@@ -1,6 +1,21 @@
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
+*.idea
+*.iml
+*.ipr
+*.iws
+*.DS_Store
+target
+staging
+overlays
+examples
+pom.xml.bak
+pom.xml.releaseBackup
+release.properties
+logs/
+*.classpath
+*.settings
+*.project
+*/bin/
+*/test-output/
+*/src/test/resources/*.jar
+dependency-reduced-pom.xml
+dependency-reduced-pom.xml.bak
