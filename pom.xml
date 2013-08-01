@@ -34,7 +34,7 @@
     </scm>
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/killbill/killbill-analytics-plugin/issues</url>
+        <url>https://github.com/killbill/killbill-client-java/issues</url>
     </issueManagement>
     <dependencies>
         <dependency>
