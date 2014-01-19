@@ -16,10 +16,25 @@
 
 package com.ning.billing.client;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
+import javax.annotation.Nullable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.ning.billing.client.model.BillingException;
+import com.ning.billing.client.model.KillBillObjects;
 import com.ning.billing.jaxrs.resources.JaxrsResource;
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
@@ -30,111 +45,401 @@ import com.ning.http.client.Realm;
 import com.ning.http.client.Realm.RealmBuilder;
 import com.ning.http.client.Response;
 
-public class KillBillHttpClient {
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.google.common.collect.ImmutableMap;
 
-    public static String KBServerUrl = PropertiesManager.getInstance().getCommonProperty("killbill.server.host.url", "http://127.0.0.1:8080/killbill");
+public class KillBillHttpClient {
 
     public static final int DEFAULT_HTTP_TIMEOUT_SEC = 10;
 
-    private String createdBy;
-    private String reason;
-    private String comment;
+    public static final Map<String, String> DEFAULT_EMPTY_QUERY = ImmutableMap.<String, String>of();
+    public static final String AUDIT_OPTION_CREATED_BY = "__AUDIT_OPTION_CREATED_BY";
+    public static final String AUDIT_OPTION_REASON = "__AUDIT_OPTION_REASON";
+    public static final String AUDIT_OPTION_COMMENT = "__AUDIT_OPTION_COMMENT";
+    public static final String TENANT_OPTION_API_KEY = "__TENANT_OPTION_API_KEY";
+    public static final String TENANT_OPTION_API_SECRET = "__TENANT_OPTION_API_SECRET";
+    public static final String RBAC_OPTION_USERNAME = "__RBAC_OPTION_USERNAME";
+    public static final String RBAC_OPTION_PASSWORD = "__RBAC_OPTION_PASSWORD";
 
-    public KillBillHttpClient() {}
+    private static final Logger log = LoggerFactory.getLogger(KillBillHttpClient.class);
+    private static final String USER_AGENT = "KillBill-JavaClient/1.0";
 
-    public KillBillHttpClient(String createdBy, String reason, String comment) {
-        this.createdBy = createdBy;
-        this.reason = reason;
-        this.comment = comment;
+    private final boolean DEBUG = Boolean.parseBoolean(System.getProperty("killbill.debug", "false"));
+
+    private final String kbServerUrl;
+    private final String username;
+    private final String password;
+    private final String apiKey;
+    private final String apiSecret;
+    private final AsyncHttpClient httpClient;
+    private final ObjectMapper mapper;
+
+    public KillBillHttpClient(final String kbServerUrl, final String username, final String password, final String apiKey, final String apiSecret) {
+        this.kbServerUrl = kbServerUrl;
+        this.username = username;
+        this.password = password;
+        this.apiKey = apiKey;
+        this.apiSecret = apiSecret;
+
+        final AsyncHttpClientConfig.Builder cfg = new AsyncHttpClientConfig.Builder();
+        cfg.setUserAgent(USER_AGENT);
+        this.httpClient = new AsyncHttpClient(cfg.build());
+
+        mapper = new ObjectMapper();
+        mapper.registerModule(new JodaModule());
     }
 
-    protected Response doPost(final String uri, final String body, final Map<String, String> queryParams, final int timeoutSec) {
-        final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery("POST", getKBServerUrl(uri), queryParams);
-        if (body != null) {
-            builder.setBody(body);
-        } else {
-            builder.setBody("{}");
+    public KillBillHttpClient() {
+        this(System.getProperty("killbill.url", "http://127.0.0.1:8080/"),
+             System.getProperty("killbill.username", "admin"),
+             System.getProperty("killbill.password", "password"),
+             System.getProperty("killbill.apiKey", "bob"),
+             System.getProperty("killbill.apiSecret", "lazar"));
+    }
+
+    public void close() {
+        httpClient.close();
+    }
+
+    // POST
+
+    public Response doPost(final String uri, final Object body, final Map<String, String> options) throws KillBillClientException {
+        return doPost(uri, body, options, Response.class);
+    }
+
+    public <T> T doPost(final String uri, final Object body, final Map<String, String> options, final Class<T> clazz) throws KillBillClientException {
+        return doPost(uri, body, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+    }
+
+    public <T> T doPost(final String uri, final Object body, final Map<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        return doPostAndMaybeFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, false);
+    }
+
+    public <T> T doPostAndFollowLocation(final String uri, final Object body, final Map<String, String> options, final Class<T> clazz) throws KillBillClientException {
+        return doPostAndFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, clazz);
+    }
+
+    public <T> T doPostAndFollowLocation(final String uri, final Object body, final Map<String, String> options, final Map<String, String> optionsForFollow, final Class<T> clazz) throws KillBillClientException {
+        return doPostAndFollowLocation(uri, body, options, optionsForFollow, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+    }
+
+    public <T> T doPostAndFollowLocation(final String uri, final Object body, final Map<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        return doPostAndFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
+    }
+
+    public <T> T doPostAndFollowLocation(final String uri, final Object body, final Map<String, String> options, final Map<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        return doPostAndMaybeFollowLocation(uri, body, options, optionsForFollow, timeoutSec, clazz, true);
+    }
+
+    public <T> T doPostAndMaybeFollowLocation(final String uri, final Object body, final Map<String, String> options, final Map<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
+        final String verb = "POST";
+        return doPrepareRequestAndMaybeFollowLocation(verb, uri, body, options, optionsForFollow, timeoutSec, clazz, followLocation);
+    }
+
+    // PUT
+
+    public Response doPut(final String uri, final Object body, final Map<String, String> options) throws KillBillClientException {
+        return doPut(uri, body, options, Response.class);
+    }
+
+    public <T> T doPut(final String uri, final Object body, final Map<String, String> options, final Class<T> clazz) throws KillBillClientException {
+        return doPut(uri, body, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+    }
+
+    public <T> T doPut(final String uri, final Object body, final Map<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        return doPutAndMaybeFollowLocation(uri, body, options, timeoutSec, clazz, false);
+    }
+
+    public <T> T doPutAndFollowLocation(final String uri, final Object body, final Map<String, String> options, final Class<T> clazz) throws KillBillClientException {
+        return doPutAndFollowLocation(uri, body, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+    }
+
+    public <T> T doPutAndFollowLocation(final String uri, final Object body, final Map<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        return doPutAndMaybeFollowLocation(uri, body, options, timeoutSec, clazz, true);
+    }
+
+    public <T> T doPutAndMaybeFollowLocation(final String uri, final Object body, final Map<String, String> options, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
+        final String verb = "PUT";
+        return doPrepareRequestAndMaybeFollowLocation(verb, uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, followLocation);
+    }
+
+    // DELETE
+
+    public Response doDelete(final String uri, final Map<String, String> options) throws KillBillClientException {
+        return doDelete(uri, options, Response.class);
+    }
+
+    public <T> T doDelete(final String uri, final Map<String, String> options, final Class<T> clazz) throws KillBillClientException {
+        return doDeleteAndMaybeFollowLocation(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz, false);
+    }
+
+    public <T> T doDeleteAndFollowLocation(final String uri, final Map<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        return doDeleteAndMaybeFollowLocation(uri, options, timeoutSec, clazz, true);
+    }
+
+    public <T> T doDeleteAndMaybeFollowLocation(final String uri, final Map<String, String> options, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
+        final String verb = "DELETE";
+        return doPrepareRequestAndMaybeFollowLocation(verb, uri, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, followLocation);
+    }
+
+    // GET
+
+    public Response doGet(final String uri, final Map<String, String> options) throws KillBillClientException {
+        return doGet(uri, options, Response.class);
+    }
+
+    public <T> T doGet(final String uri, final Map<String, String> options, final Class<T> clazz) throws KillBillClientException {
+        return doGetWithUrl(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+    }
+
+    public <T> T doGet(final String uri, final Map<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        return doGetWithUrl(uri, options, timeoutSec, clazz);
+    }
+
+    public <T> T doGetWithUrl(final String url, final Map<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        final String verb = "GET";
+        return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
+    }
+
+    // HEAD
+
+    public Response doHead(final String uri, final Map<String, String> options) throws KillBillClientException {
+        return doHead(uri, options, Response.class);
+    }
+
+    public <T> T doHead(final String uri, final Map<String, String> options, final Class<T> clazz) throws KillBillClientException {
+        return doHeadWithUrl(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+    }
+
+    public <T> T doHead(final String uri, final Map<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        return doHeadWithUrl(uri, options, timeoutSec, clazz);
+    }
+
+    public <T> T doHeadWithUrl(final String url, final Map<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        final String verb = "HEAD";
+        return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
+    }
+
+    // OPTIONS
+
+    public Response doOptions(final String uri, final Map<String, String> options) throws KillBillClientException {
+        return doOptions(uri, options, Response.class);
+    }
+
+    public <T> T doOptions(final String uri, final Map<String, String> options, final Class<T> clazz) throws KillBillClientException {
+        return doOptionsWithUrl(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+    }
+
+    public <T> T doOptions(final String uri, final Map<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        return doOptionsWithUrl(uri, options, timeoutSec, clazz);
+    }
+
+    public <T> T doOptionsWithUrl(final String url, final Map<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        final String verb = "OPTIONS";
+        return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
+    }
+
+    // COMMON
+
+    private <T> T doPrepareRequestAndMaybeFollowLocation(final String verb, final String uri, final Map<String, String> options, final Map<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        return doPrepareRequestAndMaybeFollowLocation(verb, uri, null, options, optionsForFollow, timeoutSec, clazz, false);
+    }
+
+    private <T> T doPrepareRequestAndMaybeFollowLocation(final String verb, final String uri, final Map<String, String> options, final Map<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
+        return doPrepareRequestAndMaybeFollowLocation(verb, uri, null, options, optionsForFollow, timeoutSec, clazz, followLocation);
+    }
+
+    private <T> T doPrepareRequestAndMaybeFollowLocation(final String verb, final String uri, final Object body, final Map<String, String> optionsRo, final Map<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
+        final Map<String, String> options = new HashMap<String, String>(optionsRo);
+
+        final String createdBy = options.get(AUDIT_OPTION_CREATED_BY);
+        final String reason = options.get(AUDIT_OPTION_REASON);
+        final String comment = options.get(AUDIT_OPTION_COMMENT);
+        String apiKey = options.get(TENANT_OPTION_API_KEY);
+        if (apiKey == null) {
+            apiKey = this.apiKey;
         }
-        return executeAndWait(builder, timeoutSec, true);
-    }
-
-    protected Response doPut(final String uri, final String body, final Map<String, String> queryParams, final int timeoutSec) {
-        final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery("PUT", getKBServerUrl(uri), queryParams);
-        if (body != null) {
-            builder.setBody(body);
-        } else {
-            builder.setBody("{}");
+        String apiSecret = options.get(TENANT_OPTION_API_SECRET);
+        if (apiSecret == null) {
+            apiSecret = this.apiSecret;
         }
-        return executeAndWait(builder, timeoutSec, true);
-    }
+        String username = options.get(RBAC_OPTION_USERNAME);
+        if (username == null) {
+            username = this.username;
+        }
+        String password = options.get(RBAC_OPTION_PASSWORD);
+        if (password == null) {
+            password = this.password;
+        }
 
-    protected Response doDelete(final String uri, final Map<String, String> queryParams, final int timeoutSec) {
-        final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery("DELETE", getKBServerUrl(uri), queryParams);
-        return executeAndWait(builder, timeoutSec, true);
-    }
+        options.remove(AUDIT_OPTION_CREATED_BY);
+        options.remove(AUDIT_OPTION_REASON);
+        options.remove(AUDIT_OPTION_COMMENT);
+        options.remove(TENANT_OPTION_API_KEY);
+        options.remove(TENANT_OPTION_API_SECRET);
+        options.remove(RBAC_OPTION_USERNAME);
+        options.remove(RBAC_OPTION_PASSWORD);
 
-    protected Response doGet(final String uri, final Map<String, String> queryParams, final int timeoutSec) {
-        return doGetWithUrl(getKBServerUrl(uri), queryParams, timeoutSec);
-    }
+        final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery(verb, getKBServerUrl(uri), username, password, options);
 
-    protected Response doHead(final String uri, final Map<String, String> queryParams, final int timeoutSec) {
-        return doHeadWithUrl(getKBServerUrl(uri), queryParams, timeoutSec);
-    }
-
-    protected Response doOptions(final String uri, final Map<String, String> queryParams, final int timeoutSec) {
-        return doOptionsWithUrl(getKBServerUrl(uri), queryParams, timeoutSec);
-    }
-
-    protected Response doGetWithUrl(final String url, final Map<String, String> queryParams, final int timeoutSec) {
-        final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery("GET", url, queryParams);
-        return executeAndWait(builder, timeoutSec, false);
-    }
-
-    protected Response doHeadWithUrl(final String url, final Map<String, String> queryParams, final int timeoutSec) {
-        final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery("HEAD", url, queryParams);
-        return executeAndWait(builder, timeoutSec, false);
-    }
-
-    protected Response doOptionsWithUrl(final String url, final Map<String, String> queryParams, final int timeoutSec) {
-        final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery("OPTIONS", url, queryParams);
-        return executeAndWait(builder, timeoutSec, false);
-    }
-
-    private Response executeAndWait(final BoundRequestBuilder builder, final int timeoutSec, final boolean addContextHeader) {
-        if (addContextHeader) {
+        // Multi-Tenancy headers
+        if (apiKey != null) {
+            builder.addHeader(JaxrsResource.HDR_API_KEY, apiKey);
+        }
+        if (apiSecret != null) {
+            builder.addHeader(JaxrsResource.HDR_API_SECRET, apiSecret);
+        }
+        // Metadata Additional headers
+        if (createdBy != null) {
             builder.addHeader(JaxrsResource.HDR_CREATED_BY, createdBy);
+        }
+        if (reason != null) {
             builder.addHeader(JaxrsResource.HDR_REASON, reason);
+        }
+        if (comment != null) {
             builder.addHeader(JaxrsResource.HDR_COMMENT, comment);
         }
 
-        Response response = null;
+        if (!"GET".equals(verb) && !"HEAD".equals(verb)) {
+            if (body != null) {
+                try {
+                    builder.setBody(mapper.writeValueAsString(body));
+                } catch (JsonProcessingException e) {
+                    throw new KillBillClientException(e);
+                }
+            } else {
+                builder.setBody("{}");
+            }
+        }
+
+        if (followLocation) {
+            final Response response = executeAndWait(builder, timeoutSec, Response.class);
+            if (response == null || response.getHeader("Location") == null) {
+                // 404, bad request, ...
+                return Response.class.isAssignableFrom(clazz) ? (T) response : null;
+            } else {
+                final String location = response.getHeader("Location");
+                return doGetWithUrl(location, optionsForFollow, timeoutSec, clazz);
+            }
+        } else {
+            return executeAndWait(builder, timeoutSec, clazz);
+        }
+    }
+
+    private <T> T executeAndWait(final BoundRequestBuilder builder, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        Response response;
+        final ListenableFuture<Response> futureStatus;
         try {
-            final ListenableFuture<Response> futureStatus =
-                    builder.execute(new AsyncCompletionHandler<Response>() {
-                        @Override
-                        public Response onCompleted(final Response response) throws Exception {
-                            return response;
-                        }
-                    });
+            futureStatus = builder.execute(new AsyncCompletionHandler<Response>() {
+                @Override
+                public Response onCompleted(final Response response) throws Exception {
+                    return response;
+                }
+            });
             response = futureStatus.get(timeoutSec, TimeUnit.SECONDS);
-        } catch (final Exception e) {
+        } catch (final IOException e) {
+            throw new KillBillClientException(e);
+        } catch (final InterruptedException e) {
+            throw new KillBillClientException(e);
+        } catch (final ExecutionException e) {
+            throw new KillBillClientException(e);
+        } catch (final TimeoutException e) {
+            throw new KillBillClientException(e);
         }
 
         if (response != null && response.getStatusCode() == 401) {
-            throw new IllegalArgumentException("Unauthorized - did you configure your tenant credentials?");
+            throw new KillBillClientException(new IllegalArgumentException("Unauthorized - did you configure your RBAC and/or tenant credentials?"),
+                                              response);
+        } else if (response != null && (response.getStatusCode() == 404 || response.getStatusCode() == 204)) {
+            // Return empty list for KillBillObjects instead of null for convenience
+            if (Iterable.class.isAssignableFrom(clazz)) {
+                for (final Constructor constructor : clazz.getConstructors()) {
+                    if (constructor.getParameterTypes().length == 0) {
+                        try {
+                            return (T) constructor.newInstance();
+                        } catch (InstantiationException e) {
+                            return null;
+                        } catch (IllegalAccessException e) {
+                            return null;
+                        } catch (InvocationTargetException e) {
+                            return null;
+                        }
+                    }
+                }
+                return null;
+            } else {
+                return null;
+            }
+        } else if (response != null && response.getStatusCode() >= 400) {
+            final BillingException exception = deserializeResponse(response, BillingException.class);
+            log.warn("Error " + response.getStatusCode() + " from Kill Bill: " + exception.getMessage());
+            throw new KillBillClientException(exception, response);
         }
-        return response;
+
+        // No deserialization required?
+        if (Response.class.isAssignableFrom(clazz)) {
+            return (T) response;
+        }
+
+        return deserializeResponse(response, clazz);
     }
 
-    private BoundRequestBuilder getBuilderWithHeaderAndQuery(final String verb, final String url, final Map<String, String> queryParams) {
-        BoundRequestBuilder builder = null;
+    private <T> T deserializeResponse(final Response response, final Class<T> clazz) throws KillBillClientException {
+        final T result;
+        try {
+            if (DEBUG) {
+                final String content = response.getResponseBody();
+                log.debug("Received: " + content);
+                result = mapper.readValue(content, clazz);
+            } else {
+                InputStream in = null;
+                try {
+                    in = response.getResponseBodyAsStream();
+                    result = mapper.readValue(in, clazz);
+                } finally {
+                    if (in != null) {
+                        try {
+                            in.close();
+                        } catch (IOException e) {
+                            log.warn("Failed to close http-client - provided InputStream: {}", e.getLocalizedMessage());
+                        }
+                    }
+                }
+            }
+        } catch (final IOException e) {
+            throw new KillBillClientException(e, response);
+        }
 
-        String apiKey = PropertiesManager.getInstance().getCommonProperty("killbill.tenant.apiKey", "bob");
-        String apiSecret = PropertiesManager.getInstance().getCommonProperty("killbill.tenant.apiSecret", "lazar");
-        Realm realm = new RealmBuilder().setPrincipal(apiKey).setPassword(apiSecret).build();
-        AsyncHttpClientConfig cfg = new AsyncHttpClientConfig.Builder().setRealm(realm).build();
+        if (KillBillObjects.class.isAssignableFrom(clazz)) {
+            final KillBillObjects objects = ((KillBillObjects) result);
+            final String paginationCurrentOffset = response.getHeader(JaxrsResource.HDR_PAGINATION_CURRENT_OFFSET);
+            if (paginationCurrentOffset != null) {
+                objects.setPaginationCurrentOffset(Integer.parseInt(paginationCurrentOffset));
+            }
+            final String paginationNextOffset = response.getHeader(JaxrsResource.HDR_PAGINATION_NEXT_OFFSET);
+            if (paginationNextOffset != null) {
+                objects.setPaginationNextOffset(Integer.parseInt(paginationNextOffset));
+            }
+            final String paginationTotalNbRecords = response.getHeader(JaxrsResource.HDR_PAGINATION_TOTAL_NB_RECORDS);
+            if (paginationTotalNbRecords != null) {
+                objects.setPaginationTotalNbRecords(Integer.parseInt(paginationTotalNbRecords));
+            }
+            final String paginationMaxNbRecords = response.getHeader(JaxrsResource.HDR_PAGINATION_MAX_NB_RECORDS);
+            if (paginationMaxNbRecords != null) {
+                objects.setPaginationMaxNbRecords(Integer.parseInt(paginationMaxNbRecords));
+            }
+            objects.setPaginationNextPageUri(response.getHeader(JaxrsResource.HDR_PAGINATION_NEXT_PAGE_URI));
+            objects.setKillBillHttpClient(this);
+        }
 
-        AsyncHttpClient httpClient = new AsyncHttpClient(cfg);
+        return result;
+    }
+
+    private BoundRequestBuilder getBuilderWithHeaderAndQuery(final String verb, final String url, @Nullable final String username, @Nullable final String password, final Map<String, String> options) {
+        BoundRequestBuilder builder;
+
         if (verb.equals("GET")) {
             builder = httpClient.prepareGet(url);
         } else if (verb.equals("POST")) {
@@ -148,16 +453,35 @@ public class KillBillHttpClient {
         } else if (verb.equals("OPTIONS")) {
             builder = httpClient.prepareOptions(url);
         } else {
+            throw new IllegalArgumentException("Unrecognized verb: " + verb);
         }
+
+        if (username != null && password != null) {
+            final Realm realm = new RealmBuilder().setPrincipal(username).setPassword(password).build();
+            builder.setRealm(realm);
+        }
+
         builder.addHeader("Content-Type", "application/json; charset=utf-8");
-        for (final Entry<String, String> q : queryParams.entrySet()) {
-            builder.addQueryParameter(q.getKey(), q.getValue());
+
+        for (final String key : options.keySet()) {
+            if (options.get(key) != null) {
+                builder.addQueryParameter(key, options.get(key));
+            }
         }
 
         return builder;
     }
 
-    private String getKBServerUrl(String uri) {
-        return String.format("%s%s", KBServerUrl, uri);
+    private String getKBServerUrl(final String uri) throws KillBillClientException {
+        try {
+            final URI u = new URI(uri);
+            if (u.isAbsolute()) {
+                return uri;
+            } else {
+                return String.format("%s%s", kbServerUrl, uri);
+            }
+        } catch (URISyntaxException e) {
+            throw new KillBillClientException(e);
+        }
     }
 }

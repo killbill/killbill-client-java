@@ -19,7 +19,7 @@
     <parent>
         <artifactId>killbill-oss-parent</artifactId>
         <groupId>com.ning.billing</groupId>
-        <version>0.3.9</version>
+        <version>0.5.19</version>
     </parent>
     <artifactId>killbill-client-java</artifactId>
     <version>0.0.1-SNAPSHOT</version>
