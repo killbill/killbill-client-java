@@ -64,6 +64,7 @@ import com.ning.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import com.ning.billing.jaxrs.resources.JaxrsResource;
 import com.ning.billing.util.api.AuditLevel;
 import com.ning.http.client.Response;
+import com.ning.http.util.UTF8UrlEncoder;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
@@ -146,7 +147,7 @@ public class KillBillClient {
     }
 
     public Accounts searchAccounts(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + JaxrsResource.SEARCH + "/" + key;
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
         final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
                                                                                 JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
@@ -203,7 +204,7 @@ public class KillBillClient {
         Preconditions.checkNotNull(email.getAccountId(), "AccountEmail#accountId cannot be null");
         Preconditions.checkNotNull(email.getEmail(), "AccountEmail#email cannot be null");
 
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + email.getAccountId() + "/" + JaxrsResource.EMAILS + "/" + email.getEmail();
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + email.getAccountId() + "/" + JaxrsResource.EMAILS + "/" + UTF8UrlEncoder.encode(email.getEmail());
 
         final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
@@ -561,7 +562,7 @@ public class KillBillClient {
     }
 
     public Payments searchPayments(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.SEARCH + "/" + key;
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
         final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
                                                                                 JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
@@ -654,7 +655,7 @@ public class KillBillClient {
     }
 
     public Refunds searchRefunds(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.REFUNDS_PATH + "/" + JaxrsResource.SEARCH + "/" + key;
+        final String uri = JaxrsResource.REFUNDS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
         final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
                                                                                 JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
@@ -758,7 +759,7 @@ public class KillBillClient {
     }
 
     public PaymentMethods searchPaymentMethods(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + key;
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
         final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
                                                                                 JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
@@ -799,7 +800,7 @@ public class KillBillClient {
     }
 
     public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, @Nullable final String pluginName, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + key;
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
         final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_INFO, Strings.nullToEmpty(pluginName),
                                                                                 JaxrsResource.QUERY_AUDIT, auditLevel.toString());
@@ -885,8 +886,7 @@ public class KillBillClient {
     }
 
     public Tags getTags(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
-        //final String uri = JaxrsResource.TAGS_PATH + "/" + JaxrsResource.PAGINATION;
-        final String uri = JaxrsResource.PREFIX + "/" + JaxrsResource.TAGS + "/" + JaxrsResource.PAGINATION;
+        final String uri = JaxrsResource.TAGS_PATH + "/" + JaxrsResource.PAGINATION;
 
         final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
                                                                                 JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
@@ -904,8 +904,7 @@ public class KillBillClient {
     }
 
     public Tags searchTags(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
-        //final String uri = JaxrsResource.TAGS_PATH + "/" + JaxrsResource.SEARCH + "/" + key;
-        final String uri = JaxrsResource.PREFIX + "/" + JaxrsResource.TAGS + "/" + JaxrsResource.SEARCH + "/" + key;
+        final String uri = JaxrsResource.TAGS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
         final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
                                                                                 JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
@@ -959,8 +958,7 @@ public class KillBillClient {
     }
 
     public CustomFields getCustomFields(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
-        //final String uri = JaxrsResource.CUSTOM_FIELDS_PATH + "/" + JaxrsResource.PAGINATION;
-        final String uri = JaxrsResource.PREFIX + "/" + JaxrsResource.CUSTOM_FIELDS + "/" + JaxrsResource.PAGINATION;
+        final String uri = JaxrsResource.CUSTOM_FIELDS_PATH + "/" + JaxrsResource.PAGINATION;
 
         final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
                                                                                 JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
@@ -978,8 +976,7 @@ public class KillBillClient {
     }
 
     public CustomFields searchCustomFields(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
-        //final String uri = JaxrsResource.CUSTOM_FIELDS_PATH + "/" + JaxrsResource.SEARCH + "/" + key;
-        final String uri = JaxrsResource.PREFIX + "/" + JaxrsResource.CUSTOM_FIELDS + "/" + JaxrsResource.SEARCH + "/" + key;
+        final String uri = JaxrsResource.CUSTOM_FIELDS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
         final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
                                                                                 JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
