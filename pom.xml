@@ -22,7 +22,7 @@
         <version>0.5.22</version>
     </parent>
     <artifactId>killbill-client-java</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
     <name>Kill Bill Client Java</name>
     <description>Kill Bill Java client library</description>
