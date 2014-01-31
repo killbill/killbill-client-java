@@ -257,6 +257,42 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Bundles.class);
     }
 
+    public Bundles getBundles() throws KillBillClientException {
+        return getBundles(0L, 100L);
+    }
+
+    public Bundles getBundles(final Long offset, final Long limit) throws KillBillClientException {
+        return getBundles(offset, limit, AuditLevel.NONE);
+    }
+
+    public Bundles getBundles(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.BUNDLES_PATH + "/" + JaxrsResource.PAGINATION;
+
+        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        return httpClient.doGet(uri, queryParams, Bundles.class);
+    }
+
+    public Bundles searchBundles(final String key) throws KillBillClientException {
+        return searchBundles(key, 0L, 100L);
+    }
+
+    public Bundles searchBundles(final String key, final Long offset, final Long limit) throws KillBillClientException {
+        return searchBundles(key, offset, limit, AuditLevel.NONE);
+    }
+
+    public Bundles searchBundles(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.BUNDLES_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
+
+        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Bundles.class);
+    }
+
     public Bundle transferBundle(final Bundle bundle, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(bundle.getBundleId(), "Bundle#bundleId cannot be null");
         Preconditions.checkNotNull(bundle.getAccountId(), "Bundle#accountId cannot be null");
@@ -434,6 +470,24 @@ public class KillBillClient {
                                                                                 JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Invoices.class);
+    }
+
+    public Invoices searchInvoices(final String key) throws KillBillClientException {
+        return searchInvoices(key, 0L, 100L);
+    }
+
+    public Invoices searchInvoices(final String key, final Long offset, final Long limit) throws KillBillClientException {
+        return searchInvoices(key, offset, limit, AuditLevel.NONE);
+    }
+
+    public Invoices searchInvoices(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
+
+        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Invoices.class);
     }
 
     public Invoice createDryRunInvoice(final UUID accountId, final DateTime futureDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {

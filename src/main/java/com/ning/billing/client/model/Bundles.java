@@ -16,5 +16,14 @@
 
 package com.ning.billing.client.model;
 
+import com.ning.billing.client.KillBillClientException;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Bundles extends KillBillObjects<Bundle> {
+
+    @JsonIgnore
+    public Bundles getNext() throws KillBillClientException {
+        return getNext(Bundles.class);
+    }
 }
