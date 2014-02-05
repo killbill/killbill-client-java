@@ -1,3 +1,6 @@
+0.0.4
+    Update CustomField for killbill 0.8.11
+
 0.0.3
     Implement bundles pagination and search APIs
     Implement invoices search API
