@@ -1,3 +1,6 @@
+0.0.5
+    Fix query parameters bug in searchInvoices
+
 0.0.4
     Update CustomField for killbill 0.8.11
 

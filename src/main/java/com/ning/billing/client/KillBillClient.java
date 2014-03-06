@@ -487,7 +487,7 @@ public class KillBillClient {
                                                                                 JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
                                                                                 JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Invoices.class);
+        return httpClient.doGet(uri, queryParams, Invoices.class);
     }
 
     public Invoice createDryRunInvoice(final UUID accountId, final DateTime futureDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {
