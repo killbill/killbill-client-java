@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
-import org.killbill.billing.clock.DefaultClock;
+import org.killbill.clock.DefaultClock;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
