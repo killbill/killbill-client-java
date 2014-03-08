@@ -18,8 +18,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>killbill-oss-parent</artifactId>
-        <groupId>com.ning.billing</groupId>
-        <version>0.5.23</version>
+        <groupId>org.kill-bill.billing</groupId>
+        <version>0.5.26-SNAPSHOT</version>
     </parent>
     <artifactId>killbill-client-java</artifactId>
     <version>0.0.5-SNAPSHOT</version>
@@ -54,14 +54,6 @@
             <artifactId>async-http-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ning.billing</groupId>
-            <artifactId>killbill-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ning.billing</groupId>
-            <artifactId>killbill-jaxrs</artifactId>
-        </dependency>
-        <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>
@@ -69,6 +61,14 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.kill-bill.billing</groupId>
+            <artifactId>killbill-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kill-bill.billing</groupId>
+            <artifactId>killbill-jaxrs</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
