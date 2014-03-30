@@ -39,6 +39,7 @@ public class InvoiceItem extends KillBillObject {
     private UUID subscriptionId;
     private String planName;
     private String phaseName;
+    private String usageName;
     private String itemType;
     private String description;
     private LocalDate startDate;
@@ -57,6 +58,7 @@ public class InvoiceItem extends KillBillObject {
                        @JsonProperty("subscriptionId") final UUID subscriptionId,
                        @JsonProperty("planName") final String planName,
                        @JsonProperty("phaseName") final String phaseName,
+                       @JsonProperty("usageName") final String usageName,
                        @JsonProperty("itemType") final String itemType,
                        @JsonProperty("description") final String description,
                        @JsonProperty("startDate") final LocalDate startDate,
@@ -133,6 +135,10 @@ public class InvoiceItem extends KillBillObject {
         return planName;
     }
 
+    public String getUsageName() {
+        return usageName;
+    }
+
     public void setPlanName(final String planName) {
         this.planName = planName;
     }
@@ -143,6 +149,10 @@ public class InvoiceItem extends KillBillObject {
 
     public void setPhaseName(final String phaseName) {
         this.phaseName = phaseName;
+    }
+
+    public void setUsageName(final String usageName) {
+        this.usageName = usageName;
     }
 
     public String getItemType() {
@@ -240,6 +250,9 @@ public class InvoiceItem extends KillBillObject {
         if (planName != null ? !planName.equals(that.planName) : that.planName != null) {
             return false;
         }
+        if (usageName != null ? !usageName.equals(that.usageName) : that.usageName != null) {
+            return false;
+        }
         if (startDate != null ? startDate.compareTo(that.startDate) != 0 : that.startDate != null) {
             return false;
         }
@@ -260,6 +273,7 @@ public class InvoiceItem extends KillBillObject {
         result = 31 * result + (subscriptionId != null ? subscriptionId.hashCode() : 0);
         result = 31 * result + (planName != null ? planName.hashCode() : 0);
         result = 31 * result + (phaseName != null ? phaseName.hashCode() : 0);
+        result = 31 * result + (usageName != null ? usageName.hashCode() : 0);
         result = 31 * result + (itemType != null ? itemType.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
