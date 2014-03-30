@@ -1,3 +1,6 @@
+0.0.7
+    Add usageName for invoiceItem model
+
 0.0.6
     Rename package to org.killbill
 
