@@ -16,6 +16,7 @@
 
 package org.killbill.billing.client;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -654,13 +655,15 @@ public class KillBillClient {
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Payments.class);
     }
 
-    public void payAllInvoices(final UUID accountId, final boolean externalPayment, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public void payAllInvoices(final UUID accountId, final boolean externalPayment, final BigDecimal paymentAmount, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENTS;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of("externalPayment", String.valueOf(externalPayment)),
-                                                                createdBy,
-                                                                reason,
-                                                                comment);
+        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of("externalPayment", String.valueOf(externalPayment),
+                        "paymentAmount", String.valueOf(paymentAmount)),
+                createdBy,
+                reason,
+                comment
+        );
 
         httpClient.doPost(uri, null, queryParams);
     }
