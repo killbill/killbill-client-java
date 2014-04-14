@@ -1,3 +1,6 @@
+0.0.8
+    Update payAllInvoice api to specify paymentAmount
+
 0.0.7
     Add usageName for invoiceItem model
 
