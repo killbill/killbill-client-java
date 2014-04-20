@@ -66,7 +66,7 @@ public class KillBillHttpClient {
     private static final Logger log = LoggerFactory.getLogger(KillBillHttpClient.class);
     private static final String USER_AGENT = "KillBill-JavaClient/1.0";
 
-    private final boolean DEBUG = Boolean.parseBoolean(System.getProperty("killbill.debug", "false"));
+    private final boolean DEBUG = Boolean.parseBoolean(System.getProperty("org.killbill.client.debug", "false"));
 
     private final String kbServerUrl;
     private final String username;
