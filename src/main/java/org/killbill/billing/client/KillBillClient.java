@@ -658,12 +658,17 @@ public class KillBillClient {
     public void payAllInvoices(final UUID accountId, final boolean externalPayment, final BigDecimal paymentAmount, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENTS;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of("externalPayment", String.valueOf(externalPayment),
-                        "paymentAmount", String.valueOf(paymentAmount)),
-                createdBy,
-                reason,
-                comment
-        );
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put(JaxrsResource.QUERY_PAYMENT_EXTERNAL, String.valueOf(externalPayment));
+        if (paymentAmount != null) {
+            params.put("paymentAmount", String.valueOf(paymentAmount));
+        }
+
+        final Map<String, String> queryParams = paramsWithAudit(params,
+                                                                createdBy,
+                                                                reason,
+                                                                comment
+                                                               );
 
         httpClient.doPost(uri, null, queryParams);
     }
