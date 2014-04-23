@@ -17,7 +17,9 @@
 package org.killbill.billing.client;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,7 +28,6 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-
 import org.killbill.billing.catalog.api.BillingActionPolicy;
 import org.killbill.billing.client.model.Account;
 import org.killbill.billing.client.model.AccountEmail;
@@ -44,6 +45,7 @@ import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Invoice;
 import org.killbill.billing.client.model.InvoiceEmail;
 import org.killbill.billing.client.model.InvoiceItem;
+import org.killbill.billing.client.model.InvoiceItems;
 import org.killbill.billing.client.model.Invoices;
 import org.killbill.billing.client.model.OverdueState;
 import org.killbill.billing.client.model.Payment;
@@ -64,6 +66,7 @@ import org.killbill.billing.client.model.TenantKey;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.jaxrs.resources.JaxrsResource;
 import org.killbill.billing.util.api.AuditLevel;
+
 import com.ning.http.client.Response;
 import com.ning.http.util.UTF8UrlEncoder;
 
@@ -535,26 +538,44 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(uri, invoiceItem, queryParams, Invoice.class);
     }
 
-    public Invoice createExternalCharge(final InvoiceItem externalCharge, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        Preconditions.checkNotNull(externalCharge.getAccountId(), "InvoiceItem#accountId cannot be null");
-        Preconditions.checkNotNull(externalCharge.getAmount(), "InvoiceItem#amount cannot be null");
+    public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final List<InvoiceItem> externalCharges = createExternalCharges(ImmutableList.<InvoiceItem>of(externalCharge), requestedDate, autoPay, createdBy, reason, comment);
+        return externalCharges.isEmpty() ? null : externalCharges.get(0);
+    }
 
-        final String uri;
-        if (externalCharge.getInvoiceId() != null) {
-            uri = JaxrsResource.INVOICES_PATH + "/" + externalCharge.getInvoiceId() + "/" + JaxrsResource.CHARGES;
-        } else {
-            uri = JaxrsResource.CHARGES_PATH;
+    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final Map<UUID, Collection<InvoiceItem>> externalChargesPerAccount = new HashMap<UUID, Collection<InvoiceItem>>();
+        for (final InvoiceItem externalCharge : externalCharges) {
+            Preconditions.checkNotNull(externalCharge.getAccountId(), "InvoiceItem#accountId cannot be null");
+            Preconditions.checkNotNull(externalCharge.getAmount(), "InvoiceItem#amount cannot be null");
+            Preconditions.checkNotNull(externalCharge.getCurrency(), "InvoiceItem#currency cannot be null");
+
+            if (externalChargesPerAccount.get(externalCharge.getAccountId()) == null) {
+                externalChargesPerAccount.put(externalCharge.getAccountId(), new LinkedList<InvoiceItem>());
+            }
+            externalChargesPerAccount.get(externalCharge.getAccountId()).add(externalCharge);
         }
+
+        final List<InvoiceItem> createdExternalCharges = new LinkedList<InvoiceItem>();
+        for (final UUID accountId : externalChargesPerAccount.keySet()) {
+            final List<InvoiceItem> invoiceItems = createExternalCharges(accountId, externalChargesPerAccount.get(accountId), requestedDate, autoPay, createdBy, reason, comment);
+            createdExternalCharges.addAll(invoiceItems);
+        }
+
+        return createdExternalCharges;
+    }
+
+    private List<InvoiceItem> createExternalCharges(final UUID accountId, final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.CHARGES + "/" + accountId;
 
         final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString(),
                                                                                                 JaxrsResource.QUERY_PAY_INVOICE, autoPay.toString()),
                                                                 createdBy,
                                                                 reason,
-                                                                comment);
+                                                                comment
+                                                               );
 
-        final Map<String, String> queryParamsForFollow = ImmutableMap.<String, String>of(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, "true");
-
-        return httpClient.doPostAndFollowLocation(uri, externalCharge, queryParams, queryParamsForFollow, Invoice.class);
+        return httpClient.doPost(uri, externalCharges, queryParams, InvoiceItems.class);
     }
 
     public void triggerInvoiceNotification(final UUID invoiceId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
