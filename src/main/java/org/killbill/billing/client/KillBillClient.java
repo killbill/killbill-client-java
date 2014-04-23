@@ -1,7 +1,7 @@
 /*
- * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014 Groupon, Inc
  *
- * Ning licenses this file to you under the Apache License, version 2.0
+ * Groupon licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
  * License.  You may obtain a copy of the License at:
  *
@@ -16,62 +16,27 @@
 
 package org.killbill.billing.client;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-
-import org.killbill.billing.catalog.api.BillingActionPolicy;
-import org.killbill.billing.client.model.Account;
-import org.killbill.billing.client.model.AccountEmail;
-import org.killbill.billing.client.model.AccountEmails;
-import org.killbill.billing.client.model.AccountTimeline;
-import org.killbill.billing.client.model.Accounts;
-import org.killbill.billing.client.model.Bundle;
-import org.killbill.billing.client.model.Bundles;
-import org.killbill.billing.client.model.Catalog;
-import org.killbill.billing.client.model.Chargeback;
-import org.killbill.billing.client.model.Chargebacks;
-import org.killbill.billing.client.model.Credit;
-import org.killbill.billing.client.model.CustomField;
-import org.killbill.billing.client.model.CustomFields;
-import org.killbill.billing.client.model.Invoice;
-import org.killbill.billing.client.model.InvoiceEmail;
-import org.killbill.billing.client.model.InvoiceItem;
-import org.killbill.billing.client.model.Invoices;
-import org.killbill.billing.client.model.OverdueState;
-import org.killbill.billing.client.model.Payment;
-import org.killbill.billing.client.model.PaymentMethod;
-import org.killbill.billing.client.model.PaymentMethods;
-import org.killbill.billing.client.model.Payments;
-import org.killbill.billing.client.model.Permissions;
-import org.killbill.billing.client.model.PlanDetail;
-import org.killbill.billing.client.model.PlanDetails;
-import org.killbill.billing.client.model.Refund;
-import org.killbill.billing.client.model.Refunds;
-import org.killbill.billing.client.model.Subscription;
-import org.killbill.billing.client.model.TagDefinition;
-import org.killbill.billing.client.model.TagDefinitions;
-import org.killbill.billing.client.model.Tags;
-import org.killbill.billing.client.model.Tenant;
-import org.killbill.billing.client.model.TenantKey;
-import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
-import org.killbill.billing.jaxrs.resources.JaxrsResource;
-import org.killbill.billing.util.api.AuditLevel;
-import com.ning.http.client.Response;
-import com.ning.http.util.UTF8UrlEncoder;
-
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.ning.http.client.Response;
+import com.ning.http.util.UTF8UrlEncoder;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.killbill.billing.catalog.api.BillingActionPolicy;
+import org.killbill.billing.client.model.*;
+import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
+import org.killbill.billing.jaxrs.resources.JaxrsResource;
+import org.killbill.billing.util.api.AuditLevel;
+
+import javax.annotation.Nullable;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_EMPTY_QUERY;
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_HTTP_TIMEOUT_SEC;
@@ -686,6 +651,33 @@ public class KillBillClient {
                                                                 comment);
 
         return httpClient.doPostAndFollowLocation(uri, payment, queryParams, Payments.class);
+    }
+
+    // Direct Payments
+    public DirectPayment createDirectPayment(final UUID accountId, final DirectTransaction transaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(accountId, "accountId cannot be null");
+        Preconditions.checkNotNull(transaction.getTransactionType(), "DirectTransaction#transactionId cannot be null");
+        if (transaction.getTransactionType().equals("AUTHORIZE") || transaction.getTransactionType().equals("PURCHASE")) {
+            Preconditions.checkNotNull(transaction.getAmount(), "DirectTransaction#amount cannot be null");
+            Preconditions.checkNotNull(transaction.getExternalKey(), "DirectTransaction#externalKey cannot be null");
+        } else if (transaction.getTransactionType().equals("CAPTURE")) {
+            Preconditions.checkNotNull(transaction.getAmount(), "DirectTransaction#amount cannot be null");
+            Preconditions.checkNotNull(transaction.getDirectPaymentId(), "DirectTransaction#directPaymentId cannot be null");
+        } else if (transaction.getTransactionType().equals("CREDIT") || transaction.getTransactionType().equals("VOID")) {
+            Preconditions.checkNotNull(transaction.getDirectPaymentId(), "DirectTransaction#directPaymentId cannot be null");
+        } else {
+            throw new IllegalArgumentException("Unknown transaction type " + transaction.getTransactionType());
+        }
+
+
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.DIRECT_PAYMENTS;
+
+        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(),
+                createdBy,
+                reason,
+                comment);
+
+        return httpClient.doPostAndFollowLocation(uri, transaction, queryParams, DirectPayment.class);
     }
 
     // Refunds
