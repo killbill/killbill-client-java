@@ -179,6 +179,10 @@ public class KillBillHttpClient {
         return doDeleteAndMaybeFollowLocation(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz, false);
     }
 
+    public <T> T doDeleteAndFollowLocation(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
+        return doDeleteAndFollowLocation(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+    }
+
     public <T> T doDeleteAndFollowLocation(final String uri, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         return doDeleteAndMaybeFollowLocation(uri, options, timeoutSec, clazz, true);
     }

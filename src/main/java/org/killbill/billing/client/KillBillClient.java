@@ -422,7 +422,7 @@ public class KillBillClient {
         return getInvoices(true, offset, limit, auditLevel);
     }
 
-    public Invoices getInvoices(boolean withItems, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+    public Invoices getInvoices(final boolean withItems, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.PAGINATION;
 
         final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
@@ -437,11 +437,11 @@ public class KillBillClient {
         return getInvoice(invoiceId, true);
     }
 
-    public Invoice getInvoice(final UUID invoiceId, boolean withItems) throws KillBillClientException {
+    public Invoice getInvoice(final UUID invoiceId, final boolean withItems) throws KillBillClientException {
         return getInvoice(invoiceId, withItems, AuditLevel.NONE);
     }
 
-    public Invoice getInvoice(final UUID invoiceId, boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
+    public Invoice getInvoice(final UUID invoiceId, final boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
         return getInvoiceByIdOrNumber(invoiceId.toString(), withItems, auditLevel);
     }
 
@@ -449,15 +449,15 @@ public class KillBillClient {
         return getInvoice(invoiceNumber, true);
     }
 
-    public Invoice getInvoice(final Integer invoiceNumber, boolean withItems) throws KillBillClientException {
+    public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems) throws KillBillClientException {
         return getInvoice(invoiceNumber, withItems, AuditLevel.NONE);
     }
 
-    public Invoice getInvoice(final Integer invoiceNumber, boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
+    public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
         return getInvoiceByIdOrNumber(invoiceNumber.toString(), withItems, auditLevel);
     }
 
-    public Invoice getInvoiceByIdOrNumber(final String invoiceIdOrNumber, boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
+    public Invoice getInvoiceByIdOrNumber(final String invoiceIdOrNumber, final boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceIdOrNumber;
 
         final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
@@ -470,11 +470,11 @@ public class KillBillClient {
         return getInvoicesForAccount(accountId, true);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, boolean withItems) throws KillBillClientException {
+    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems) throws KillBillClientException {
         return getInvoicesForAccount(accountId, withItems, AuditLevel.NONE);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
+    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.INVOICES;
 
         final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
