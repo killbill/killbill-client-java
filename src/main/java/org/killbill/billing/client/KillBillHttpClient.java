@@ -338,7 +338,7 @@ public class KillBillHttpClient {
 
     private String getUniqueValue(final Multimap<String, String> options, final String key) {
         final Collection<String> values = options.get(key);
-        if (values == null) {
+        if (values == null || values.size() == 0) {
             return null;
         } else {
             Preconditions.checkState(values.size() == 1, "You can only specify a unique value for " + key);
