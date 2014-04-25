@@ -17,6 +17,7 @@
 package org.killbill.billing.client;
 
 import org.killbill.billing.client.model.BillingException;
+
 import com.ning.http.client.Response;
 
 @SuppressWarnings("serial")

@@ -23,7 +23,6 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
-
 import org.killbill.clock.DefaultClock;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
