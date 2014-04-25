@@ -653,7 +653,7 @@ public class KillBillClient {
                                                                                           JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
                                                                                           JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Payments.class);
+        return httpClient.doGet(uri, queryParams, Payments.class);
     }
 
     public Payment getPayment(final UUID paymentId) throws KillBillClientException {
