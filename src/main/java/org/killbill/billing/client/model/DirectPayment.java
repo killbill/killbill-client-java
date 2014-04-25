@@ -155,7 +155,7 @@ public class DirectPayment extends KillBillObject {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DirectPayment)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 

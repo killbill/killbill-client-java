@@ -181,25 +181,28 @@ public class DirectTransaction extends KillBillObject {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DirectTransaction)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
         final DirectTransaction that = (DirectTransaction) o;
 
-        if (directPaymentId != null ? !directPaymentId.equals(that.directPaymentId) : that.directPaymentId != null) {
-            return false;
-        }
-        if (directTransactionId != null ? !directTransactionId.equals(that.directTransactionId) : that.directTransactionId != null) {
-            return false;
-        }
         if (amount != null ? amount.compareTo(that.amount) != 0 : that.amount != null) {
             return false;
         }
         if (currency != null ? !currency.equals(that.currency) : that.currency != null) {
             return false;
         }
+        if (directPaymentId != null ? !directPaymentId.equals(that.directPaymentId) : that.directPaymentId != null) {
+            return false;
+        }
+        if (directTransactionId != null ? !directTransactionId.equals(that.directTransactionId) : that.directTransactionId != null) {
+            return false;
+        }
         if (effectiveDate != null ? effectiveDate.compareTo(that.effectiveDate) != 0 : that.effectiveDate != null) {
+            return false;
+        }
+        if (externalKey != null ? !externalKey.equals(that.externalKey) : that.externalKey != null) {
             return false;
         }
         if (gatewayErrorCode != null ? !gatewayErrorCode.equals(that.gatewayErrorCode) : that.gatewayErrorCode != null) {
@@ -211,29 +214,27 @@ public class DirectTransaction extends KillBillObject {
         if (retryCount != null ? !retryCount.equals(that.retryCount) : that.retryCount != null) {
             return false;
         }
-        if (externalKey != null ? !externalKey.equals(that.externalKey) : that.externalKey != null) {
-            return false;
-        }
         if (status != null ? !status.equals(that.status) : that.status != null) {
             return false;
         }
-        if (transactionType.equals(that.transactionType)) {
+        if (transactionType != null ? !transactionType.equals(that.transactionType) : that.transactionType != null) {
             return false;
         }
+
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = transactionType != null ? transactionType.hashCode() : 0;
+        int result = directTransactionId != null ? directTransactionId.hashCode() : 0;
         result = 31 * result + (directPaymentId != null ? directPaymentId.hashCode() : 0);
-        result = 31 * result + (directTransactionId != null ? directTransactionId.hashCode() : 0);
+        result = 31 * result + (transactionType != null ? transactionType.hashCode() : 0);
         result = 31 * result + (effectiveDate != null ? effectiveDate.hashCode() : 0);
         result = 31 * result + (retryCount != null ? retryCount.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (externalKey != null ? externalKey.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
+        result = 31 * result + (externalKey != null ? externalKey.hashCode() : 0);
         result = 31 * result + (gatewayErrorCode != null ? gatewayErrorCode.hashCode() : 0);
         result = 31 * result + (gatewayErrorMsg != null ? gatewayErrorMsg.hashCode() : 0);
         return result;

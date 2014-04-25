@@ -45,6 +45,7 @@ import org.killbill.billing.client.model.Credit;
 import org.killbill.billing.client.model.CustomField;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.DirectPayment;
+import org.killbill.billing.client.model.DirectPayments;
 import org.killbill.billing.client.model.DirectTransaction;
 import org.killbill.billing.client.model.Invoice;
 import org.killbill.billing.client.model.InvoiceEmail;
@@ -79,6 +80,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 
@@ -719,29 +721,178 @@ public class KillBillClient {
     }
 
     // Direct Payments
+
+    public DirectPayments getDirectPayments() throws KillBillClientException {
+        return getDirectPayments(0L, 100L);
+    }
+
+    public DirectPayments getDirectPayments(final Long offset, final Long limit) throws KillBillClientException {
+        return getDirectPayments(offset, limit, AuditLevel.NONE);
+    }
+
+    public DirectPayments getDirectPayments(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return getDirectPayments(offset, limit, null, ImmutableMap.<String, String>of(), auditLevel);
+    }
+
+    public DirectPayments getDirectPayments(final Long offset, final Long limit, @Nullable final String pluginName, final Map<String, String> pluginProperties, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.DIRECT_PAYMENTS_PATH + "/" + JaxrsResource.PAGINATION;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
+        if (pluginName != null) {
+            queryParams.put(JaxrsResource.QUERY_PAYMENT_PLUGIN_NAME, pluginName);
+        }
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        storePluginPropertiesAsParams(pluginProperties, queryParams);
+
+        return httpClient.doGet(uri, queryParams, DirectPayments.class);
+    }
+
+    public DirectPayments searchDirectPayments(final String key) throws KillBillClientException {
+        return searchDirectPayments(key, 0L, 100L);
+    }
+
+    public DirectPayments searchDirectPayments(final String key, final Long offset, final Long limit) throws KillBillClientException {
+        return searchDirectPayments(key, offset, limit, AuditLevel.NONE);
+    }
+
+    public DirectPayments searchDirectPayments(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return searchDirectPayments(key, offset, limit, null, ImmutableMap.<String, String>of(), auditLevel);
+    }
+
+    public DirectPayments searchDirectPayments(final String key, final Long offset, final Long limit, @Nullable final String pluginName, final Map<String, String> pluginProperties, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.DIRECT_PAYMENTS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
+        if (pluginName != null) {
+            queryParams.put(JaxrsResource.QUERY_PAYMENT_PLUGIN_NAME, pluginName);
+        }
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        storePluginPropertiesAsParams(pluginProperties, queryParams);
+
+        return httpClient.doGet(uri, queryParams, DirectPayments.class);
+    }
+
+    public DirectPayment getDirectPayment(final UUID directPaymentId) throws KillBillClientException {
+        return getDirectPayment(directPaymentId, true);
+    }
+
+    public DirectPayment getDirectPayment(final UUID directPaymentId, final boolean withPluginInfo) throws KillBillClientException {
+        return getDirectPayment(directPaymentId, withPluginInfo, AuditLevel.NONE);
+    }
+
+    public DirectPayment getDirectPayment(final UUID directPaymentId, final boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
+        return getDirectPayment(directPaymentId, withPluginInfo, ImmutableMap.<String, String>of(), auditLevel);
+    }
+
+    public DirectPayment getDirectPayment(final UUID directPaymentId, final boolean withPluginInfo, final Map<String, String> pluginProperties, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.DIRECT_PAYMENTS_PATH + "/" + directPaymentId;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
+        queryParams.put(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_INFO, String.valueOf(withPluginInfo));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        storePluginPropertiesAsParams(pluginProperties, queryParams);
+
+        return httpClient.doGet(uri, queryParams, DirectPayment.class);
+    }
+
+    public DirectPayments getDirectPaymentsForAccount(final UUID accountId) throws KillBillClientException {
+        return getDirectPaymentsForAccount(accountId, AuditLevel.NONE);
+    }
+
+    public DirectPayments getDirectPaymentsForAccount(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.DIRECT_PAYMENTS;
+
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        return httpClient.doGet(uri, queryParams, DirectPayments.class);
+    }
+
     public DirectPayment createDirectPayment(final UUID accountId, final DirectTransaction transaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createDirectPayment(accountId, transaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    }
+
+    public DirectPayment createDirectPayment(final UUID accountId, final DirectTransaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "accountId cannot be null");
         Preconditions.checkNotNull(transaction.getTransactionType(), "DirectTransaction#transactionId cannot be null");
-        if (transaction.getTransactionType().equals("AUTHORIZE") || transaction.getTransactionType().equals("PURCHASE")) {
-            Preconditions.checkNotNull(transaction.getAmount(), "DirectTransaction#amount cannot be null");
-            Preconditions.checkNotNull(transaction.getExternalKey(), "DirectTransaction#externalKey cannot be null");
-        } else if (transaction.getTransactionType().equals("CAPTURE")) {
-            Preconditions.checkNotNull(transaction.getAmount(), "DirectTransaction#amount cannot be null");
-            Preconditions.checkNotNull(transaction.getDirectPaymentId(), "DirectTransaction#directPaymentId cannot be null");
-        } else if (transaction.getTransactionType().equals("CREDIT") || transaction.getTransactionType().equals("VOID")) {
-            Preconditions.checkNotNull(transaction.getDirectPaymentId(), "DirectTransaction#directPaymentId cannot be null");
-        } else {
-            throw new IllegalArgumentException("Unknown transaction type " + transaction.getTransactionType());
-        }
+        Preconditions.checkArgument("AUTHORIZE".equals(transaction.getTransactionType()) || "PURCHASE".equals(transaction.getTransactionType()), "Invalid transaction type " + transaction.getTransactionType());
+        Preconditions.checkNotNull(transaction.getAmount(), "DirectTransaction#amount cannot be null");
+        Preconditions.checkNotNull(transaction.getCurrency(), "DirectTransaction#currency cannot be null");
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.DIRECT_PAYMENTS;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(),
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        storePluginPropertiesAsParams(pluginProperties, params);
+
+        final Multimap<String, String> queryParams = paramsWithAudit(params,
                                                                      createdBy,
                                                                      reason,
                                                                      comment);
 
         return httpClient.doPostAndFollowLocation(uri, transaction, queryParams, DirectPayment.class);
+    }
+
+    public DirectPayment captureAuthorization(final DirectTransaction transaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return captureAuthorization(transaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    }
+
+    public DirectPayment captureAuthorization(final DirectTransaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(transaction.getDirectPaymentId(), "DirectTransaction#directPaymentId cannot be null");
+        Preconditions.checkNotNull(transaction.getAmount(), "DirectTransaction#amount cannot be null");
+
+        final String uri = JaxrsResource.DIRECT_PAYMENTS_PATH + "/" + transaction.getDirectPaymentId();
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        storePluginPropertiesAsParams(pluginProperties, params);
+
+        final Multimap<String, String> queryParams = paramsWithAudit(params,
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
+
+        return httpClient.doPostAndFollowLocation(uri, transaction, queryParams, DirectPayment.class);
+    }
+
+    public DirectPayment creditPayment(final DirectTransaction transaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return creditPayment(transaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    }
+
+    public DirectPayment creditPayment(final DirectTransaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(transaction.getDirectPaymentId(), "DirectTransaction#directPaymentId cannot be null");
+        Preconditions.checkNotNull(transaction.getAmount(), "DirectTransaction#amount cannot be null");
+
+        final String uri = JaxrsResource.DIRECT_PAYMENTS_PATH + "/" + transaction.getDirectPaymentId() + "/" + JaxrsResource.CREDITS;
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        storePluginPropertiesAsParams(pluginProperties, params);
+
+        final Multimap<String, String> queryParams = paramsWithAudit(params,
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
+
+        return httpClient.doPostAndFollowLocation(uri, transaction, queryParams, DirectPayment.class);
+    }
+
+    public DirectPayment voidPayment(final UUID directPaymentId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return voidPayment(directPaymentId, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    }
+
+    public DirectPayment voidPayment(final UUID directPaymentId, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.DIRECT_PAYMENTS_PATH + "/" + directPaymentId;
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        storePluginPropertiesAsParams(pluginProperties, params);
+
+        final Multimap<String, String> queryParams = paramsWithAudit(params,
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
+
+        return httpClient.doDeleteAndFollowLocation(uri, queryParams, DirectPayment.class);
     }
 
     // Refunds
@@ -1260,5 +1411,11 @@ public class KillBillClient {
         return ImmutableMultimap.<String, String>of(KillBillHttpClient.AUDIT_OPTION_CREATED_BY, createdBy,
                                                     KillBillHttpClient.AUDIT_OPTION_REASON, reason,
                                                     KillBillHttpClient.AUDIT_OPTION_COMMENT, comment);
+    }
+
+    private void storePluginPropertiesAsParams(final Map<String, String> pluginProperties, final Multimap<String, String> params) {
+        for (final String key : pluginProperties.keySet()) {
+            params.put(JaxrsResource.QUERY_PLUGIN_PROPERTY, String.format("%s=%s", UTF8UrlEncoder.encode(key), UTF8UrlEncoder.encode(pluginProperties.get(key))));
+        }
     }
 }
