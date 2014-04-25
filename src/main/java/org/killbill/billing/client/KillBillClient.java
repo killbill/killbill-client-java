@@ -1,7 +1,9 @@
 /*
+ * Copyright 2010-2013 Ning, Inc.
  * Copyright 2014 Groupon, Inc
+ * Copyright 2014 The Billing Project, LLC
  *
- * Groupon licenses this file to you under the Apache License, version 2.0
+ * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
  * License.  You may obtain a copy of the License at:
  *
@@ -16,13 +18,16 @@
 
 package org.killbill.billing.client;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.ning.http.client.Response;
-import com.ning.http.util.UTF8UrlEncoder;
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
@@ -66,14 +71,16 @@ import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.jaxrs.resources.JaxrsResource;
 import org.killbill.billing.util.api.AuditLevel;
 
-import javax.annotation.Nullable;
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import com.ning.http.client.Response;
+import com.ning.http.util.UTF8UrlEncoder;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_EMPTY_QUERY;
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_HTTP_TIMEOUT_SEC;
@@ -109,9 +116,9 @@ public class KillBillClient {
     public Accounts getAccounts(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Accounts.class);
     }
@@ -123,8 +130,8 @@ public class KillBillClient {
     public Account getAccount(final UUID accountId, final boolean withBalance, final boolean withCBA) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE, withBalance ? "true" : "false",
-                                                                                JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE_AND_CBA, withCBA ? "true" : "false");
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE, withBalance ? "true" : "false",
+                                                                                          JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE_AND_CBA, withCBA ? "true" : "false");
 
         return httpClient.doGet(uri, queryParams, Account.class);
     }
@@ -134,9 +141,9 @@ public class KillBillClient {
     }
 
     public Account getAccount(final String externalKey, final boolean withBalance, final boolean withCBA) throws KillBillClientException {
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey,
-                                                                                JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE, withBalance ? "true" : "false",
-                                                                                JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE_AND_CBA, withCBA ? "true" : "false");
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey,
+                                                                                          JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE, withBalance ? "true" : "false",
+                                                                                          JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE_AND_CBA, withCBA ? "true" : "false");
 
         return httpClient.doGet(JaxrsResource.ACCOUNTS_PATH, queryParams, Account.class);
     }
@@ -152,9 +159,9 @@ public class KillBillClient {
     public Accounts searchAccounts(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Accounts.class);
     }
@@ -166,13 +173,13 @@ public class KillBillClient {
     public AccountTimeline getAccountTimeline(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.TIMELINE;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, AccountTimeline.class);
     }
 
     public Account createAccount(final Account account, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         return httpClient.doPostAndFollowLocation(JaxrsResource.ACCOUNTS_PATH, account, queryParams, Account.class);
     }
@@ -182,7 +189,7 @@ public class KillBillClient {
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + account.getAccountId();
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         return httpClient.doPut(uri, account, queryParams, Account.class);
     }
@@ -198,7 +205,7 @@ public class KillBillClient {
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + email.getAccountId() + "/" + JaxrsResource.EMAILS;
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         httpClient.doPost(uri, email, queryParams);
     }
@@ -209,7 +216,7 @@ public class KillBillClient {
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + email.getAccountId() + "/" + JaxrsResource.EMAILS + "/" + UTF8UrlEncoder.encode(email.getEmail());
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         httpClient.doDelete(uri, queryParams);
     }
@@ -225,7 +232,7 @@ public class KillBillClient {
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + invoiceEmail.getAccountId() + "/" + JaxrsResource.EMAIL_NOTIFICATIONS;
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         httpClient.doPut(uri, invoiceEmail, queryParams);
     }
@@ -241,7 +248,7 @@ public class KillBillClient {
     public Bundle getBundle(final String externalKey) throws KillBillClientException {
         final String uri = JaxrsResource.BUNDLES_PATH;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
 
         return httpClient.doGet(uri, queryParams, Bundle.class);
     }
@@ -255,7 +262,7 @@ public class KillBillClient {
     public Bundles getAccountBundles(final UUID accountId, final String externalKey) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.BUNDLES;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
 
         return httpClient.doGet(uri, queryParams, Bundles.class);
     }
@@ -271,9 +278,9 @@ public class KillBillClient {
     public Bundles getBundles(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.BUNDLES_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Bundles.class);
     }
@@ -289,9 +296,9 @@ public class KillBillClient {
     public Bundles searchBundles(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.BUNDLES_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Bundles.class);
     }
@@ -302,7 +309,7 @@ public class KillBillClient {
 
         final String uri = JaxrsResource.BUNDLES_PATH + "/" + bundle.getBundleId();
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         return httpClient.doPutAndFollowLocation(uri, bundle, queryParams, Bundle.class);
 
@@ -328,12 +335,12 @@ public class KillBillClient {
         Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
         Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false",
-                                                                                                JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec)),
-                                                                createdBy,
-                                                                reason,
-                                                                comment
-                                                               );
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false",
+                                                                                                          JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec)),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment
+                                                                    );
 
         final int httpTimeout = Math.max(DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec);
 
@@ -356,13 +363,13 @@ public class KillBillClient {
 
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscription.getSubscriptionId();
 
-        final Map<String, String> params = new HashMap<String, String>();
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
         params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
         params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
         if (billingPolicy != null) {
             params.put(JaxrsResource.QUERY_BILLING_POLICY, billingPolicy.toString());
         }
-        final Map<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
         return httpClient.doPut(uri, subscription, queryParams, Subscription.class);
     }
@@ -379,7 +386,7 @@ public class KillBillClient {
                                    final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId;
 
-        final Map<String, String> params = new HashMap<String, String>();
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
         params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
         params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
         if (entitlementPolicy != null) {
@@ -388,7 +395,7 @@ public class KillBillClient {
         if (billingPolicy != null) {
             params.put(JaxrsResource.QUERY_BILLING_POLICY, billingPolicy.toString());
         }
-        final Map<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
         httpClient.doDelete(uri, queryParams);
     }
@@ -396,7 +403,7 @@ public class KillBillClient {
     public void uncancelSubscription(final UUID subscriptionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId + "/uncancel";
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         httpClient.doPut(uri, null, queryParams);
     }
@@ -418,10 +425,10 @@ public class KillBillClient {
     public Invoices getInvoices(boolean withItems, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Invoices.class);
     }
@@ -453,8 +460,8 @@ public class KillBillClient {
     public Invoice getInvoiceByIdOrNumber(final String invoiceIdOrNumber, boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceIdOrNumber;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Invoice.class);
     }
@@ -470,8 +477,8 @@ public class KillBillClient {
     public Invoices getInvoicesForAccount(final UUID accountId, boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.INVOICES;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Invoices.class);
     }
@@ -487,9 +494,9 @@ public class KillBillClient {
     public Invoices searchInvoices(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Invoices.class);
     }
@@ -497,13 +504,13 @@ public class KillBillClient {
     public Invoice createDryRunInvoice(final UUID accountId, final DateTime futureDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
-                                                                                                JaxrsResource.QUERY_TARGET_DATE, futureDate.toString(),
-                                                                                                JaxrsResource.QUERY_DRY_RUN, "true"),
-                                                                createdBy,
-                                                                reason,
-                                                                comment
-                                                               );
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
+                                                                                                          JaxrsResource.QUERY_TARGET_DATE, futureDate.toString(),
+                                                                                                          JaxrsResource.QUERY_DRY_RUN, "true"),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment
+                                                                    );
 
         return httpClient.doPost(uri, null, queryParams, Invoice.class);
     }
@@ -511,12 +518,12 @@ public class KillBillClient {
     public Invoice createInvoice(final UUID accountId, final DateTime futureDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
-                                                                                                JaxrsResource.QUERY_TARGET_DATE, futureDate.toString()),
-                                                                createdBy,
-                                                                reason,
-                                                                comment
-                                                               );
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
+                                                                                                          JaxrsResource.QUERY_TARGET_DATE, futureDate.toString()),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment
+                                                                    );
 
         return httpClient.doPostAndFollowLocation(uri, null, queryParams, Invoice.class);
     }
@@ -532,10 +539,10 @@ public class KillBillClient {
 
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceItem.getInvoiceId();
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString()),
-                                                                createdBy,
-                                                                reason,
-                                                                comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString()),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
 
         return httpClient.doPostAndFollowLocation(uri, invoiceItem, queryParams, Invoice.class);
     }
@@ -570,12 +577,12 @@ public class KillBillClient {
     private List<InvoiceItem> createExternalCharges(final UUID accountId, final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.CHARGES + "/" + accountId;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString(),
-                                                                                                JaxrsResource.QUERY_PAY_INVOICE, autoPay.toString()),
-                                                                createdBy,
-                                                                reason,
-                                                                comment
-                                                               );
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString(),
+                                                                                                          JaxrsResource.QUERY_PAY_INVOICE, autoPay.toString()),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment
+                                                                    );
 
         return httpClient.doPost(uri, externalCharges, queryParams, InvoiceItems.class);
     }
@@ -583,7 +590,7 @@ public class KillBillClient {
     public void triggerInvoiceNotification(final UUID invoiceId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId.toString() + "/" + JaxrsResource.EMAIL_NOTIFICATIONS;
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         httpClient.doPost(uri, null, queryParams);
     }
@@ -597,7 +604,7 @@ public class KillBillClient {
     public Credit getCredit(final UUID creditId, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.CREDITS_PATH + "/" + creditId;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Credit.class);
     }
@@ -606,7 +613,7 @@ public class KillBillClient {
         Preconditions.checkNotNull(credit.getAccountId(), "Credt#accountId cannot be null");
         Preconditions.checkNotNull(credit.getCreditAmount(), "Credt#creditAmount cannot be null");
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         return httpClient.doPostAndFollowLocation(JaxrsResource.CREDITS_PATH, credit, queryParams, Credit.class);
     }
@@ -624,9 +631,9 @@ public class KillBillClient {
     public Payments getPayments(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Payments.class);
     }
@@ -642,9 +649,9 @@ public class KillBillClient {
     public Payments searchPayments(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Payments.class);
     }
@@ -660,8 +667,8 @@ public class KillBillClient {
     public Payment getPayment(final UUID paymentId, final boolean withRefundsAndChargebacks, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_PAYMENT_WITH_REFUNDS_AND_CHARGEBACKS, String.valueOf(withRefundsAndChargebacks),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_PAYMENT_WITH_REFUNDS_AND_CHARGEBACKS, String.valueOf(withRefundsAndChargebacks),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Payment.class);
     }
@@ -681,17 +688,17 @@ public class KillBillClient {
     public void payAllInvoices(final UUID accountId, final boolean externalPayment, final BigDecimal paymentAmount, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENTS;
 
-        final Map<String, String> params = new HashMap<String, String>();
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
         params.put(JaxrsResource.QUERY_PAYMENT_EXTERNAL, String.valueOf(externalPayment));
         if (paymentAmount != null) {
             params.put("paymentAmount", String.valueOf(paymentAmount));
         }
 
-        final Map<String, String> queryParams = paramsWithAudit(params,
-                                                                createdBy,
-                                                                reason,
-                                                                comment
-                                                               );
+        final Multimap<String, String> queryParams = paramsWithAudit(params,
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment
+                                                                    );
 
         httpClient.doPost(uri, null, queryParams);
     }
@@ -703,10 +710,10 @@ public class KillBillClient {
 
         final String uri = JaxrsResource.INVOICES_PATH + "/" + payment.getInvoiceId() + "/" + JaxrsResource.PAYMENTS;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of("externalPayment", String.valueOf(isExternal)),
-                                                                createdBy,
-                                                                reason,
-                                                                comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of("externalPayment", String.valueOf(isExternal)),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
 
         return httpClient.doPostAndFollowLocation(uri, payment, queryParams, Payments.class);
     }
@@ -727,13 +734,12 @@ public class KillBillClient {
             throw new IllegalArgumentException("Unknown transaction type " + transaction.getTransactionType());
         }
 
-
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.DIRECT_PAYMENTS;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(),
-                                                                createdBy,
-                                                                reason,
-                                                                comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
 
         return httpClient.doPostAndFollowLocation(uri, transaction, queryParams, DirectPayment.class);
     }
@@ -751,9 +757,9 @@ public class KillBillClient {
     public Refunds getRefunds(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.REFUNDS_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Refunds.class);
     }
@@ -769,9 +775,9 @@ public class KillBillClient {
     public Refunds searchRefunds(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.REFUNDS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Refunds.class);
     }
@@ -801,7 +807,7 @@ public class KillBillClient {
 
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + refund.getPaymentId() + "/" + JaxrsResource.REFUNDS;
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         return httpClient.doPostAndFollowLocation(uri, refund, queryParams, Refund.class);
     }
@@ -815,7 +821,7 @@ public class KillBillClient {
     public Chargebacks getChargebacksForAccount(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.CHARGEBACKS;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Chargebacks.class);
     }
@@ -827,7 +833,7 @@ public class KillBillClient {
     public Chargebacks getChargebacksForPayment(final UUID paymentId, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId + "/" + JaxrsResource.CHARGEBACKS;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Chargebacks.class);
     }
@@ -836,7 +842,7 @@ public class KillBillClient {
         Preconditions.checkNotNull(chargeback.getAmount(), "Chargeback#amount cannot be null");
         Preconditions.checkNotNull(chargeback.getPaymentId(), "Chargeback#paymentId cannot be null");
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         return httpClient.doPostAndFollowLocation(JaxrsResource.CHARGEBACKS_PATH, chargeback, queryParams, Chargeback.class);
     }
@@ -854,13 +860,12 @@ public class KillBillClient {
     public PaymentMethods getPaymentMethods(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, PaymentMethods.class);
     }
-
 
     public PaymentMethods searchPaymentMethods(final String key) throws KillBillClientException {
         return searchPaymentMethods(key, 0L, 100L);
@@ -873,9 +878,9 @@ public class KillBillClient {
     public PaymentMethods searchPaymentMethods(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, PaymentMethods.class);
     }
@@ -891,8 +896,8 @@ public class KillBillClient {
     public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_INFO, String.valueOf(withPluginInfo),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_INFO, String.valueOf(withPluginInfo),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, PaymentMethod.class);
     }
@@ -914,8 +919,8 @@ public class KillBillClient {
     public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, @Nullable final String pluginName, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_INFO, Strings.nullToEmpty(pluginName),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_INFO, Strings.nullToEmpty(pluginName),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, PaymentMethods.class);
     }
@@ -926,10 +931,10 @@ public class KillBillClient {
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + paymentMethod.getAccountId() + "/" + JaxrsResource.PAYMENT_METHODS;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_IS_DEFAULT, paymentMethod.getIsDefault() ? "true" : "false"),
-                                                                createdBy,
-                                                                reason,
-                                                                comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_IS_DEFAULT, paymentMethod.getIsDefault() ? "true" : "false"),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
 
         return httpClient.doPostAndFollowLocation(uri, paymentMethod, queryParams, PaymentMethod.class);
     }
@@ -937,7 +942,7 @@ public class KillBillClient {
     public void updateDefaultPaymentMethod(final UUID accountId, final UUID paymentMethodId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS + "/" + paymentMethodId + "/" + JaxrsResource.PAYMENT_METHODS_DEFAULT_PATH_POSTFIX;
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         httpClient.doPut(uri, null, queryParams);
     }
@@ -945,10 +950,10 @@ public class KillBillClient {
     public void deletePaymentMethod(final UUID paymentMethodId, final Boolean deleteDefault, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF, deleteDefault.toString()),
-                                                                createdBy,
-                                                                reason,
-                                                                comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF, deleteDefault.toString()),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
 
         httpClient.doDelete(uri, queryParams);
     }
@@ -974,7 +979,7 @@ public class KillBillClient {
     }
 
     public TagDefinition createTagDefinition(final TagDefinition tagDefinition, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         return httpClient.doPostAndFollowLocation(JaxrsResource.TAG_DEFINITIONS_PATH, tagDefinition, queryParams, TagDefinition.class);
     }
@@ -982,7 +987,7 @@ public class KillBillClient {
     public void deleteTagDefinition(final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.TAG_DEFINITIONS_PATH + "/" + tagDefinitionId;
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         httpClient.doDelete(uri, queryParams);
     }
@@ -1000,9 +1005,9 @@ public class KillBillClient {
     public Tags getTags(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.TAGS_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Tags.class);
     }
@@ -1018,9 +1023,9 @@ public class KillBillClient {
     public Tags searchTags(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.TAGS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Tags.class);
     }
@@ -1032,7 +1037,7 @@ public class KillBillClient {
     public Tags getAccountTags(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.TAGS;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Tags.class);
     }
@@ -1040,10 +1045,10 @@ public class KillBillClient {
     public Tags createAccountTag(final UUID accountId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.TAGS;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(JaxrsResource.QUERY_TAGS, tagDefinitionId.toString()),
-                                                                createdBy,
-                                                                reason,
-                                                                comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_TAGS, tagDefinitionId.toString()),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
 
         return httpClient.doPostAndFollowLocation(uri, null, queryParams, Tags.class);
     }
@@ -1051,10 +1056,10 @@ public class KillBillClient {
     public void deleteAccountTag(final UUID accountId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.TAGS;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(JaxrsResource.QUERY_TAGS, tagDefinitionId.toString()),
-                                                                createdBy,
-                                                                reason,
-                                                                comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_TAGS, tagDefinitionId.toString()),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
 
         httpClient.doDelete(uri, queryParams);
     }
@@ -1072,9 +1077,9 @@ public class KillBillClient {
     public CustomFields getCustomFields(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.CUSTOM_FIELDS_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, CustomFields.class);
     }
@@ -1090,9 +1095,9 @@ public class KillBillClient {
     public CustomFields searchCustomFields(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.CUSTOM_FIELDS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
+                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, CustomFields.class);
     }
@@ -1104,7 +1109,7 @@ public class KillBillClient {
     public CustomFields getAccountCustomFields(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.CUSTOM_FIELDS;
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, CustomFields.class);
     }
@@ -1116,7 +1121,7 @@ public class KillBillClient {
     public CustomFields createAccountCustomFields(final UUID accountId, final Iterable<CustomField> customFields, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.CUSTOM_FIELDS;
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         return httpClient.doPostAndFollowLocation(uri, customFields, queryParams, CustomFields.class);
     }
@@ -1132,14 +1137,14 @@ public class KillBillClient {
     public void deleteAccountCustomFields(final UUID accountId, @Nullable final Iterable<UUID> customFieldIds, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.CUSTOM_FIELDS;
 
-        final Map<String, String> paramCustomFields = customFieldIds == null ?
-                                                      ImmutableMap.<String, String>of() :
-                                                      ImmutableMap.<String, String>of(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+        final Multimap<String, String> paramCustomFields = customFieldIds == null ?
+                                                           ImmutableMultimap.<String, String>of() :
+                                                           ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
 
-        final Map<String, String> queryParams = paramsWithAudit(paramCustomFields,
-                                                                createdBy,
-                                                                reason,
-                                                                comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(paramCustomFields,
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
 
         httpClient.doDelete(uri, queryParams);
     }
@@ -1155,7 +1160,7 @@ public class KillBillClient {
     public List<PlanDetail> getAvailableAddons(final String baseProductName) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH + "/availableAddons";
 
-        final Map<String, String> queryParams = ImmutableMap.<String, String>of("baseProductName", baseProductName);
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of("baseProductName", baseProductName);
 
         return httpClient.doGet(uri, queryParams, PlanDetails.class);
     }
@@ -1172,7 +1177,7 @@ public class KillBillClient {
         Preconditions.checkNotNull(tenant.getApiKey(), "Tenant#apiKey cannot be null");
         Preconditions.checkNotNull(tenant.getApiSecret(), "Tenant#apiSecret cannot be null");
 
-        final Map<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         return httpClient.doPostAndFollowLocation(JaxrsResource.TENANTS_PATH, tenant, queryParams, Tenant.class);
     }
@@ -1180,10 +1185,10 @@ public class KillBillClient {
     public TenantKey registerCallbackNotificationForTenant(final String callback, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.REGISTER_NOTIFICATION_CALLBACK;
 
-        final Map<String, String> queryParams = paramsWithAudit(ImmutableMap.<String, String>of(JaxrsResource.QUERY_NOTIFICATION_CALLBACK, callback),
-                                                                createdBy,
-                                                                reason,
-                                                                comment);
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_NOTIFICATION_CALLBACK, callback),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
 
         return httpClient.doPostAndFollowLocation(uri, null, queryParams, TenantKey.class);
     }
@@ -1198,7 +1203,7 @@ public class KillBillClient {
         return pluginGET(uri, DEFAULT_EMPTY_QUERY);
     }
 
-    public Response pluginGET(final String uri, final Map<String, String> queryParams) throws Exception {
+    public Response pluginGET(final String uri, final Multimap<String, String> queryParams) throws Exception {
         return httpClient.doGet(JaxrsResource.PLUGINS_PATH + "/" + uri, queryParams);
     }
 
@@ -1206,7 +1211,7 @@ public class KillBillClient {
         return pluginHEAD(uri, DEFAULT_EMPTY_QUERY);
     }
 
-    public Response pluginHEAD(final String uri, final Map<String, String> queryParams) throws Exception {
+    public Response pluginHEAD(final String uri, final Multimap<String, String> queryParams) throws Exception {
         return httpClient.doHead(JaxrsResource.PLUGINS_PATH + "/" + uri, queryParams);
     }
 
@@ -1214,7 +1219,7 @@ public class KillBillClient {
         return pluginPOST(uri, body, DEFAULT_EMPTY_QUERY);
     }
 
-    public Response pluginPOST(final String uri, @Nullable final String body, final Map<String, String> queryParams) throws Exception {
+    public Response pluginPOST(final String uri, @Nullable final String body, final Multimap<String, String> queryParams) throws Exception {
         return httpClient.doPost(JaxrsResource.PLUGINS_PATH + "/" + uri, body, queryParams);
     }
 
@@ -1222,7 +1227,7 @@ public class KillBillClient {
         return pluginPUT(uri, body, DEFAULT_EMPTY_QUERY);
     }
 
-    public Response pluginPUT(final String uri, @Nullable final String body, final Map<String, String> queryParams) throws Exception {
+    public Response pluginPUT(final String uri, @Nullable final String body, final Multimap<String, String> queryParams) throws Exception {
         return httpClient.doPut(JaxrsResource.PLUGINS_PATH + "/" + uri, body, queryParams);
     }
 
@@ -1230,7 +1235,7 @@ public class KillBillClient {
         return pluginDELETE(uri, DEFAULT_EMPTY_QUERY);
     }
 
-    public Response pluginDELETE(final String uri, final Map<String, String> queryParams) throws Exception {
+    public Response pluginDELETE(final String uri, final Multimap<String, String> queryParams) throws Exception {
         return httpClient.doDelete(JaxrsResource.PLUGINS_PATH + "/" + uri, queryParams);
     }
 
@@ -1238,22 +1243,22 @@ public class KillBillClient {
         return pluginOPTIONS(uri, DEFAULT_EMPTY_QUERY);
     }
 
-    public Response pluginOPTIONS(final String uri, final Map<String, String> queryParams) throws Exception {
+    public Response pluginOPTIONS(final String uri, final Multimap<String, String> queryParams) throws Exception {
         return httpClient.doOptions(JaxrsResource.PLUGINS_PATH + "/" + uri, queryParams);
     }
 
     // Utilities
 
-    private Map<String, String> paramsWithAudit(final Map<String, String> queryParams, final String createdBy, final String reason, final String comment) {
-        final Map<String, String> queryParamsWithAudit = new HashMap<String, String>();
+    private Multimap<String, String> paramsWithAudit(final Multimap<String, String> queryParams, final String createdBy, final String reason, final String comment) {
+        final Multimap<String, String> queryParamsWithAudit = HashMultimap.<String, String>create();
         queryParamsWithAudit.putAll(queryParams);
         queryParamsWithAudit.putAll(paramsWithAudit(createdBy, reason, comment));
         return queryParamsWithAudit;
     }
 
-    private Map<String, String> paramsWithAudit(final String createdBy, final String reason, final String comment) {
-        return ImmutableMap.<String, String>of(KillBillHttpClient.AUDIT_OPTION_CREATED_BY, createdBy,
-                                               KillBillHttpClient.AUDIT_OPTION_REASON, reason,
-                                               KillBillHttpClient.AUDIT_OPTION_COMMENT, comment);
+    private Multimap<String, String> paramsWithAudit(final String createdBy, final String reason, final String comment) {
+        return ImmutableMultimap.<String, String>of(KillBillHttpClient.AUDIT_OPTION_CREATED_BY, createdBy,
+                                                    KillBillHttpClient.AUDIT_OPTION_REASON, reason,
+                                                    KillBillHttpClient.AUDIT_OPTION_COMMENT, comment);
     }
 }
