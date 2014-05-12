@@ -37,7 +37,7 @@ public class PaymentMethodPluginDetail {
     private String state;
     private String zip;
     private String country;
-    private List<PaymentMethodProperties> properties;
+    private List<PluginProperty> properties;
 
     public PaymentMethodPluginDetail() {}
 
@@ -56,7 +56,7 @@ public class PaymentMethodPluginDetail {
                                      @JsonProperty("state") final String state,
                                      @JsonProperty("zip") final String zip,
                                      @JsonProperty("country") final String country,
-                                     @JsonProperty("properties") final List<PaymentMethodProperties> properties) {
+                                     @JsonProperty("properties") final List<PluginProperty> properties) {
         this.externalPaymentId = externalPaymentId;
         this.isDefaultPaymentMethod = isDefaultPaymentMethod;
         this.type = type;
@@ -186,11 +186,11 @@ public class PaymentMethodPluginDetail {
         this.country = country;
     }
 
-    public List<PaymentMethodProperties> getProperties() {
+    public List<PluginProperty> getProperties() {
         return properties;
     }
 
-    public void setProperties(final List<PaymentMethodProperties> properties) {
+    public void setProperties(final List<PluginProperty> properties) {
         this.properties = properties;
     }
 

@@ -47,6 +47,8 @@ import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.DirectPayment;
 import org.killbill.billing.client.model.DirectPayments;
 import org.killbill.billing.client.model.DirectTransaction;
+import org.killbill.billing.client.model.HostedPaymentPageFields;
+import org.killbill.billing.client.model.HostedPaymentPageFormDescriptor;
 import org.killbill.billing.client.model.Invoice;
 import org.killbill.billing.client.model.InvoiceEmail;
 import org.killbill.billing.client.model.InvoiceItem;
@@ -893,6 +895,36 @@ public class KillBillClient {
                                                                      comment);
 
         return httpClient.doDeleteAndFollowLocation(uri, queryParams, DirectPayment.class);
+    }
+
+    // Hosted payment pages
+
+    public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields fields, final UUID kbAccountId, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_GATEWAYS_PATH + "/" + JaxrsResource.HOSTED + "/" + JaxrsResource.FORM + "/" + kbAccountId;
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        storePluginPropertiesAsParams(pluginProperties, params);
+
+        final Multimap<String, String> queryParams = paramsWithAudit(params,
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
+
+        return httpClient.doPost(uri, fields, queryParams, HostedPaymentPageFormDescriptor.class);
+    }
+
+    public Response processNotification(final String notification, final String pluginName, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_GATEWAYS_PATH + "/" + JaxrsResource.NOTIFICATION + "/" + pluginName;
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        storePluginPropertiesAsParams(pluginProperties, params);
+
+        final Multimap<String, String> queryParams = paramsWithAudit(params,
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
+
+        return httpClient.doPost(uri, notification, queryParams);
     }
 
     // Refunds

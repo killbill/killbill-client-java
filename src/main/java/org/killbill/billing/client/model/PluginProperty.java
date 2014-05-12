@@ -1,5 +1,7 @@
 /*
  * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014 Groupon, Inc
+ * Copyright 2014 The Billing Project, LLC
  *
  * Ning licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -19,18 +21,18 @@ package org.killbill.billing.client.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PaymentMethodProperties {
+public class PluginProperty {
 
     private String key;
     private String value;
     private Boolean isUpdatable;
 
-    public PaymentMethodProperties() {}
+    public PluginProperty() {}
 
     @JsonCreator
-    public PaymentMethodProperties(@JsonProperty("key") final String key,
-                                   @JsonProperty("value") final String value,
-                                   @JsonProperty("isUpdatable") final Boolean isUpdatable) {
+    public PluginProperty(@JsonProperty("key") final String key,
+                          @JsonProperty("value") final String value,
+                          @JsonProperty("isUpdatable") final Boolean isUpdatable) {
         super();
         this.key = key;
         this.value = value;
@@ -80,7 +82,7 @@ public class PaymentMethodProperties {
             return false;
         }
 
-        final PaymentMethodProperties that = (PaymentMethodProperties) o;
+        final PluginProperty that = (PluginProperty) o;
 
         if (isUpdatable != null ? !isUpdatable.equals(that.isUpdatable) : that.isUpdatable != null) {
             return false;
