@@ -30,6 +30,7 @@ public class DirectPayment extends KillBillObject {
     private UUID accountId;
     private UUID directPaymentId;
     private Integer paymentNumber;
+    private String directPaymentExternalKey;
     private BigDecimal authAmount;
     private BigDecimal capturedAmount;
     private BigDecimal refundedAmount;
@@ -41,20 +42,22 @@ public class DirectPayment extends KillBillObject {
     }
 
     @JsonCreator
-    public DirectPayment(@JsonProperty("accountId") UUID accountId,
-                         @JsonProperty("directPaymentId") UUID directPaymentId,
-                         @JsonProperty("paymentNumber") Integer paymentNumber,
-                         @JsonProperty("authAmount") BigDecimal authAmount,
-                         @JsonProperty("capturedAmount") BigDecimal capturedAmount,
-                         @JsonProperty("refundedAmount") BigDecimal refundedAmount,
-                         @JsonProperty("currency") String currency,
-                         @JsonProperty("paymentMethodId") UUID paymentMethodId,
-                         @JsonProperty("transactions") List<DirectTransaction> transactions,
-                         @JsonProperty("auditLogs") @Nullable List<AuditLog> auditLogs) {
+    public DirectPayment(@JsonProperty("accountId") final UUID accountId,
+                         @JsonProperty("directPaymentId") final UUID directPaymentId,
+                         @JsonProperty("paymentNumber") final Integer paymentNumber,
+                         @JsonProperty("directPaymentExternalKey") final String directPaymentExternalKey,
+                         @JsonProperty("authAmount") final BigDecimal authAmount,
+                         @JsonProperty("capturedAmount") final BigDecimal capturedAmount,
+                         @JsonProperty("refundedAmount") final BigDecimal refundedAmount,
+                         @JsonProperty("currency") final String currency,
+                         @JsonProperty("paymentMethodId") final UUID paymentMethodId,
+                         @JsonProperty("transactions") final List<DirectTransaction> transactions,
+                         @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.accountId = accountId;
         this.directPaymentId = directPaymentId;
         this.paymentNumber = paymentNumber;
+        this.directPaymentExternalKey = directPaymentExternalKey;
         this.authAmount = authAmount;
         this.capturedAmount = capturedAmount;
         this.refundedAmount = refundedAmount;
@@ -67,7 +70,7 @@ public class DirectPayment extends KillBillObject {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
+    public void setAccountId(final UUID accountId) {
         this.accountId = accountId;
     }
 
@@ -75,7 +78,7 @@ public class DirectPayment extends KillBillObject {
         return directPaymentId;
     }
 
-    public void setDirectPaymentId(UUID directPaymentId) {
+    public void setDirectPaymentId(final UUID directPaymentId) {
         this.directPaymentId = directPaymentId;
     }
 
@@ -83,15 +86,23 @@ public class DirectPayment extends KillBillObject {
         return paymentNumber;
     }
 
-    public void setPaymentNumber(Integer paymentNumber) {
+    public void setPaymentNumber(final Integer paymentNumber) {
         this.paymentNumber = paymentNumber;
+    }
+
+    public String getDirectPaymentExternalKey() {
+        return directPaymentExternalKey;
+    }
+
+    public void setDirectPaymentExternalKey(final String directPaymentExternalKey) {
+        this.directPaymentExternalKey = directPaymentExternalKey;
     }
 
     public BigDecimal getAuthAmount() {
         return authAmount;
     }
 
-    public void setAuthAmount(BigDecimal authAmount) {
+    public void setAuthAmount(final BigDecimal authAmount) {
         this.authAmount = authAmount;
     }
 
@@ -99,7 +110,7 @@ public class DirectPayment extends KillBillObject {
         return capturedAmount;
     }
 
-    public void setCapturedAmount(BigDecimal capturedAmount) {
+    public void setCapturedAmount(final BigDecimal capturedAmount) {
         this.capturedAmount = capturedAmount;
     }
 
@@ -107,7 +118,7 @@ public class DirectPayment extends KillBillObject {
         return refundedAmount;
     }
 
-    public void setRefundedAmount(BigDecimal refundedAmount) {
+    public void setRefundedAmount(final BigDecimal refundedAmount) {
         this.refundedAmount = refundedAmount;
     }
 
@@ -115,7 +126,7 @@ public class DirectPayment extends KillBillObject {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(final String currency) {
         this.currency = currency;
     }
 
@@ -123,7 +134,7 @@ public class DirectPayment extends KillBillObject {
         return paymentMethodId;
     }
 
-    public void setPaymentMethodId(UUID paymentMethodId) {
+    public void setPaymentMethodId(final UUID paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
     }
 
@@ -131,23 +142,25 @@ public class DirectPayment extends KillBillObject {
         return transactions;
     }
 
-    public void setTransactions(List<DirectTransaction> transactions) {
+    public void setTransactions(final List<DirectTransaction> transactions) {
         this.transactions = transactions;
     }
 
     @Override
     public String toString() {
-        return "DirectPaymentJson{" +
-                "accountId='" + accountId + '\'' +
-                ", directPaymentId='" + directPaymentId + '\'' +
-                ", paymentNumber='" + paymentNumber + '\'' +
-                ", authAmount=" + authAmount +
-                ", capturedAmount=" + capturedAmount +
-                ", refundedAmount=" + refundedAmount +
-                ", currency='" + currency + '\'' +
-                ", paymentMethodId='" + paymentMethodId + '\'' +
-                ", transactions=" + transactions +
-                '}';
+        final StringBuilder sb = new StringBuilder("DirectPayment{");
+        sb.append("accountId=").append(accountId);
+        sb.append(", directPaymentId=").append(directPaymentId);
+        sb.append(", paymentNumber=").append(paymentNumber);
+        sb.append(", directPaymentExternalKey='").append(directPaymentExternalKey).append('\'');
+        sb.append(", authAmount=").append(authAmount);
+        sb.append(", capturedAmount=").append(capturedAmount);
+        sb.append(", refundedAmount=").append(refundedAmount);
+        sb.append(", currency='").append(currency).append('\'');
+        sb.append(", paymentMethodId=").append(paymentMethodId);
+        sb.append(", transactions=").append(transactions);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
@@ -171,6 +184,9 @@ public class DirectPayment extends KillBillObject {
             return false;
         }
         if (currency != null ? !currency.equals(that.currency) : that.currency != null) {
+            return false;
+        }
+        if (directPaymentExternalKey != null ? !directPaymentExternalKey.equals(that.directPaymentExternalKey) : that.directPaymentExternalKey != null) {
             return false;
         }
         if (directPaymentId != null ? !directPaymentId.equals(that.directPaymentId) : that.directPaymentId != null) {
@@ -197,6 +213,7 @@ public class DirectPayment extends KillBillObject {
         int result = accountId != null ? accountId.hashCode() : 0;
         result = 31 * result + (directPaymentId != null ? directPaymentId.hashCode() : 0);
         result = 31 * result + (paymentNumber != null ? paymentNumber.hashCode() : 0);
+        result = 31 * result + (directPaymentExternalKey != null ? directPaymentExternalKey.hashCode() : 0);
         result = 31 * result + (authAmount != null ? authAmount.hashCode() : 0);
         result = 31 * result + (capturedAmount != null ? capturedAmount.hashCode() : 0);
         result = 31 * result + (refundedAmount != null ? refundedAmount.hashCode() : 0);

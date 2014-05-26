@@ -30,14 +30,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class DirectTransaction extends KillBillObject {
 
     private UUID directTransactionId;
+    private String directTransactionExternalKey;
     private UUID directPaymentId;
+    private String directPaymentExternalKey;
     private String transactionType;
     private DateTime effectiveDate;
-    private Integer retryCount;
     private String status;
     private BigDecimal amount;
     private String currency;
-    private String externalKey;
     private String gatewayErrorCode;
     private String gatewayErrorMsg;
 
@@ -45,28 +45,28 @@ public class DirectTransaction extends KillBillObject {
     }
 
     @JsonCreator
-    public DirectTransaction(@JsonProperty("directTransactionId") UUID directTransactionId,
-                             @JsonProperty("directPaymentId") UUID directPaymentId,
-                             @JsonProperty("transactionType") String transactionType,
-                             @JsonProperty("effectiveDate") DateTime effectiveDate,
-                             @JsonProperty("retryCount") Integer retryCount,
-                             @JsonProperty("status") String status,
-                             @JsonProperty("amount") BigDecimal amount,
-                             @JsonProperty("currency") String currency,
-                             @JsonProperty("externalKey") String externalKey,
-                             @JsonProperty("gatewayErrorCode") String gatewayErrorCode,
-                             @JsonProperty("gatewayErrorMsg") String gatewayErrorMsg,
-                             @JsonProperty("auditLogs") @Nullable List<AuditLog> auditLogs) {
+    public DirectTransaction(@JsonProperty("directTransactionId") final UUID directTransactionId,
+                             @JsonProperty("directTransactionExternalKey") final String directTransactionExternalKey,
+                             @JsonProperty("directPaymentId") final UUID directPaymentId,
+                             @JsonProperty("directPaymentExternalKey") final String directPaymentExternalKey,
+                             @JsonProperty("transactionType") final String transactionType,
+                             @JsonProperty("effectiveDate") final DateTime effectiveDate,
+                             @JsonProperty("status") final String status,
+                             @JsonProperty("amount") final BigDecimal amount,
+                             @JsonProperty("currency") final String currency,
+                             @JsonProperty("gatewayErrorCode") final String gatewayErrorCode,
+                             @JsonProperty("gatewayErrorMsg") final String gatewayErrorMsg,
+                             @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.directTransactionId = directTransactionId;
+        this.directTransactionExternalKey = directTransactionExternalKey;
         this.directPaymentId = directPaymentId;
+        this.directPaymentExternalKey = directPaymentExternalKey;
         this.transactionType = transactionType;
         this.effectiveDate = effectiveDate;
-        this.retryCount = retryCount;
         this.status = status;
         this.amount = amount;
         this.currency = currency;
-        this.externalKey = externalKey;
         this.gatewayErrorCode = gatewayErrorCode;
         this.gatewayErrorMsg = gatewayErrorMsg;
     }
@@ -75,23 +75,39 @@ public class DirectTransaction extends KillBillObject {
         return directTransactionId;
     }
 
-    public void setDirectTransactionId(UUID directTransactionId) {
+    public void setDirectTransactionId(final UUID directTransactionId) {
         this.directTransactionId = directTransactionId;
+    }
+
+    public String getDirectTransactionExternalKey() {
+        return directTransactionExternalKey;
+    }
+
+    public void setDirectTransactionExternalKey(final String directTransactionExternalKey) {
+        this.directTransactionExternalKey = directTransactionExternalKey;
     }
 
     public UUID getDirectPaymentId() {
         return directPaymentId;
     }
 
-    public void setDirectPaymentId(UUID directPaymentId) {
+    public void setDirectPaymentId(final UUID directPaymentId) {
         this.directPaymentId = directPaymentId;
+    }
+
+    public String getDirectPaymentExternalKey() {
+        return directPaymentExternalKey;
+    }
+
+    public void setDirectPaymentExternalKey(final String directPaymentExternalKey) {
+        this.directPaymentExternalKey = directPaymentExternalKey;
     }
 
     public String getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(String transactionType) {
+    public void setTransactionType(final String transactionType) {
         this.transactionType = transactionType;
     }
 
@@ -99,23 +115,15 @@ public class DirectTransaction extends KillBillObject {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(DateTime effectiveDate) {
+    public void setEffectiveDate(final DateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
-    }
-
-    public Integer getRetryCount() {
-        return retryCount;
-    }
-
-    public void setRetryCount(Integer retryCount) {
-        this.retryCount = retryCount;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(final String status) {
         this.status = status;
     }
 
@@ -123,7 +131,7 @@ public class DirectTransaction extends KillBillObject {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(final BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -131,23 +139,15 @@ public class DirectTransaction extends KillBillObject {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(final String currency) {
         this.currency = currency;
-    }
-
-    public String getExternalKey() {
-        return externalKey;
-    }
-
-    public void setExternalKey(String externalKey) {
-        this.externalKey = externalKey;
     }
 
     public String getGatewayErrorCode() {
         return gatewayErrorCode;
     }
 
-    public void setGatewayErrorCode(String gatewayErrorCode) {
+    public void setGatewayErrorCode(final String gatewayErrorCode) {
         this.gatewayErrorCode = gatewayErrorCode;
     }
 
@@ -155,25 +155,26 @@ public class DirectTransaction extends KillBillObject {
         return gatewayErrorMsg;
     }
 
-    public void setGatewayErrorMsg(String gatewayErrorMsg) {
+    public void setGatewayErrorMsg(final String gatewayErrorMsg) {
         this.gatewayErrorMsg = gatewayErrorMsg;
     }
 
     @Override
     public String toString() {
-        return "DirectTransactionJson{" +
-                "directPaymentId=" + directPaymentId +
-                "directTransactionId=" + directTransactionId +
-                "transactionType=" + transactionType +
-                ", effectiveDate=" + effectiveDate +
-                ", retryCount=" + retryCount +
-                ", status='" + status + '\'' +
-                ", externalKey='" + externalKey + '\'' +
-                ", amount=" + amount +
-                ", currency='" + currency + '\'' +
-                ", gatewayErrorCode='" + gatewayErrorCode + '\'' +
-                ", gatewayErrorMsg='" + gatewayErrorMsg + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("DirectTransaction{");
+        sb.append("directTransactionId=").append(directTransactionId);
+        sb.append(", directTransactionExternalKey='").append(directTransactionExternalKey).append('\'');
+        sb.append(", directPaymentId=").append(directPaymentId);
+        sb.append(", directPaymentExternalKey='").append(directPaymentExternalKey).append('\'');
+        sb.append(", transactionType='").append(transactionType).append('\'');
+        sb.append(", effectiveDate=").append(effectiveDate);
+        sb.append(", status='").append(status).append('\'');
+        sb.append(", amount=").append(amount);
+        sb.append(", currency='").append(currency).append('\'');
+        sb.append(", gatewayErrorCode='").append(gatewayErrorCode).append('\'');
+        sb.append(", gatewayErrorMsg='").append(gatewayErrorMsg).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
@@ -193,7 +194,13 @@ public class DirectTransaction extends KillBillObject {
         if (currency != null ? !currency.equals(that.currency) : that.currency != null) {
             return false;
         }
+        if (directPaymentExternalKey != null ? !directPaymentExternalKey.equals(that.directPaymentExternalKey) : that.directPaymentExternalKey != null) {
+            return false;
+        }
         if (directPaymentId != null ? !directPaymentId.equals(that.directPaymentId) : that.directPaymentId != null) {
+            return false;
+        }
+        if (directTransactionExternalKey != null ? !directTransactionExternalKey.equals(that.directTransactionExternalKey) : that.directTransactionExternalKey != null) {
             return false;
         }
         if (directTransactionId != null ? !directTransactionId.equals(that.directTransactionId) : that.directTransactionId != null) {
@@ -202,16 +209,10 @@ public class DirectTransaction extends KillBillObject {
         if (effectiveDate != null ? effectiveDate.compareTo(that.effectiveDate) != 0 : that.effectiveDate != null) {
             return false;
         }
-        if (externalKey != null ? !externalKey.equals(that.externalKey) : that.externalKey != null) {
-            return false;
-        }
         if (gatewayErrorCode != null ? !gatewayErrorCode.equals(that.gatewayErrorCode) : that.gatewayErrorCode != null) {
             return false;
         }
         if (gatewayErrorMsg != null ? !gatewayErrorMsg.equals(that.gatewayErrorMsg) : that.gatewayErrorMsg != null) {
-            return false;
-        }
-        if (retryCount != null ? !retryCount.equals(that.retryCount) : that.retryCount != null) {
             return false;
         }
         if (status != null ? !status.equals(that.status) : that.status != null) {
@@ -227,14 +228,14 @@ public class DirectTransaction extends KillBillObject {
     @Override
     public int hashCode() {
         int result = directTransactionId != null ? directTransactionId.hashCode() : 0;
+        result = 31 * result + (directTransactionExternalKey != null ? directTransactionExternalKey.hashCode() : 0);
         result = 31 * result + (directPaymentId != null ? directPaymentId.hashCode() : 0);
+        result = 31 * result + (directPaymentExternalKey != null ? directPaymentExternalKey.hashCode() : 0);
         result = 31 * result + (transactionType != null ? transactionType.hashCode() : 0);
         result = 31 * result + (effectiveDate != null ? effectiveDate.hashCode() : 0);
-        result = 31 * result + (retryCount != null ? retryCount.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
-        result = 31 * result + (externalKey != null ? externalKey.hashCode() : 0);
         result = 31 * result + (gatewayErrorCode != null ? gatewayErrorCode.hashCode() : 0);
         result = 31 * result + (gatewayErrorMsg != null ? gatewayErrorMsg.hashCode() : 0);
         return result;

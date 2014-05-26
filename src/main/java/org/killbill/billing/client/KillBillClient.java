@@ -879,12 +879,15 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(uri, transaction, queryParams, DirectPayment.class);
     }
 
-    public DirectPayment voidPayment(final UUID directPaymentId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return voidPayment(directPaymentId, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    public DirectPayment voidPayment(final UUID directPaymentId, final String directTransactionKey, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return voidPayment(directPaymentId, directTransactionKey, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
 
-    public DirectPayment voidPayment(final UUID directPaymentId, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public DirectPayment voidPayment(final UUID directPaymentId, final String directTransactionExternalKey, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.DIRECT_PAYMENTS_PATH + "/" + directPaymentId;
+
+        final DirectTransaction transaction = new DirectTransaction();
+        transaction.setDirectTransactionExternalKey(directTransactionExternalKey);
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         storePluginPropertiesAsParams(pluginProperties, params);
@@ -894,7 +897,7 @@ public class KillBillClient {
                                                                      reason,
                                                                      comment);
 
-        return httpClient.doDeleteAndFollowLocation(uri, queryParams, DirectPayment.class);
+        return httpClient.doDeleteAndFollowLocation(uri, transaction, queryParams, DirectPayment.class);
     }
 
     // Hosted payment pages

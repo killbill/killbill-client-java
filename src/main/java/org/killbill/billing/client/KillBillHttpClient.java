@@ -179,17 +179,22 @@ public class KillBillHttpClient {
         return doDeleteAndMaybeFollowLocation(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz, false);
     }
 
-    public <T> T doDeleteAndFollowLocation(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doDeleteAndFollowLocation(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+    public <T> T doDeleteAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
+        return doDeleteAndFollowLocation(uri, body, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
     }
 
-    public <T> T doDeleteAndFollowLocation(final String uri, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
-        return doDeleteAndMaybeFollowLocation(uri, options, timeoutSec, clazz, true);
+    public <T> T doDeleteAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
+        return doDeleteAndMaybeFollowLocation(uri, body, options, timeoutSec, clazz, true);
     }
 
     public <T> T doDeleteAndMaybeFollowLocation(final String uri, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
         final String verb = "DELETE";
         return doPrepareRequestAndMaybeFollowLocation(verb, uri, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, followLocation);
+    }
+
+    public <T> T doDeleteAndMaybeFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
+        final String verb = "DELETE";
+        return doPrepareRequestAndMaybeFollowLocation(verb, uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, followLocation);
     }
 
     // GET
