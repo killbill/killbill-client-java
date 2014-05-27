@@ -818,6 +818,14 @@ public class KillBillClient {
     }
 
     public DirectPayment createDirectPayment(final UUID accountId, final DirectTransaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createDirectPayment(accountId, null, transaction, pluginProperties, createdBy, reason, comment);
+    }
+
+    public DirectPayment createDirectPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final DirectTransaction transaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createDirectPayment(accountId, paymentMethodId, transaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    }
+
+    public DirectPayment createDirectPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final DirectTransaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "accountId cannot be null");
         Preconditions.checkNotNull(transaction.getTransactionType(), "DirectTransaction#transactionId cannot be null");
         Preconditions.checkArgument("AUTHORIZE".equals(transaction.getTransactionType()) || "PURCHASE".equals(transaction.getTransactionType()), "Invalid transaction type " + transaction.getTransactionType());
@@ -827,6 +835,9 @@ public class KillBillClient {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.DIRECT_PAYMENTS;
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
+        if (paymentMethodId != null) {
+            params.put("paymentMethodId", paymentMethodId.toString());
+        }
         storePluginPropertiesAsParams(pluginProperties, params);
 
         final Multimap<String, String> queryParams = paramsWithAudit(params,
