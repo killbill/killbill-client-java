@@ -26,6 +26,7 @@ import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.ImmutableList;
 
 public class DirectTransaction extends KillBillObject {
 
@@ -43,7 +44,8 @@ public class DirectTransaction extends KillBillObject {
     // Plugin specific fields
     private String firstPaymentReferenceId;
     private String secondPaymentReferenceId;
-    private List<PluginProperty> properties;
+    // Avoid null iterable field
+    private List<PluginProperty> properties = ImmutableList.<PluginProperty>of();
 
     public DirectTransaction() {
     }
@@ -62,7 +64,7 @@ public class DirectTransaction extends KillBillObject {
                              @JsonProperty("gatewayErrorMsg") final String gatewayErrorMsg,
                              @JsonProperty("firstPaymentReferenceId") final String firstPaymentReferenceId,
                              @JsonProperty("secondPaymentReferenceId") final String secondPaymentReferenceId,
-                             @JsonProperty("properties") final List<PluginProperty> properties,
+                             @JsonProperty("properties") @Nullable final List<PluginProperty> properties,
                              @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.directTransactionId = directTransactionId;
@@ -78,7 +80,7 @@ public class DirectTransaction extends KillBillObject {
         this.gatewayErrorMsg = gatewayErrorMsg;
         this.firstPaymentReferenceId = firstPaymentReferenceId;
         this.secondPaymentReferenceId = secondPaymentReferenceId;
-        this.properties = properties;
+        setProperties(properties);
     }
 
     public UUID getDirectTransactionId() {
@@ -190,7 +192,9 @@ public class DirectTransaction extends KillBillObject {
     }
 
     public void setProperties(final List<PluginProperty> properties) {
-        this.properties = properties;
+        if (properties != null) {
+            this.properties = properties;
+        }
     }
 
     @Override
