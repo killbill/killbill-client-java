@@ -1,6 +1,7 @@
 0.0.12
     Add DirectTransaction#externalKey (https://github.com/killbill/killbill/issues/180)
     Allow override of payment method id for createDirectPayment (https://github.com/killbill/killbill/issues/177)
+    Expose plugin properties in DirectTransaction (https://github.com/killbill/killbill/issues/185)
 
 0.0.11
     HPP API support (unstable)

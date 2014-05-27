@@ -40,6 +40,10 @@ public class DirectTransaction extends KillBillObject {
     private String currency;
     private String gatewayErrorCode;
     private String gatewayErrorMsg;
+    // Plugin specific fields
+    private String firstPaymentReferenceId;
+    private String secondPaymentReferenceId;
+    private List<PluginProperty> properties;
 
     public DirectTransaction() {
     }
@@ -56,6 +60,9 @@ public class DirectTransaction extends KillBillObject {
                              @JsonProperty("currency") final String currency,
                              @JsonProperty("gatewayErrorCode") final String gatewayErrorCode,
                              @JsonProperty("gatewayErrorMsg") final String gatewayErrorMsg,
+                             @JsonProperty("firstPaymentReferenceId") final String firstPaymentReferenceId,
+                             @JsonProperty("secondPaymentReferenceId") final String secondPaymentReferenceId,
+                             @JsonProperty("properties") final List<PluginProperty> properties,
                              @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.directTransactionId = directTransactionId;
@@ -69,6 +76,9 @@ public class DirectTransaction extends KillBillObject {
         this.currency = currency;
         this.gatewayErrorCode = gatewayErrorCode;
         this.gatewayErrorMsg = gatewayErrorMsg;
+        this.firstPaymentReferenceId = firstPaymentReferenceId;
+        this.secondPaymentReferenceId = secondPaymentReferenceId;
+        this.properties = properties;
     }
 
     public UUID getDirectTransactionId() {
@@ -159,6 +169,30 @@ public class DirectTransaction extends KillBillObject {
         this.gatewayErrorMsg = gatewayErrorMsg;
     }
 
+    public String getFirstPaymentReferenceId() {
+        return firstPaymentReferenceId;
+    }
+
+    public void setFirstPaymentReferenceId(final String firstPaymentReferenceId) {
+        this.firstPaymentReferenceId = firstPaymentReferenceId;
+    }
+
+    public String getSecondPaymentReferenceId() {
+        return secondPaymentReferenceId;
+    }
+
+    public void setSecondPaymentReferenceId(final String secondPaymentReferenceId) {
+        this.secondPaymentReferenceId = secondPaymentReferenceId;
+    }
+
+    public List<PluginProperty> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(final List<PluginProperty> properties) {
+        this.properties = properties;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("DirectTransaction{");
@@ -173,6 +207,9 @@ public class DirectTransaction extends KillBillObject {
         sb.append(", currency='").append(currency).append('\'');
         sb.append(", gatewayErrorCode='").append(gatewayErrorCode).append('\'');
         sb.append(", gatewayErrorMsg='").append(gatewayErrorMsg).append('\'');
+        sb.append(", firstPaymentReferenceId='").append(firstPaymentReferenceId).append('\'');
+        sb.append(", secondPaymentReferenceId='").append(secondPaymentReferenceId).append('\'');
+        sb.append(", properties=").append(properties);
         sb.append('}');
         return sb.toString();
     }
@@ -209,10 +246,19 @@ public class DirectTransaction extends KillBillObject {
         if (effectiveDate != null ? effectiveDate.compareTo(that.effectiveDate) != 0 : that.effectiveDate != null) {
             return false;
         }
+        if (firstPaymentReferenceId != null ? !firstPaymentReferenceId.equals(that.firstPaymentReferenceId) : that.firstPaymentReferenceId != null) {
+            return false;
+        }
         if (gatewayErrorCode != null ? !gatewayErrorCode.equals(that.gatewayErrorCode) : that.gatewayErrorCode != null) {
             return false;
         }
         if (gatewayErrorMsg != null ? !gatewayErrorMsg.equals(that.gatewayErrorMsg) : that.gatewayErrorMsg != null) {
+            return false;
+        }
+        if (properties != null ? !properties.equals(that.properties) : that.properties != null) {
+            return false;
+        }
+        if (secondPaymentReferenceId != null ? !secondPaymentReferenceId.equals(that.secondPaymentReferenceId) : that.secondPaymentReferenceId != null) {
             return false;
         }
         if (status != null ? !status.equals(that.status) : that.status != null) {
@@ -238,6 +284,9 @@ public class DirectTransaction extends KillBillObject {
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
         result = 31 * result + (gatewayErrorCode != null ? gatewayErrorCode.hashCode() : 0);
         result = 31 * result + (gatewayErrorMsg != null ? gatewayErrorMsg.hashCode() : 0);
+        result = 31 * result + (firstPaymentReferenceId != null ? firstPaymentReferenceId.hashCode() : 0);
+        result = 31 * result + (secondPaymentReferenceId != null ? secondPaymentReferenceId.hashCode() : 0);
+        result = 31 * result + (properties != null ? properties.hashCode() : 0);
         return result;
     }
 }
