@@ -828,7 +828,11 @@ public class KillBillClient {
     public DirectPayment createDirectPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final DirectTransaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "accountId cannot be null");
         Preconditions.checkNotNull(transaction.getTransactionType(), "DirectTransaction#transactionId cannot be null");
-        Preconditions.checkArgument("AUTHORIZE".equals(transaction.getTransactionType()) || "PURCHASE".equals(transaction.getTransactionType()), "Invalid transaction type " + transaction.getTransactionType());
+        Preconditions.checkArgument("AUTHORIZE".equals(transaction.getTransactionType()) ||
+                                    "CREDIT".equals(transaction.getTransactionType()) ||
+                                    "PURCHASE".equals(transaction.getTransactionType()),
+                                    "Invalid transaction type " + transaction.getTransactionType()
+                                   );
         Preconditions.checkNotNull(transaction.getAmount(), "DirectTransaction#amount cannot be null");
         Preconditions.checkNotNull(transaction.getCurrency(), "DirectTransaction#currency cannot be null");
 
@@ -869,15 +873,15 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(uri, transaction, queryParams, DirectPayment.class);
     }
 
-    public DirectPayment creditPayment(final DirectTransaction transaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return creditPayment(transaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    public DirectPayment refundPayment(final DirectTransaction transaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return refundPayment(transaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
 
-    public DirectPayment creditPayment(final DirectTransaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public DirectPayment refundPayment(final DirectTransaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(transaction.getDirectPaymentId(), "DirectTransaction#directPaymentId cannot be null");
         Preconditions.checkNotNull(transaction.getAmount(), "DirectTransaction#amount cannot be null");
 
-        final String uri = JaxrsResource.DIRECT_PAYMENTS_PATH + "/" + transaction.getDirectPaymentId() + "/" + JaxrsResource.CREDITS;
+        final String uri = JaxrsResource.DIRECT_PAYMENTS_PATH + "/" + transaction.getDirectPaymentId() + "/" + JaxrsResource.REFUNDS;
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         storePluginPropertiesAsParams(pluginProperties, params);
