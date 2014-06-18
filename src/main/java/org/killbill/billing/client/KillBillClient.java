@@ -491,13 +491,18 @@ public class KillBillClient {
     }
 
     public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, withItems, AuditLevel.NONE);
+        return getInvoicesForAccount(accountId, withItems, false, AuditLevel.NONE);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
+    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly) throws KillBillClientException {
+        return getInvoicesForAccount(accountId, withItems, unpaidOnly, AuditLevel.NONE);
+    }
+
+    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.INVOICES;
 
         final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
+                                                                                          JaxrsResource.QUERY_UNPAID_INVOICES_ONLY, String.valueOf(unpaidOnly),
                                                                                           JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Invoices.class);
