@@ -17,7 +17,6 @@
 
 package org.killbill.billing.client.model;
 
-import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -34,11 +33,11 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
     public HostedPaymentPageFormDescriptor() {}
 
     @JsonCreator
-    public HostedPaymentPageFormDescriptor(@JsonProperty("formFields") final String kbAccountId,
-                                           @JsonProperty("formFields") final String formMethod,
-                                           @JsonProperty("formFields") final String formUrl,
+    public HostedPaymentPageFormDescriptor(@JsonProperty("kbAccountId") final String kbAccountId,
+                                           @JsonProperty("formMethod") final String formMethod,
+                                           @JsonProperty("formUrl") final String formUrl,
                                            @JsonProperty("formFields") final Map<String, String> formFields,
-                                           @JsonProperty("formFields") final Map<String, String> properties) {
+                                           @JsonProperty("properties") final Map<String, String> properties) {
         super();
         this.kbAccountId = kbAccountId;
         this.formMethod = formMethod;
