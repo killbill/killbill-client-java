@@ -332,6 +332,10 @@ public class KillBillClient {
     }
 
     public Subscription createSubscription(final Subscription subscription, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createSubscription(subscription, null, timeoutSec, createdBy, reason, comment);
+    }
+
+    public Subscription createSubscription(final Subscription subscription, final DateTime requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(subscription.getAccountId(), "Subscription#accountId cannot be null");
         Preconditions.checkNotNull(subscription.getExternalKey(), "Subscription#externalKey cannot be null");
         Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
@@ -339,12 +343,13 @@ public class KillBillClient {
         Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
         Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false",
-                                                                                                          JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec)),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment
-                                                                    );
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
+        params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
+        if (requestedDate != null) {
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+        }
+        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
         final int httpTimeout = Math.max(DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec);
 
@@ -352,14 +357,14 @@ public class KillBillClient {
     }
 
     public Subscription updateSubscription(final Subscription subscription, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return updateSubscription(subscription, -1, createdBy, reason, comment);
-    }
-
-    public Subscription updateSubscription(final Subscription subscription, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return updateSubscription(subscription, null, timeoutSec, createdBy, reason, comment);
+        return updateSubscription(subscription, null, -1, createdBy, reason, comment);
     }
 
     public Subscription updateSubscription(final Subscription subscription, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return updateSubscription(subscription, null, billingPolicy, -1, createdBy, reason, comment);
+    }
+
+    public Subscription updateSubscription(final Subscription subscription, @Nullable final DateTime requestedDate, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(subscription.getSubscriptionId(), "Subscription#subscriptionId cannot be null");
         Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
         Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
@@ -370,6 +375,9 @@ public class KillBillClient {
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
         params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
+        if (requestedDate != null) {
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+        }
         if (billingPolicy != null) {
             params.put(JaxrsResource.QUERY_BILLING_POLICY, billingPolicy.toString());
         }
@@ -388,11 +396,19 @@ public class KillBillClient {
 
     public void cancelSubscription(final UUID subscriptionId, @Nullable final EntitlementActionPolicy entitlementPolicy, @Nullable final BillingActionPolicy billingPolicy,
                                    final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        cancelSubscription(subscriptionId, null, entitlementPolicy, billingPolicy, timeoutSec, createdBy, reason, comment);
+    }
+
+    public void cancelSubscription(final UUID subscriptionId, @Nullable final DateTime requestedDate, @Nullable final EntitlementActionPolicy entitlementPolicy, @Nullable final BillingActionPolicy billingPolicy,
+                                   final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId;
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
         params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
+        if (requestedDate != null) {
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+        }
         if (entitlementPolicy != null) {
             params.put(JaxrsResource.QUERY_ENTITLEMENT_POLICY, entitlementPolicy.toString());
         }
