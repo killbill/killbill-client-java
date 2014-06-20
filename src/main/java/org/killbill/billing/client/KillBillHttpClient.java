@@ -485,6 +485,7 @@ public class KillBillHttpClient {
         }
 
         builder.addHeader("Content-Type", "application/json; charset=utf-8");
+        builder.setBodyEncoding("UTF-8");
 
         for (final String key : options.keySet()) {
             if (options.get(key) != null) {
