@@ -22,87 +22,53 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import org.joda.time.DateTime;
-import org.killbill.clock.DefaultClock;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Payment extends KillBillObject {
 
-    private BigDecimal paidAmount;
-    private BigDecimal amount;
     private UUID accountId;
-    private UUID invoiceId;
     private UUID paymentId;
     private Integer paymentNumber;
-    private DateTime requestedDate;
-    private DateTime effectiveDate;
-    private Integer retryCount;
+    private String paymentExternalKey;
+    private BigDecimal authAmount;
+    private BigDecimal capturedAmount;
+    private BigDecimal purchasedAmount;
+    private BigDecimal refundedAmount;
+    private BigDecimal creditedAmount;
     private String currency;
-    private String status;
-    private String gatewayErrorCode;
-    private String gatewayErrorMsg;
     private UUID paymentMethodId;
-    private String bundleKeys;
-    private List<Refund> refunds;
-    private List<Chargeback> chargebacks;
+    private List<Transaction> transactions;
 
     public Payment() {}
 
     @JsonCreator
-    public Payment(@JsonProperty("amount") final BigDecimal amount,
-                   @JsonProperty("paidAmount") final BigDecimal paidAmount,
-                   @JsonProperty("accountId") final UUID accountId,
-                   @JsonProperty("invoiceId") final UUID invoiceId,
+    public Payment(@JsonProperty("accountId") final UUID accountId,
                    @JsonProperty("paymentId") final UUID paymentId,
                    @JsonProperty("paymentNumber") final Integer paymentNumber,
-                   @JsonProperty("paymentMethodId") final UUID paymentMethodId,
-                   @JsonProperty("requestedDate") final DateTime requestedDate,
-                   @JsonProperty("effectiveDate") final DateTime effectiveDate,
-                   @JsonProperty("retryCount") final Integer retryCount,
+                   @JsonProperty("paymentExternalKey") final String paymentExternalKey,
+                   @JsonProperty("authAmount") final BigDecimal authAmount,
+                   @JsonProperty("capturedAmount") final BigDecimal capturedAmount,
+                   @JsonProperty("purchasedAmount") final BigDecimal purchasedAmount,
+                   @JsonProperty("refundedAmount") final BigDecimal refundedAmount,
+                   @JsonProperty("creditedAmount") final BigDecimal creditedAmount,
                    @JsonProperty("currency") final String currency,
-                   @JsonProperty("status") final String status,
-                   @JsonProperty("gatewayErrorCode") final String gatewayErrorCode,
-                   @JsonProperty("gatewayErrorMsg") final String gatewayErrorMsg,
-                   @JsonProperty("externalBundleKeys") final String bundleKeys,
-                   @JsonProperty("refunds") final List<Refund> refunds,
-                   @JsonProperty("chargebacks") final List<Chargeback> chargebacks,
+                   @JsonProperty("paymentMethodId") final UUID paymentMethodId,
+                   @JsonProperty("transactions") final List<Transaction> transactions,
                    @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
-        this.amount = amount;
-        this.paidAmount = paidAmount;
-        this.invoiceId = invoiceId;
         this.accountId = accountId;
         this.paymentId = paymentId;
         this.paymentNumber = paymentNumber;
-        this.paymentMethodId = paymentMethodId;
-        this.requestedDate = DefaultClock.toUTCDateTime(requestedDate);
-        this.effectiveDate = DefaultClock.toUTCDateTime(effectiveDate);
+        this.paymentExternalKey = paymentExternalKey;
+        this.authAmount = authAmount;
+        this.capturedAmount = capturedAmount;
+        this.purchasedAmount = purchasedAmount;
+        this.refundedAmount = refundedAmount;
+        this.creditedAmount = creditedAmount;
         this.currency = currency;
-        this.retryCount = retryCount;
-        this.status = status;
-        this.gatewayErrorCode = gatewayErrorCode;
-        this.gatewayErrorMsg = gatewayErrorMsg;
-        this.bundleKeys = bundleKeys;
-        this.refunds = refunds;
-        this.chargebacks = chargebacks;
-    }
-
-    public BigDecimal getPaidAmount() {
-        return paidAmount;
-    }
-
-    public void setPaidAmount(final BigDecimal paidAmount) {
-        this.paidAmount = paidAmount;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(final BigDecimal amount) {
-        this.amount = amount;
+        this.paymentMethodId = paymentMethodId;
+        this.transactions = transactions;
     }
 
     public UUID getAccountId() {
@@ -111,14 +77,6 @@ public class Payment extends KillBillObject {
 
     public void setAccountId(final UUID accountId) {
         this.accountId = accountId;
-    }
-
-    public UUID getInvoiceId() {
-        return invoiceId;
-    }
-
-    public void setInvoiceId(final UUID invoiceId) {
-        this.invoiceId = invoiceId;
     }
 
     public UUID getPaymentId() {
@@ -137,28 +95,52 @@ public class Payment extends KillBillObject {
         this.paymentNumber = paymentNumber;
     }
 
-    public DateTime getRequestedDate() {
-        return requestedDate;
+    public String getPaymentExternalKey() {
+        return paymentExternalKey;
     }
 
-    public void setRequestedDate(final DateTime requestedDate) {
-        this.requestedDate = requestedDate;
+    public void setPaymentExternalKey(final String paymentExternalKey) {
+        this.paymentExternalKey = paymentExternalKey;
     }
 
-    public DateTime getEffectiveDate() {
-        return effectiveDate;
+    public BigDecimal getAuthAmount() {
+        return authAmount;
     }
 
-    public void setEffectiveDate(final DateTime effectiveDate) {
-        this.effectiveDate = effectiveDate;
+    public void setAuthAmount(final BigDecimal authAmount) {
+        this.authAmount = authAmount;
     }
 
-    public Integer getRetryCount() {
-        return retryCount;
+    public BigDecimal getCapturedAmount() {
+        return capturedAmount;
     }
 
-    public void setRetryCount(final Integer retryCount) {
-        this.retryCount = retryCount;
+    public void setCapturedAmount(final BigDecimal capturedAmount) {
+        this.capturedAmount = capturedAmount;
+    }
+
+    public BigDecimal getPurchasedAmount() {
+        return purchasedAmount;
+    }
+
+    public void setPurchasedAmount(final BigDecimal purchasedAmount) {
+        this.purchasedAmount = purchasedAmount;
+    }
+
+    public BigDecimal getRefundedAmount() {
+        return refundedAmount;
+    }
+
+    public void setRefundedAmount(final BigDecimal refundedAmount) {
+        this.refundedAmount = refundedAmount;
+    }
+
+    public BigDecimal getCreditedAmount() {
+        return creditedAmount;
+    }
+
+    public void setCreditedAmount(final BigDecimal creditedAmount) {
+        this.creditedAmount = creditedAmount;
     }
 
     public String getCurrency() {
@@ -169,30 +151,6 @@ public class Payment extends KillBillObject {
         this.currency = currency;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    public String getGatewayErrorCode() {
-        return gatewayErrorCode;
-    }
-
-    public void setGatewayErrorCode(final String gatewayErrorCode) {
-        this.gatewayErrorCode = gatewayErrorCode;
-    }
-
-    public String getGatewayErrorMsg() {
-        return gatewayErrorMsg;
-    }
-
-    public void setGatewayErrorMsg(final String gatewayErrorMsg) {
-        this.gatewayErrorMsg = gatewayErrorMsg;
-    }
-
     public UUID getPaymentMethodId() {
         return paymentMethodId;
     }
@@ -201,52 +159,12 @@ public class Payment extends KillBillObject {
         this.paymentMethodId = paymentMethodId;
     }
 
-    public String getBundleKeys() {
-        return bundleKeys;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setBundleKeys(final String bundleKeys) {
-        this.bundleKeys = bundleKeys;
-    }
-
-    public List<Refund> getRefunds() {
-        return refunds;
-    }
-
-    public void setRefunds(final List<Refund> refunds) {
-        this.refunds = refunds;
-    }
-
-    public List<Chargeback> getChargebacks() {
-        return chargebacks;
-    }
-
-    public void setChargebacks(final List<Chargeback> chargebacks) {
-        this.chargebacks = chargebacks;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Payment{");
-        sb.append("paidAmount=").append(paidAmount);
-        sb.append(", amount=").append(amount);
-        sb.append(", accountId='").append(accountId).append('\'');
-        sb.append(", invoiceId='").append(invoiceId).append('\'');
-        sb.append(", paymentId='").append(paymentId).append('\'');
-        sb.append(", paymentNumber='").append(paymentNumber).append('\'');
-        sb.append(", requestedDate=").append(requestedDate);
-        sb.append(", effectiveDate=").append(effectiveDate);
-        sb.append(", retryCount=").append(retryCount);
-        sb.append(", currency='").append(currency).append('\'');
-        sb.append(", status='").append(status).append('\'');
-        sb.append(", gatewayErrorCode='").append(gatewayErrorCode).append('\'');
-        sb.append(", gatewayErrorMsg='").append(gatewayErrorMsg).append('\'');
-        sb.append(", paymentMethodId='").append(paymentMethodId).append('\'');
-        sb.append(", bundleKeys='").append(bundleKeys).append('\'');
-        sb.append(", refunds=").append(refunds);
-        sb.append(", chargebacks=").append(chargebacks);
-        sb.append('}');
-        return sb.toString();
+    public void setTransactions(final List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     @Override
@@ -254,7 +172,7 @@ public class Payment extends KillBillObject {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Payment)) {
             return false;
         }
 
@@ -263,31 +181,19 @@ public class Payment extends KillBillObject {
         if (accountId != null ? !accountId.equals(payment.accountId) : payment.accountId != null) {
             return false;
         }
-        if (amount != null ? amount.compareTo(payment.amount) != 0 : payment.amount != null) {
+        if (authAmount != null ? authAmount.compareTo(payment.authAmount) != 0 : payment.authAmount != null) {
             return false;
         }
-        if (bundleKeys != null ? !bundleKeys.equals(payment.bundleKeys) : payment.bundleKeys != null) {
+        if (capturedAmount != null ? capturedAmount.compareTo(payment.capturedAmount) != 0 : payment.capturedAmount != null) {
             return false;
         }
-        if (chargebacks != null ? !chargebacks.equals(payment.chargebacks) : payment.chargebacks != null) {
+        if (creditedAmount != null ? creditedAmount.compareTo(payment.creditedAmount) != 0 : payment.creditedAmount != null) {
             return false;
         }
         if (currency != null ? !currency.equals(payment.currency) : payment.currency != null) {
             return false;
         }
-        if (effectiveDate != null ? effectiveDate.compareTo(payment.effectiveDate) != 0 : payment.effectiveDate != null) {
-            return false;
-        }
-        if (gatewayErrorCode != null ? !gatewayErrorCode.equals(payment.gatewayErrorCode) : payment.gatewayErrorCode != null) {
-            return false;
-        }
-        if (gatewayErrorMsg != null ? !gatewayErrorMsg.equals(payment.gatewayErrorMsg) : payment.gatewayErrorMsg != null) {
-            return false;
-        }
-        if (invoiceId != null ? !invoiceId.equals(payment.invoiceId) : payment.invoiceId != null) {
-            return false;
-        }
-        if (paidAmount != null ? paidAmount.compareTo(payment.paidAmount) != 0 : payment.paidAmount != null) {
+        if (paymentExternalKey != null ? !paymentExternalKey.equals(payment.paymentExternalKey) : payment.paymentExternalKey != null) {
             return false;
         }
         if (paymentId != null ? !paymentId.equals(payment.paymentId) : payment.paymentId != null) {
@@ -299,16 +205,13 @@ public class Payment extends KillBillObject {
         if (paymentNumber != null ? !paymentNumber.equals(payment.paymentNumber) : payment.paymentNumber != null) {
             return false;
         }
-        if (refunds != null ? !refunds.equals(payment.refunds) : payment.refunds != null) {
+        if (purchasedAmount != null ? purchasedAmount.compareTo(payment.purchasedAmount) != 0 : payment.purchasedAmount != null) {
             return false;
         }
-        if (requestedDate != null ? requestedDate.compareTo(payment.requestedDate) != 0 : payment.requestedDate != null) {
+        if (refundedAmount != null ? refundedAmount.compareTo(payment.refundedAmount) != 0 : payment.refundedAmount != null) {
             return false;
         }
-        if (retryCount != null ? !retryCount.equals(payment.retryCount) : payment.retryCount != null) {
-            return false;
-        }
-        if (status != null ? !status.equals(payment.status) : payment.status != null) {
+        if (transactions != null ? !transactions.equals(payment.transactions) : payment.transactions != null) {
             return false;
         }
 
@@ -317,23 +220,18 @@ public class Payment extends KillBillObject {
 
     @Override
     public int hashCode() {
-        int result = paidAmount != null ? paidAmount.hashCode() : 0;
-        result = 31 * result + (amount != null ? amount.hashCode() : 0);
-        result = 31 * result + (accountId != null ? accountId.hashCode() : 0);
-        result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
+        int result = accountId != null ? accountId.hashCode() : 0;
         result = 31 * result + (paymentId != null ? paymentId.hashCode() : 0);
         result = 31 * result + (paymentNumber != null ? paymentNumber.hashCode() : 0);
-        result = 31 * result + (requestedDate != null ? requestedDate.hashCode() : 0);
-        result = 31 * result + (effectiveDate != null ? effectiveDate.hashCode() : 0);
-        result = 31 * result + (retryCount != null ? retryCount.hashCode() : 0);
+        result = 31 * result + (paymentExternalKey != null ? paymentExternalKey.hashCode() : 0);
+        result = 31 * result + (authAmount != null ? authAmount.hashCode() : 0);
+        result = 31 * result + (capturedAmount != null ? capturedAmount.hashCode() : 0);
+        result = 31 * result + (purchasedAmount != null ? purchasedAmount.hashCode() : 0);
+        result = 31 * result + (refundedAmount != null ? refundedAmount.hashCode() : 0);
+        result = 31 * result + (creditedAmount != null ? creditedAmount.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (gatewayErrorCode != null ? gatewayErrorCode.hashCode() : 0);
-        result = 31 * result + (gatewayErrorMsg != null ? gatewayErrorMsg.hashCode() : 0);
         result = 31 * result + (paymentMethodId != null ? paymentMethodId.hashCode() : 0);
-        result = 31 * result + (bundleKeys != null ? bundleKeys.hashCode() : 0);
-        result = 31 * result + (refunds != null ? refunds.hashCode() : 0);
-        result = 31 * result + (chargebacks != null ? chargebacks.hashCode() : 0);
+        result = 31 * result + (transactions != null ? transactions.hashCode() : 0);
         return result;
     }
 }

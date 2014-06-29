@@ -1,4 +1,5 @@
 /*
+ * Copyright 2010-2013 Ning, Inc.
  * Copyright 2014 Groupon, Inc
  * Copyright 2014 The Billing Project, LLC
  *
@@ -21,10 +22,11 @@ import org.killbill.billing.client.KillBillClientException;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class DirectPayments extends KillBillObjects<DirectPayment> {
+public class InvoicePayments extends KillBillObjects<InvoicePayment> {
 
     @JsonIgnore
-    public DirectPayments getNext() throws KillBillClientException {
-        return getNext(DirectPayments.class);
+    public InvoicePayments getNext() throws KillBillClientException {
+        return getNext(InvoicePayments.class);
     }
+
 }

@@ -26,7 +26,7 @@ public class AccountTimeline extends KillBillObject {
     private Account account;
     private List<Bundle> bundles;
     private List<Invoice> invoices;
-    private List<Payment> payments;
+    private List<InvoicePayment> payments;
 
     public AccountTimeline() { }
 
@@ -34,7 +34,7 @@ public class AccountTimeline extends KillBillObject {
     public AccountTimeline(@JsonProperty("account") final Account account,
                            @JsonProperty("bundles") final List<Bundle> bundles,
                            @JsonProperty("invoices") final List<Invoice> invoices,
-                           @JsonProperty("payments") final List<Payment> payments) {
+                           @JsonProperty("payments") final List<InvoicePayment> payments) {
         this.account = account;
         this.bundles = bundles;
         this.invoices = invoices;
@@ -65,11 +65,11 @@ public class AccountTimeline extends KillBillObject {
         this.invoices = invoices;
     }
 
-    public List<Payment> getPayments() {
+    public List<InvoicePayment> getPayments() {
         return payments;
     }
 
-    public void setPayments(final List<Payment> payments) {
+    public void setPayments(final List<InvoicePayment> payments) {
         this.payments = payments;
     }
 
