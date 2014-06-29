@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableList;
 
-public class Transaction extends KillBillObject {
+public class PaymentTransaction extends KillBillObject {
 
     private UUID transactionId;
     private String transactionExternalKey;
@@ -47,25 +47,25 @@ public class Transaction extends KillBillObject {
     // Avoid null iterable field
     private List<PluginProperty> properties = ImmutableList.<PluginProperty>of();
 
-    public Transaction() {
+    public PaymentTransaction() {
     }
 
     @JsonCreator
-    public Transaction(@JsonProperty("transactionId") final UUID transactionId,
-                       @JsonProperty("transactionExternalKey") final String transactionExternalKey,
-                       @JsonProperty("paymentId") final UUID paymentId,
-                       @JsonProperty("paymentExternalKey") final String paymentExternalKey,
-                       @JsonProperty("transactionType") final String transactionType,
-                       @JsonProperty("effectiveDate") final DateTime effectiveDate,
-                       @JsonProperty("status") final String status,
-                       @JsonProperty("amount") final BigDecimal amount,
-                       @JsonProperty("currency") final String currency,
-                       @JsonProperty("gatewayErrorCode") final String gatewayErrorCode,
-                       @JsonProperty("gatewayErrorMsg") final String gatewayErrorMsg,
-                       @JsonProperty("firstPaymentReferenceId") final String firstPaymentReferenceId,
-                       @JsonProperty("secondPaymentReferenceId") final String secondPaymentReferenceId,
-                       @JsonProperty("properties") @Nullable final List<PluginProperty> properties,
-                       @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
+    public PaymentTransaction(@JsonProperty("transactionId") final UUID transactionId,
+                              @JsonProperty("transactionExternalKey") final String transactionExternalKey,
+                              @JsonProperty("paymentId") final UUID paymentId,
+                              @JsonProperty("paymentExternalKey") final String paymentExternalKey,
+                              @JsonProperty("transactionType") final String transactionType,
+                              @JsonProperty("amount") final BigDecimal amount,
+                              @JsonProperty("currency") final String currency,
+                              @JsonProperty("effectiveDate") final DateTime effectiveDate,
+                              @JsonProperty("status") final String status,
+                              @JsonProperty("gatewayErrorCode") final String gatewayErrorCode,
+                              @JsonProperty("gatewayErrorMsg") final String gatewayErrorMsg,
+                              @JsonProperty("firstPaymentReferenceId") final String firstPaymentReferenceId,
+                              @JsonProperty("secondPaymentReferenceId") final String secondPaymentReferenceId,
+                              @JsonProperty("properties") @Nullable final List<PluginProperty> properties,
+                              @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.transactionId = transactionId;
         this.transactionExternalKey = transactionExternalKey;
@@ -199,7 +199,7 @@ public class Transaction extends KillBillObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Transaction{");
+        final StringBuilder sb = new StringBuilder("PaymentTransaction{");
         sb.append("transactionId=").append(transactionId);
         sb.append(", transactionExternalKey='").append(transactionExternalKey).append('\'');
         sb.append(", paymentId=").append(paymentId);
@@ -227,7 +227,7 @@ public class Transaction extends KillBillObject {
             return false;
         }
 
-        final Transaction that = (Transaction) o;
+        final PaymentTransaction that = (PaymentTransaction) o;
 
         if (amount != null ? amount.compareTo(that.amount) != 0 : that.amount != null) {
             return false;

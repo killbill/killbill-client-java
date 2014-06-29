@@ -51,25 +51,24 @@ import org.killbill.billing.client.model.InvoiceEmail;
 import org.killbill.billing.client.model.InvoiceItem;
 import org.killbill.billing.client.model.InvoiceItems;
 import org.killbill.billing.client.model.InvoicePayment;
+import org.killbill.billing.client.model.InvoicePaymentTransaction;
 import org.killbill.billing.client.model.InvoicePayments;
 import org.killbill.billing.client.model.Invoices;
 import org.killbill.billing.client.model.OverdueState;
 import org.killbill.billing.client.model.Payment;
 import org.killbill.billing.client.model.PaymentMethod;
 import org.killbill.billing.client.model.PaymentMethods;
+import org.killbill.billing.client.model.PaymentTransaction;
 import org.killbill.billing.client.model.Payments;
 import org.killbill.billing.client.model.Permissions;
 import org.killbill.billing.client.model.PlanDetail;
 import org.killbill.billing.client.model.PlanDetails;
-import org.killbill.billing.client.model.Refund;
-import org.killbill.billing.client.model.Refunds;
 import org.killbill.billing.client.model.Subscription;
 import org.killbill.billing.client.model.TagDefinition;
 import org.killbill.billing.client.model.TagDefinitions;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.client.model.Tenant;
 import org.killbill.billing.client.model.TenantKey;
-import org.killbill.billing.client.model.Transaction;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.jaxrs.resources.JaxrsResource;
 import org.killbill.billing.util.api.AuditLevel;
@@ -768,28 +767,28 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, InvoicePayments.class);
     }
 
-    public Payment createPayment(final UUID accountId, final Transaction transaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createPayment(accountId, transaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    public Payment createPayment(final UUID accountId, final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createPayment(accountId, paymentTransaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
 
-    public Payment createPayment(final UUID accountId, final Transaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createPayment(accountId, null, transaction, pluginProperties, createdBy, reason, comment);
+    public Payment createPayment(final UUID accountId, final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createPayment(accountId, null, paymentTransaction, pluginProperties, createdBy, reason, comment);
     }
 
-    public Payment createPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final Transaction transaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createPayment(accountId, paymentMethodId, transaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    public Payment createPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createPayment(accountId, paymentMethodId, paymentTransaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
 
-    public Payment createPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final Transaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment createPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "accountId cannot be null");
-        Preconditions.checkNotNull(transaction.getTransactionType(), "Transaction#transactionId cannot be null");
-        Preconditions.checkArgument("AUTHORIZE".equals(transaction.getTransactionType()) ||
-                                    "CREDIT".equals(transaction.getTransactionType()) ||
-                                    "PURCHASE".equals(transaction.getTransactionType()),
-                                    "Invalid transaction type " + transaction.getTransactionType()
+        Preconditions.checkNotNull(paymentTransaction.getTransactionType(), "PaymentTransaction#transactionId cannot be null");
+        Preconditions.checkArgument("AUTHORIZE".equals(paymentTransaction.getTransactionType()) ||
+                                    "CREDIT".equals(paymentTransaction.getTransactionType()) ||
+                                    "PURCHASE".equals(paymentTransaction.getTransactionType()),
+                                    "Invalid paymentTransaction type " + paymentTransaction.getTransactionType()
                                    );
-        Preconditions.checkNotNull(transaction.getAmount(), "Transaction#amount cannot be null");
-        Preconditions.checkNotNull(transaction.getCurrency(), "Transaction#currency cannot be null");
+        Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
+        Preconditions.checkNotNull(paymentTransaction.getCurrency(), "PaymentTransaction#currency cannot be null");
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENTS;
 
@@ -804,18 +803,18 @@ public class KillBillClient {
                                                                      reason,
                                                                      comment);
 
-        return httpClient.doPostAndFollowLocation(uri, transaction, queryParams, Payment.class);
+        return httpClient.doPostAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
     }
 
-    public Payment captureAuthorization(final Transaction transaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return captureAuthorization(transaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    public Payment captureAuthorization(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return captureAuthorization(paymentTransaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
 
-    public Payment captureAuthorization(final Transaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        Preconditions.checkNotNull(transaction.getPaymentId(), "Transaction#paymentId cannot be null");
-        Preconditions.checkNotNull(transaction.getAmount(), "Transaction#amount cannot be null");
+    public Payment captureAuthorization(final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentTransaction.getPaymentId(), "PaymentTransaction#paymentId cannot be null");
+        Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
 
-        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + transaction.getPaymentId();
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId();
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         storePluginPropertiesAsParams(pluginProperties, params);
@@ -825,18 +824,18 @@ public class KillBillClient {
                                                                      reason,
                                                                      comment);
 
-        return httpClient.doPostAndFollowLocation(uri, transaction, queryParams, Payment.class);
+        return httpClient.doPostAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
     }
 
-    public Payment refundPayment(final Transaction transaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return refundPayment(transaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    public Payment refundPayment(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return refundPayment(paymentTransaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
 
-    public Payment refundPayment(final Transaction transaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        Preconditions.checkNotNull(transaction.getPaymentId(), "Transaction#paymentId cannot be null");
-        Preconditions.checkNotNull(transaction.getAmount(), "Transaction#amount cannot be null");
+    public Payment refundPayment(final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentTransaction.getPaymentId(), "PaymentTransaction#paymentId cannot be null");
+        Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
 
-        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + transaction.getPaymentId() + "/" + JaxrsResource.REFUNDS;
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() + "/" + JaxrsResource.REFUNDS;
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         storePluginPropertiesAsParams(pluginProperties, params);
@@ -846,7 +845,7 @@ public class KillBillClient {
                                                                      reason,
                                                                      comment);
 
-        return httpClient.doPostAndFollowLocation(uri, transaction, queryParams, Payment.class);
+        return httpClient.doPostAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
     }
 
     public Payment voidPayment(final UUID paymentId, final String transactionKey, final String createdBy, final String reason, final String comment) throws KillBillClientException {
@@ -856,8 +855,8 @@ public class KillBillClient {
     public Payment voidPayment(final UUID paymentId, final String transactionExternalKey, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId;
 
-        final Transaction transaction = new Transaction();
-        transaction.setTransactionExternalKey(transactionExternalKey);
+        final PaymentTransaction paymentTransaction = new PaymentTransaction();
+        paymentTransaction.setTransactionExternalKey(transactionExternalKey);
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         storePluginPropertiesAsParams(pluginProperties, params);
@@ -867,7 +866,7 @@ public class KillBillClient {
                                                                      reason,
                                                                      comment);
 
-        return httpClient.doDeleteAndFollowLocation(uri, transaction, queryParams, Payment.class);
+        return httpClient.doDeleteAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
     }
 
     // Hosted payment pages
@@ -900,36 +899,22 @@ public class KillBillClient {
         return httpClient.doPost(uri, notification, queryParams);
     }
 
-    // Refunds
-
-    public Refunds getRefundsForAccount(final UUID accountId) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.REFUNDS;
-
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Refunds.class);
-    }
-
-    public Refunds getRefundsForPayment(final UUID paymentId) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId + "/" + JaxrsResource.REFUNDS;
-
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Refunds.class);
-    }
-
-    public Payment createInvoicePaymentRefund(final Refund refund, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        Preconditions.checkNotNull(refund.getPaymentId(), "Refund#paymentId cannot be null");
+    public InvoicePayment createInvoicePaymentRefund(final InvoicePaymentTransaction refundTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(refundTransaction.getPaymentId(), "InvoicePaymentTransaction#paymentId cannot be null");
 
         // Specify isAdjusted for invoice adjustment and invoice item adjustment
         // Specify adjustments for invoice item adjustments only
-        if (refund.getAdjustments() != null) {
-            for (final InvoiceItem invoiceItem : refund.getAdjustments()) {
+        if (refundTransaction.getAdjustments() != null) {
+            for (final InvoiceItem invoiceItem : refundTransaction.getAdjustments()) {
                 Preconditions.checkNotNull(invoiceItem.getInvoiceItemId(), "InvoiceItem#invoiceItemId cannot be null");
             }
         }
 
-        final String uri = JaxrsResource.INVOICE_PAYMENTS_PATH + "/" + refund.getPaymentId() + "/" + JaxrsResource.REFUNDS;
+        final String uri = JaxrsResource.INVOICE_PAYMENTS_PATH + "/" + refundTransaction.getPaymentId() + "/" + JaxrsResource.REFUNDS;
 
         final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
-        return httpClient.doPostAndFollowLocation(uri, refund, queryParams, Payment.class);
+        return httpClient.doPostAndFollowLocation(uri, refundTransaction, queryParams, InvoicePayment.class);
     }
 
     // Chargebacks

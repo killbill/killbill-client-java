@@ -38,7 +38,7 @@ public class Payment extends KillBillObject {
     private BigDecimal creditedAmount;
     private String currency;
     private UUID paymentMethodId;
-    private List<Transaction> transactions;
+    private List<PaymentTransaction> paymentTransactions;
 
     public Payment() {}
 
@@ -54,7 +54,7 @@ public class Payment extends KillBillObject {
                    @JsonProperty("creditedAmount") final BigDecimal creditedAmount,
                    @JsonProperty("currency") final String currency,
                    @JsonProperty("paymentMethodId") final UUID paymentMethodId,
-                   @JsonProperty("transactions") final List<Transaction> transactions,
+                   @JsonProperty("paymentTransactions") final List<PaymentTransaction> paymentTransactions,
                    @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.accountId = accountId;
@@ -68,7 +68,7 @@ public class Payment extends KillBillObject {
         this.creditedAmount = creditedAmount;
         this.currency = currency;
         this.paymentMethodId = paymentMethodId;
-        this.transactions = transactions;
+        this.paymentTransactions = paymentTransactions;
     }
 
     public UUID getAccountId() {
@@ -159,12 +159,12 @@ public class Payment extends KillBillObject {
         this.paymentMethodId = paymentMethodId;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public List<PaymentTransaction> getPaymentTransactions() {
+        return paymentTransactions;
     }
 
-    public void setTransactions(final List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setPaymentTransactions(final List<PaymentTransaction> paymentTransactions) {
+        this.paymentTransactions = paymentTransactions;
     }
 
     @Override
@@ -211,7 +211,7 @@ public class Payment extends KillBillObject {
         if (refundedAmount != null ? refundedAmount.compareTo(payment.refundedAmount) != 0 : payment.refundedAmount != null) {
             return false;
         }
-        if (transactions != null ? !transactions.equals(payment.transactions) : payment.transactions != null) {
+        if (paymentTransactions != null ? !paymentTransactions.equals(payment.paymentTransactions) : payment.paymentTransactions != null) {
             return false;
         }
 
@@ -231,7 +231,7 @@ public class Payment extends KillBillObject {
         result = 31 * result + (creditedAmount != null ? creditedAmount.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
         result = 31 * result + (paymentMethodId != null ? paymentMethodId.hashCode() : 0);
-        result = 31 * result + (transactions != null ? transactions.hashCode() : 0);
+        result = 31 * result + (paymentTransactions != null ? paymentTransactions.hashCode() : 0);
         return result;
     }
 }
