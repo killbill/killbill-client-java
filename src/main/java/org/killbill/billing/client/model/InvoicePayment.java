@@ -47,7 +47,7 @@ public class InvoicePayment extends Payment {
                           @JsonProperty("creditedAmount") final BigDecimal creditedAmount,
                           @JsonProperty("currency") final String currency,
                           @JsonProperty("paymentMethodId") final UUID paymentMethodId,
-                          @JsonProperty("paymentTransactions") final List<PaymentTransaction> paymentTransactions,
+                          @JsonProperty("transactions") final List<PaymentTransaction> paymentTransactions,
                           @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(accountId, paymentId, paymentNumber, paymentExternalKey, authAmount, capturedAmount, purchasedAmount, refundedAmount, creditedAmount,
              currency, paymentMethodId, paymentTransactions, auditLogs);
