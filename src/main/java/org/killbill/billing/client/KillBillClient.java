@@ -660,7 +660,6 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Payments.class);
     }
 
-
     public InvoicePayments getInvoicePaymentsForAccount(final UUID accountId) throws KillBillClientException {
         return getInvoicePaymentsForAccount(accountId, AuditLevel.NONE);
     }
@@ -1007,6 +1006,24 @@ public class KillBillClient {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
 
         final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo),
+                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        return httpClient.doGet(uri, queryParams, PaymentMethod.class);
+    }
+
+    public PaymentMethod getPaymentMethodByKey(final String externalKey) throws KillBillClientException {
+        return getPaymentMethodByKey(externalKey, false);
+    }
+
+    public PaymentMethod getPaymentMethodByKey(final String externalKey, final boolean withPluginInfo) throws KillBillClientException {
+        return getPaymentMethodByKey(externalKey, withPluginInfo, AuditLevel.NONE);
+    }
+
+    public PaymentMethod getPaymentMethodByKey(final String externalKey, final boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH;
+
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey,
+                                                                                          JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo),
                                                                                           JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, PaymentMethod.class);

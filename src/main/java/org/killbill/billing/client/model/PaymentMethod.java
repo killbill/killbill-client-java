@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class PaymentMethod extends KillBillObject {
 
     private UUID paymentMethodId;
+    private String externalKey;
     private UUID accountId;
     private Boolean isDefault;
     private String pluginName;
@@ -33,11 +34,13 @@ public class PaymentMethod extends KillBillObject {
 
     @JsonCreator
     public PaymentMethod(@JsonProperty("paymentMethodId") final UUID paymentMethodId,
+                         @JsonProperty("externalKey") final String externalKey,
                          @JsonProperty("accountId") final UUID accountId,
                          @JsonProperty("isDefault") final Boolean isDefault,
                          @JsonProperty("pluginName") final String pluginName,
                          @JsonProperty("pluginInfo") final PaymentMethodPluginDetail pluginInfo) {
         this.paymentMethodId = paymentMethodId;
+        this.externalKey = externalKey;
         this.accountId = accountId;
         this.isDefault = isDefault;
         this.pluginName = pluginName;
@@ -84,11 +87,20 @@ public class PaymentMethod extends KillBillObject {
         this.pluginInfo = pluginInfo;
     }
 
+    public String getExternalKey() {
+        return externalKey;
+    }
+
+    public void setExternalKey(final String externalKey) {
+        this.externalKey = externalKey;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("PaymentMethod{");
         sb.append("paymentMethodId='").append(paymentMethodId).append('\'');
         sb.append(", accountId='").append(accountId).append('\'');
+        sb.append(", externalKey='").append(externalKey).append('\'');
         sb.append(", isDefault=").append(isDefault);
         sb.append(", pluginName='").append(pluginName).append('\'');
         sb.append(", pluginInfo=").append(pluginInfo);
@@ -108,6 +120,9 @@ public class PaymentMethod extends KillBillObject {
         final PaymentMethod that = (PaymentMethod) o;
 
         if (accountId != null ? !accountId.equals(that.accountId) : that.accountId != null) {
+            return false;
+        }
+        if (externalKey != null ? !externalKey.equals(that.externalKey) : that.externalKey != null) {
             return false;
         }
         if (isDefault != null ? !isDefault.equals(that.isDefault) : that.isDefault != null) {
@@ -130,6 +145,7 @@ public class PaymentMethod extends KillBillObject {
     public int hashCode() {
         int result = paymentMethodId != null ? paymentMethodId.hashCode() : 0;
         result = 31 * result + (accountId != null ? accountId.hashCode() : 0);
+        result = 31 * result + (externalKey != null ? externalKey.hashCode() : 0);
         result = 31 * result + (isDefault != null ? isDefault.hashCode() : 0);
         result = 31 * result + (pluginName != null ? pluginName.hashCode() : 0);
         result = 31 * result + (pluginInfo != null ? pluginInfo.hashCode() : 0);
