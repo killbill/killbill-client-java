@@ -355,12 +355,12 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(JaxrsResource.SUBSCRIPTIONS_PATH, subscription, queryParams, httpTimeout, Subscription.class);
     }
 
-    public Subscription updateSubscription(final Subscription subscription, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return updateSubscription(subscription, null, -1, createdBy, reason, comment);
+    public Subscription updateSubscription(final Subscription subscription, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return updateSubscription(subscription, null, timeoutSec, createdBy, reason, comment);
     }
 
     public Subscription updateSubscription(final Subscription subscription, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return updateSubscription(subscription, null, billingPolicy, -1, createdBy, reason, comment);
+        return updateSubscription(subscription, null, billingPolicy, timeoutSec, createdBy, reason, comment);
     }
 
     public Subscription updateSubscription(final Subscription subscription, @Nullable final DateTime requestedDate, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
@@ -660,10 +660,15 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Payments.class);
     }
 
-    public InvoicePayments getInvoicePaymentsForAccount(final UUID accountId) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENTS;
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, InvoicePayments.class);
+    public InvoicePayments getInvoicePaymentsForAccount(final UUID accountId) throws KillBillClientException {
+        return getInvoicePaymentsForAccount(accountId, AuditLevel.NONE);
+    }
+
+    public InvoicePayments getInvoicePaymentsForAccount(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.INVOICE_PAYMENTS;
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        return httpClient.doGet(uri, queryParams, InvoicePayments.class);
     }
 
     public InvoicePayments getInvoicePayment(final UUID invoiceId) throws KillBillClientException {
@@ -755,16 +760,16 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Payment.class);
     }
 
-    public InvoicePayments getPaymentsForAccount(final UUID accountId) throws KillBillClientException {
+    public Payments getPaymentsForAccount(final UUID accountId) throws KillBillClientException {
         return getPaymentsForAccount(accountId, AuditLevel.NONE);
     }
 
-    public InvoicePayments getPaymentsForAccount(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.INVOICE_PAYMENTS;
+    public Payments getPaymentsForAccount(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENTS;
 
         final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, InvoicePayments.class);
+        return httpClient.doGet(uri, queryParams, Payments.class);
     }
 
     public Payment createPayment(final UUID accountId, final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
