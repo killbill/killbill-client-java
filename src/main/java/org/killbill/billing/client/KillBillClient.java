@@ -753,7 +753,7 @@ public class KillBillClient {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
-        queryParams.put(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_INFO, String.valueOf(withPluginInfo));
+        queryParams.put(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo));
         queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
         storePluginPropertiesAsParams(pluginProperties, queryParams);
 
@@ -1006,7 +1006,7 @@ public class KillBillClient {
     public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_INFO, String.valueOf(withPluginInfo),
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo),
                                                                                           JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, PaymentMethod.class);
@@ -1029,7 +1029,7 @@ public class KillBillClient {
     public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, @Nullable final String pluginName, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_INFO, Strings.nullToEmpty(pluginName),
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_WITH_PLUGIN_INFO, Strings.nullToEmpty(pluginName),
                                                                                           JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, PaymentMethods.class);
