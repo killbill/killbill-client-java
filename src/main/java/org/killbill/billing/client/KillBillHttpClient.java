@@ -33,7 +33,6 @@ import javax.annotation.Nullable;
 
 import org.killbill.billing.client.model.BillingException;
 import org.killbill.billing.client.model.KillBillObjects;
-import org.killbill.billing.jaxrs.resources.JaxrsResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
