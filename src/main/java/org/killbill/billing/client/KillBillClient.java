@@ -39,8 +39,6 @@ import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.client.model.Bundle;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Catalog;
-import org.killbill.billing.client.model.Chargeback;
-import org.killbill.billing.client.model.Chargebacks;
 import org.killbill.billing.client.model.Credit;
 import org.killbill.billing.client.model.CustomField;
 import org.killbill.billing.client.model.CustomFields;
@@ -852,6 +850,23 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
     }
 
+
+
+    public Payment chargebackPayment(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentTransaction.getPaymentId(), "PaymentTransaction#paymentId cannot be null");
+        Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
+
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() + "/" + JaxrsResource.CHARGEBACKS;
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+
+        final Multimap<String, String> queryParams = paramsWithAudit(params,
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
+
+        return httpClient.doPostAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
+    }
+
     public Payment voidPayment(final UUID paymentId, final String transactionKey, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return voidPayment(paymentId, transactionKey, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
@@ -922,39 +937,15 @@ public class KillBillClient {
     }
 
     // Chargebacks
+    public InvoicePayment createInvoicePaymentChargeback(final InvoicePaymentTransaction chargebackTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(chargebackTransaction.getPaymentId(), "InvoicePaymentTransaction#paymentId cannot be null");
 
-    public Chargebacks getChargebacksForAccount(final UUID accountId) throws KillBillClientException {
-        return getChargebacksForAccount(accountId, AuditLevel.NONE);
-    }
-
-    public Chargebacks getChargebacksForAccount(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.CHARGEBACKS;
-
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
-
-        return httpClient.doGet(uri, queryParams, Chargebacks.class);
-    }
-
-    public Chargebacks getChargebacksForPayment(final UUID paymentId) throws KillBillClientException {
-        return getChargebacksForPayment(paymentId, AuditLevel.NONE);
-    }
-
-    public Chargebacks getChargebacksForPayment(final UUID paymentId, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId + "/" + JaxrsResource.CHARGEBACKS;
-
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
-
-        return httpClient.doGet(uri, queryParams, Chargebacks.class);
-    }
-
-    public Chargeback createChargeBack(final Chargeback chargeback, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        Preconditions.checkNotNull(chargeback.getAmount(), "Chargeback#amount cannot be null");
-        Preconditions.checkNotNull(chargeback.getPaymentId(), "Chargeback#paymentId cannot be null");
+        final String uri = JaxrsResource.INVOICE_PAYMENTS_PATH + "/" + chargebackTransaction.getPaymentId() + "/" + JaxrsResource.CHARGEBACKS;
 
         final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        return httpClient.doPostAndFollowLocation(JaxrsResource.CHARGEBACKS_PATH, chargeback, queryParams, Chargeback.class);
+        return httpClient.doPostAndFollowLocation(uri, chargebackTransaction, queryParams, InvoicePayment.class);
     }
+
 
     // Payment methods
 
