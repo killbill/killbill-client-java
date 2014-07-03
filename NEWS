@@ -3,6 +3,9 @@
     Allow override of payment method id for createDirectPayment (https://github.com/killbill/killbill/issues/177)
     Expose plugin properties in DirectTransaction (https://github.com/killbill/killbill/issues/185)
     Cleanup credit and refund operations (https://github.com/killbill/killbill/issues/187)
+    Update payment, refund and chargeback APIs to match the latest Kill Bill APIs (killbill 0.11.5)
+    Enforce UTF-8 encoding for all requests
+    Update killbill-oss-parent to 0.7.12
 
 0.0.11
     HPP API support (unstable)
