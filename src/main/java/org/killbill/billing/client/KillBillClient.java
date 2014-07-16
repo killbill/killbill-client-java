@@ -1382,7 +1382,7 @@ public class KillBillClient {
 
     private void storePluginPropertiesAsParams(final Map<String, String> pluginProperties, final Multimap<String, String> params) {
         for (final String key : pluginProperties.keySet()) {
-            params.put(null /* STEPH JaxrsResource.QUERY_PLUGIN_PROPERTY */, String.format("%s=%s", UTF8UrlEncoder.encode(key), UTF8UrlEncoder.encode(pluginProperties.get(key))));
+            params.put(JaxrsResource.QUERY_PLUGIN_PROPERTY, String.format("%s=%s", UTF8UrlEncoder.encode(key), UTF8UrlEncoder.encode(pluginProperties.get(key))));
         }
     }
 }
