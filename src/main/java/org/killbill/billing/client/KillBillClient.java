@@ -68,7 +68,6 @@ import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.client.model.Tenant;
 import org.killbill.billing.client.model.TenantKey;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
-import org.killbill.billing.jaxrs.resources.JaxrsResource;
 import org.killbill.billing.util.api.AuditLevel;
 
 import com.ning.http.client.Response;
@@ -85,8 +84,6 @@ import com.google.common.collect.Multimap;
 
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_EMPTY_QUERY;
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_HTTP_TIMEOUT_SEC;
-import static org.killbill.billing.jaxrs.resources.JaxrsResource.OVERDUE;
-import static org.killbill.billing.jaxrs.resources.JaxrsResource.QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF;
 
 public class KillBillClient {
 
@@ -1068,7 +1065,7 @@ public class KillBillClient {
     public void deletePaymentMethod(final UUID paymentMethodId, final Boolean deleteDefault, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF, deleteDefault.toString()),
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF, deleteDefault.toString()),
                                                                      createdBy,
                                                                      reason,
                                                                      comment);
@@ -1079,7 +1076,7 @@ public class KillBillClient {
     // Overdue
 
     public OverdueState getOverdueStateForAccount(final UUID accountId) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + OVERDUE;
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.OVERDUE;
 
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, OverdueState.class);
     }
