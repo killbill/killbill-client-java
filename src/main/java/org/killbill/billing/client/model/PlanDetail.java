@@ -25,73 +25,73 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PlanDetail extends KillBillObject {
 
-    private String productName;
-    private String planName;
-    private BillingPeriod billingPeriod;
-    private String priceListName;
-    private List<Price> finalPhasePrice;
+    private String product;
+    private String plan;
+    private BillingPeriod finalPhaseBillingPeriod;
+    private String priceList;
+    private List<Price> finalPhaseRecurringPrice;
 
     @JsonCreator
-    public PlanDetail(@JsonProperty("product") final String productName,
-                      @JsonProperty("plan") final String planName,
-                      @JsonProperty("final_phase_billing_period") final BillingPeriod billingPeriod,
-                      @JsonProperty("priceList") final String priceListName,
-                      @JsonProperty("final_phase_recurring_price") final List<Price> finalPhasePrice) {
-        this.productName = productName;
-        this.planName = planName;
-        this.billingPeriod = billingPeriod;
-        this.priceListName = priceListName;
-        this.finalPhasePrice = finalPhasePrice;
+    public PlanDetail(@JsonProperty("product") final String product,
+                      @JsonProperty("plan") final String plan,
+                      @JsonProperty("final_phase_billing_period") final BillingPeriod finalPhaseBillingPeriod,
+                      @JsonProperty("priceList") final String priceList,
+                      @JsonProperty("final_phase_recurring_price") final List<Price> finalPhaseRecurringPrice) {
+        this.product = product;
+        this.plan = plan;
+        this.finalPhaseBillingPeriod = finalPhaseBillingPeriod;
+        this.priceList = priceList;
+        this.finalPhaseRecurringPrice = finalPhaseRecurringPrice;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getProduct() {
+        return product;
     }
 
-    public void setProductName(final String productName) {
-        this.productName = productName;
+    public void setProduct(final String product) {
+        this.product = product;
     }
 
-    public String getPlanName() {
-        return planName;
+    public String getPlan() {
+        return plan;
     }
 
-    public void setPlanName(final String planName) {
-        this.planName = planName;
+    public void setPlan(final String plan) {
+        this.plan = plan;
     }
 
-    public BillingPeriod getBillingPeriod() {
-        return billingPeriod;
+    public BillingPeriod getFinalPhaseBillingPeriod() {
+        return finalPhaseBillingPeriod;
     }
 
-    public void setBillingPeriod(final BillingPeriod billingPeriod) {
-        this.billingPeriod = billingPeriod;
+    public void setFinalPhaseBillingPeriod(final BillingPeriod finalPhaseBillingPeriod) {
+        this.finalPhaseBillingPeriod = finalPhaseBillingPeriod;
     }
 
-    public String getPriceListName() {
-        return priceListName;
+    public String getPriceList() {
+        return priceList;
     }
 
-    public void setPriceListName(final String priceListName) {
-        this.priceListName = priceListName;
+    public void setPriceList(final String priceList) {
+        this.priceList = priceList;
     }
 
-    public List<Price> getFinalPhasePrice() {
-        return finalPhasePrice;
+    public List<Price> getFinalPhaseRecurringPrice() {
+        return finalPhaseRecurringPrice;
     }
 
-    public void setFinalPhasePrice(final List<Price> finalPhasePrice) {
-        this.finalPhasePrice = finalPhasePrice;
+    public void setFinalPhaseRecurringPrice(final List<Price> finalPhaseRecurringPrice) {
+        this.finalPhaseRecurringPrice = finalPhaseRecurringPrice;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("PlanDetail{");
-        sb.append("productName='").append(productName).append('\'');
-        sb.append(", planName='").append(planName).append('\'');
-        sb.append(", billingPeriod=").append(billingPeriod);
-        sb.append(", priceListName='").append(priceListName).append('\'');
-        sb.append(", finalPhasePrice=").append(finalPhasePrice);
+        sb.append("product='").append(product).append('\'');
+        sb.append(", plan='").append(plan).append('\'');
+        sb.append(", finalPhaseBillingPeriod=").append(finalPhaseBillingPeriod);
+        sb.append(", priceList='").append(priceList).append('\'');
+        sb.append(", finalPhaseRecurringPrice=").append(finalPhaseRecurringPrice);
         sb.append('}');
         return sb.toString();
     }
@@ -107,19 +107,19 @@ public class PlanDetail extends KillBillObject {
 
         final PlanDetail that = (PlanDetail) o;
 
-        if (billingPeriod != that.billingPeriod) {
+        if (finalPhaseBillingPeriod != that.finalPhaseBillingPeriod) {
             return false;
         }
-        if (finalPhasePrice != null ? !finalPhasePrice.equals(that.finalPhasePrice) : that.finalPhasePrice != null) {
+        if (finalPhaseRecurringPrice != null ? !finalPhaseRecurringPrice.equals(that.finalPhaseRecurringPrice) : that.finalPhaseRecurringPrice != null) {
             return false;
         }
-        if (planName != null ? !planName.equals(that.planName) : that.planName != null) {
+        if (plan != null ? !plan.equals(that.plan) : that.plan != null) {
             return false;
         }
-        if (priceListName != null ? !priceListName.equals(that.priceListName) : that.priceListName != null) {
+        if (priceList != null ? !priceList.equals(that.priceList) : that.priceList != null) {
             return false;
         }
-        if (productName != null ? !productName.equals(that.productName) : that.productName != null) {
+        if (product != null ? !product.equals(that.product) : that.product != null) {
             return false;
         }
 
@@ -128,11 +128,11 @@ public class PlanDetail extends KillBillObject {
 
     @Override
     public int hashCode() {
-        int result = productName != null ? productName.hashCode() : 0;
-        result = 31 * result + (planName != null ? planName.hashCode() : 0);
-        result = 31 * result + (billingPeriod != null ? billingPeriod.hashCode() : 0);
-        result = 31 * result + (priceListName != null ? priceListName.hashCode() : 0);
-        result = 31 * result + (finalPhasePrice != null ? finalPhasePrice.hashCode() : 0);
+        int result = product != null ? product.hashCode() : 0;
+        result = 31 * result + (plan != null ? plan.hashCode() : 0);
+        result = 31 * result + (finalPhaseBillingPeriod != null ? finalPhaseBillingPeriod.hashCode() : 0);
+        result = 31 * result + (priceList != null ? priceList.hashCode() : 0);
+        result = 31 * result + (finalPhaseRecurringPrice != null ? finalPhaseRecurringPrice.hashCode() : 0);
         return result;
     }
 }
