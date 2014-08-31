@@ -1,3 +1,6 @@
+0.0.14
+    Fix bug in searchPaymentMethodsByKeyAndPlugin call
+
 0.0.13
     Minor update for payment (missing PluginProperty constant)
 

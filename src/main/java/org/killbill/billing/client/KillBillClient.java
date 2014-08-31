@@ -847,8 +847,6 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
     }
 
-
-
     public Payment chargebackPayment(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(paymentTransaction.getPaymentId(), "PaymentTransaction#paymentId cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
@@ -943,7 +941,6 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(uri, chargebackTransaction, queryParams, InvoicePayment.class);
     }
 
-
     // Payment methods
 
     public PaymentMethods getPaymentMethods() throws KillBillClientException {
@@ -1027,14 +1024,23 @@ public class KillBillClient {
         return searchPaymentMethodsByKeyAndPlugin(key, null);
     }
 
+    public PaymentMethods searchPaymentMethodsByKey(final String key, final boolean withPluginInfo) throws KillBillClientException {
+        return searchPaymentMethodsByKeyAndPlugin(key, withPluginInfo, null, AuditLevel.NONE);
+    }
+
     public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, @Nullable final String pluginName) throws KillBillClientException {
         return searchPaymentMethodsByKeyAndPlugin(key, pluginName, AuditLevel.NONE);
     }
 
     public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, @Nullable final String pluginName, final AuditLevel auditLevel) throws KillBillClientException {
+        return searchPaymentMethodsByKeyAndPlugin(key, pluginName != null, pluginName, auditLevel);
+    }
+
+    public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, final boolean withPluginInfo, @Nullable final String pluginName, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_WITH_PLUGIN_INFO, Strings.nullToEmpty(pluginName),
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_NAME, Strings.nullToEmpty(pluginName),
+                                                                                          JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo),
                                                                                           JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, PaymentMethods.class);

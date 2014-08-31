@@ -123,5 +123,6 @@ public interface JaxrsResource {
     public static final String QUERY_TAGS = "tagList";
     public static final String QUERY_TARGET_DATE = "targetDate";
     public static final String QUERY_UNPAID_INVOICES_ONLY = "unpaidInvoicesOnly";
+    public static final String QUERY_PAYMENT_METHOD_PLUGIN_NAME = "pluginName";
     public static final String QUERY_WITH_PLUGIN_INFO = "withPluginInfo";
 }
