@@ -48,6 +48,7 @@ public interface JaxrsResource {
     public static final String HOSTED = "hosted";
     public static final String INVOICES = "invoices";
     public static final String INVOICES_PATH = PREFIX + "/" + INVOICES;
+    public static final String DRY_RUN = "dryRun";
     public static final String INVOICE_PAYMENTS = "invoicePayments";
     public static final String INVOICE_PAYMENTS_PATH = PREFIX + "/" + INVOICE_PAYMENTS;
     public static final String NOTIFICATION = "notification";

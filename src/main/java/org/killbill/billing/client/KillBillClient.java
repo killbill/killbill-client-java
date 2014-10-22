@@ -45,6 +45,7 @@ import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.HostedPaymentPageFields;
 import org.killbill.billing.client.model.HostedPaymentPageFormDescriptor;
 import org.killbill.billing.client.model.Invoice;
+import org.killbill.billing.client.model.InvoiceDryRun;
 import org.killbill.billing.client.model.InvoiceEmail;
 import org.killbill.billing.client.model.InvoiceItem;
 import org.killbill.billing.client.model.InvoiceItems;
@@ -520,8 +521,8 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Invoices.class);
     }
 
-    public Invoice createDryRunInvoice(final UUID accountId, final DateTime futureDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES_PATH;
+    public Invoice createDryRunInvoice(final UUID accountId, final DateTime futureDate, final InvoiceDryRun dryRunInfo, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.DRY_RUN;
 
         final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
                                                                                                           JaxrsResource.QUERY_TARGET_DATE, futureDate.toString(),
@@ -531,7 +532,7 @@ public class KillBillClient {
                                                                      comment
                                                                     );
 
-        return httpClient.doPost(uri, null, queryParams, Invoice.class);
+        return httpClient.doPost(uri, dryRunInfo, queryParams, Invoice.class);
     }
 
     public Invoice createInvoice(final UUID accountId, final DateTime futureDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {
