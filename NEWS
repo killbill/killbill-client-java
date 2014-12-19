@@ -1,3 +1,6 @@
+0.0.16
+    Per tenant overdue and catalog endpoints
+
 0.0.15
     Modify invoice api to trigger dryRun invoice to it also supports adding subscription info (CREATE, CHANGE, CANCEL) ...
 
