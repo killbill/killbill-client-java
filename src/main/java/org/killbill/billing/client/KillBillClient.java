@@ -18,7 +18,10 @@
 
 package org.killbill.billing.client;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -82,6 +85,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.io.Files;
 
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_EMPTY_QUERY;
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_HTTP_TIMEOUT_SEC;
@@ -1082,6 +1086,39 @@ public class KillBillClient {
 
     // Overdue
 
+
+    public void uploadXMLOverdueConfig(final String overdueConfigPath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(overdueConfigPath, "overdueConfigPath cannot be null");
+
+        final String uri = JaxrsResource.OVERDUE_PATH;
+
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, "application/xml");
+
+        final File catalogFile = new File(overdueConfigPath);
+        Preconditions.checkArgument(catalogFile.exists() && catalogFile.isFile() && catalogFile.canRead(), "overdueConfigPath needs to be a valid file");
+        try {
+            final String body = Files.toString(catalogFile, Charset.forName("UTF-8"));
+            httpClient.doPost(uri, body, queryParams);
+        } catch (IOException e) {
+            throw new KillBillClientException(e);
+        }
+    }
+
+    public String getXMLOverdueConfig() throws KillBillClientException {
+        final String uri = JaxrsResource.OVERDUE_PATH;
+
+        final Multimap<String, String> queryParams = HashMultimap.create();
+        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, "application/xml");
+
+        final Response response = httpClient.doGet(uri, queryParams);
+        try {
+            return response.getResponseBody("UTF-8");
+        } catch (IOException e) {
+            throw new KillBillClientException(e);
+        }
+    }
+
     public OverdueState getOverdueStateForAccount(final UUID accountId) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.OVERDUE;
 
@@ -1293,6 +1330,40 @@ public class KillBillClient {
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, PlanDetails.class);
     }
 
+    public void uploadXMLCatalog(final String catalogPath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(catalogPath, "catalogPath cannot be null");
+
+        final String uri = JaxrsResource.CATALOG_PATH;
+
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, "application/xml");
+
+        final File catalogFile = new File(catalogPath);
+        Preconditions.checkArgument(catalogFile.exists() && catalogFile.isFile() && catalogFile.canRead(), "catalogPath needs to be a valid file");
+        try {
+            final String body = Files.toString(catalogFile, Charset.forName("UTF-8"));
+            httpClient.doPost(uri, body, queryParams);
+        } catch (IOException e) {
+            throw new KillBillClientException(e);
+        }
+    }
+
+    public String getXMLCatalog() throws KillBillClientException {
+        final String uri = JaxrsResource.CATALOG_PATH;
+
+        final Multimap<String, String> queryParams = HashMultimap.create();
+        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, "application/xml");
+
+        final Response response = httpClient.doGet(uri, queryParams);
+        try {
+            return response.getResponseBody("UTF-8");
+        } catch (IOException e) {
+            throw new KillBillClientException(e);
+        }
+    }
+
+
+
     // Tenants
 
     public Tenant createTenant(final Tenant tenant, final String createdBy, final String reason, final String comment) throws KillBillClientException {
@@ -1379,9 +1450,11 @@ public class KillBillClient {
     }
 
     private Multimap<String, String> paramsWithAudit(final String createdBy, final String reason, final String comment) {
-        return ImmutableMultimap.<String, String>of(KillBillHttpClient.AUDIT_OPTION_CREATED_BY, createdBy,
-                                                    KillBillHttpClient.AUDIT_OPTION_REASON, reason,
-                                                    KillBillHttpClient.AUDIT_OPTION_COMMENT, comment);
+        final Multimap result = HashMultimap.create();
+        result.put(KillBillHttpClient.AUDIT_OPTION_CREATED_BY, createdBy);
+        result.put(KillBillHttpClient.AUDIT_OPTION_REASON, reason);
+        result.put(KillBillHttpClient.AUDIT_OPTION_COMMENT, comment);
+        return result;
     }
 
     private void storePluginPropertiesAsParams(final Map<String, String> pluginProperties, final Multimap<String, String> params) {

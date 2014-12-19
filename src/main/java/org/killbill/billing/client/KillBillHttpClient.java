@@ -66,6 +66,8 @@ public class KillBillHttpClient {
     public static final String RBAC_OPTION_USERNAME = "__RBAC_OPTION_USERNAME";
     public static final String RBAC_OPTION_PASSWORD = "__RBAC_OPTION_PASSWORD";
 
+    public static final String HTPP_HEADER_CONTENT_TYPE = "Content-Type";
+
     private static final Logger log = LoggerFactory.getLogger(KillBillHttpClient.class);
     private static final String USER_AGENT = "KillBill-JavaClient/1.0";
 
@@ -294,6 +296,7 @@ public class KillBillHttpClient {
         options.removeAll(RBAC_OPTION_USERNAME);
         options.removeAll(RBAC_OPTION_PASSWORD);
 
+
         final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery(verb, getKBServerUrl(uri), username, password, options);
 
         // Multi-Tenancy headers
@@ -316,15 +319,20 @@ public class KillBillHttpClient {
 
         if (!"GET".equals(verb) && !"HEAD".equals(verb)) {
             if (body != null) {
-                try {
-                    builder.setBody(mapper.writeValueAsString(body));
-                } catch (JsonProcessingException e) {
-                    throw new KillBillClientException(e);
+                if (body instanceof String) {
+                    builder.setBody((String) body);
+                } else {
+                    try {
+                        builder.setBody(mapper.writeValueAsString(body));
+                    } catch (JsonProcessingException e) {
+                        throw new KillBillClientException(e);
+                    }
                 }
-            } else {
-                builder.setBody("{}");
             }
+        } else {
+            builder.setBody("{}");
         }
+
 
         if (followLocation) {
             final Response response = executeAndWait(builder, timeoutSec, Response.class);
@@ -483,7 +491,14 @@ public class KillBillHttpClient {
             builder.setRealm(realm);
         }
 
-        builder.addHeader("Content-Type", "application/json; charset=utf-8");
+        String contentType = getUniqueValue(options, HTPP_HEADER_CONTENT_TYPE);
+        if (contentType == null) {
+            contentType = "application/json; charset=utf-8";
+        } else {
+            options.removeAll(HTPP_HEADER_CONTENT_TYPE);
+        }
+        builder.addHeader(HTPP_HEADER_CONTENT_TYPE, contentType);
+
         builder.setBodyEncoding("UTF-8");
 
         for (final String key : options.keySet()) {

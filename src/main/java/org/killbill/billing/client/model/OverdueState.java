@@ -16,6 +16,8 @@
 
 package org.killbill.billing.client.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,7 +25,7 @@ public class OverdueState extends KillBillObject {
 
     private String name;
     private String externalMessage;
-    private Integer daysBetweenPaymentRetries;
+    private List<Integer> daysBetweenPaymentRetries;
     private Boolean disableEntitlementAndChangesBlocked;
     private Boolean blockChanges;
     private Boolean isClearState;
@@ -32,7 +34,7 @@ public class OverdueState extends KillBillObject {
     @JsonCreator
     public OverdueState(@JsonProperty("name") final String name,
                         @JsonProperty("externalMessage") final String externalMessage,
-                        @JsonProperty("daysBetweenPaymentRetries") final Integer daysBetweenPaymentRetries,
+                        @JsonProperty("daysBetweenPaymentRetries") final List<Integer> daysBetweenPaymentRetries,
                         @JsonProperty("disableEntitlementAndChangesBlocked") final Boolean disableEntitlementAndChangesBlocked,
                         @JsonProperty("blockChanges") final Boolean blockChanges,
                         @JsonProperty("clearState") final Boolean isClearState,
@@ -62,11 +64,11 @@ public class OverdueState extends KillBillObject {
         this.externalMessage = externalMessage;
     }
 
-    public Integer getDaysBetweenPaymentRetries() {
+    public List<Integer> getDaysBetweenPaymentRetries() {
         return daysBetweenPaymentRetries;
     }
 
-    public void setDaysBetweenPaymentRetries(final Integer daysBetweenPaymentRetries) {
+    public void setDaysBetweenPaymentRetries(final List<Integer> daysBetweenPaymentRetries) {
         this.daysBetweenPaymentRetries = daysBetweenPaymentRetries;
     }
 

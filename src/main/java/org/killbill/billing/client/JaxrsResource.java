@@ -53,6 +53,7 @@ public interface JaxrsResource {
     public static final String INVOICE_PAYMENTS_PATH = PREFIX + "/" + INVOICE_PAYMENTS;
     public static final String NOTIFICATION = "notification";
     public static final String OVERDUE = "overdue";
+    public static final String OVERDUE_PATH = PREFIX + "/" + OVERDUE;
     public static final String PAGINATION = "pagination";
     public static final String PAYMENTS = "payments";
     public static final String PAYMENTS_PATH = PREFIX + "/" + PAYMENTS;
