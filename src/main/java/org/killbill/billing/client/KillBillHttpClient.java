@@ -328,9 +328,9 @@ public class KillBillHttpClient {
                         throw new KillBillClientException(e);
                     }
                 }
+            } else {
+                builder.setBody("{}");
             }
-        } else {
-            builder.setBody("{}");
         }
 
 
