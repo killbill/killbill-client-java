@@ -619,6 +619,39 @@ public class KillBillClient {
         httpClient.doPost(uri, null, queryParams);
     }
 
+
+    public void uploadInvoiceTemplate(final String invoiceTemplate, final boolean manualPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES + (manualPay ? "/manualPayTemplate" : "/template");
+        uploadFile(invoiceTemplate, uri, "text/html", createdBy, reason, comment);
+    }
+
+    public String getInvoiceTemplate(final boolean manualPay) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES + (manualPay ? "/manualPayTemplate" : "/template");
+        return getResourceFile(uri, "text/html");
+    }
+
+
+    public void uploadInvoiceTranslation(final String invoiceTemplate, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES +  "/translation/" + locale ;
+        uploadFile(invoiceTemplate, uri, "text/plain", createdBy, reason, comment);
+    }
+
+    public String getInvoiceTranslation(final String locale) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES +  "/translation/" + locale ;
+        return getResourceFile(uri, "text/plain");
+    }
+
+
+    public void uploadCatalogTranslation(final String invoiceTemplate, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES +  "/catalogTranslation/" + locale ;
+        uploadFile(invoiceTemplate, uri, "text/plain", createdBy, reason, comment);
+    }
+
+    public String getCatalogTranslation(final String locale) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES +  "/catalogTranslation/" + locale ;
+        return getResourceFile(uri, "text/plain");
+    }
+
     // Credits
 
     public Credit getCredit(final UUID creditId) throws KillBillClientException {
@@ -1088,35 +1121,13 @@ public class KillBillClient {
 
 
     public void uploadXMLOverdueConfig(final String overdueConfigPath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        Preconditions.checkNotNull(overdueConfigPath, "overdueConfigPath cannot be null");
-
         final String uri = JaxrsResource.OVERDUE_PATH;
-
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, "application/xml");
-
-        final File catalogFile = new File(overdueConfigPath);
-        Preconditions.checkArgument(catalogFile.exists() && catalogFile.isFile() && catalogFile.canRead(), "overdueConfigPath needs to be a valid file");
-        try {
-            final String body = Files.toString(catalogFile, Charset.forName("UTF-8"));
-            httpClient.doPost(uri, body, queryParams);
-        } catch (IOException e) {
-            throw new KillBillClientException(e);
-        }
+        uploadFile(overdueConfigPath, uri, "application/xml", createdBy, reason, comment);
     }
 
     public String getXMLOverdueConfig() throws KillBillClientException {
         final String uri = JaxrsResource.OVERDUE_PATH;
-
-        final Multimap<String, String> queryParams = HashMultimap.create();
-        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, "application/xml");
-
-        final Response response = httpClient.doGet(uri, queryParams);
-        try {
-            return response.getResponseBody("UTF-8");
-        } catch (IOException e) {
-            throw new KillBillClientException(e);
-        }
+        return getResourceFile(uri, "application/xml");
     }
 
     public OverdueState getOverdueStateForAccount(final UUID accountId) throws KillBillClientException {
@@ -1331,35 +1342,13 @@ public class KillBillClient {
     }
 
     public void uploadXMLCatalog(final String catalogPath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        Preconditions.checkNotNull(catalogPath, "catalogPath cannot be null");
-
         final String uri = JaxrsResource.CATALOG_PATH;
-
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, "application/xml");
-
-        final File catalogFile = new File(catalogPath);
-        Preconditions.checkArgument(catalogFile.exists() && catalogFile.isFile() && catalogFile.canRead(), "catalogPath needs to be a valid file");
-        try {
-            final String body = Files.toString(catalogFile, Charset.forName("UTF-8"));
-            httpClient.doPost(uri, body, queryParams);
-        } catch (IOException e) {
-            throw new KillBillClientException(e);
-        }
+        uploadFile(catalogPath, uri, "application/xml", createdBy, reason, comment);
     }
 
     public String getXMLCatalog() throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH;
-
-        final Multimap<String, String> queryParams = HashMultimap.create();
-        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, "application/xml");
-
-        final Response response = httpClient.doGet(uri, queryParams);
-        try {
-            return response.getResponseBody("UTF-8");
-        } catch (IOException e) {
-            throw new KillBillClientException(e);
-        }
+        return getResourceFile(uri, "application/xml");
     }
 
 
@@ -1441,6 +1430,33 @@ public class KillBillClient {
     }
 
     // Utilities
+
+    private String getResourceFile(final String uri, final String contentType) throws KillBillClientException {
+        final Multimap<String, String> queryParams = HashMultimap.create();
+        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, contentType);
+        final Response response = httpClient.doGet(uri, queryParams);
+        try {
+            return response.getResponseBody("UTF-8");
+        } catch (IOException e) {
+            throw new KillBillClientException(e);
+        }
+    }
+
+    private void uploadFile(final String fileToUpload, final String uri, final String contentType, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(fileToUpload, "fileToUpload cannot be null");
+
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, contentType);
+
+        final File catalogFile = new File(fileToUpload);
+        Preconditions.checkArgument(catalogFile.exists() && catalogFile.isFile() && catalogFile.canRead(), "file to upload needs to be a valid file");
+        try {
+            final String body = Files.toString(catalogFile, Charset.forName("UTF-8"));
+            httpClient.doPost(uri, body, queryParams);
+        } catch (IOException e) {
+            throw new KillBillClientException(e);
+        }
+    }
 
     private Multimap<String, String> paramsWithAudit(final Multimap<String, String> queryParams, final String createdBy, final String reason, final String comment) {
         final Multimap<String, String> queryParamsWithAudit = HashMultimap.<String, String>create();
