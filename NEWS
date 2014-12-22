@@ -1,3 +1,6 @@
+0.1.1
+    Add apis to upload per tenant invoice template and translations
+
 0.0.16
     Per tenant overdue and catalog endpoints
 
