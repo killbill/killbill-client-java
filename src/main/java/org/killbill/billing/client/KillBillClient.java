@@ -336,7 +336,6 @@ public class KillBillClient {
 
     public Subscription createSubscription(final Subscription subscription, final DateTime requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(subscription.getAccountId(), "Subscription#accountId cannot be null");
-        Preconditions.checkNotNull(subscription.getExternalKey(), "Subscription#externalKey cannot be null");
         Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
         Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
         Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
@@ -619,7 +618,6 @@ public class KillBillClient {
         httpClient.doPost(uri, null, queryParams);
     }
 
-
     public void uploadInvoiceTemplate(final String invoiceTemplate, final boolean manualPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES + (manualPay ? "/manualPayTemplate" : "/template");
         uploadFile(invoiceTemplate, uri, "text/html", createdBy, reason, comment);
@@ -630,25 +628,23 @@ public class KillBillClient {
         return getResourceFile(uri, "text/html");
     }
 
-
     public void uploadInvoiceTranslation(final String invoiceTemplate, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES +  "/translation/" + locale ;
+        final String uri = JaxrsResource.INVOICES + "/translation/" + locale;
         uploadFile(invoiceTemplate, uri, "text/plain", createdBy, reason, comment);
     }
 
     public String getInvoiceTranslation(final String locale) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES +  "/translation/" + locale ;
+        final String uri = JaxrsResource.INVOICES + "/translation/" + locale;
         return getResourceFile(uri, "text/plain");
     }
 
-
     public void uploadCatalogTranslation(final String invoiceTemplate, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES +  "/catalogTranslation/" + locale ;
+        final String uri = JaxrsResource.INVOICES + "/catalogTranslation/" + locale;
         uploadFile(invoiceTemplate, uri, "text/plain", createdBy, reason, comment);
     }
 
     public String getCatalogTranslation(final String locale) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES +  "/catalogTranslation/" + locale ;
+        final String uri = JaxrsResource.INVOICES + "/catalogTranslation/" + locale;
         return getResourceFile(uri, "text/plain");
     }
 
@@ -1119,7 +1115,6 @@ public class KillBillClient {
 
     // Overdue
 
-
     public void uploadXMLOverdueConfig(final String overdueConfigPath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.OVERDUE_PATH;
         uploadFile(overdueConfigPath, uri, "application/xml", createdBy, reason, comment);
@@ -1350,8 +1345,6 @@ public class KillBillClient {
         final String uri = JaxrsResource.CATALOG_PATH;
         return getResourceFile(uri, "application/xml");
     }
-
-
 
     // Tenants
 
