@@ -1,7 +1,9 @@
 /*
  * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2015 Groupon, Inc
+ * Copyright 2015 The Billing Project, LLC
  *
- * Ning licenses this file to you under the Apache License, version 2.0
+ * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
  * License.  You may obtain a copy of the License at:
  *
@@ -44,8 +46,6 @@ public class Subscription extends KillBillObject {
     private LocalDate billingStartDate;
     private LocalDate billingEndDate;
     private List<EventSubscription> events;
-    private List<DeletedEventSubscription> deletedEvents;
-    private List<NewEventSubscription> newEvents;
 
     public Subscription() { }
 
@@ -64,8 +64,6 @@ public class Subscription extends KillBillObject {
                         @JsonProperty("billingStartDate") @Nullable final LocalDate billingStartDate,
                         @JsonProperty("billingEndDate") @Nullable final LocalDate billingEndDate,
                         @JsonProperty("events") @Nullable final List<EventSubscription> events,
-                        @JsonProperty("newEvents") @Nullable final List<NewEventSubscription> newEvents,
-                        @JsonProperty("deletedEvents") @Nullable final List<DeletedEventSubscription> deletedEvents,
                         @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.startDate = startDate;
@@ -82,8 +80,6 @@ public class Subscription extends KillBillObject {
         this.subscriptionId = subscriptionId;
         this.externalKey = externalKey;
         this.events = events;
-        this.deletedEvents = deletedEvents;
-        this.newEvents = newEvents;
     }
 
     public UUID getAccountId() {
@@ -198,22 +194,6 @@ public class Subscription extends KillBillObject {
         this.events = events;
     }
 
-    public List<DeletedEventSubscription> getDeletedEvents() {
-        return deletedEvents;
-    }
-
-    public void setDeletedEvents(final List<DeletedEventSubscription> deletedEvents) {
-        this.deletedEvents = deletedEvents;
-    }
-
-    public List<NewEventSubscription> getNewEvents() {
-        return newEvents;
-    }
-
-    public void setNewEvents(final List<NewEventSubscription> newEvents) {
-        this.newEvents = newEvents;
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Subscription{");
@@ -231,8 +211,6 @@ public class Subscription extends KillBillObject {
         sb.append(", billingStartDate=").append(billingStartDate);
         sb.append(", billingEndDate=").append(billingEndDate);
         sb.append(", events=").append(events);
-        sb.append(", deletedEvents=").append(deletedEvents);
-        sb.append(", newEvents=").append(newEvents);
         sb.append('}');
         return sb.toString();
     }
@@ -269,16 +247,10 @@ public class Subscription extends KillBillObject {
         if (chargedThroughDate != null ? chargedThroughDate.compareTo(that.chargedThroughDate) != 0 : that.chargedThroughDate != null) {
             return false;
         }
-        if (deletedEvents != null ? !deletedEvents.equals(that.deletedEvents) : that.deletedEvents != null) {
-            return false;
-        }
         if (events != null ? !events.equals(that.events) : that.events != null) {
             return false;
         }
         if (externalKey != null ? !externalKey.equals(that.externalKey) : that.externalKey != null) {
-            return false;
-        }
-        if (newEvents != null ? !newEvents.equals(that.newEvents) : that.newEvents != null) {
             return false;
         }
         if (priceList != null ? !priceList.equals(that.priceList) : that.priceList != null) {
@@ -316,8 +288,6 @@ public class Subscription extends KillBillObject {
         result = 31 * result + (billingStartDate != null ? billingStartDate.hashCode() : 0);
         result = 31 * result + (billingEndDate != null ? billingEndDate.hashCode() : 0);
         result = 31 * result + (events != null ? events.hashCode() : 0);
-        result = 31 * result + (deletedEvents != null ? deletedEvents.hashCode() : 0);
-        result = 31 * result + (newEvents != null ? newEvents.hashCode() : 0);
         return result;
     }
 }
