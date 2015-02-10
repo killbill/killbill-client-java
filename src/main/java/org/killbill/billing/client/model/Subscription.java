@@ -25,7 +25,10 @@ import javax.annotation.Nullable;
 
 import org.joda.time.LocalDate;
 import org.killbill.billing.catalog.api.BillingPeriod;
+import org.killbill.billing.catalog.api.PhaseType;
 import org.killbill.billing.catalog.api.ProductCategory;
+import org.killbill.billing.entitlement.api.Entitlement.EntitlementSourceType;
+import org.killbill.billing.entitlement.api.Entitlement.EntitlementState;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -40,7 +43,10 @@ public class Subscription extends KillBillObject {
     private String productName;
     private ProductCategory productCategory;
     private BillingPeriod billingPeriod;
+    private PhaseType phaseType;
     private String priceList;
+    private EntitlementState state;
+    private EntitlementSourceType sourceType;
     private LocalDate cancelledDate;
     private LocalDate chargedThroughDate;
     private LocalDate billingStartDate;
@@ -58,7 +64,10 @@ public class Subscription extends KillBillObject {
                         @JsonProperty("productName") @Nullable final String productName,
                         @JsonProperty("productCategory") @Nullable final ProductCategory productCategory,
                         @JsonProperty("billingPeriod") @Nullable final BillingPeriod billingPeriod,
+                        @JsonProperty("phaseType") @Nullable final PhaseType phaseType,
                         @JsonProperty("priceList") @Nullable final String priceList,
+                        @JsonProperty("state") @Nullable final EntitlementState state,
+                        @JsonProperty("sourceType") @Nullable final EntitlementSourceType sourceType,
                         @JsonProperty("cancelledDate") @Nullable final LocalDate cancelledDate,
                         @JsonProperty("chargedThroughDate") @Nullable final LocalDate chargedThroughDate,
                         @JsonProperty("billingStartDate") @Nullable final LocalDate billingStartDate,
@@ -70,7 +79,10 @@ public class Subscription extends KillBillObject {
         this.productName = productName;
         this.productCategory = productCategory;
         this.billingPeriod = billingPeriod;
+        this.phaseType = phaseType;
         this.priceList = priceList;
+        this.state = state;
+        this.sourceType = sourceType;
         this.cancelledDate = cancelledDate;
         this.chargedThroughDate = chargedThroughDate;
         this.billingStartDate = billingStartDate;
@@ -146,12 +158,36 @@ public class Subscription extends KillBillObject {
         this.billingPeriod = billingPeriod;
     }
 
+    public PhaseType getPhaseType() {
+        return phaseType;
+    }
+
+    public void setPhaseType(final PhaseType phaseType) {
+        this.phaseType = phaseType;
+    }
+
     public String getPriceList() {
         return priceList;
     }
 
     public void setPriceList(final String priceList) {
         this.priceList = priceList;
+    }
+
+    public EntitlementState getState() {
+        return state;
+    }
+
+    public void setState(final EntitlementState state) {
+        this.state = state;
+    }
+
+    public EntitlementSourceType getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(final EntitlementSourceType sourceType) {
+        this.sourceType = sourceType;
     }
 
     public LocalDate getCancelledDate() {
@@ -197,15 +233,18 @@ public class Subscription extends KillBillObject {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Subscription{");
-        sb.append("accountId='").append(accountId).append('\'');
-        sb.append(", bundleId='").append(bundleId).append('\'');
-        sb.append(", subscriptionId='").append(subscriptionId).append('\'');
+        sb.append("accountId=").append(accountId);
+        sb.append(", bundleId=").append(bundleId);
+        sb.append(", subscriptionId=").append(subscriptionId);
         sb.append(", externalKey='").append(externalKey).append('\'');
         sb.append(", startDate=").append(startDate);
         sb.append(", productName='").append(productName).append('\'');
-        sb.append(", productCategory='").append(productCategory).append('\'');
-        sb.append(", billingPeriod='").append(billingPeriod).append('\'');
+        sb.append(", productCategory=").append(productCategory);
+        sb.append(", billingPeriod=").append(billingPeriod);
+        sb.append(", phaseType=").append(phaseType);
         sb.append(", priceList='").append(priceList).append('\'');
+        sb.append(", state=").append(state);
+        sb.append(", sourceType=").append(sourceType);
         sb.append(", cancelledDate=").append(cancelledDate);
         sb.append(", chargedThroughDate=").append(chargedThroughDate);
         sb.append(", billingStartDate=").append(billingStartDate);
@@ -232,7 +271,7 @@ public class Subscription extends KillBillObject {
         if (billingEndDate != null ? billingEndDate.compareTo(that.billingEndDate) != 0 : that.billingEndDate != null) {
             return false;
         }
-        if (billingPeriod != null ? !billingPeriod.equals(that.billingPeriod) : that.billingPeriod != null) {
+        if (billingPeriod != that.billingPeriod) {
             return false;
         }
         if (billingStartDate != null ? billingStartDate.compareTo(that.billingStartDate) != 0 : that.billingStartDate != null) {
@@ -253,16 +292,25 @@ public class Subscription extends KillBillObject {
         if (externalKey != null ? !externalKey.equals(that.externalKey) : that.externalKey != null) {
             return false;
         }
+        if (phaseType != that.phaseType) {
+            return false;
+        }
         if (priceList != null ? !priceList.equals(that.priceList) : that.priceList != null) {
             return false;
         }
-        if (productCategory != null ? !productCategory.equals(that.productCategory) : that.productCategory != null) {
+        if (productCategory != that.productCategory) {
             return false;
         }
         if (productName != null ? !productName.equals(that.productName) : that.productName != null) {
             return false;
         }
+        if (sourceType != that.sourceType) {
+            return false;
+        }
         if (startDate != null ? startDate.compareTo(that.startDate) != 0 : that.startDate != null) {
+            return false;
+        }
+        if (state != that.state) {
             return false;
         }
         if (subscriptionId != null ? !subscriptionId.equals(that.subscriptionId) : that.subscriptionId != null) {
@@ -282,7 +330,10 @@ public class Subscription extends KillBillObject {
         result = 31 * result + (productName != null ? productName.hashCode() : 0);
         result = 31 * result + (productCategory != null ? productCategory.hashCode() : 0);
         result = 31 * result + (billingPeriod != null ? billingPeriod.hashCode() : 0);
+        result = 31 * result + (phaseType != null ? phaseType.hashCode() : 0);
         result = 31 * result + (priceList != null ? priceList.hashCode() : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (sourceType != null ? sourceType.hashCode() : 0);
         result = 31 * result + (cancelledDate != null ? cancelledDate.hashCode() : 0);
         result = 31 * result + (chargedThroughDate != null ? chargedThroughDate.hashCode() : 0);
         result = 31 * result + (billingStartDate != null ? billingStartDate.hashCode() : 0);
