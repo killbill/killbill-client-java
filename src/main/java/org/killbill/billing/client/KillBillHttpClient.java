@@ -71,7 +71,9 @@ public class KillBillHttpClient {
     public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";
 
     public static final String ACCEPT_JSON = "application/json";
+    public static final String ACCEPT_XML = "application/xml";
     public static final String CONTENT_TYPE_JSON = "application/json; charset=utf-8";
+    public static final String CONTENT_TYPE_XML = "application/xml; charset=utf-8";
 
     private static final Logger log = LoggerFactory.getLogger(KillBillHttpClient.class);
     private static final String USER_AGENT = "KillBill-JavaClient/1.0";
@@ -303,7 +305,6 @@ public class KillBillHttpClient {
         options.removeAll(RBAC_OPTION_USERNAME);
         options.removeAll(RBAC_OPTION_PASSWORD);
 
-
         final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery(verb, getKBServerUrl(uri), username, password, options);
 
         // Multi-Tenancy headers
@@ -339,7 +340,6 @@ public class KillBillHttpClient {
                 builder.setBody("{}");
             }
         }
-
 
         if (followLocation) {
             final Response response = executeAndWait(builder, timeoutSec, Response.class);

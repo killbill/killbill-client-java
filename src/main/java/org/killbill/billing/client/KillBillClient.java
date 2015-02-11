@@ -87,6 +87,9 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.io.Files;
 
+import static org.killbill.billing.client.KillBillHttpClient.ACCEPT_JSON;
+import static org.killbill.billing.client.KillBillHttpClient.ACCEPT_XML;
+import static org.killbill.billing.client.KillBillHttpClient.CONTENT_TYPE_XML;
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_EMPTY_QUERY;
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_HTTP_TIMEOUT_SEC;
 
@@ -1338,12 +1341,17 @@ public class KillBillClient {
 
     public void uploadXMLCatalog(final String catalogPath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH;
-        uploadFile(catalogPath, uri, "application/xml", createdBy, reason, comment);
+        uploadFile(catalogPath, uri, CONTENT_TYPE_XML, createdBy, reason, comment);
+    }
+
+    public String getJSONCatalog() throws KillBillClientException {
+        final String uri = JaxrsResource.CATALOG_PATH;
+        return getResourceFile(uri, ACCEPT_JSON);
     }
 
     public String getXMLCatalog() throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH;
-        return getResourceFile(uri, "application/xml");
+        return getResourceFile(uri, ACCEPT_XML);
     }
 
     // Tenants
