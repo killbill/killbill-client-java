@@ -1,9 +1,9 @@
 /*
  * Copyright 2010-2013 Ning, Inc.
- * Copyright 2014 Groupon, Inc
- * Copyright 2014 The Billing Project, LLC
+ * Copyright 2014-2015 Groupon, Inc
+ * Copyright 2014-2015 The Billing Project, LLC
  *
- * Ning licenses this file to you under the Apache License, version 2.0
+ * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
  * License.  You may obtain a copy of the License at:
  *
@@ -48,6 +48,7 @@ import com.ning.http.client.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
@@ -66,10 +67,16 @@ public class KillBillHttpClient {
     public static final String RBAC_OPTION_USERNAME = "__RBAC_OPTION_USERNAME";
     public static final String RBAC_OPTION_PASSWORD = "__RBAC_OPTION_PASSWORD";
 
+    public static final String HTTP_HEADER_ACCEPT = "Accept";
     public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";
+
+    public static final String ACCEPT_JSON = "application/json";
+    public static final String CONTENT_TYPE_JSON = "application/json; charset=utf-8";
 
     private static final Logger log = LoggerFactory.getLogger(KillBillHttpClient.class);
     private static final String USER_AGENT = "KillBill-JavaClient/1.0";
+
+    private static final Joiner CSV_JOINER = Joiner.on(",");
 
     private final boolean DEBUG = Boolean.parseBoolean(System.getProperty("org.killbill.client.debug", "false"));
 
@@ -491,13 +498,22 @@ public class KillBillHttpClient {
             builder.setRealm(realm);
         }
 
-        String contentType = getUniqueValue(options, HTTP_HEADER_CONTENT_TYPE);
-        if (contentType == null) {
-            contentType = "application/json; charset=utf-8";
+        final Collection<String> acceptHeaders = options.removeAll(HTTP_HEADER_ACCEPT);
+        final String acceptHeader;
+        if (!acceptHeaders.isEmpty()) {
+            acceptHeader = CSV_JOINER.join(acceptHeaders);
+        } else {
+            acceptHeader = ACCEPT_JSON;
+        }
+        builder.addHeader(HTTP_HEADER_ACCEPT, acceptHeader);
+
+        String contentTypeHeader = getUniqueValue(options, HTTP_HEADER_CONTENT_TYPE);
+        if (contentTypeHeader == null) {
+            contentTypeHeader = CONTENT_TYPE_JSON;
         } else {
             options.removeAll(HTTP_HEADER_CONTENT_TYPE);
         }
-        builder.addHeader(HTTP_HEADER_CONTENT_TYPE, contentType);
+        builder.addHeader(HTTP_HEADER_CONTENT_TYPE, contentTypeHeader);
 
         builder.setBodyEncoding("UTF-8");
 

@@ -1426,7 +1426,7 @@ public class KillBillClient {
 
     private String getResourceFile(final String uri, final String contentType) throws KillBillClientException {
         final Multimap<String, String> queryParams = HashMultimap.create();
-        queryParams.put(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, contentType);
+        queryParams.put(KillBillHttpClient.HTTP_HEADER_ACCEPT, contentType);
         final Response response = httpClient.doGet(uri, queryParams);
         try {
             return response.getResponseBody("UTF-8");
