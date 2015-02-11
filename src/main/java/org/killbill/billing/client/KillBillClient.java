@@ -1426,7 +1426,7 @@ public class KillBillClient {
 
     private String getResourceFile(final String uri, final String contentType) throws KillBillClientException {
         final Multimap<String, String> queryParams = HashMultimap.create();
-        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, contentType);
+        queryParams.put(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, contentType);
         final Response response = httpClient.doGet(uri, queryParams);
         try {
             return response.getResponseBody("UTF-8");
@@ -1439,7 +1439,7 @@ public class KillBillClient {
         Preconditions.checkNotNull(fileToUpload, "fileToUpload cannot be null");
 
         final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        queryParams.put(KillBillHttpClient.HTPP_HEADER_CONTENT_TYPE, contentType);
+        queryParams.put(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, contentType);
 
         final File catalogFile = new File(fileToUpload);
         Preconditions.checkArgument(catalogFile.exists() && catalogFile.isFile() && catalogFile.canRead(), "file to upload needs to be a valid file");

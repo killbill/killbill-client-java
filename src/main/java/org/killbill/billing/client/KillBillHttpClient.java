@@ -66,7 +66,7 @@ public class KillBillHttpClient {
     public static final String RBAC_OPTION_USERNAME = "__RBAC_OPTION_USERNAME";
     public static final String RBAC_OPTION_PASSWORD = "__RBAC_OPTION_PASSWORD";
 
-    public static final String HTPP_HEADER_CONTENT_TYPE = "Content-Type";
+    public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";
 
     private static final Logger log = LoggerFactory.getLogger(KillBillHttpClient.class);
     private static final String USER_AGENT = "KillBill-JavaClient/1.0";
@@ -491,13 +491,13 @@ public class KillBillHttpClient {
             builder.setRealm(realm);
         }
 
-        String contentType = getUniqueValue(options, HTPP_HEADER_CONTENT_TYPE);
+        String contentType = getUniqueValue(options, HTTP_HEADER_CONTENT_TYPE);
         if (contentType == null) {
             contentType = "application/json; charset=utf-8";
         } else {
-            options.removeAll(HTPP_HEADER_CONTENT_TYPE);
+            options.removeAll(HTTP_HEADER_CONTENT_TYPE);
         }
-        builder.addHeader(HTPP_HEADER_CONTENT_TYPE, contentType);
+        builder.addHeader(HTTP_HEADER_CONTENT_TYPE, contentType);
 
         builder.setBodyEncoding("UTF-8");
 
