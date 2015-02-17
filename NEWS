@@ -1,3 +1,7 @@
+0.2.0
+    Set Accept header instead of Content-Type for GETs
+    Regenerate models for 0.13.4
+
 0.1.2
     Make Subscription#externalKey optional
 
