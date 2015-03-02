@@ -623,7 +623,7 @@ public class KillBillClient {
 
     public void uploadInvoiceTemplate(final String invoiceTemplate, final boolean manualPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES + (manualPay ? "/manualPayTemplate" : "/template");
-        uploadFile(invoiceTemplate, uri, "text/html", createdBy, reason, comment);
+        uploadFile(invoiceTemplate, uri, "text/html", createdBy, reason, comment, null);
     }
 
     public String getInvoiceTemplate(final boolean manualPay) throws KillBillClientException {
@@ -633,7 +633,7 @@ public class KillBillClient {
 
     public void uploadInvoiceTranslation(final String invoiceTemplate, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES + "/translation/" + locale;
-        uploadFile(invoiceTemplate, uri, "text/plain", createdBy, reason, comment);
+        uploadFile(invoiceTemplate, uri, "text/plain", createdBy, reason, comment, null);
     }
 
     public String getInvoiceTranslation(final String locale) throws KillBillClientException {
@@ -643,7 +643,7 @@ public class KillBillClient {
 
     public void uploadCatalogTranslation(final String invoiceTemplate, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES + "/catalogTranslation/" + locale;
-        uploadFile(invoiceTemplate, uri, "text/plain", createdBy, reason, comment);
+        uploadFile(invoiceTemplate, uri, "text/plain", createdBy, reason, comment, null);
     }
 
     public String getCatalogTranslation(final String locale) throws KillBillClientException {
@@ -1120,7 +1120,7 @@ public class KillBillClient {
 
     public void uploadXMLOverdueConfig(final String overdueConfigPath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.OVERDUE_PATH;
-        uploadFile(overdueConfigPath, uri, "application/xml", createdBy, reason, comment);
+        uploadFile(overdueConfigPath, uri, "application/xml", createdBy, reason, comment, null);
     }
 
     public String getXMLOverdueConfig() throws KillBillClientException {
@@ -1341,7 +1341,7 @@ public class KillBillClient {
 
     public void uploadXMLCatalog(final String catalogPath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH;
-        uploadFile(catalogPath, uri, CONTENT_TYPE_XML, createdBy, reason, comment);
+        uploadFile(catalogPath, uri, CONTENT_TYPE_XML, createdBy, reason, comment, null);
     }
 
     public String getJSONCatalog() throws KillBillClientException {
@@ -1375,6 +1375,37 @@ public class KillBillClient {
 
         return httpClient.doPostAndFollowLocation(uri, null, queryParams, TenantKey.class);
     }
+
+    public TenantKey getCallbackNotificationForTenant() throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.REGISTER_NOTIFICATION_CALLBACK;
+        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, TenantKey.class);
+    }
+
+    public void unregisterCallbackNotificationForTenant(final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.REGISTER_NOTIFICATION_CALLBACK;
+
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        httpClient.doDelete(uri, queryParams);
+    }
+
+
+    public TenantKey registerPluginConfigurationForTenant(final String pluginName, final String pluginConfig, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
+        return uploadFile(pluginConfig, uri, "text/plain", createdBy, reason, comment, TenantKey.class);
+    }
+
+    public TenantKey getPluginConfigurationForTenant(final String pluginName) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG +  "/" + pluginName;
+        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, TenantKey.class);
+    }
+
+    public void unregisterPluginConfigurationForTenant(final String pluginName, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
+
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        httpClient.doDelete(uri, queryParams);
+    }
+
 
     public Permissions getPermissions() throws KillBillClientException {
         return httpClient.doGet(JaxrsResource.SECURITY_PATH + "/permissions", DEFAULT_EMPTY_QUERY, Permissions.class);
@@ -1443,7 +1474,7 @@ public class KillBillClient {
         }
     }
 
-    private void uploadFile(final String fileToUpload, final String uri, final String contentType, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    private <ReturnType> ReturnType uploadFile(final String fileToUpload, final String uri, final String contentType, final String createdBy, final String reason, final String comment, final Class<ReturnType> followUpClass) throws KillBillClientException {
         Preconditions.checkNotNull(fileToUpload, "fileToUpload cannot be null");
 
         final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
@@ -1453,7 +1484,13 @@ public class KillBillClient {
         Preconditions.checkArgument(catalogFile.exists() && catalogFile.isFile() && catalogFile.canRead(), "file to upload needs to be a valid file");
         try {
             final String body = Files.toString(catalogFile, Charset.forName("UTF-8"));
-            httpClient.doPost(uri, body, queryParams);
+            if (followUpClass != null) {
+                return httpClient.doPostAndFollowLocation(uri, body, queryParams, followUpClass);
+
+            } else {
+                httpClient.doPost(uri, body, queryParams);
+                return null;
+            }
         } catch (IOException e) {
             throw new KillBillClientException(e);
         }
