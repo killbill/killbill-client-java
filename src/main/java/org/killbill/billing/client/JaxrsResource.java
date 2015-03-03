@@ -116,6 +116,7 @@ public interface JaxrsResource {
     public static final String QUERY_INVOICE_WITH_ITEMS = "withItems";
     public static final String QUERY_NOTIFICATION_CALLBACK = "cb";
     public static final String QUERY_PAYMENT_EXTERNAL = "externalPayment";
+    public static final String QUERY_PAYMENT_METHOD_ID = "paymentMethodId";
     public static final String QUERY_PAYMENT_METHOD_IS_DEFAULT = "isDefault";
     public static final String QUERY_PAYMENT_PLUGIN_NAME = "pluginName";
     public static final String QUERY_PAY_INVOICE = "payInvoice";

@@ -921,12 +921,13 @@ public class KillBillClient {
     }
 
     // Hosted payment pages
-
-    public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields fields, final UUID kbAccountId, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields fields, final UUID kbAccountId, @Nullable final UUID kbPaymentMethodId, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_GATEWAYS_PATH + "/" + JaxrsResource.HOSTED + "/" + JaxrsResource.FORM + "/" + kbAccountId;
-
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         storePluginPropertiesAsParams(pluginProperties, params);
+        if (kbPaymentMethodId != null) {
+            params.put(JaxrsResource.QUERY_PAYMENT_METHOD_ID, kbPaymentMethodId.toString());
+        }
 
         final Multimap<String, String> queryParams = paramsWithAudit(params,
                                                                      createdBy,
