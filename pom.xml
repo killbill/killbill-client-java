@@ -25,9 +25,9 @@
     </parent>
     <artifactId>killbill-client-java</artifactId>
     <version>0.2.3-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>Kill Bill Client Java</name>
-    <description>Kill Bill Java client library</description>
+    <packaging>bundle</packaging>
+    <name>Kill Bill Client Java (OSGi)</name>
+    <description>Kill Bill Java client OSGi library</description>
     <url>http://github.com/killbill/killbill-client-java</url>
     <scm>
         <connection>scm:git:git://github.com/killbill/killbill-client-java.git</connection>
@@ -103,6 +103,36 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <!-- non osgi jars should be embedded -->
+                        <Embed-Dependency>killbill-api;inline=false,
+                            jsr305;inline=false</Embed-Dependency>
+                        <Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
+                        <Import-Package>org.slf4j;provider=paxlogging,*</Import-Package>
+                        <!-- export of killbill entitlement api and killbill util api, because enums are in public access method signature -->
+                        <Export-Package>org.killbill.billing.client*,                            
+                            org.killbill.billing.entitlement.api,
+                            org.killbill.billing.util.api</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- Override Parent Pluginmanagement to use bundle plugin -->
+                        <phase>never</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- commented because plugin overwrite bundle jar
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
@@ -125,6 +155,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
         </plugins>
     </build>
 </project>
