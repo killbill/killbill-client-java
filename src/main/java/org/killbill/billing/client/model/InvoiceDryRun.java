@@ -18,6 +18,7 @@
 
 package org.killbill.billing.client.model;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -44,7 +45,7 @@ public class InvoiceDryRun {
     private final UUID subscriptionId;
     private final UUID bundleId;
     private final BillingActionPolicy billingPolicy;
-
+    private final List<PhasePriceOverride> priceOverrides;
     @JsonCreator
     public InvoiceDryRun(@JsonProperty("dryRunAction") @Nullable final SubscriptionEventType dryRunAction,
                          @JsonProperty("phaseType") @Nullable final PhaseType phaseType,
@@ -55,7 +56,8 @@ public class InvoiceDryRun {
                          @JsonProperty("subscriptionId") @Nullable final UUID subscriptionId,
                          @JsonProperty("bundleId") @Nullable final UUID bundleId,
                          @JsonProperty("effectiveDate") @Nullable final LocalDate effectiveDate,
-                         @JsonProperty("billingPolicy") @Nullable final BillingActionPolicy billingPolicy) {
+                         @JsonProperty("billingPolicy") @Nullable final BillingActionPolicy billingPolicy,
+                         @JsonProperty("priceOverrides") @Nullable final List<PhasePriceOverride> priceOverrides) {
         this.dryRunAction = dryRunAction;
         this.phaseType = phaseType;
         this.productName = productName;
@@ -66,6 +68,7 @@ public class InvoiceDryRun {
         this.bundleId = bundleId;
         this.effectiveDate = effectiveDate;
         this.billingPolicy = billingPolicy;
+        this.priceOverrides= priceOverrides;
     }
 
     public SubscriptionEventType getDryRunAction() {
@@ -106,5 +109,9 @@ public class InvoiceDryRun {
 
     public BillingActionPolicy getBillingPolicy() {
         return billingPolicy;
+    }
+
+    public List<PhasePriceOverride> getPriceOverrides() {
+        return priceOverrides;
     }
 }

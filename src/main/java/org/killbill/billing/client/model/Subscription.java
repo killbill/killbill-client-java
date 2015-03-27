@@ -52,6 +52,7 @@ public class Subscription extends KillBillObject {
     private LocalDate billingStartDate;
     private LocalDate billingEndDate;
     private List<EventSubscription> events;
+    private List<PhasePriceOverride> priceOverrides;
 
     public Subscription() { }
 
@@ -73,6 +74,7 @@ public class Subscription extends KillBillObject {
                         @JsonProperty("billingStartDate") @Nullable final LocalDate billingStartDate,
                         @JsonProperty("billingEndDate") @Nullable final LocalDate billingEndDate,
                         @JsonProperty("events") @Nullable final List<EventSubscription> events,
+                        @JsonProperty("priceOverrides") @Nullable final List<PhasePriceOverride> priceOverrides,
                         @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.startDate = startDate;
@@ -92,6 +94,7 @@ public class Subscription extends KillBillObject {
         this.subscriptionId = subscriptionId;
         this.externalKey = externalKey;
         this.events = events;
+        this.priceOverrides = priceOverrides;
     }
 
     public UUID getAccountId() {
@@ -230,6 +233,10 @@ public class Subscription extends KillBillObject {
         this.events = events;
     }
 
+    public List<PhasePriceOverride> getPriceOverrides() {
+        return priceOverrides;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Subscription{");
@@ -250,6 +257,7 @@ public class Subscription extends KillBillObject {
         sb.append(", billingStartDate=").append(billingStartDate);
         sb.append(", billingEndDate=").append(billingEndDate);
         sb.append(", events=").append(events);
+        sb.append(", priceOverrides=").append(priceOverrides);
         sb.append('}');
         return sb.toString();
     }
@@ -287,6 +295,9 @@ public class Subscription extends KillBillObject {
             return false;
         }
         if (events != null ? !events.equals(that.events) : that.events != null) {
+            return false;
+        }
+        if (priceOverrides != null ? !priceOverrides.equals(that.priceOverrides) : that.priceOverrides != null) {
             return false;
         }
         if (externalKey != null ? !externalKey.equals(that.externalKey) : that.externalKey != null) {
@@ -339,6 +350,7 @@ public class Subscription extends KillBillObject {
         result = 31 * result + (billingStartDate != null ? billingStartDate.hashCode() : 0);
         result = 31 * result + (billingEndDate != null ? billingEndDate.hashCode() : 0);
         result = 31 * result + (events != null ? events.hashCode() : 0);
+        result = 31 * result + (priceOverrides != null ? priceOverrides.hashCode() : 0);
         return result;
     }
 }
