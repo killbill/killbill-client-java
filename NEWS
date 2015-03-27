@@ -1,3 +1,6 @@
+0.2.3
+    Change models to allow to pass price override on subscription creation or plan change
+
 0.2.2
     Update latest opm to haver latest killbill-api (dep seemed really old)
 
