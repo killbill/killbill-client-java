@@ -1,3 +1,6 @@
+0.3.1
+    Add missing getter/setter (required to json serialization)
+
 0.2.3
     Change models to allow to pass price override on subscription creation or plan change
 
