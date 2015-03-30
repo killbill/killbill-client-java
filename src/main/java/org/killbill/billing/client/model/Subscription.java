@@ -237,6 +237,10 @@ public class Subscription extends KillBillObject {
         return priceOverrides;
     }
 
+    public void setPriceOverrides(final List<PhasePriceOverride> priceOverrides) {
+        this.priceOverrides = priceOverrides;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Subscription{");

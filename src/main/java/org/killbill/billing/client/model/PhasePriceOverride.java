@@ -42,4 +42,20 @@ public class PhasePriceOverride {
         this.fixedPrice = fixedPrice;
         this.recurringPrice = recurringPrice;
     }
+
+    public String getPhaseName() {
+        return phaseName;
+    }
+
+    public String getPhaseType() {
+        return phaseType;
+    }
+
+    public BigDecimal getFixedPrice() {
+        return fixedPrice;
+    }
+
+    public BigDecimal getRecurringPrice() {
+        return recurringPrice;
+    }
 }
