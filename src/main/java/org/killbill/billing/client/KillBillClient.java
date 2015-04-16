@@ -65,12 +65,14 @@ import org.killbill.billing.client.model.Payments;
 import org.killbill.billing.client.model.Permissions;
 import org.killbill.billing.client.model.PlanDetail;
 import org.killbill.billing.client.model.PlanDetails;
+import org.killbill.billing.client.model.RoleDefinition;
 import org.killbill.billing.client.model.Subscription;
 import org.killbill.billing.client.model.TagDefinition;
 import org.killbill.billing.client.model.TagDefinitions;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.client.model.Tenant;
 import org.killbill.billing.client.model.TenantKey;
+import org.killbill.billing.client.model.UserRoles;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.util.api.AuditLevel;
 
@@ -1412,6 +1414,18 @@ public class KillBillClient {
 
     public Permissions getPermissions() throws KillBillClientException {
         return httpClient.doGet(JaxrsResource.SECURITY_PATH + "/permissions", DEFAULT_EMPTY_QUERY, Permissions.class);
+    }
+
+
+    public Response addUserRoles(final UserRoles userRoles, String createdBy, String reason, String comment) throws KillBillClientException {
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        return httpClient.doPost(JaxrsResource.SECURITY_PATH + "/users", userRoles, queryParams);
+    }
+
+
+    public Response addRoleDefinition(final RoleDefinition roleDefinition, String createdBy, String reason, String comment) throws KillBillClientException {
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        return httpClient.doPost(JaxrsResource.SECURITY_PATH + "/roles", roleDefinition, queryParams);
     }
 
     // Plugin endpoints
