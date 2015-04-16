@@ -1406,7 +1406,6 @@ public class KillBillClient {
 
     public void unregisterPluginConfigurationForTenant(final String pluginName, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
-
         final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
         httpClient.doDelete(uri, queryParams);
     }
@@ -1420,6 +1419,27 @@ public class KillBillClient {
     public Response addUserRoles(final UserRoles userRoles, String createdBy, String reason, String comment) throws KillBillClientException {
         final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
         return httpClient.doPost(JaxrsResource.SECURITY_PATH + "/users", userRoles, queryParams);
+    }
+
+
+    public Response updateUserPassword(final String username, final String newPassword, String createdBy, String reason, String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.SECURITY_PATH + "/users/" + username + "/password";
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final UserRoles userRoles = new UserRoles(username, newPassword, ImmutableList.<String>of());
+        return httpClient.doPut(uri, userRoles, queryParams);
+    }
+
+    public Response updateUserRoles(final String username, final List<String> newRoles, String createdBy, String reason, String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.SECURITY_PATH + "/users/" + username + "/roles";
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final UserRoles userRoles = new UserRoles(username, null, newRoles);
+        return httpClient.doPut(uri, userRoles, queryParams);
+    }
+
+    public Response invalidateUser(final String username, String createdBy, String reason, String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.SECURITY_PATH + "/users/" + username;
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        return httpClient.doDelete(uri, queryParams);
     }
 
 
