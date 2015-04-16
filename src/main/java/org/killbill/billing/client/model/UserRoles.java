@@ -25,9 +25,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserRoles {
 
-    private final String username;
-    private final String password;
-    private final List<String> roles;
+    private String username;
+    private String password;
+    private List<String> roles;
 
     @JsonCreator
     public UserRoles(@JsonProperty("username") final String username,
@@ -48,5 +48,17 @@ public class UserRoles {
 
     public List<String> getRoles() {
         return roles;
+    }
+
+    public void setUsername(final String username) {
+        this.username = username;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
+    }
+
+    public void setRoles(final List<String> roles) {
+        this.roles = roles;
     }
 }

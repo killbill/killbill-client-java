@@ -25,8 +25,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RoleDefinition {
 
-    private final String role;
-    private final List<String> permissions;
+    private String role;
+    private List<String> permissions;
 
     @JsonCreator
     public RoleDefinition(@JsonProperty("role") final String role,
@@ -41,5 +41,13 @@ public class RoleDefinition {
 
     public List<String> getPermissions() {
         return permissions;
+    }
+
+    public void setRole(final String role) {
+        this.role = role;
+    }
+
+    public void setPermissions(final List<String> permissions) {
+        this.permissions = permissions;
     }
 }
