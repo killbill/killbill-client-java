@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
+import org.killbill.billing.catalog.api.ProductCategory;
 import org.killbill.billing.client.model.Account;
 import org.killbill.billing.client.model.AccountEmail;
 import org.killbill.billing.client.model.AccountEmails;
@@ -345,7 +346,9 @@ public class KillBillClient {
         Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
         Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
         Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
-        Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null");
+        if (subscription.getProductCategory() == ProductCategory.BASE) {
+            Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null");
+        }
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
@@ -373,7 +376,6 @@ public class KillBillClient {
         Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
         Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
         Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
-        Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null");
 
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscription.getSubscriptionId();
 
