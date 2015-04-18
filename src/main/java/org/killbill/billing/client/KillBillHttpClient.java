@@ -98,6 +98,9 @@ public class KillBillHttpClient {
         this.apiSecret = apiSecret;
 
         final AsyncHttpClientConfig.Builder cfg = new AsyncHttpClientConfig.Builder();
+        cfg.setConnectionTimeoutInMs(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
+        cfg.setRequestTimeoutInMs(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
+        cfg.setIdleConnectionTimeoutInMs(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
         cfg.setUserAgent(USER_AGENT);
         this.httpClient = new AsyncHttpClient(cfg.build());
 

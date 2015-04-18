@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
+import org.killbill.billing.catalog.api.ProductCategory;
 import org.killbill.billing.client.model.Account;
 import org.killbill.billing.client.model.AccountEmail;
 import org.killbill.billing.client.model.AccountEmails;
@@ -65,12 +66,14 @@ import org.killbill.billing.client.model.Payments;
 import org.killbill.billing.client.model.Permissions;
 import org.killbill.billing.client.model.PlanDetail;
 import org.killbill.billing.client.model.PlanDetails;
+import org.killbill.billing.client.model.RoleDefinition;
 import org.killbill.billing.client.model.Subscription;
 import org.killbill.billing.client.model.TagDefinition;
 import org.killbill.billing.client.model.TagDefinitions;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.client.model.Tenant;
 import org.killbill.billing.client.model.TenantKey;
+import org.killbill.billing.client.model.UserRoles;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.util.api.AuditLevel;
 
@@ -343,7 +346,9 @@ public class KillBillClient {
         Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
         Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
         Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
-        Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null");
+        if (subscription.getProductCategory() == ProductCategory.BASE) {
+            Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null");
+        }
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
@@ -371,7 +376,6 @@ public class KillBillClient {
         Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
         Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
         Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
-        Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null");
 
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscription.getSubscriptionId();
 
@@ -1404,7 +1408,6 @@ public class KillBillClient {
 
     public void unregisterPluginConfigurationForTenant(final String pluginName, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
-
         final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
         httpClient.doDelete(uri, queryParams);
     }
@@ -1412,6 +1415,39 @@ public class KillBillClient {
 
     public Permissions getPermissions() throws KillBillClientException {
         return httpClient.doGet(JaxrsResource.SECURITY_PATH + "/permissions", DEFAULT_EMPTY_QUERY, Permissions.class);
+    }
+
+
+    public Response addUserRoles(final UserRoles userRoles, String createdBy, String reason, String comment) throws KillBillClientException {
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        return httpClient.doPost(JaxrsResource.SECURITY_PATH + "/users", userRoles, queryParams);
+    }
+
+
+    public Response updateUserPassword(final String username, final String newPassword, String createdBy, String reason, String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.SECURITY_PATH + "/users/" + username + "/password";
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final UserRoles userRoles = new UserRoles(username, newPassword, ImmutableList.<String>of());
+        return httpClient.doPut(uri, userRoles, queryParams);
+    }
+
+    public Response updateUserRoles(final String username, final List<String> newRoles, String createdBy, String reason, String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.SECURITY_PATH + "/users/" + username + "/roles";
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final UserRoles userRoles = new UserRoles(username, null, newRoles);
+        return httpClient.doPut(uri, userRoles, queryParams);
+    }
+
+    public Response invalidateUser(final String username, String createdBy, String reason, String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.SECURITY_PATH + "/users/" + username;
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        return httpClient.doDelete(uri, queryParams);
+    }
+
+
+    public Response addRoleDefinition(final RoleDefinition roleDefinition, String createdBy, String reason, String comment) throws KillBillClientException {
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        return httpClient.doPost(JaxrsResource.SECURITY_PATH + "/roles", roleDefinition, queryParams);
     }
 
     // Plugin endpoints
