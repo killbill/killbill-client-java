@@ -98,9 +98,9 @@ public class KillBillHttpClient {
         this.apiSecret = apiSecret;
 
         final AsyncHttpClientConfig.Builder cfg = new AsyncHttpClientConfig.Builder();
-        cfg.setConnectionTimeoutInMs(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
-        cfg.setRequestTimeoutInMs(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
-        cfg.setIdleConnectionTimeoutInMs(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
+        cfg.setConnectTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
+        cfg.setRequestTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
+        cfg.setReadTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
         cfg.setUserAgent(USER_AGENT);
         this.httpClient = new AsyncHttpClient(cfg.build());
 
@@ -379,8 +379,6 @@ public class KillBillHttpClient {
                 }
             });
             response = futureStatus.get(timeoutSec, TimeUnit.SECONDS);
-        } catch (final IOException e) {
-            throw new KillBillClientException(e);
         } catch (final InterruptedException e) {
             throw new KillBillClientException(e);
         } catch (final ExecutionException e) {
@@ -523,7 +521,7 @@ public class KillBillHttpClient {
         for (final String key : options.keySet()) {
             if (options.get(key) != null) {
                 for (final String value : options.get(key)) {
-                    builder.addQueryParameter(key, value);
+                    builder.addQueryParam(key, value);
                 }
             }
         }
