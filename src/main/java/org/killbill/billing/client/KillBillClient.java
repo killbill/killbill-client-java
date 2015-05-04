@@ -66,17 +66,19 @@ import org.killbill.billing.client.model.Permissions;
 import org.killbill.billing.client.model.PlanDetail;
 import org.killbill.billing.client.model.PlanDetails;
 import org.killbill.billing.client.model.Subscription;
+import org.killbill.billing.client.model.SubscriptionUsage;
 import org.killbill.billing.client.model.TagDefinition;
 import org.killbill.billing.client.model.TagDefinitions;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.client.model.Tenant;
 import org.killbill.billing.client.model.TenantKey;
+import org.killbill.billing.client.model.UnitUsage;
+import org.killbill.billing.client.model.Usage;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.util.api.AuditLevel;
 
 import com.ning.http.client.Response;
 import com.ning.http.util.UTF8UrlEncoder;
-
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -429,6 +431,16 @@ public class KillBillClient {
         final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         httpClient.doPut(uri, null, queryParams);
+    }
+    
+    public SubscriptionUsage createSubscriptionUsage(final SubscriptionUsage subscriptionUsage, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+      Preconditions.checkNotNull(subscriptionUsage.getSubscriptionId(), "SubscriptionUsage#subscriptionId cannot be null");
+      Preconditions.checkNotNull(subscriptionUsage.getUnitUsage(), "SubscriptionUsage#unitUsage cannot be null");
+      Preconditions.checkArgument(!subscriptionUsage.getUnitUsage().isEmpty(), "SubscriptionUsage#unitUsage cannot be empty");      
+      
+      final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+
+      return httpClient.doPostAndFollowLocation(JaxrsResource.USAGES_PATH, subscriptionUsage, queryParams, SubscriptionUsage.class);
     }
 
     // Invoices
