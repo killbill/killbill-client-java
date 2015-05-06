@@ -1,3 +1,8 @@
+0.4
+    New APIs for user management (password, roles, invalidation)
+    Update Async Http Client to 1.9.19
+    Update killbill-oss-parent to 0.11
+
 0.3.1
     Add missing getter/setter (required to json serialization)
 
