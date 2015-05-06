@@ -3,16 +3,13 @@ package org.killbill.billing.client.model;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UnitUsage extends KillBillObject {
+public class UnitUsage {
 
     private String unitType;
     private List<Usage> usageRecords;
-    @JsonIgnore
-    private List<AuditLog> auditLogs;
-
+   
     @JsonCreator
     public UnitUsage(@JsonProperty("unitType") final String unitType,
                      @JsonProperty("usageRecords") final List<Usage> usageRecords) {
@@ -24,27 +21,15 @@ public class UnitUsage extends KillBillObject {
         return unitType;
     }
 
-    public List<Usage> getDailyAmount() {
+    public List<Usage> getUsageRecords() {
         return usageRecords;
     }
-    
-    @JsonIgnore
-    @Override
-    public List<AuditLog> getAuditLogs() {
-      return auditLogs;
-    }
-    
-    @JsonIgnore
-    @Override
-    public void setAuditLogs(final List<AuditLog> auditLogs) {
-      this.auditLogs = auditLogs;
-    }
-
+       
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("UnitUsage{");
         sb.append("unitType=").append(unitType);
-        sb.append(", usage=").append(usageRecords);       
+        sb.append(", usageRecords=").append(usageRecords);       
         sb.append('}');
         return sb.toString();
     }

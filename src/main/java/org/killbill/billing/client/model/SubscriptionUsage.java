@@ -4,16 +4,13 @@ import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SubscriptionUsage extends KillBillObject {
+public class SubscriptionUsage  {
 
     private UUID subscriptionId;
     private List<UnitUsage> unitUsageRecords;
-    @JsonIgnore
-    private List<AuditLog> auditLogs;
-
+   
     @JsonCreator
     public SubscriptionUsage(@JsonProperty("subscriptionId") final UUID subscriptionId,
                              @JsonProperty("unitUsageRecords") final List<UnitUsage> unitUsageRecords) {
@@ -27,20 +24,8 @@ public class SubscriptionUsage extends KillBillObject {
 
     public List<UnitUsage> getUnitUsageRecords() {
         return unitUsageRecords;
-    }
-    
-    @JsonIgnore
-    @Override
-    public List<AuditLog> getAuditLogs() {
-      return auditLogs;
-    }
-    
-    @JsonIgnore
-    @Override
-    public void setAuditLogs(final List<AuditLog> auditLogs) {
-      this.auditLogs = auditLogs;
-    }
-    
+    }    
+   
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("SubscriptionUsage{");        
