@@ -435,8 +435,8 @@ public class KillBillClient {
     
     public SubscriptionUsage createSubscriptionUsage(final SubscriptionUsage subscriptionUsage, final String createdBy, final String reason, final String comment) throws KillBillClientException {
       Preconditions.checkNotNull(subscriptionUsage.getSubscriptionId(), "SubscriptionUsage#subscriptionId cannot be null");
-      Preconditions.checkNotNull(subscriptionUsage.getUnitUsage(), "SubscriptionUsage#unitUsage cannot be null");
-      Preconditions.checkArgument(!subscriptionUsage.getUnitUsage().isEmpty(), "SubscriptionUsage#unitUsage cannot be empty");      
+      Preconditions.checkNotNull(subscriptionUsage.getUnitUsageRecords(), "SubscriptionUsage#unitUsageRecords cannot be null");
+      Preconditions.checkArgument(!subscriptionUsage.getUnitUsageRecords().isEmpty(), "SubscriptionUsage#unitUsageRecords cannot be empty");      
       
       final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 

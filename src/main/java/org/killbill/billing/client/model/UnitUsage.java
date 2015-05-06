@@ -8,13 +8,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class UnitUsage extends KillBillObject {
 
     private String unitType;
-    private List<Usage> usage;
+    private List<Usage> usageRecords;
 
     @JsonCreator
     public UnitUsage(@JsonProperty("unitType") final String unitType,
-                     @JsonProperty("usage") final List<Usage> usage) {
+                     @JsonProperty("usageRecords") final List<Usage> usageRecords) {
         this.unitType = unitType;
-        this.usage = usage;
+        this.usageRecords = usageRecords;
     }
 
     public String getUnitType() {
@@ -22,14 +22,14 @@ public class UnitUsage extends KillBillObject {
     }
 
     public List<Usage> getDailyAmount() {
-        return usage;
+        return usageRecords;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("UnitUsage{");
         sb.append("unitType=").append(unitType);
-        sb.append(", usage=").append(usage);       
+        sb.append(", usage=").append(usageRecords);       
         sb.append('}');
         return sb.toString();
     }
@@ -40,7 +40,7 @@ public class UnitUsage extends KillBillObject {
       final int prime = 31;
       int result = 1;
       result = prime * result + ((unitType == null) ? 0 : unitType.hashCode());
-      result = prime * result + ((usage == null) ? 0 : usage.hashCode());
+      result = prime * result + ((usageRecords == null) ? 0 : usageRecords.hashCode());
       return result;
     }
 
@@ -61,12 +61,12 @@ public class UnitUsage extends KillBillObject {
       }
       else if (!unitType.equals(other.unitType))
         return false;
-      if (usage == null)
+      if (usageRecords == null)
       {
-        if (other.usage != null)
+        if (other.usageRecords != null)
           return false;
       }
-      else if (!usage.equals(other.usage))
+      else if (!usageRecords.equals(other.usageRecords))
         return false;
       return true;
     }

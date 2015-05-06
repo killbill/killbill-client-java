@@ -9,28 +9,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SubscriptionUsage extends KillBillObject {
 
     private UUID subscriptionId;
-    private List<UnitUsage> unitUsage;
+    private List<UnitUsage> unitUsageRecords;
 
     @JsonCreator
     public SubscriptionUsage(@JsonProperty("subscriptionId") final UUID subscriptionId,
-                             @JsonProperty("unitUsage") final List<UnitUsage> unitUsage) {
+                             @JsonProperty("unitUsageRecords") final List<UnitUsage> unitUsageRecords) {
         this.subscriptionId = subscriptionId;
-        this.unitUsage = unitUsage;
+        this.unitUsageRecords = unitUsageRecords;
     }
 
     public UUID getSubscriptionId() {
         return subscriptionId;
     }
 
-    public List<UnitUsage> getUnitUsage() {
-        return unitUsage;
+    public List<UnitUsage> getUnitUsageRecords() {
+        return unitUsageRecords;
     }
     
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("SubscriptionUsage{");        
         sb.append("subscriptionId=").append(subscriptionId);
-        sb.append(", unitUsage=").append(unitUsage);       
+        sb.append(", unitUsageRecords=").append(unitUsageRecords);       
         sb.append('}');
         return sb.toString();
     }
@@ -41,7 +41,7 @@ public class SubscriptionUsage extends KillBillObject {
       final int prime = 31;
       int result = 1;
       result = prime * result + ((subscriptionId == null) ? 0 : subscriptionId.hashCode());
-      result = prime * result + ((unitUsage == null) ? 0 : unitUsage.hashCode());
+      result = prime * result + ((unitUsageRecords == null) ? 0 : unitUsageRecords.hashCode());
       return result;
     }
 
@@ -62,12 +62,12 @@ public class SubscriptionUsage extends KillBillObject {
       }
       else if (!subscriptionId.equals(other.subscriptionId))
         return false;
-      if (unitUsage == null)
+      if (unitUsageRecords == null)
       {
-        if (other.unitUsage != null)
+        if (other.unitUsageRecords != null)
           return false;
       }
-      else if (!unitUsage.equals(other.unitUsage))
+      else if (!unitUsageRecords.equals(other.unitUsageRecords))
         return false;
       return true;
     }
