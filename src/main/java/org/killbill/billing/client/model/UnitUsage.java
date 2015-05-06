@@ -3,12 +3,15 @@ package org.killbill.billing.client.model;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UnitUsage extends KillBillObject {
 
     private String unitType;
     private List<Usage> usageRecords;
+    @JsonIgnore
+    private List<AuditLog> auditLogs;
 
     @JsonCreator
     public UnitUsage(@JsonProperty("unitType") final String unitType,
@@ -23,6 +26,18 @@ public class UnitUsage extends KillBillObject {
 
     public List<Usage> getDailyAmount() {
         return usageRecords;
+    }
+    
+    @JsonIgnore
+    @Override
+    public List<AuditLog> getAuditLogs() {
+      return auditLogs;
+    }
+    
+    @JsonIgnore
+    @Override
+    public void setAuditLogs(final List<AuditLog> auditLogs) {
+      this.auditLogs = auditLogs;
     }
 
     @Override

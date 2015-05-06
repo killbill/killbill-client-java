@@ -1,14 +1,19 @@
 package org.killbill.billing.client.model;
 
+import java.util.List;
+
 import org.joda.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Usage {
+public class Usage extends KillBillObject {
 
     private LocalDate recordDate;
     private Long amount;
+    @JsonIgnore
+    private List<AuditLog> auditLogs;
 
     @JsonCreator
     public Usage(@JsonProperty("recordDate") final LocalDate recordDate,
@@ -23,6 +28,18 @@ public class Usage {
 
     public Long getAmount() {
         return amount;
+    }
+    
+    @JsonIgnore
+    @Override
+    public List<AuditLog> getAuditLogs() {
+      return auditLogs;
+    }
+    
+    @JsonIgnore
+    @Override
+    public void setAuditLogs(final List<AuditLog> auditLogs) {
+      this.auditLogs = auditLogs;
     }
     
     @Override
