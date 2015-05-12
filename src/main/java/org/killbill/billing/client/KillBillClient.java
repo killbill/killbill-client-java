@@ -492,6 +492,12 @@ public class KillBillClient {
 
         return httpClient.doGet(uri, queryParams, Invoice.class);
     }
+    
+    public String getInvoiceAsHtml(final String invoiceId) throws KillBillClientException {
+      final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId + "/" + JaxrsResource.INVOICE_HTML;
+
+      return httpClient.doGet(uri, null, String.class);
+  }
 
     public Invoices getInvoicesForAccount(final UUID accountId) throws KillBillClientException {
         return getInvoicesForAccount(accountId, true);
