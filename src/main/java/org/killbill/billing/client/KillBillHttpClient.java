@@ -70,6 +70,7 @@ public class KillBillHttpClient {
     public static final String HTTP_HEADER_ACCEPT = "Accept";
     public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";
 
+    public static final String ACCEPT_HTML = "text/html";
     public static final String ACCEPT_JSON = "application/json";
     public static final String ACCEPT_XML = "application/xml";
     public static final String CONTENT_TYPE_JSON = "application/json; charset=utf-8";

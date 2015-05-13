@@ -494,9 +494,20 @@ public class KillBillClient {
     
     public String getInvoiceAsHtml(final String invoiceId) throws KillBillClientException {
       final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId + "/" + JaxrsResource.INVOICE_HTML;
-      final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of();
-
-      return httpClient.doGet(uri, queryParams, String.class);
+      final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(KillBillHttpClient.HTTP_HEADER_ACCEPT, KillBillHttpClient.ACCEPT_HTML);        
+      
+      final Response response = httpClient.doGet(uri, queryParams, Response.class);
+      
+      if(response != null) {
+        try {
+          return response.getResponseBody();
+        }
+        catch (final IOException e) {
+          throw new KillBillClientException(e);
+        }        
+      } else {
+        return null;
+      }
     }
 
     public Invoices getInvoicesForAccount(final UUID accountId) throws KillBillClientException {
