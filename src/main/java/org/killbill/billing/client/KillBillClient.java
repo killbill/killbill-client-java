@@ -79,7 +79,6 @@ import org.killbill.billing.util.api.AuditLevel;
 
 import com.ning.http.client.Response;
 import com.ning.http.util.UTF8UrlEncoder;
-
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -495,9 +494,10 @@ public class KillBillClient {
     
     public String getInvoiceAsHtml(final String invoiceId) throws KillBillClientException {
       final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId + "/" + JaxrsResource.INVOICE_HTML;
+      final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of();
 
-      return httpClient.doGet(uri, null, String.class);
-  }
+      return httpClient.doGet(uri, queryParams, String.class);
+    }
 
     public Invoices getInvoicesForAccount(final UUID accountId) throws KillBillClientException {
         return getInvoicesForAccount(accountId, true);
