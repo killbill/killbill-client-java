@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
 import org.killbill.billing.catalog.api.ProductCategory;
 import org.killbill.billing.client.model.Account;
@@ -533,11 +534,12 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Invoices.class);
     }
 
-    public Invoice createDryRunInvoice(final UUID accountId, final DateTime futureDate, final InvoiceDryRun dryRunInfo, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Invoice createDryRunInvoice(final UUID accountId, @Nullable final LocalDate futureDate, final InvoiceDryRun dryRunInfo, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.DRY_RUN;
 
+        final String futureDateOrUpcomingNextInvoice = futureDate != null ? futureDate.toString() : JaxrsResource.UPCOMING_INVOICE_TARGET_DATE;
         final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
-                                                                                                          JaxrsResource.QUERY_TARGET_DATE, futureDate.toString(),
+                                                                                                          JaxrsResource.QUERY_TARGET_DATE, futureDateOrUpcomingNextInvoice,
                                                                                                           JaxrsResource.QUERY_DRY_RUN, "true"),
                                                                      createdBy,
                                                                      reason,
@@ -547,7 +549,7 @@ public class KillBillClient {
         return httpClient.doPost(uri, dryRunInfo, queryParams, Invoice.class);
     }
 
-    public Invoice createInvoice(final UUID accountId, final DateTime futureDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Invoice createInvoice(final UUID accountId, final LocalDate futureDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH;
 
         final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
