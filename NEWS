@@ -1,3 +1,6 @@
+
+    Modify dryRun api to support both a null targetDate and the constant upcomingInvoiceTargetDate"
+
 0.4
     New APIs for user management (password, roles, invalidation)
     Update Async Http Client to 1.9.19
