@@ -534,18 +534,32 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Invoices.class);
     }
 
-    public Invoice createDryRunInvoice(final UUID accountId, @Nullable final LocalDate futureDate, final InvoiceDryRun dryRunInfo, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Invoice createDryRunInvoice(final UUID accountId, @Nullable final LocalDate futureDate, final boolean nextUpcomingInvoiceTargetDate, final InvoiceDryRun dryRunInfo, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.DRY_RUN;
 
-        final String futureDateOrUpcomingNextInvoice = futureDate != null ? futureDate.toString() : JaxrsResource.UPCOMING_INVOICE_TARGET_DATE;
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
-                                                                                                          JaxrsResource.QUERY_TARGET_DATE, futureDateOrUpcomingNextInvoice,
-                                                                                                          JaxrsResource.QUERY_DRY_RUN, "true"),
+        final String futureDateOrUpcomingNextInvoice;
+        if (nextUpcomingInvoiceTargetDate) {
+            futureDateOrUpcomingNextInvoice = JaxrsResource.UPCOMING_INVOICE_TARGET_DATE;
+        } else if (futureDate != null) {
+            futureDateOrUpcomingNextInvoice = futureDate.toString();
+        } else {
+            futureDateOrUpcomingNextInvoice = null;
+        }
+
+        final Multimap<String, String> rawQueryParams;
+        if (futureDateOrUpcomingNextInvoice != null) {
+            rawQueryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
+                                                               JaxrsResource.QUERY_TARGET_DATE, futureDateOrUpcomingNextInvoice,
+                                                               JaxrsResource.QUERY_DRY_RUN, "true");
+        } else {
+            rawQueryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
+                                                               JaxrsResource.QUERY_DRY_RUN, "true");
+        }
+        final Multimap<String, String> queryParams = paramsWithAudit(rawQueryParams,
                                                                      createdBy,
                                                                      reason,
                                                                      comment
                                                                     );
-
         return httpClient.doPost(uri, dryRunInfo, queryParams, Invoice.class);
     }
 
