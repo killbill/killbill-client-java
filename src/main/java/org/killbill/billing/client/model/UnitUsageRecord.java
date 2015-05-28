@@ -21,13 +21,13 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UnitUsage {
+public class UnitUsageRecord {
 
     private String unitType;
     private List<Usage> usageRecords;
    
     @JsonCreator
-    public UnitUsage(@JsonProperty("unitType") final String unitType,
+    public UnitUsageRecord(@JsonProperty("unitType") final String unitType,
                      @JsonProperty("usageRecords") final List<Usage> usageRecords) {
         this.unitType = unitType;
         this.usageRecords = usageRecords;
@@ -43,7 +43,7 @@ public class UnitUsage {
        
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("UnitUsage{");
+        final StringBuilder sb = new StringBuilder("UnitUsageRecord{");
         sb.append("unitType=").append(unitType);
         sb.append(", usageRecords=").append(usageRecords);       
         sb.append('}');
@@ -69,7 +69,7 @@ public class UnitUsage {
         return false;
       if (getClass() != obj.getClass())
         return false;
-      UnitUsage other = (UnitUsage) obj;
+      UnitUsageRecord other = (UnitUsageRecord) obj;
       if (unitType == null)
       {
         if (other.unitType != null)
