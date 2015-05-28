@@ -67,14 +67,12 @@ import org.killbill.billing.client.model.Permissions;
 import org.killbill.billing.client.model.PlanDetail;
 import org.killbill.billing.client.model.PlanDetails;
 import org.killbill.billing.client.model.Subscription;
-import org.killbill.billing.client.model.SubscriptionUsage;
+import org.killbill.billing.client.model.SubscriptionUsageRecord;
 import org.killbill.billing.client.model.TagDefinition;
 import org.killbill.billing.client.model.TagDefinitions;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.client.model.Tenant;
 import org.killbill.billing.client.model.TenantKey;
-import org.killbill.billing.client.model.UnitUsage;
-import org.killbill.billing.client.model.Usage;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.util.api.AuditLevel;
 
@@ -434,14 +432,14 @@ public class KillBillClient {
         httpClient.doPut(uri, null, queryParams);
     }
     
-    public SubscriptionUsage createSubscriptionUsage(final SubscriptionUsage subscriptionUsage, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-      Preconditions.checkNotNull(subscriptionUsage.getSubscriptionId(), "SubscriptionUsage#subscriptionId cannot be null");
-      Preconditions.checkNotNull(subscriptionUsage.getUnitUsageRecords(), "SubscriptionUsage#unitUsageRecords cannot be null");
-      Preconditions.checkArgument(!subscriptionUsage.getUnitUsageRecords().isEmpty(), "SubscriptionUsage#unitUsageRecords cannot be empty");      
+    public SubscriptionUsageRecord createSubscriptionUsageRecord(final SubscriptionUsageRecord subscriptionUsageRecord, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+      Preconditions.checkNotNull(subscriptionUsageRecord.getSubscriptionId(), "SubscriptionUsageRecord#subscriptionId cannot be null");
+      Preconditions.checkNotNull(subscriptionUsageRecord.getUnitUsageRecords(), "SubscriptionUsageRecord#unitUsageRecords cannot be null");
+      Preconditions.checkArgument(!subscriptionUsageRecord.getUnitUsageRecords().isEmpty(), "SubscriptionUsageRecord#unitUsageRecords cannot be empty");      
       
       final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
-      return httpClient.doPostAndFollowLocation(JaxrsResource.USAGES_PATH, subscriptionUsage, queryParams, SubscriptionUsage.class);
+      return httpClient.doPostAndFollowLocation(JaxrsResource.USAGES_PATH, subscriptionUsageRecord, queryParams, SubscriptionUsageRecord.class);
     }
 
     // Invoices
