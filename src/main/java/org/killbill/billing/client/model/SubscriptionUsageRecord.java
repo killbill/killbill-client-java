@@ -22,13 +22,13 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SubscriptionUsage  {
+public class SubscriptionUsageRecord  {
 
     private UUID subscriptionId;
     private List<UnitUsage> unitUsageRecords;
    
     @JsonCreator
-    public SubscriptionUsage(@JsonProperty("subscriptionId") final UUID subscriptionId,
+    public SubscriptionUsageRecord(@JsonProperty("subscriptionId") final UUID subscriptionId,
                              @JsonProperty("unitUsageRecords") final List<UnitUsage> unitUsageRecords) {
         this.subscriptionId = subscriptionId;
         this.unitUsageRecords = unitUsageRecords;
@@ -44,7 +44,7 @@ public class SubscriptionUsage  {
    
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("SubscriptionUsage{");        
+        final StringBuilder sb = new StringBuilder("SubscriptionUsageRecord{");        
         sb.append("subscriptionId=").append(subscriptionId);
         sb.append(", unitUsageRecords=").append(unitUsageRecords);       
         sb.append('}');
@@ -70,7 +70,7 @@ public class SubscriptionUsage  {
         return false;
       if (getClass() != obj.getClass())
         return false;
-      SubscriptionUsage other = (SubscriptionUsage) obj;
+      SubscriptionUsageRecord other = (SubscriptionUsageRecord) obj;
       if (subscriptionId == null)
       {
         if (other.subscriptionId != null)
