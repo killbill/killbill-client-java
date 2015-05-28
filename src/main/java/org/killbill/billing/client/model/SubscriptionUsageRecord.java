@@ -25,11 +25,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SubscriptionUsageRecord  {
 
     private UUID subscriptionId;
-    private List<UnitUsage> unitUsageRecords;
+    private List<UnitUsageRecord> unitUsageRecords;
    
     @JsonCreator
     public SubscriptionUsageRecord(@JsonProperty("subscriptionId") final UUID subscriptionId,
-                             @JsonProperty("unitUsageRecords") final List<UnitUsage> unitUsageRecords) {
+                             @JsonProperty("unitUsageRecords") final List<UnitUsageRecord> unitUsageRecords) {
         this.subscriptionId = subscriptionId;
         this.unitUsageRecords = unitUsageRecords;
     }
@@ -38,7 +38,7 @@ public class SubscriptionUsageRecord  {
         return subscriptionId;
     }
 
-    public List<UnitUsage> getUnitUsageRecords() {
+    public List<UnitUsageRecord> getUnitUsageRecords() {
         return unitUsageRecords;
     }    
    
