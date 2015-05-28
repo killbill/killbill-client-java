@@ -24,11 +24,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class UnitUsageRecord {
 
     private String unitType;
-    private List<Usage> usageRecords;
+    private List<UsageRecord> usageRecords;
    
     @JsonCreator
     public UnitUsageRecord(@JsonProperty("unitType") final String unitType,
-                     @JsonProperty("usageRecords") final List<Usage> usageRecords) {
+                     @JsonProperty("usageRecords") final List<UsageRecord> usageRecords) {
         this.unitType = unitType;
         this.usageRecords = usageRecords;
     }
@@ -37,7 +37,7 @@ public class UnitUsageRecord {
         return unitType;
     }
 
-    public List<Usage> getUsageRecords() {
+    public List<UsageRecord> getUsageRecords() {
         return usageRecords;
     }
        
