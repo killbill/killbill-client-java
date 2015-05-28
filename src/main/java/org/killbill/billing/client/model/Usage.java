@@ -21,13 +21,13 @@ import org.joda.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Usage {
+public class UsageRecord {
 
     private LocalDate recordDate;
     private Long amount;
    
     @JsonCreator
-    public Usage(@JsonProperty("recordDate") final LocalDate recordDate,
+    public UsageRecord(@JsonProperty("recordDate") final LocalDate recordDate,
                  @JsonProperty("amount") final Long amount) {
         this.recordDate = recordDate;
         this.amount = amount;
@@ -43,7 +43,7 @@ public class Usage {
        
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Usage{");
+        final StringBuilder sb = new StringBuilder("UsageRecord{");
         sb.append("recordDate=").append(recordDate);
         sb.append(", amount=").append(amount);       
         sb.append('}');
@@ -69,7 +69,7 @@ public class Usage {
         return false;
       if (getClass() != obj.getClass())
         return false;
-      Usage other = (Usage) obj;
+      UsageRecord other = (UsageRecord) obj;
       if (amount == null)
       {
         if (other.amount != null)
