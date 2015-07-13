@@ -1,4 +1,7 @@
+0.6
+    Rename PaymentMethodPluginDetail#externalPaymentId to PaymentMethodPluginDetail#externalPaymentMethodId
 
+0.5
     Modify dryRun api to support both a null targetDate and the constant upcomingInvoiceTargetDate"
 
 0.4

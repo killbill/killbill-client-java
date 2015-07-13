@@ -1,7 +1,9 @@
 /*
  * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2015 Groupon, Inc
+ * Copyright 2015 The Billing Project, LLC
  *
- * Ning licenses this file to you under the Apache License, version 2.0
+ * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
  * License.  You may obtain a copy of the License at:
  *
@@ -23,27 +25,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PaymentMethodPluginDetail {
 
-    private String externalPaymentId;
+    private String externalPaymentMethodId;
     private Boolean isDefaultPaymentMethod;
     private List<PluginProperty> properties;
 
     public PaymentMethodPluginDetail() {}
 
     @JsonCreator
-    public PaymentMethodPluginDetail(@JsonProperty("externalPaymentId") final String externalPaymentId,
+    public PaymentMethodPluginDetail(@JsonProperty("externalPaymentMethodId") final String externalPaymentMethodId,
                                      @JsonProperty("isDefaultPaymentMethod") final Boolean isDefaultPaymentMethod,
                                      @JsonProperty("properties") final List<PluginProperty> properties) {
-        this.externalPaymentId = externalPaymentId;
+        this.externalPaymentMethodId = externalPaymentMethodId;
         this.isDefaultPaymentMethod = isDefaultPaymentMethod;
         this.properties = properties;
     }
 
-    public String getExternalPaymentId() {
-        return externalPaymentId;
+    public String getExternalPaymentMethodId() {
+        return externalPaymentMethodId;
     }
 
-    public void setExternalPaymentId(final String externalPaymentId) {
-        this.externalPaymentId = externalPaymentId;
+    public void setExternalPaymentMethodId(final String externalPaymentMethodId) {
+        this.externalPaymentMethodId = externalPaymentMethodId;
     }
 
     public Boolean getIsDefaultPaymentMethod() {
@@ -53,7 +55,6 @@ public class PaymentMethodPluginDetail {
     public void setIsDefaultPaymentMethod(final Boolean isDefaultPaymentMethod) {
         this.isDefaultPaymentMethod = isDefaultPaymentMethod;
     }
-
 
     public List<PluginProperty> getProperties() {
         return properties;
@@ -66,7 +67,7 @@ public class PaymentMethodPluginDetail {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("PaymentMethodPluginDetail{");
-        sb.append("externalPaymentId='").append(externalPaymentId).append('\'');
+        sb.append("externalPaymentMethodId='").append(externalPaymentMethodId).append('\'');
         sb.append(", isDefaultPaymentMethod=").append(isDefaultPaymentMethod);
         sb.append(", properties=").append(properties);
         sb.append('}');
@@ -84,7 +85,7 @@ public class PaymentMethodPluginDetail {
 
         final PaymentMethodPluginDetail that = (PaymentMethodPluginDetail) o;
 
-        if (externalPaymentId != null ? !externalPaymentId.equals(that.externalPaymentId) : that.externalPaymentId != null) {
+        if (externalPaymentMethodId != null ? !externalPaymentMethodId.equals(that.externalPaymentMethodId) : that.externalPaymentMethodId != null) {
             return false;
         }
         if (isDefaultPaymentMethod != null ? !isDefaultPaymentMethod.equals(that.isDefaultPaymentMethod) : that.isDefaultPaymentMethod != null) {
@@ -98,7 +99,7 @@ public class PaymentMethodPluginDetail {
 
     @Override
     public int hashCode() {
-        int result = externalPaymentId != null ? externalPaymentId.hashCode() : 0;
+        int result = externalPaymentMethodId != null ? externalPaymentMethodId.hashCode() : 0;
         result = 31 * result + (isDefaultPaymentMethod != null ? isDefaultPaymentMethod.hashCode() : 0);
         result = 31 * result + (properties != null ? properties.hashCode() : 0);
         return result;
