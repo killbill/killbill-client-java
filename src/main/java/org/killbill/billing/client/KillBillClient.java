@@ -952,6 +952,9 @@ public class KillBillClient {
                            JaxrsResource.PAYMENTS_PATH;
 
         final PaymentTransaction paymentTransaction = new PaymentTransaction();
+        if (paymentExternalKey != null) {
+            paymentTransaction.setPaymentExternalKey(paymentExternalKey);
+        }
         paymentTransaction.setTransactionExternalKey(transactionExternalKey);
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
