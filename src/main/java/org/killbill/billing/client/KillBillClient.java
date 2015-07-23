@@ -882,10 +882,12 @@ public class KillBillClient {
     }
 
     public Payment captureAuthorization(final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentTransaction.getPaymentId(), "PaymentTransaction#paymentId cannot be null");
+        Preconditions.checkState(paymentTransaction.getPaymentId() != null || paymentTransaction.getPaymentExternalKey() != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
 
-        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId();
+        final String uri = (paymentTransaction.getPaymentId() != null) ?
+                           JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() :
+                           JaxrsResource.PAYMENTS_PATH;
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         storePluginPropertiesAsParams(pluginProperties, params);
@@ -903,10 +905,12 @@ public class KillBillClient {
     }
 
     public Payment refundPayment(final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentTransaction.getPaymentId(), "PaymentTransaction#paymentId cannot be null");
+        Preconditions.checkState(paymentTransaction.getPaymentId() != null || paymentTransaction.getPaymentExternalKey() != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
 
-        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() + "/" + JaxrsResource.REFUNDS;
+        final String uri = (paymentTransaction.getPaymentId() != null) ?
+                           JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() + "/" + JaxrsResource.REFUNDS :
+                           JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.REFUNDS;
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         storePluginPropertiesAsParams(pluginProperties, params);
@@ -920,10 +924,12 @@ public class KillBillClient {
     }
 
     public Payment chargebackPayment(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentTransaction.getPaymentId(), "PaymentTransaction#paymentId cannot be null");
+        Preconditions.checkState(paymentTransaction.getPaymentId() != null || paymentTransaction.getPaymentExternalKey() != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
 
-        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() + "/" + JaxrsResource.CHARGEBACKS;
+        final String uri = (paymentTransaction.getPaymentId() != null) ?
+                           JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() + "/" + JaxrsResource.CHARGEBACKS:
+                           JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.CHARGEBACKS;
         final Multimap<String, String> params = HashMultimap.<String, String>create();
 
         final Multimap<String, String> queryParams = paramsWithAudit(params,
@@ -934,12 +940,16 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
     }
 
-    public Payment voidPayment(final UUID paymentId, final String transactionKey, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return voidPayment(paymentId, transactionKey, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    public Payment voidPayment(final UUID paymentId, final String transactionExternalKey, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return voidPayment(paymentId, null, transactionExternalKey, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
 
-    public Payment voidPayment(final UUID paymentId, final String transactionExternalKey, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId;
+    public Payment voidPayment(final UUID paymentId, final String paymentExternalKey, final String transactionExternalKey, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+
+        Preconditions.checkState(paymentId != null || paymentExternalKey != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
+        final String uri = (paymentId != null) ?
+                           JaxrsResource.PAYMENTS_PATH + "/" + paymentId :
+                           JaxrsResource.PAYMENTS_PATH;
 
         final PaymentTransaction paymentTransaction = new PaymentTransaction();
         paymentTransaction.setTransactionExternalKey(transactionExternalKey);

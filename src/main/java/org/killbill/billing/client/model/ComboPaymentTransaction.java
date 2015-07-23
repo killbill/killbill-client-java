@@ -68,6 +68,26 @@ public class ComboPaymentTransaction extends KillBillObject {
         return transactionPluginProperties;
     }
 
+    public void setAccount(final Account account) {
+        this.account = account;
+    }
+
+    public void setPaymentMethod(final PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public void setTransaction(final PaymentTransaction transaction) {
+        this.transaction = transaction;
+    }
+
+    public void setPaymentMethodPluginProperties(final List<PluginProperty> paymentMethodPluginProperties) {
+        this.paymentMethodPluginProperties = paymentMethodPluginProperties;
+    }
+
+    public void setTransactionPluginProperties(final List<PluginProperty> transactionPluginProperties) {
+        this.transactionPluginProperties = transactionPluginProperties;
+    }
+
     @Override
     public String toString() {
         return "ComboPaymentTransaction{" +
