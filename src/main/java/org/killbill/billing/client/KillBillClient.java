@@ -827,7 +827,7 @@ public class KillBillClient {
     }
 
     public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENTS_PATH;
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.COMBO;
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         final Multimap<String, String> queryParams = paramsWithAudit(params,
                                                                      createdBy,

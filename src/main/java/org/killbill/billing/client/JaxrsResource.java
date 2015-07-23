@@ -79,6 +79,7 @@ public interface JaxrsResource {
     public static final String TENANTS = "tenants";
     public static final String TENANTS_PATH = PREFIX + "/" + TENANTS;
     public static final String TIMELINE = "timeline";
+    public static final String COMBO = "combo";
 
     /*
      * Multi-Tenancy headers
