@@ -44,6 +44,7 @@ import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.client.model.Bundle;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Catalog;
+import org.killbill.billing.client.model.ComboPaymentTransaction;
 import org.killbill.billing.client.model.Credit;
 import org.killbill.billing.client.model.CustomField;
 import org.killbill.billing.client.model.CustomFields;
@@ -824,6 +825,18 @@ public class KillBillClient {
 
         return httpClient.doGet(uri, queryParams, Payments.class);
     }
+
+    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENTS_PATH;
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        final Multimap<String, String> queryParams = paramsWithAudit(params,
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
+        storePluginPropertiesAsParams(pluginProperties, params);
+        return httpClient.doPostAndFollowLocation(uri, comboPaymentTransaction, queryParams, Payment.class);
+    }
+
 
     public Payment createPayment(final UUID accountId, final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return createPayment(accountId, paymentTransaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
