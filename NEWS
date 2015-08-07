@@ -1,8 +1,8 @@
-
-    Add support for payment combo call
-
 0.6
     Rename PaymentMethodPluginDetail#externalPaymentId to PaymentMethodPluginDetail#externalPaymentMethodId
+    Add support for payment combo call
+    Add support for payment operations via external keys
+    Update killbill-oss-parent to 0.29
 
 0.5
     Modify dryRun api to support both a null targetDate and the constant upcomingInvoiceTargetDate"
@@ -19,7 +19,7 @@
     Change models to allow to pass price override on subscription creation or plan change
 
 0.2.2
-    Update latest opm to haver latest killbill-api (dep seemed really old)
+    Update latest pom to have latest killbill-api (dep seemed really old)
 
 0.2.1
     Add new APIs for multi-tenant configuration (per plugin config,..)
