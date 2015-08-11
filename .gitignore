@@ -1,6 +1,7 @@
 .idea/workspace.xml
 .idea/libraries
 .idea/dictionaries
+.idea/dbnavigator.xml
 *.iml
 *.ipr
 *.iws
