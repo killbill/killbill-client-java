@@ -1,5 +1,4 @@
 /*
- * Copyright 2010-2013 Ning, Inc.
  * Copyright 2015 Groupon, Inc
  * Copyright 2015 The Billing Project, LLC
  *
@@ -23,14 +22,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ComboPaymentTransaction extends KillBillObject {
+public class ComboPaymentTransaction extends ComboPayment {
 
-    private Account account;
-    private PaymentMethod paymentMethod;
     private PaymentTransaction transaction;
-    private List<PluginProperty> paymentMethodPluginProperties;
     private List<PluginProperty> transactionPluginProperties;
-
 
     public ComboPaymentTransaction() { }
 
@@ -40,48 +35,21 @@ public class ComboPaymentTransaction extends KillBillObject {
                                    @JsonProperty("transaction") final PaymentTransaction transaction,
                                    @JsonProperty("paymentMethodPluginProperties") final List<PluginProperty> paymentMethodPluginProperties,
                                    @JsonProperty("transactionPluginProperties") final List<PluginProperty> transactionPluginProperties) {
-        super(null);
-        this.account = account;
-        this.paymentMethod = paymentMethod;
+        super(account, paymentMethod, paymentMethodPluginProperties);
         this.transaction = transaction;
-        this.paymentMethodPluginProperties = paymentMethodPluginProperties;
         this.transactionPluginProperties = transactionPluginProperties;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
     }
 
     public PaymentTransaction getTransaction() {
         return transaction;
     }
 
-    public List<PluginProperty> getPaymentMethodPluginProperties() {
-        return paymentMethodPluginProperties;
-    }
-
-    public List<PluginProperty> getTransactionPluginProperties() {
-        return transactionPluginProperties;
-    }
-
-    public void setAccount(final Account account) {
-        this.account = account;
-    }
-
-    public void setPaymentMethod(final PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
     public void setTransaction(final PaymentTransaction transaction) {
         this.transaction = transaction;
     }
 
-    public void setPaymentMethodPluginProperties(final List<PluginProperty> paymentMethodPluginProperties) {
-        this.paymentMethodPluginProperties = paymentMethodPluginProperties;
+    public List<PluginProperty> getTransactionPluginProperties() {
+        return transactionPluginProperties;
     }
 
     public void setTransactionPluginProperties(final List<PluginProperty> transactionPluginProperties) {
@@ -90,13 +58,11 @@ public class ComboPaymentTransaction extends KillBillObject {
 
     @Override
     public String toString() {
-        return "ComboPaymentTransaction{" +
-               "account=" + account +
-               ", paymentMethod=" + paymentMethod +
-               ", transaction=" + transaction +
-               ", paymentMethodPluginProperties=" + paymentMethodPluginProperties +
-               ", transactionPluginProperties=" + transactionPluginProperties +
-               '}';
+        final StringBuilder sb = new StringBuilder("ComboPaymentTransaction{");
+        sb.append("transaction=").append(transaction);
+        sb.append(", transactionPluginProperties=").append(transactionPluginProperties);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
@@ -104,34 +70,25 @@ public class ComboPaymentTransaction extends KillBillObject {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ComboPaymentTransaction)) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
             return false;
         }
 
         final ComboPaymentTransaction that = (ComboPaymentTransaction) o;
 
-        if (account != null ? !account.equals(that.account) : that.account != null) {
-            return false;
-        }
-        if (paymentMethod != null ? !paymentMethod.equals(that.paymentMethod) : that.paymentMethod != null) {
-            return false;
-        }
         if (transaction != null ? !transaction.equals(that.transaction) : that.transaction != null) {
             return false;
         }
-        if (paymentMethodPluginProperties != null ? !paymentMethodPluginProperties.equals(that.paymentMethodPluginProperties) : that.paymentMethodPluginProperties != null) {
-            return false;
-        }
         return !(transactionPluginProperties != null ? !transactionPluginProperties.equals(that.transactionPluginProperties) : that.transactionPluginProperties != null);
-
     }
 
     @Override
     public int hashCode() {
-        int result = account != null ? account.hashCode() : 0;
-        result = 31 * result + (paymentMethod != null ? paymentMethod.hashCode() : 0);
+        int result = super.hashCode();
         result = 31 * result + (transaction != null ? transaction.hashCode() : 0);
-        result = 31 * result + (paymentMethodPluginProperties != null ? paymentMethodPluginProperties.hashCode() : 0);
         result = 31 * result + (transactionPluginProperties != null ? transactionPluginProperties.hashCode() : 0);
         return result;
     }

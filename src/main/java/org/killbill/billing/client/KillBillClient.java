@@ -44,6 +44,7 @@ import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.client.model.Bundle;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Catalog;
+import org.killbill.billing.client.model.ComboHostedPaymentPage;
 import org.killbill.billing.client.model.ComboPaymentTransaction;
 import org.killbill.billing.client.model.Credit;
 import org.killbill.billing.client.model.CustomField;
@@ -983,6 +984,19 @@ public class KillBillClient {
                                                                      comment);
 
         return httpClient.doPost(uri, fields, queryParams, HostedPaymentPageFormDescriptor.class);
+    }
+
+    public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_GATEWAYS_PATH + "/" + JaxrsResource.HOSTED + "/" + JaxrsResource.FORM;
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        storePluginPropertiesAsParams(pluginProperties, params);
+
+        final Multimap<String, String> queryParams = paramsWithAudit(params,
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
+
+        return httpClient.doPost(uri, comboHostedPaymentPage, queryParams, HostedPaymentPageFormDescriptor.class);
     }
 
     public Response processNotification(final String notification, final String pluginName, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
