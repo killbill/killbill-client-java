@@ -878,6 +878,28 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
     }
 
+    public Payment completePayment(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return completePayment(paymentTransaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    }
+
+    public Payment completePayment(final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkState(paymentTransaction.getPaymentId() != null || paymentTransaction.getPaymentExternalKey() != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
+
+        final String uri = (paymentTransaction.getPaymentId() != null) ?
+                           JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() :
+                           JaxrsResource.PAYMENTS_PATH;
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        storePluginPropertiesAsParams(pluginProperties, params);
+
+        final Multimap<String, String> queryParams = paramsWithAudit(params,
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
+
+        return httpClient.doPutAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
+    }
+
     public Payment captureAuthorization(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return captureAuthorization(paymentTransaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
