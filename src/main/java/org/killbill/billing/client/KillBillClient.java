@@ -853,7 +853,7 @@ public class KillBillClient {
 
     public Payment createPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "accountId cannot be null");
-        Preconditions.checkNotNull(paymentTransaction.getTransactionType(), "PaymentTransaction#transactionId cannot be null");
+        Preconditions.checkNotNull(paymentTransaction.getTransactionType(), "PaymentTransaction#transactionType cannot be null");
         Preconditions.checkArgument("AUTHORIZE".equals(paymentTransaction.getTransactionType()) ||
                                     "CREDIT".equals(paymentTransaction.getTransactionType()) ||
                                     "PURCHASE".equals(paymentTransaction.getTransactionType()),
