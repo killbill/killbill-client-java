@@ -1,3 +1,6 @@
+
+    Payments APIs: HPP combo call, ability to complete payments by payment id / external key
+
 0.6
     Rename PaymentMethodPluginDetail#externalPaymentId to PaymentMethodPluginDetail#externalPaymentMethodId
     Add support for payment combo call
