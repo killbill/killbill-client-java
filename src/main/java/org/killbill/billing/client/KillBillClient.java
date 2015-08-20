@@ -66,6 +66,7 @@ import org.killbill.billing.client.model.Payments;
 import org.killbill.billing.client.model.Permissions;
 import org.killbill.billing.client.model.PlanDetail;
 import org.killbill.billing.client.model.PlanDetails;
+import org.killbill.billing.client.model.RolledUpUsage;
 import org.killbill.billing.client.model.Subscription;
 import org.killbill.billing.client.model.SubscriptionUsageRecord;
 import org.killbill.billing.client.model.TagDefinition;
@@ -440,6 +441,19 @@ public class KillBillClient {
       final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
       return httpClient.doPostAndFollowLocation(JaxrsResource.USAGES_PATH, subscriptionUsageRecord, queryParams, SubscriptionUsageRecord.class);
+    }
+    
+    public RolledUpUsage getRolledUpUsage(final UUID subscriptionId, final @Nullable String unitType, final DateTime startDate, final DateTime endDate) throws KillBillClientException {
+      String uri = JaxrsResource.USAGES_PATH + "/" + subscriptionId;
+      
+      if (unitType != null && !unitType.trim().isEmpty()){
+        uri = uri.concat("/").concat(unitType);
+      }      
+      
+      final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_START_DATE, startDate.toString(),
+                                                                                        JaxrsResource.QUERY_END_DATE, endDate.toString());     
+     
+      return httpClient.doGet(uri, queryParams, RolledUpUsage.class);
     }
 
     // Invoices
