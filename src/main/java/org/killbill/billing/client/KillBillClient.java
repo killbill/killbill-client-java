@@ -34,6 +34,8 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
 import org.killbill.billing.client.model.Account;
 import org.killbill.billing.client.model.AccountEmail;
@@ -97,6 +99,7 @@ import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_HTTP_TIMEOU
 
 public class KillBillClient {
 
+    protected final DateTimeFormatter LOCAL_DATE_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd");
     private final KillBillHttpClient httpClient;
 
     public KillBillClient() {
@@ -450,8 +453,8 @@ public class KillBillClient {
         uri = uri.concat("/").concat(unitType);
       }      
       
-      final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_START_DATE, startDate.toString(),
-                                                                                        JaxrsResource.QUERY_END_DATE, endDate.toString());     
+      final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_START_DATE, startDate.toString(LOCAL_DATE_FORMATTER),
+                                                                                        JaxrsResource.QUERY_END_DATE, endDate.toString(LOCAL_DATE_FORMATTER));     
      
       return httpClient.doGet(uri, queryParams, RolledUpUsage.class);
     }
