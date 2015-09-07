@@ -827,15 +827,18 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Payments.class);
     }
 
-    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment, final Multimap<String, String> queryParams) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.COMBO;
-        final Multimap<String, String> params = HashMultimap.<String, String>create();
-        final Multimap<String, String> queryParams = paramsWithAudit(params,
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
-        storePluginPropertiesAsParams(pluginProperties, params);
-        return httpClient.doPostAndFollowLocation(uri, comboPaymentTransaction, queryParams, Payment.class);
+        final Multimap<String, String> queryParamsWithAudit = paramsWithAudit(queryParams,
+                createdBy,
+                reason,
+                comment);
+        storePluginPropertiesAsParams(pluginProperties, queryParams);
+        return httpClient.doPostAndFollowLocation(uri, comboPaymentTransaction, queryParamsWithAudit, Payment.class);
+    }
+
+    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return this.createPayment(comboPaymentTransaction, pluginProperties, createdBy, reason, comment, HashMultimap.<String, String>create());
     }
 
 
