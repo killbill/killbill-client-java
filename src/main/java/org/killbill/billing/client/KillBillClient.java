@@ -590,9 +590,9 @@ public class KillBillClient {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceItem.getInvoiceId();
 
         final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString()),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
+                                                                                                          createdBy,
+                                                                                                          reason,
+                                                                                                          comment);
 
         return httpClient.doPostAndFollowLocation(uri, invoiceItem, queryParams, Invoice.class);
     }
@@ -827,8 +827,15 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Payments.class);
     }
 
-    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment, final Multimap<String, String> queryParams) throws KillBillClientException {
+    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.COMBO;
+
+        final Multimap<String, String> queryParams = HashMultimap.create();
+
+        if (controlPluginNames != null) {
+            queryParams.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
+        }
+
         final Multimap<String, String> queryParamsWithAudit = paramsWithAudit(queryParams,
                 createdBy,
                 reason,
@@ -838,7 +845,7 @@ public class KillBillClient {
     }
 
     public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return this.createPayment(comboPaymentTransaction, pluginProperties, createdBy, reason, comment, HashMultimap.<String, String>create());
+        return this.createPayment(comboPaymentTransaction, null, pluginProperties, createdBy, reason, comment);
     }
 
 
@@ -1011,9 +1018,10 @@ public class KillBillClient {
         return httpClient.doPost(uri, fields, queryParams, HostedPaymentPageFormDescriptor.class);
     }
 
-    public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_GATEWAYS_PATH + "/" + JaxrsResource.HOSTED + "/" + JaxrsResource.FORM;
-        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        final Multimap<String, String> params = HashMultimap.create();
+        params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
         storePluginPropertiesAsParams(pluginProperties, params);
 
         final Multimap<String, String> queryParams = paramsWithAudit(params,

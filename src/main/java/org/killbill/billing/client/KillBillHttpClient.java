@@ -31,7 +31,14 @@ import java.util.concurrent.TimeoutException;
 
 import javax.annotation.Nullable;
 
-import com.ning.http.client.*;
+import com.ning.http.client.AsyncHttpClient;
+import com.ning.http.client.AsyncHttpClientConfig;
+import com.ning.http.client.ProxyServer;
+import com.ning.http.client.Response;
+import com.ning.http.client.Realm;
+import com.ning.http.client.ListenableFuture;
+import com.ning.http.client.AsyncCompletionHandler;
+
 import org.killbill.billing.client.model.BillingException;
 import org.killbill.billing.client.model.KillBillObjects;
 import org.slf4j.Logger;
@@ -61,6 +68,8 @@ public class KillBillHttpClient {
     public static final String TENANT_OPTION_API_SECRET = "__TENANT_OPTION_API_SECRET";
     public static final String RBAC_OPTION_USERNAME = "__RBAC_OPTION_USERNAME";
     public static final String RBAC_OPTION_PASSWORD = "__RBAC_OPTION_PASSWORD";
+
+    public static final String CONTROL_PLUGIN_NAME = "controlPluginName";
 
     public static final String HTTP_HEADER_ACCEPT = "Accept";
     public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";
