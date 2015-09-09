@@ -590,9 +590,9 @@ public class KillBillClient {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceItem.getInvoiceId();
 
         final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString()),
-                                                                                                          createdBy,
-                                                                                                          reason,
-                                                                                                          comment);
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
 
         return httpClient.doPostAndFollowLocation(uri, invoiceItem, queryParams, Invoice.class);
     }
@@ -1301,20 +1301,121 @@ public class KillBillClient {
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Tags.class);
     }
 
+    public Tags getAllAccountTags(final UUID accountId, final String objectType) throws KillBillClientException {
+        return getAllAccountTags(accountId, objectType);
+    }
+
+    public Tags getAllAccountTags(final UUID accountId, @Nullable final String objectType, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.ALL_TAGS;
+
+        final ImmutableMultimap.Builder mapBuilder = ImmutableMultimap.builder().put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        if (objectType != null) {
+            mapBuilder.put(JaxrsResource.QUERY_OBJECT_TYPE, objectType);
+        }
+        return httpClient.doGet(uri, mapBuilder.build(), Tags.class);
+    }
+
+
     public Tags getAccountTags(final UUID accountId) throws KillBillClientException {
         return getAccountTags(accountId, AuditLevel.NONE);
     }
 
     public Tags getAccountTags(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.TAGS;
+        return getObjectTags(accountId, JaxrsResource.ACCOUNTS_PATH, auditLevel);
+    }
+
+    public Tags createAccountTag(final UUID accountId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createObjectTag(accountId, JaxrsResource.ACCOUNTS_PATH, tagDefinitionId, createdBy, reason, comment);
+    }
+
+    public void deleteAccountTag(final UUID accountId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deleteObjectTag(accountId, JaxrsResource.ACCOUNTS_PATH, tagDefinitionId, createdBy, reason, comment);
+    }
+
+
+    public Tags getBundleTags(final UUID bundleId) throws KillBillClientException {
+        return getBundleTags(bundleId, AuditLevel.NONE);
+    }
+
+    public Tags getBundleTags(final UUID bundleId, final AuditLevel auditLevel) throws KillBillClientException {
+        return getObjectTags(bundleId, JaxrsResource.BUNDLES_PATH, auditLevel);
+    }
+
+    public Tags createBundleTag(final UUID bundleId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createObjectTag(bundleId, JaxrsResource.BUNDLES_PATH, tagDefinitionId, createdBy, reason, comment);
+    }
+
+
+    public void deleteBundleTag(final UUID bundleId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deleteObjectTag(bundleId, JaxrsResource.BUNDLES_PATH, tagDefinitionId, createdBy, reason, comment);
+    }
+
+
+    public Tags getSubscriptionTags(final UUID subscriptionId) throws KillBillClientException {
+        return getBundleTags(subscriptionId, AuditLevel.NONE);
+    }
+
+    public Tags getSubscriptionTags(final UUID subscriptionId, final AuditLevel auditLevel) throws KillBillClientException {
+        return getObjectTags(subscriptionId, JaxrsResource.SUBSCRIPTIONS_PATH, auditLevel);
+    }
+
+    public Tags createSubscriptionTag(final UUID subscriptionId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createObjectTag(subscriptionId, JaxrsResource.SUBSCRIPTIONS_PATH, tagDefinitionId, createdBy, reason, comment);
+    }
+
+
+    public void deleteSubscriptionTag(final UUID subscriptionId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deleteObjectTag(subscriptionId, JaxrsResource.SUBSCRIPTIONS_PATH, tagDefinitionId, createdBy, reason, comment);
+    }
+
+    public Tags getInvoiceTags(final UUID invoiceId) throws KillBillClientException {
+        return getBundleTags(invoiceId, AuditLevel.NONE);
+    }
+
+    public Tags getInvoiceTags(final UUID invoiceId, final AuditLevel auditLevel) throws KillBillClientException {
+        return getObjectTags(invoiceId, JaxrsResource.INVOICES_PATH, auditLevel);
+    }
+
+    public Tags createInvoiceTag(final UUID invoiceId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createObjectTag(invoiceId, JaxrsResource.INVOICES_PATH, tagDefinitionId, createdBy, reason, comment);
+    }
+
+
+    public void deleteInvoiceTag(final UUID invoiceId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deleteObjectTag(invoiceId, JaxrsResource.INVOICES_PATH, tagDefinitionId, createdBy, reason, comment);
+    }
+
+
+    public Tags getPaymentTags(final UUID paymentId) throws KillBillClientException {
+        return getBundleTags(paymentId, AuditLevel.NONE);
+    }
+
+    public Tags getPaymentTags(final UUID paymentId, final AuditLevel auditLevel) throws KillBillClientException {
+        return getObjectTags(paymentId, JaxrsResource.PAYMENTS_PATH, auditLevel);
+    }
+
+    public Tags createPaymentTag(final UUID paymentId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createObjectTag(paymentId, JaxrsResource.PAYMENTS_PATH, tagDefinitionId, createdBy, reason, comment);
+    }
+
+
+    public void deletePaymentTag(final UUID paymentId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deleteObjectTag(paymentId, JaxrsResource.PAYMENTS_PATH, tagDefinitionId, createdBy, reason, comment);
+    }
+
+
+    private Tags getObjectTags(final UUID objectId, final String resourcePathPrefix, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = resourcePathPrefix + "/" + objectId + "/" + JaxrsResource.TAGS;
 
         final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Tags.class);
     }
 
-    public Tags createAccountTag(final UUID accountId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.TAGS;
+
+
+    private Tags createObjectTag(final UUID objectId, final String resourcePathPrefix, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = resourcePathPrefix + "/" + objectId + "/" + JaxrsResource.TAGS;
 
         final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_TAGS, tagDefinitionId.toString()),
                                                                      createdBy,
@@ -1324,8 +1425,9 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(uri, null, queryParams, Tags.class);
     }
 
-    public void deleteAccountTag(final UUID accountId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.TAGS;
+
+    private void deleteObjectTag(final UUID objectId, final String resourcePathPrefix, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = resourcePathPrefix + "/" + objectId + "/" + JaxrsResource.TAGS;
 
         final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_TAGS, tagDefinitionId.toString()),
                                                                      createdBy,

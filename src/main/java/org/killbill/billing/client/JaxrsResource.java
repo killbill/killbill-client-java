@@ -73,6 +73,7 @@ public interface JaxrsResource {
     public static final String SUBSCRIPTIONS = "subscriptions";
     public static final String SUBSCRIPTIONS_PATH = PREFIX + "/" + SUBSCRIPTIONS;
     public static final String TAGS = "tags";
+    public static final String ALL_TAGS = "allTags";
     public static final String TAGS_PATH = PREFIX + "/" + TAGS;
     public static final String TAG_DEFINITIONS = "tagDefinitions";
     public static final String TAG_DEFINITIONS_PATH = PREFIX + "/" + TAG_DEFINITIONS;
@@ -126,6 +127,7 @@ public interface JaxrsResource {
     public static final String QUERY_SEARCH_LIMIT = "limit";
     public static final String QUERY_SEARCH_OFFSET = "offset";
     public static final String QUERY_TAGS = "tagList";
+    public static final String QUERY_OBJECT_TYPE = "objectType";
     public static final String QUERY_TARGET_DATE = "targetDate";
     public static final String QUERY_UNPAID_INVOICES_ONLY = "unpaidInvoicesOnly";
     public static final String QUERY_PAYMENT_METHOD_PLUGIN_NAME = "pluginName";
