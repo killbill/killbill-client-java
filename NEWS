@@ -1,3 +1,7 @@
+0.8
+    Add support for HTTP proxy
+    Add control plugins support for payment combo calls
+
 0.7
     Payments APIs: HPP combo call, ability to complete payments by payment id / external key
 
