@@ -31,19 +31,21 @@ import java.util.concurrent.TimeoutException;
 
 import javax.annotation.Nullable;
 
+import com.ning.http.client.AsyncHttpClient;
+import com.ning.http.client.AsyncHttpClientConfig;
+import com.ning.http.client.ProxyServer;
+import com.ning.http.client.Response;
+import com.ning.http.client.Realm;
+import com.ning.http.client.ListenableFuture;
+import com.ning.http.client.AsyncCompletionHandler;
+
 import org.killbill.billing.client.model.BillingException;
 import org.killbill.billing.client.model.KillBillObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ning.http.client.AsyncCompletionHandler;
-import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
-import com.ning.http.client.AsyncHttpClientConfig;
-import com.ning.http.client.ListenableFuture;
-import com.ning.http.client.Realm;
 import com.ning.http.client.Realm.RealmBuilder;
-import com.ning.http.client.Response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,6 +68,8 @@ public class KillBillHttpClient {
     public static final String TENANT_OPTION_API_SECRET = "__TENANT_OPTION_API_SECRET";
     public static final String RBAC_OPTION_USERNAME = "__RBAC_OPTION_USERNAME";
     public static final String RBAC_OPTION_PASSWORD = "__RBAC_OPTION_PASSWORD";
+
+    public static final String CONTROL_PLUGIN_NAME = "controlPluginName";
 
     public static final String HTTP_HEADER_ACCEPT = "Accept";
     public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";
@@ -90,23 +94,35 @@ public class KillBillHttpClient {
     private final AsyncHttpClient httpClient;
     private final ObjectMapper mapper;
 
-    public KillBillHttpClient(final String kbServerUrl, final String username, final String password, final String apiKey, final String apiSecret) {
+    public KillBillHttpClient(final String kbServerUrl, final String username, final String password, final String apiKey, final String apiSecret, final String proxyHost, final Integer proxyPort) {
         this.kbServerUrl = kbServerUrl;
         this.username = username;
         this.password = password;
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
 
+
         final AsyncHttpClientConfig.Builder cfg = new AsyncHttpClientConfig.Builder();
         cfg.setConnectTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
         cfg.setRequestTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
         cfg.setReadTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
         cfg.setUserAgent(USER_AGENT);
+
+        if (proxyHost != null && proxyPort != null) {
+            final ProxyServer proxyServer = new ProxyServer(proxyHost, proxyPort);
+            cfg.setProxyServer(proxyServer);
+        }
+
         this.httpClient = new AsyncHttpClient(cfg.build());
 
         mapper = new ObjectMapper();
         mapper.registerModule(new JodaModule());
     }
+
+    public KillBillHttpClient(final String kbServerUrl, final String username, final String password, final String apiKey, final String apiSecret) {
+        this(kbServerUrl, username, password, apiKey, apiSecret, null, null);
+    }
+
 
     public KillBillHttpClient() {
         this(System.getProperty("killbill.url", "http://127.0.0.1:8080/"),
