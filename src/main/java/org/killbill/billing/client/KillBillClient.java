@@ -607,7 +607,8 @@ public class KillBillClient {
         for (final InvoiceItem externalCharge : externalCharges) {
             Preconditions.checkNotNull(externalCharge.getAccountId(), "InvoiceItem#accountId cannot be null");
             Preconditions.checkNotNull(externalCharge.getAmount(), "InvoiceItem#amount cannot be null");
-            Preconditions.checkNotNull(externalCharge.getCurrency(), "InvoiceItem#currency cannot be null");
+            // We allow the currency to be null and in this case will default to account currency
+            //Preconditions.checkNotNull(externalCharge.getCurrency(), "InvoiceItem#currency cannot be null");
 
             if (externalChargesPerAccount.get(externalCharge.getAccountId()) == null) {
                 externalChargesPerAccount.put(externalCharge.getAccountId(), new LinkedList<InvoiceItem>());
