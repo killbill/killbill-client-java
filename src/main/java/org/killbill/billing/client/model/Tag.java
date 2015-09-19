@@ -30,6 +30,7 @@ public class Tag extends KillBillObject {
 
     private UUID tagId;
     private ObjectType objectType;
+    private UUID objectId;
     private UUID tagDefinitionId;
     private String tagDefinitionName;
 
@@ -38,12 +39,14 @@ public class Tag extends KillBillObject {
     @JsonCreator
     public Tag(@JsonProperty("tagId") final UUID tagId,
                @JsonProperty("objectType") final ObjectType objectType,
+               @JsonProperty("objectId") final UUID objectId,
                @JsonProperty("tagDefinitionId") final UUID tagDefinitionId,
                @JsonProperty("tagDefinitionName") final String tagDefinitionName,
                @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.tagId = tagId;
         this.objectType = objectType;
+        this.objectId = objectId;
         this.tagDefinitionId = tagDefinitionId;
         this.tagDefinitionName = tagDefinitionName;
     }
@@ -80,11 +83,20 @@ public class Tag extends KillBillObject {
         this.tagDefinitionName = tagDefinitionName;
     }
 
+    public UUID getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(final UUID objectId) {
+        this.objectId = objectId;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Tag{");
         sb.append("tagId=").append(tagId);
         sb.append(", objectType=").append(objectType);
+        sb.append(", objectId=").append(objectId);
         sb.append(", tagDefinitionId=").append(tagDefinitionId);
         sb.append(", tagDefinitionName='").append(tagDefinitionName).append('\'');
         sb.append('}');
@@ -108,7 +120,10 @@ public class Tag extends KillBillObject {
         if (tagDefinitionId != null ? !tagDefinitionId.equals(tag.tagDefinitionId) : tag.tagDefinitionId != null) {
             return false;
         }
-        if (tagDefinitionName != null ? !tagDefinitionName.equals(tag.tagDefinitionName) : tag.tagDefinitionName != null) {
+        if (tagDefinitionId != null ? !tagDefinitionId.equals(tag.tagDefinitionId) : tag.tagDefinitionId != null) {
+            return false;
+        }
+        if (objectId != null ? !objectId.equals(tag.objectId) : tag.objectId != null) {
             return false;
         }
         if (tagId != null ? !tagId.equals(tag.tagId) : tag.tagId != null) {
@@ -123,6 +138,7 @@ public class Tag extends KillBillObject {
         int result = tagId != null ? tagId.hashCode() : 0;
         result = 31 * result + (objectType != null ? objectType.hashCode() : 0);
         result = 31 * result + (tagDefinitionId != null ? tagDefinitionId.hashCode() : 0);
+        result = 31 * result + (objectId != null ? objectId.hashCode() : 0);
         result = 31 * result + (tagDefinitionName != null ? tagDefinitionName.hashCode() : 0);
         return result;
     }
