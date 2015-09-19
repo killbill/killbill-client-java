@@ -1,4 +1,5 @@
 
+    Add new objectId to Tag model object
     Remove constraint where we have to pass a currency for each item when creating the extrenal charges
 
 0.9
