@@ -29,12 +29,14 @@ import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.catalog.api.PhaseType;
 import org.killbill.billing.catalog.api.ProductCategory;
 import org.killbill.billing.entitlement.api.SubscriptionEventType;
+import org.killbill.billing.invoice.api.DryRunType;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class InvoiceDryRun {
 
+    private final DryRunType dryRunType;
     private final SubscriptionEventType dryRunAction;
     private final PhaseType phaseType;
     private final String productName;
@@ -46,8 +48,10 @@ public class InvoiceDryRun {
     private final UUID bundleId;
     private final BillingActionPolicy billingPolicy;
     private final List<PhasePriceOverride> priceOverrides;
+
     @JsonCreator
-    public InvoiceDryRun(@JsonProperty("dryRunAction") @Nullable final SubscriptionEventType dryRunAction,
+    public InvoiceDryRun(@JsonProperty("dryRunType") @Nullable final DryRunType dryRunType,
+                         @JsonProperty("dryRunAction") @Nullable final SubscriptionEventType dryRunAction,
                          @JsonProperty("phaseType") @Nullable final PhaseType phaseType,
                          @JsonProperty("productName") @Nullable final String productName,
                          @JsonProperty("productCategory") @Nullable final ProductCategory productCategory,
@@ -58,6 +62,7 @@ public class InvoiceDryRun {
                          @JsonProperty("effectiveDate") @Nullable final LocalDate effectiveDate,
                          @JsonProperty("billingPolicy") @Nullable final BillingActionPolicy billingPolicy,
                          @JsonProperty("priceOverrides") @Nullable final List<PhasePriceOverride> priceOverrides) {
+        this.dryRunType = dryRunType;
         this.dryRunAction = dryRunAction;
         this.phaseType = phaseType;
         this.productName = productName;
@@ -69,6 +74,10 @@ public class InvoiceDryRun {
         this.effectiveDate = effectiveDate;
         this.billingPolicy = billingPolicy;
         this.priceOverrides= priceOverrides;
+    }
+
+    public DryRunType getDryRunType() {
+        return dryRunType;
     }
 
     public SubscriptionEventType getDryRunAction() {

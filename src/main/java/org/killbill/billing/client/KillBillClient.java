@@ -536,18 +536,10 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Invoices.class);
     }
 
-    public Invoice createDryRunInvoice(final UUID accountId, @Nullable final LocalDate futureDate, final boolean nextUpcomingInvoiceTargetDate, final InvoiceDryRun dryRunInfo, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Invoice createDryRunInvoice(final UUID accountId, @Nullable final LocalDate futureDate, final InvoiceDryRun dryRunInfo, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.DRY_RUN;
 
-        final String futureDateOrUpcomingNextInvoice;
-        if (nextUpcomingInvoiceTargetDate) {
-            futureDateOrUpcomingNextInvoice = JaxrsResource.UPCOMING_INVOICE_TARGET_DATE;
-        } else if (futureDate != null) {
-            futureDateOrUpcomingNextInvoice = futureDate.toString();
-        } else {
-            futureDateOrUpcomingNextInvoice = null;
-        }
-
+        final String futureDateOrUpcomingNextInvoice = (futureDate != null) ? futureDate.toString() : null;
         final Multimap<String, String> rawQueryParams;
         if (futureDateOrUpcomingNextInvoice != null) {
             rawQueryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
