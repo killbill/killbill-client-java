@@ -51,6 +51,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.base.Joiner;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
@@ -118,15 +119,9 @@ public class KillBillHttpClient {
 
         final AsyncHttpClientConfig.Builder cfg = new AsyncHttpClientConfig.Builder();
 
-        if (connectTimeOut != null && readTimeOut != null && requestTimeout != null) {
-            cfg.setConnectTimeout(connectTimeOut);
-            cfg.setReadTimeout(readTimeOut);
-            cfg.setRequestTimeout(requestTimeout);
-        } else {
-            cfg.setConnectTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
-            cfg.setReadTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
-            cfg.setRequestTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
-        }
+        cfg.setConnectTimeout(MoreObjects.firstNonNull(connectTimeOut, DEFAULT_HTTP_TIMEOUT_SEC * 1000));
+        cfg.setReadTimeout(MoreObjects.firstNonNull(readTimeOut, DEFAULT_HTTP_TIMEOUT_SEC * 1000));
+        cfg.setRequestTimeout(MoreObjects.firstNonNull(requestTimeout, DEFAULT_HTTP_TIMEOUT_SEC * 1000));
         cfg.setUserAgent(USER_AGENT);
 
         if (proxyHost != null && proxyPort != null) {
