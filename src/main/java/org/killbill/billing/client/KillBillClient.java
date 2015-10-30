@@ -1523,6 +1523,51 @@ public class KillBillClient {
         httpClient.doDelete(uri, queryParams);
     }
 
+
+    public CustomFields getPaymentMethodCustomFields(final UUID paymentMethodId) throws KillBillClientException {
+        return getAccountCustomFields(paymentMethodId, AuditLevel.NONE);
+    }
+
+    public CustomFields getPaymentMethodCustomFields(final UUID paymentMethodId, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        return httpClient.doGet(uri, queryParams, CustomFields.class);
+    }
+
+
+    public CustomFields createPaymentMethodCustomField(final UUID paymentMethodId, final CustomField customField, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createPaymentMethodCustomFields(paymentMethodId, ImmutableList.of(customField), createdBy, reason, comment);
+    }
+
+    public CustomFields createPaymentMethodCustomFields(final UUID paymentMethodId, final Iterable<CustomField> customFields, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+
+        return httpClient.doPostAndFollowLocation(uri, customFields, queryParams, CustomFields.class);
+    }
+
+    public void deletePaymentMethodtCustomFields(final UUID paymentMethodId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deleteAccountCustomFields(paymentMethodId, null, createdBy, reason, comment);
+    }
+
+    public void deletePaymentMethodCustomFields(final UUID paymentMethodId, @Nullable final Iterable<UUID> customFieldIds, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> paramCustomFields = customFieldIds == null ?
+                ImmutableMultimap.<String, String>of() :
+                ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+
+        final Multimap<String, String> queryParams = paramsWithAudit(paramCustomFields,
+                createdBy,
+                reason,
+                comment);
+
+        httpClient.doDelete(uri, queryParams);
+    }
+
     // Catalog
 
     public Catalog getSimpleCatalog() throws KillBillClientException {
