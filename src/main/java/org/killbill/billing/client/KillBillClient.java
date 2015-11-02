@@ -372,7 +372,6 @@ public class KillBillClient {
         final Iterator<Subscription> subscriptionsIterator = subscriptions.iterator();
         while (subscriptionsIterator.hasNext()) {
             Subscription subscription = subscriptionsIterator.next();
-            Preconditions.checkNotNull(subscription.getAccountId(), "Subscription#accountId cannot be null");
             Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
             Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
             Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
