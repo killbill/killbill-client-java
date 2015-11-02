@@ -1515,9 +1515,8 @@ public class KillBillClient {
         httpClient.doDelete(uri, queryParams);
     }
 
-
     public CustomFields getPaymentMethodCustomFields(final UUID paymentMethodId) throws KillBillClientException {
-        return getAccountCustomFields(paymentMethodId, AuditLevel.NONE);
+        return getPaymentMethodCustomFields(paymentMethodId, AuditLevel.NONE);
     }
 
     public CustomFields getPaymentMethodCustomFields(final UUID paymentMethodId, final AuditLevel auditLevel) throws KillBillClientException {
@@ -1527,7 +1526,6 @@ public class KillBillClient {
 
         return httpClient.doGet(uri, queryParams, CustomFields.class);
     }
-
 
     public CustomFields createPaymentMethodCustomField(final UUID paymentMethodId, final CustomField customField, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return createPaymentMethodCustomFields(paymentMethodId, ImmutableList.of(customField), createdBy, reason, comment);
@@ -1541,21 +1539,21 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(uri, customFields, queryParams, CustomFields.class);
     }
 
-    public void deletePaymentMethodtCustomFields(final UUID paymentMethodId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        deleteAccountCustomFields(paymentMethodId, null, createdBy, reason, comment);
+    public void deletePaymentMethodCustomFields(final UUID paymentMethodId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deletePaymentMethodCustomFields(paymentMethodId, null, createdBy, reason, comment);
     }
 
     public void deletePaymentMethodCustomFields(final UUID paymentMethodId, @Nullable final Iterable<UUID> customFieldIds, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.CUSTOM_FIELDS;
 
         final Multimap<String, String> paramCustomFields = customFieldIds == null ?
-                ImmutableMultimap.<String, String>of() :
-                ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+                                                           ImmutableMultimap.<String, String>of() :
+                                                           ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
 
         final Multimap<String, String> queryParams = paramsWithAudit(paramCustomFields,
-                createdBy,
-                reason,
-                comment);
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment);
 
         httpClient.doDelete(uri, queryParams);
     }
