@@ -51,6 +51,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.base.Joiner;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
@@ -94,7 +95,21 @@ public class KillBillHttpClient {
     private final AsyncHttpClient httpClient;
     private final ObjectMapper mapper;
 
-    public KillBillHttpClient(final String kbServerUrl, final String username, final String password, final String apiKey, final String apiSecret, final String proxyHost, final Integer proxyPort) {
+
+    /**
+     * @param kbServerUrl Kill Bill url
+     * @param username Kill Bill username
+     * @param password Kill Bill password
+     * @param apiKey Kill Bill api key
+     * @param apiSecret Kill Bill api secret
+     * @param proxyHost hostname of a proxy server that the client should use
+     * @param proxyPort port number of a proxy server that the client should use
+     * @param connectTimeOut connect timeout in milliseconds
+     * @param readTimeOut read timeout in milliseconds
+     * @param requestTimeout request timeout in milliseconds
+     *
+     */
+    public KillBillHttpClient(final String kbServerUrl, final String username, final String password, final String apiKey, final String apiSecret, final String proxyHost, final Integer proxyPort, final Integer connectTimeOut, final Integer readTimeOut, final Integer requestTimeout) {
         this.kbServerUrl = kbServerUrl;
         this.username = username;
         this.password = password;
@@ -103,9 +118,10 @@ public class KillBillHttpClient {
 
 
         final AsyncHttpClientConfig.Builder cfg = new AsyncHttpClientConfig.Builder();
-        cfg.setConnectTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
-        cfg.setRequestTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
-        cfg.setReadTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
+
+        cfg.setConnectTimeout(MoreObjects.firstNonNull(connectTimeOut, DEFAULT_HTTP_TIMEOUT_SEC * 1000));
+        cfg.setReadTimeout(MoreObjects.firstNonNull(readTimeOut, DEFAULT_HTTP_TIMEOUT_SEC * 1000));
+        cfg.setRequestTimeout(MoreObjects.firstNonNull(requestTimeout, DEFAULT_HTTP_TIMEOUT_SEC * 1000));
         cfg.setUserAgent(USER_AGENT);
 
         if (proxyHost != null && proxyPort != null) {
@@ -120,9 +136,12 @@ public class KillBillHttpClient {
     }
 
     public KillBillHttpClient(final String kbServerUrl, final String username, final String password, final String apiKey, final String apiSecret) {
-        this(kbServerUrl, username, password, apiKey, apiSecret, null, null);
+        this(kbServerUrl, username, password, apiKey, apiSecret, null, null, null, null, null);
     }
 
+    public KillBillHttpClient(final String kbServerUrl, final String username, final String password, final String apiKey, final String apiSecret, final String proxyHost, final Integer proxyPort) {
+        this(kbServerUrl, username, password, apiKey, apiSecret, proxyHost, proxyPort, null, null, null);
+    }
 
     public KillBillHttpClient() {
         this(System.getProperty("killbill.url", "http://127.0.0.1:8080/"),
