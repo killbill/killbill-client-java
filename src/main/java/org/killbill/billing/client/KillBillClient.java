@@ -41,6 +41,7 @@ import org.killbill.billing.client.model.AccountEmail;
 import org.killbill.billing.client.model.AccountEmails;
 import org.killbill.billing.client.model.AccountTimeline;
 import org.killbill.billing.client.model.Accounts;
+import org.killbill.billing.client.model.BlockingState;
 import org.killbill.billing.client.model.Bundle;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Catalog;
@@ -324,7 +325,23 @@ public class KillBillClient {
         final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         return httpClient.doPutAndFollowLocation(uri, bundle, queryParams, Bundle.class);
+    }
 
+
+    public void setBlockingState(final UUID bundleId, final BlockingState blockingState, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+
+        Preconditions.checkNotNull(bundleId, "bundleId cannot be null");
+
+        Preconditions.checkNotNull(blockingState.getService(), "Bundle#service cannot be null");
+        Preconditions.checkNotNull(blockingState.getStateName(), "Bundle#stateName cannot be null");
+        Preconditions.checkNotNull(blockingState.getEffectiveDate(), "Bundle#effectiveDate cannot be null");
+        Preconditions.checkNotNull(blockingState.getType(), "Bundle#type cannot be null");
+
+        final String uri = JaxrsResource.BUNDLES_PATH + "/" + bundleId + "/" + JaxrsResource.BLOCK;
+
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+
+        httpClient.doPut(uri, blockingState, queryParams);
     }
 
     // Subscriptions and entitlements

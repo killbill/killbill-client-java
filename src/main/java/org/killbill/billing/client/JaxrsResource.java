@@ -82,6 +82,10 @@ public interface JaxrsResource {
     public static final String TIMELINE = "timeline";
     public static final String COMBO = "combo";
 
+
+    public static final String BLOCK = "block";
+
+
     /*
      * Multi-Tenancy headers
      */
