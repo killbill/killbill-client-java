@@ -1,3 +1,6 @@
+
+    Implement setBlockingState api
+
 0.13
     Management of custom fields on payment methods
     Allow configuration of timeouts
