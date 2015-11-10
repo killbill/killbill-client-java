@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -381,6 +382,34 @@ public class KillBillClient {
         final int httpTimeout = Math.max(DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec);
 
         return httpClient.doPostAndFollowLocation(JaxrsResource.SUBSCRIPTIONS_PATH, subscription, queryParams, httpTimeout, Subscription.class);
+    }
+
+    public Bundle createSubscriptionWithAddOns(final Iterable<Subscription> subscriptions, final DateTime requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+
+        final Iterator<Subscription> subscriptionsIterator = subscriptions.iterator();
+        while (subscriptionsIterator.hasNext()) {
+            Subscription subscription = subscriptionsIterator.next();
+            Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
+            Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
+            Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
+            Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+            if (subscription.getProductCategory() == ProductCategory.BASE) {
+                Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null for base subscription");
+            }
+        }
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
+        params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
+        if (requestedDate != null) {
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+        }
+        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
+
+        final int httpTimeout = Math.max(DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec);
+
+        String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/createEntitlementWithAddOns";
+        return httpClient.doPostAndFollowLocation(uri, subscriptions, queryParams, httpTimeout, Bundle.class);
     }
 
     public Subscription updateSubscription(final Subscription subscription, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
