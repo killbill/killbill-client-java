@@ -1625,8 +1625,18 @@ public class KillBillClient {
     }
 
     public Catalog getJSONCatalog() throws KillBillClientException {
+        return this.getJSONCatalog(null);
+    }
+
+    public Catalog getJSONCatalog(final DateTime requestedDate) throws KillBillClientException {
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        if (requestedDate != null) {
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+        }
+
         final String uri = JaxrsResource.CATALOG_PATH;
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Catalog.class);
+        return httpClient.doGet(uri, params, Catalog.class);
     }
 
     public String getXMLCatalog() throws KillBillClientException {
