@@ -1273,11 +1273,18 @@ public class KillBillClient {
     public void refreshPaymentMethods(final UUID accountId, final String pluginName, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS + "/refresh";
 
-        Multimap<String, String> params = ImmutableMultimap.of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_NAME, pluginName);
+        Multimap<String, String> params = pluginName != null ?
+                ImmutableMultimap.of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_NAME, pluginName) :
+                ImmutableMultimap.<String, String>of();
+
         storePluginPropertiesAsParams(pluginProperties, params);
 
         final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
         httpClient.doPost(uri, null, queryParams);
+    }
+
+    public void refreshPaymentMethods(final UUID accountId, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        refreshPaymentMethods(accountId, null, pluginProperties, createdBy, reason, comment);
     }
 
     // Overdue
