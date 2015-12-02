@@ -18,23 +18,32 @@ package org.killbill.billing.client.model;
 
 import java.util.List;
 
+import org.killbill.billing.catalog.api.BillingPeriod;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Plan extends KillBillObject {
 
     private final String name;
+    private final BillingPeriod billingPeriod;
     private final List<Phase> phases;
 
     @JsonCreator
     public Plan(@JsonProperty("name") final String name,
+                @JsonProperty("billingPeriod") final BillingPeriod billingPeriod,
                 @JsonProperty("phases") final List<Phase> phases) {
         this.name = name;
+        this.billingPeriod = billingPeriod;
         this.phases = phases;
     }
 
     public String getName() {
         return name;
+    }
+
+    public BillingPeriod getBillingPeriod() {
+        return billingPeriod;
     }
 
     public List<Phase> getPhases() {
@@ -45,6 +54,7 @@ public class Plan extends KillBillObject {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Plan{");
         sb.append("name='").append(name).append('\'');
+        sb.append(", billingPeriod='").append(billingPeriod).append('\'');
         sb.append(", phases=").append(phases);
         sb.append('}');
         return sb.toString();
@@ -64,6 +74,9 @@ public class Plan extends KillBillObject {
         if (name != null ? !name.equals(plan.name) : plan.name != null) {
             return false;
         }
+        if (billingPeriod != null ? !billingPeriod.equals(plan.billingPeriod) : plan.billingPeriod != null) {
+            return false;
+        }
         if (phases != null ? !phases.equals(plan.phases) : plan.phases != null) {
             return false;
         }
@@ -74,6 +87,7 @@ public class Plan extends KillBillObject {
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (billingPeriod != null ? billingPeriod.hashCode() : 0);
         result = 31 * result + (phases != null ? phases.hashCode() : 0);
         return result;
     }

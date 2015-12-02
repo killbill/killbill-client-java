@@ -95,7 +95,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.io.Files;
 
-import static org.killbill.billing.client.KillBillHttpClient.ACCEPT_JSON;
 import static org.killbill.billing.client.KillBillHttpClient.ACCEPT_XML;
 import static org.killbill.billing.client.KillBillHttpClient.CONTENT_TYPE_XML;
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_EMPTY_QUERY;
@@ -1606,12 +1605,6 @@ public class KillBillClient {
 
     // Catalog
 
-    public Catalog getSimpleCatalog() throws KillBillClientException {
-        final String uri = JaxrsResource.CATALOG_PATH + "/simpleCatalog";
-
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Catalog.class);
-    }
-
     public List<PlanDetail> getAvailableAddons(final String baseProductName) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH + "/availableAddons";
 
@@ -1631,9 +1624,19 @@ public class KillBillClient {
         uploadFile(catalogPath, uri, CONTENT_TYPE_XML, createdBy, reason, comment, null);
     }
 
-    public String getJSONCatalog() throws KillBillClientException {
+    public Catalog getJSONCatalog() throws KillBillClientException {
+        return this.getJSONCatalog(null);
+    }
+
+    public Catalog getJSONCatalog(final DateTime requestedDate) throws KillBillClientException {
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        if (requestedDate != null) {
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+        }
+
         final String uri = JaxrsResource.CATALOG_PATH;
-        return getResourceFile(uri, ACCEPT_JSON);
+        return httpClient.doGet(uri, params, Catalog.class);
     }
 
     public String getXMLCatalog() throws KillBillClientException {
