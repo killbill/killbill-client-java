@@ -113,7 +113,7 @@ public class Catalog extends KillBillObject {
         if (name != null ? !name.equals(catalog.name) : catalog.name != null) {
             return false;
         }
-        if (effectiveDate != null ? !effectiveDate.equals(catalog.effectiveDate) : catalog.effectiveDate != null) {
+        if (effectiveDate != null ? effectiveDate.compareTo(catalog.effectiveDate) != 0 : catalog.effectiveDate != null) {
             return false;
         }
         if (currencies != null ? !currencies.equals(catalog.currencies) : catalog.currencies != null) {
