@@ -1194,8 +1194,20 @@ public class KillBillClient {
 
     public PaymentMethods getPaymentMethodsForAccount(final UUID accountId) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS;
-
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, PaymentMethods.class);
+    }
+
+    public PaymentMethods getPaymentMethodsForAccount(final UUID accountId, final Map<String, String> pluginProperties, boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS;
+
+        final Multimap<String, String> queryParams =
+                ImmutableMultimap.<String, String>of(
+                        JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo),
+                        JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        storePluginPropertiesAsParams(pluginProperties, queryParams);
+
+        return httpClient.doGet(uri, queryParams, PaymentMethods.class);
     }
 
     public PaymentMethods searchPaymentMethodsByKey(final String key) throws KillBillClientException {
@@ -1255,6 +1267,23 @@ public class KillBillClient {
                                                                      comment);
 
         httpClient.doDelete(uri, queryParams);
+    }
+
+    public void refreshPaymentMethods(final UUID accountId, final String pluginName, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS + "/refresh";
+
+        Multimap<String, String> params = pluginName != null ?
+                ImmutableMultimap.of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_NAME, pluginName) :
+                ImmutableMultimap.<String, String>of();
+
+        storePluginPropertiesAsParams(pluginProperties, params);
+
+        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
+        httpClient.doPost(uri, null, queryParams);
+    }
+
+    public void refreshPaymentMethods(final UUID accountId, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        refreshPaymentMethods(accountId, null, pluginProperties, createdBy, reason, comment);
     }
 
     // Overdue
@@ -1679,9 +1708,16 @@ public class KillBillClient {
     }
 
 
-    public TenantKey registerPluginConfigurationForTenant(final String pluginName, final String pluginConfig, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public TenantKey registerPluginConfigurationForTenant(final String pluginName, final String pluginConfigFileName, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
-        return uploadFile(pluginConfig, uri, "text/plain", createdBy, reason, comment, TenantKey.class);
+        return uploadFile(pluginConfigFileName, uri, "text/plain", createdBy, reason, comment, TenantKey.class);
+    }
+
+    public TenantKey postPluginConfigurationPropertiesForTenant(final String pluginName, final String pluginConfigProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        queryParams.put(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain");
+        return httpClient.doPostAndFollowLocation(uri, pluginConfigProperties, queryParams, TenantKey.class);
     }
 
     public TenantKey getPluginConfigurationForTenant(final String pluginName) throws KillBillClientException {
