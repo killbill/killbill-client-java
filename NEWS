@@ -1,4 +1,6 @@
 
+    Add apis for payment methods
+    Add apis for catalog
     Add new entitlement api for combo call
     Implement setBlockingState api
 
