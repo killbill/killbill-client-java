@@ -25,12 +25,18 @@ public class Phase extends KillBillObject {
 
     private String type;
     private List<Price> prices;
+    private final List<Price> fixedPrices;
+    private final Duration duration;
 
     @JsonCreator
     public Phase(@JsonProperty("type") final String type,
-                 @JsonProperty("prices") final List<Price> prices) {
+                 @JsonProperty("prices") final List<Price> prices,
+                 @JsonProperty("fixedPrices") final List<Price> fixedPrices,
+                 @JsonProperty("duration") final Duration duration) {
         this.type = type;
         this.prices = prices;
+        this.fixedPrices = fixedPrices;
+        this.duration = duration;
     }
 
     public String getType() {
@@ -49,11 +55,21 @@ public class Phase extends KillBillObject {
         this.prices = prices;
     }
 
+    public List<Price> getFixedPrices() {
+        return fixedPrices;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Phase{");
         sb.append("type='").append(type).append('\'');
         sb.append(", prices=").append(prices);
+        sb.append(", fixedPrices=").append(fixedPrices);
+        sb.append(", duration=").append(duration);
         sb.append('}');
         return sb.toString();
     }
@@ -75,6 +91,12 @@ public class Phase extends KillBillObject {
         if (type != null ? !type.equals(phase.type) : phase.type != null) {
             return false;
         }
+        if (fixedPrices != null ? !fixedPrices.equals(phase.fixedPrices) : phase.fixedPrices != null) {
+            return false;
+        }
+        if (duration != null ? !duration.equals(phase.duration) : phase.duration != null) {
+            return false;
+        }
 
         return true;
     }
@@ -83,6 +105,8 @@ public class Phase extends KillBillObject {
     public int hashCode() {
         int result = type != null ? type.hashCode() : 0;
         result = 31 * result + (prices != null ? prices.hashCode() : 0);
+        result = 31 * result + (fixedPrices != null ? fixedPrices.hashCode() : 0);
+        result = 31 * result + (duration != null ? duration.hashCode() : 0);
         return result;
     }
 }
