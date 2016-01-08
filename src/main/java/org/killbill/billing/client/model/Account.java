@@ -33,6 +33,8 @@ public class Account extends KillBillObject {
     private String email;
     private Integer billCycleDayLocal;
     private String currency;
+    private UUID parentAccountId;
+    private Boolean isPaymentDelegatedToParent;
     private UUID paymentMethodId;
     private String timeZone;
     private String address1;
@@ -57,6 +59,8 @@ public class Account extends KillBillObject {
                    @JsonProperty("email") final String email,
                    @JsonProperty("billCycleDayLocal") final Integer billCycleDayLocal,
                    @JsonProperty("currency") final String currency,
+                   @JsonProperty("parentAccountId") final UUID parentAccountId,
+                   @JsonProperty("isPaymentDelegatedToParent") final Boolean isPaymentDelegatedToParent,
                    @JsonProperty("paymentMethodId") final UUID paymentMethodId,
                    @JsonProperty("timeZone") final String timeZone,
                    @JsonProperty("address1") final String address1,
@@ -81,6 +85,8 @@ public class Account extends KillBillObject {
         this.email = email;
         this.billCycleDayLocal = billCycleDayLocal;
         this.currency = currency;
+        this.parentAccountId = parentAccountId;
+        this.isPaymentDelegatedToParent = isPaymentDelegatedToParent;
         this.paymentMethodId = paymentMethodId;
         this.timeZone = timeZone;
         this.address1 = address1;
@@ -167,6 +173,22 @@ public class Account extends KillBillObject {
 
     public void setCurrency(final String currency) {
         this.currency = currency;
+    }
+
+    public UUID getParentAccountId() {
+        return parentAccountId;
+    }
+
+    public void setParentAccountId(final UUID parentAccountId) {
+        this.parentAccountId = parentAccountId;
+    }
+
+    public Boolean getIsPaymentDelegatedToParent() {
+        return isPaymentDelegatedToParent;
+    }
+
+    public void setIsPaymentDelegatedToParent(final Boolean isPaymentDelegatedToParent) {
+        this.isPaymentDelegatedToParent = isPaymentDelegatedToParent;
     }
 
     public UUID getPaymentMethodId() {
@@ -285,6 +307,8 @@ public class Account extends KillBillObject {
         sb.append(", email='").append(email).append('\'');
         sb.append(", billCycleDayLocal=").append(billCycleDayLocal);
         sb.append(", currency='").append(currency).append('\'');
+        sb.append(", parentAccountId='").append(parentAccountId).append('\'');
+        sb.append(", isPaymentDelegatedToParent='").append(isPaymentDelegatedToParent).append('\'');
         sb.append(", paymentMethodId='").append(paymentMethodId).append('\'');
         sb.append(", timeZone='").append(timeZone).append('\'');
         sb.append(", address1='").append(address1).append('\'');
@@ -343,6 +367,12 @@ public class Account extends KillBillObject {
         if (currency != null ? !currency.equals(account.currency) : account.currency != null) {
             return false;
         }
+        if (parentAccountId != null ? !parentAccountId.equals(account.parentAccountId) : account.parentAccountId != null) {
+            return false;
+        }
+        if (isPaymentDelegatedToParent != null ? !isPaymentDelegatedToParent.equals(account.isPaymentDelegatedToParent) : account.isPaymentDelegatedToParent != null) {
+            return false;
+        }
         if (email != null ? !email.equals(account.email) : account.email != null) {
             return false;
         }
@@ -394,6 +424,8 @@ public class Account extends KillBillObject {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (billCycleDayLocal != null ? billCycleDayLocal.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
+        result = 31 * result + (parentAccountId != null ? parentAccountId.hashCode() : 0);
+        result = 31 * result + (isPaymentDelegatedToParent != null ? isPaymentDelegatedToParent.hashCode() : 0);
         result = 31 * result + (paymentMethodId != null ? paymentMethodId.hashCode() : 0);
         result = 31 * result + (timeZone != null ? timeZone.hashCode() : 0);
         result = 31 * result + (address1 != null ? address1.hashCode() : 0);

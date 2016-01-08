@@ -38,6 +38,7 @@ public interface JaxrsResource {
     public static final String CATALOG_PATH = PREFIX + "/" + CATALOG;
     public static final String CHARGEBACKS = "chargebacks";
     public static final String CHARGES = "charges";
+    public static final String CHILDREN = "children";
     public static final String CREDITS = "credits";
     public static final String CREDITS_PATH = PREFIX + "/" + CREDITS;
     public static final String CUSTOM_FIELDS = "customFields";

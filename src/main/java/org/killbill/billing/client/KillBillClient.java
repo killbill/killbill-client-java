@@ -250,6 +250,15 @@ public class KillBillClient {
         httpClient.doPut(uri, invoiceEmail, queryParams);
     }
 
+    public Accounts getChildrenAccounts(final UUID parentAccountId, final boolean withBalance, final boolean withCBA) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + parentAccountId + "/" + JaxrsResource.CHILDREN;
+
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE, withBalance ? "true" : "false",
+                                                                                          JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE_AND_CBA, withCBA ? "true" : "false");
+
+        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Accounts.class);
+    }
+
     // Bundles
 
     public Bundle getBundle(final UUID bundleId) throws KillBillClientException {
