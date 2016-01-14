@@ -722,6 +722,23 @@ public class KillBillClient {
         return getResourceFile(uri, "text/plain");
     }
 
+    public void invoiceStatusTransition(final UUID accountId, final UUID invoiceId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId.toString() + "/" + JaxrsResource.ACCOUNTS + "/" + accountId.toString() + "/statusTransition";
+
+        Preconditions.checkNotNull(invoiceId, "invoiceId cannot be null");
+        Preconditions.checkNotNull(accountId, "accountId cannot be null");
+
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
+                                                                                                          JaxrsResource.QUERY_INVOICE_ID, invoiceId.toString()),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment
+                                                                    );
+
+        httpClient.doPost(uri, null, queryParams);
+
+    }
+
     // Credits
 
     public Credit getCredit(final UUID creditId) throws KillBillClientException {
