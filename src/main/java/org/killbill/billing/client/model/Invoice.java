@@ -263,7 +263,7 @@ public class Invoice extends KillBillObject {
         if (targetDate != null ? targetDate.compareTo(invoice.targetDate) != 0 : invoice.targetDate != null) {
             return false;
         }
-        if (status != null ? status.compareTo(invoice.status) != 0 : invoice.status != null) {
+        if (status != null ? !status.equals(invoice.status) : invoice.status != null) {
             return false;
         }
 
