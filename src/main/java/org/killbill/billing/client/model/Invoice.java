@@ -43,6 +43,7 @@ public class Invoice extends KillBillObject {
     private List<InvoiceItem> items;
     private String bundleKeys;
     private List<Credit> credits;
+    private String status;
 
     public Invoice() {}
 
@@ -58,6 +59,7 @@ public class Invoice extends KillBillObject {
                    @JsonProperty("balance") final BigDecimal balance,
                    @JsonProperty("accountId") final UUID accountId,
                    @JsonProperty("externalBundleKeys") final String bundleKeys,
+                   @JsonProperty("status") final String status,
                    @JsonProperty("credits") final List<Credit> credits,
                    @JsonProperty("items") final List<InvoiceItem> items,
                    @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
@@ -75,6 +77,7 @@ public class Invoice extends KillBillObject {
         this.bundleKeys = bundleKeys;
         this.credits = credits;
         this.items = items;
+        this.status = status;
     }
 
     public BigDecimal getAmount() {
@@ -181,6 +184,14 @@ public class Invoice extends KillBillObject {
         this.credits = credits;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(final String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Invoice{");
@@ -197,6 +208,7 @@ public class Invoice extends KillBillObject {
         sb.append(", items=").append(items);
         sb.append(", bundleKeys='").append(bundleKeys).append('\'');
         sb.append(", credits=").append(credits);
+        sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
     }
@@ -251,6 +263,9 @@ public class Invoice extends KillBillObject {
         if (targetDate != null ? targetDate.compareTo(invoice.targetDate) != 0 : invoice.targetDate != null) {
             return false;
         }
+        if (status != null ? !status.equals(invoice.status) : invoice.status != null) {
+            return false;
+        }
 
         return true;
     }
@@ -270,6 +285,7 @@ public class Invoice extends KillBillObject {
         result = 31 * result + (items != null ? items.hashCode() : 0);
         result = 31 * result + (bundleKeys != null ? bundleKeys.hashCode() : 0);
         result = 31 * result + (credits != null ? credits.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
 }

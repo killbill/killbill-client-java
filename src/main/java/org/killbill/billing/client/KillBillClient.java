@@ -643,12 +643,12 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(uri, invoiceItem, queryParams, Invoice.class);
     }
 
-    public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final List<InvoiceItem> externalCharges = createExternalCharges(ImmutableList.<InvoiceItem>of(externalCharge), requestedDate, autoPay, createdBy, reason, comment);
+    public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, final DateTime requestedDate, final Boolean autoPay, final Boolean autoCommit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final List<InvoiceItem> externalCharges = createExternalCharges(ImmutableList.<InvoiceItem>of(externalCharge), requestedDate, autoPay, autoCommit, createdBy, reason, comment);
         return externalCharges.isEmpty() ? null : externalCharges.get(0);
     }
 
-    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final Boolean autoCommit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final Map<UUID, Collection<InvoiceItem>> externalChargesPerAccount = new HashMap<UUID, Collection<InvoiceItem>>();
         for (final InvoiceItem externalCharge : externalCharges) {
             Preconditions.checkNotNull(externalCharge.getAccountId(), "InvoiceItem#accountId cannot be null");
@@ -664,18 +664,20 @@ public class KillBillClient {
 
         final List<InvoiceItem> createdExternalCharges = new LinkedList<InvoiceItem>();
         for (final UUID accountId : externalChargesPerAccount.keySet()) {
-            final List<InvoiceItem> invoiceItems = createExternalCharges(accountId, externalChargesPerAccount.get(accountId), requestedDate, autoPay, createdBy, reason, comment);
+            final List<InvoiceItem> invoiceItems = createExternalCharges(accountId, externalChargesPerAccount.get(accountId), requestedDate, autoPay, autoCommit, createdBy, reason, comment);
             createdExternalCharges.addAll(invoiceItems);
         }
 
         return createdExternalCharges;
     }
 
-    private List<InvoiceItem> createExternalCharges(final UUID accountId, final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    private List<InvoiceItem> createExternalCharges(final UUID accountId, final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final Boolean autoCommit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.CHARGES + "/" + accountId;
 
         final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString(),
-                                                                                                          JaxrsResource.QUERY_PAY_INVOICE, autoPay.toString()),
+                                                                                                          JaxrsResource.QUERY_PAY_INVOICE, autoPay.toString(),
+                                                                                                          JaxrsResource.QUERY_AUTO_COMMIT, String.valueOf(autoCommit)
+                                                                                                         ),
                                                                      createdBy,
                                                                      reason,
                                                                      comment
@@ -722,6 +724,18 @@ public class KillBillClient {
         return getResourceFile(uri, "text/plain");
     }
 
+    public void commitInvoice(final UUID invoiceId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId.toString() + "/commitInvoice";
+        Preconditions.checkNotNull(invoiceId, "invoiceId cannot be null");
+        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_INVOICE_ID, invoiceId.toString()),
+                                                                     createdBy,
+                                                                     reason,
+                                                                     comment
+                                                                    );
+        httpClient.doPut(uri, null, queryParams);
+
+    }
+
     // Credits
 
     public Credit getCredit(final UUID creditId) throws KillBillClientException {
@@ -736,11 +750,12 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Credit.class);
     }
 
-    public Credit createCredit(final Credit credit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Credit createCredit(final Credit credit, final Boolean autoCommit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(credit.getAccountId(), "Credt#accountId cannot be null");
         Preconditions.checkNotNull(credit.getCreditAmount(), "Credt#creditAmount cannot be null");
 
         final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        queryParams.put(JaxrsResource.QUERY_AUTO_COMMIT, String.valueOf(autoCommit));
 
         return httpClient.doPostAndFollowLocation(JaxrsResource.CREDITS_PATH, credit, queryParams, Credit.class);
     }

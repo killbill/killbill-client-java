@@ -137,6 +137,8 @@ public interface JaxrsResource {
     public static final String QUERY_UNPAID_INVOICES_ONLY = "unpaidInvoicesOnly";
     public static final String QUERY_PAYMENT_METHOD_PLUGIN_NAME = "pluginName";
     public static final String QUERY_WITH_PLUGIN_INFO = "withPluginInfo";
+    public static final String QUERY_INVOICE_ID = "invoiceId";
+    public static final String QUERY_AUTO_COMMIT = "autoCommit";
 
     public static final String UPCOMING_INVOICE_TARGET_DATE = "upcomingInvoiceTargetDate";
 
