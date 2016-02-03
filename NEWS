@@ -1,4 +1,5 @@
 
+    Add support for passing control plguin names for all payment apis
     Modify json catalog
     Add apis for payment methods
     Add apis for catalog
