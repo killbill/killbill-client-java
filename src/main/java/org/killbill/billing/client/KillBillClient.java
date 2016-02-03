@@ -949,10 +949,10 @@ public class KillBillClient {
     }
 
     public Payment captureAuthorization(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return captureAuthorization(paymentTransaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+        return captureAuthorization(paymentTransaction, null, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
 
-    public Payment captureAuthorization(final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment captureAuthorization(final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkState(paymentTransaction.getPaymentId() != null || paymentTransaction.getPaymentExternalKey() != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
 
@@ -963,6 +963,11 @@ public class KillBillClient {
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         storePluginPropertiesAsParams(pluginProperties, params);
 
+        if (controlPluginNames != null) {
+            params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
+        }
+
+
         final Multimap<String, String> queryParams = paramsWithAudit(params,
                                                                      createdBy,
                                                                      reason,
@@ -972,10 +977,10 @@ public class KillBillClient {
     }
 
     public Payment refundPayment(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return refundPayment(paymentTransaction, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+        return refundPayment(paymentTransaction, null, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
 
-    public Payment refundPayment(final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment refundPayment(final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkState(paymentTransaction.getPaymentId() != null || paymentTransaction.getPaymentExternalKey() != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
 
@@ -986,6 +991,10 @@ public class KillBillClient {
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         storePluginPropertiesAsParams(pluginProperties, params);
 
+        if (controlPluginNames != null) {
+            params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
+        }
+
         final Multimap<String, String> queryParams = paramsWithAudit(params,
                                                                      createdBy,
                                                                      reason,
@@ -995,6 +1004,10 @@ public class KillBillClient {
     }
 
     public Payment chargebackPayment(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return chargebackPayment(paymentTransaction, null, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+    }
+
+    public Payment chargebackPayment(final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkState(paymentTransaction.getPaymentId() != null || paymentTransaction.getPaymentExternalKey() != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
 
@@ -1008,14 +1021,20 @@ public class KillBillClient {
                                                                      reason,
                                                                      comment);
 
+        if (controlPluginNames != null) {
+            params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
+        }
+
         return httpClient.doPostAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
     }
 
+
+
     public Payment voidPayment(final UUID paymentId, final String transactionExternalKey, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return voidPayment(paymentId, null, transactionExternalKey, ImmutableMap.<String, String>of(), createdBy, reason, comment);
+        return voidPayment(paymentId, null, transactionExternalKey, null, ImmutableMap.<String, String>of(), createdBy, reason, comment);
     }
 
-    public Payment voidPayment(final UUID paymentId, final String paymentExternalKey, final String transactionExternalKey, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment voidPayment(final UUID paymentId, final String paymentExternalKey, final String transactionExternalKey, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
 
         Preconditions.checkState(paymentId != null || paymentExternalKey != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
         final String uri = (paymentId != null) ?
@@ -1030,6 +1049,10 @@ public class KillBillClient {
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         storePluginPropertiesAsParams(pluginProperties, params);
+
+        if (controlPluginNames != null) {
+            params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
+        }
 
         final Multimap<String, String> queryParams = paramsWithAudit(params,
                                                                      createdBy,
