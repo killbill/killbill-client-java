@@ -34,6 +34,7 @@ public class Credit extends KillBillObject {
     private String invoiceNumber;
     private LocalDate effectiveDate;
     private UUID accountId;
+    private String description;
 
     public Credit() {}
 
@@ -43,12 +44,14 @@ public class Credit extends KillBillObject {
                   @JsonProperty("invoiceNumber") final String invoiceNumber,
                   @JsonProperty("effectiveDate") final LocalDate effectiveDate,
                   @JsonProperty("accountId") final UUID accountId,
+                  @JsonProperty("description") final String description,
                   @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.creditAmount = creditAmount;
         this.invoiceId = invoiceId;
         this.invoiceNumber = invoiceNumber;
         this.effectiveDate = effectiveDate;
+        this.description = description;
         this.accountId = accountId;
     }
 
@@ -92,6 +95,14 @@ public class Credit extends KillBillObject {
         this.accountId = accountId;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Credit{");
@@ -99,6 +110,7 @@ public class Credit extends KillBillObject {
         sb.append(", invoiceId='").append(invoiceId).append('\'');
         sb.append(", invoiceNumber='").append(invoiceNumber).append('\'');
         sb.append(", effectiveDate=").append(effectiveDate);
+        sb.append(", description=").append(description);
         sb.append(", accountId='").append(accountId).append('\'');
         sb.append('}');
         return sb.toString();
@@ -130,6 +142,9 @@ public class Credit extends KillBillObject {
         if (invoiceNumber != null ? !invoiceNumber.equals(credit.invoiceNumber) : credit.invoiceNumber != null) {
             return false;
         }
+        if (description != null ? !description.equals(credit.description) : credit.description != null) {
+            return false;
+        }
 
         return true;
     }
@@ -139,6 +154,7 @@ public class Credit extends KillBillObject {
         int result = creditAmount != null ? creditAmount.hashCode() : 0;
         result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
         result = 31 * result + (invoiceNumber != null ? invoiceNumber.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (effectiveDate != null ? effectiveDate.hashCode() : 0);
         result = 31 * result + (accountId != null ? accountId.hashCode() : 0);
         return result;
