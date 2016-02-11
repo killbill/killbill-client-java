@@ -33,7 +33,6 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
 import org.killbill.billing.catalog.api.ProductCategory;
@@ -360,7 +359,7 @@ public class KillBillClient {
         return createSubscription(subscription, null, timeoutSec, createdBy, reason, comment);
     }
 
-    public Subscription createSubscription(final Subscription subscription, final DateTime requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Subscription createSubscription(final Subscription subscription, final LocalDate requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(subscription.getAccountId(), "Subscription#accountId cannot be null");
         Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
         Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
@@ -374,7 +373,7 @@ public class KillBillClient {
         params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
         params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
         if (requestedDate != null) {
-            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toString());
         }
         final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
@@ -383,7 +382,7 @@ public class KillBillClient {
         return httpClient.doPostAndFollowLocation(JaxrsResource.SUBSCRIPTIONS_PATH, subscription, queryParams, httpTimeout, Subscription.class);
     }
 
-    public Bundle createSubscriptionWithAddOns(final Iterable<Subscription> subscriptions, final DateTime requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Bundle createSubscriptionWithAddOns(final Iterable<Subscription> subscriptions, final LocalDate requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
 
         final Iterator<Subscription> subscriptionsIterator = subscriptions.iterator();
         while (subscriptionsIterator.hasNext()) {
@@ -401,7 +400,7 @@ public class KillBillClient {
         params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
         params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
         if (requestedDate != null) {
-            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toString());
         }
         final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
@@ -419,7 +418,7 @@ public class KillBillClient {
         return updateSubscription(subscription, null, billingPolicy, timeoutSec, createdBy, reason, comment);
     }
 
-    public Subscription updateSubscription(final Subscription subscription, @Nullable final DateTime requestedDate, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Subscription updateSubscription(final Subscription subscription, @Nullable final LocalDate requestedDate, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(subscription.getSubscriptionId(), "Subscription#subscriptionId cannot be null");
         Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
         Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
@@ -431,7 +430,7 @@ public class KillBillClient {
         params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
         params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
         if (requestedDate != null) {
-            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toString());
         }
         if (billingPolicy != null) {
             params.put(JaxrsResource.QUERY_BILLING_POLICY, billingPolicy.toString());
@@ -454,7 +453,7 @@ public class KillBillClient {
         cancelSubscription(subscriptionId, null, entitlementPolicy, billingPolicy, timeoutSec, createdBy, reason, comment);
     }
 
-    public void cancelSubscription(final UUID subscriptionId, @Nullable final DateTime requestedDate, @Nullable final EntitlementActionPolicy entitlementPolicy, @Nullable final BillingActionPolicy billingPolicy,
+    public void cancelSubscription(final UUID subscriptionId, @Nullable final LocalDate requestedDate, @Nullable final EntitlementActionPolicy entitlementPolicy, @Nullable final BillingActionPolicy billingPolicy,
                                    final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId;
 
@@ -462,7 +461,7 @@ public class KillBillClient {
         params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
         params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
         if (requestedDate != null) {
-            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toString());
         }
         if (entitlementPolicy != null) {
             params.put(JaxrsResource.QUERY_ENTITLEMENT_POLICY, entitlementPolicy.toString());
@@ -616,30 +615,31 @@ public class KillBillClient {
     }
 
     public Invoice adjustInvoiceItem(final InvoiceItem invoiceItem, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return adjustInvoiceItem(invoiceItem, new DateTime(DateTimeZone.UTC), createdBy, reason, comment);
+        return adjustInvoiceItem(invoiceItem, null, createdBy, reason, comment);
     }
 
-    public Invoice adjustInvoiceItem(final InvoiceItem invoiceItem, final DateTime requestedDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Invoice adjustInvoiceItem(final InvoiceItem invoiceItem, @Nullable final LocalDate requestedDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItem.getAccountId(), "InvoiceItem#accountId cannot be null");
         Preconditions.checkNotNull(invoiceItem.getInvoiceId(), "InvoiceItem#invoiceId cannot be null");
         Preconditions.checkNotNull(invoiceItem.getInvoiceItemId(), "InvoiceItem#invoiceItemId cannot be null");
 
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceItem.getInvoiceId();
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString()),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        if (requestedDate != null) {
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toString());
+        }
+        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
         return httpClient.doPostAndFollowLocation(uri, invoiceItem, queryParams, Invoice.class);
     }
 
-    public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, @Nullable final LocalDate requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final List<InvoiceItem> externalCharges = createExternalCharges(ImmutableList.<InvoiceItem>of(externalCharge), requestedDate, autoPay, createdBy, reason, comment);
         return externalCharges.isEmpty() ? null : externalCharges.get(0);
     }
 
-    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, @Nullable final LocalDate requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final Map<UUID, Collection<InvoiceItem>> externalChargesPerAccount = new HashMap<UUID, Collection<InvoiceItem>>();
         for (final InvoiceItem externalCharge : externalCharges) {
             Preconditions.checkNotNull(externalCharge.getAccountId(), "InvoiceItem#accountId cannot be null");
@@ -662,15 +662,15 @@ public class KillBillClient {
         return createdExternalCharges;
     }
 
-    private List<InvoiceItem> createExternalCharges(final UUID accountId, final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    private List<InvoiceItem> createExternalCharges(final UUID accountId, final Iterable<InvoiceItem> externalCharges, @Nullable final LocalDate requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.CHARGES + "/" + accountId;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString(),
-                                                                                                          JaxrsResource.QUERY_PAY_INVOICE, autoPay.toString()),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment
-                                                                    );
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        params.put(JaxrsResource.QUERY_PAY_INVOICE, autoPay.toString());
+        if (requestedDate != null) {
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toString());
+        }
+        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
         return httpClient.doPost(uri, externalCharges, queryParams, InvoiceItems.class);
     }
