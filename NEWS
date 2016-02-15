@@ -1,9 +1,20 @@
+0.19
+    Add methods to retrieve a payment by its external key
 
-    Add support for passing control plguin names for all payment apis
+0.18
+    Add support for passing control plugin names for all payment APIs
+
+0.17
     Modify json catalog
-    Add apis for payment methods
-    Add apis for catalog
-    Add new entitlement api for combo call
+
+0.16
+    Add APIs for payment methods
+    Add APIs for catalog
+
+0.15
+    Add new entitlement API for combo call
+
+0.14
     Implement setBlockingState api
 
 0.13
