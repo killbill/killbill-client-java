@@ -541,22 +541,23 @@ public class KillBillClient {
     }
 
     public Invoices getInvoicesForAccount(final UUID accountId) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, true);
+        return getInvoicesForAccount(accountId, true, false);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, withItems, false, AuditLevel.NONE);
+    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean includeMigrationInvoices) throws KillBillClientException {
+        return getInvoicesForAccount(accountId, withItems, includeMigrationInvoices, false, AuditLevel.NONE);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, withItems, unpaidOnly, AuditLevel.NONE);
+    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems,  final boolean includeMigrationInvoices, final boolean unpaidOnly) throws KillBillClientException {
+        return getInvoicesForAccount(accountId, withItems, includeMigrationInvoices, unpaidOnly, AuditLevel.NONE);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly, final AuditLevel auditLevel) throws KillBillClientException {
+    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems,  final boolean includeMigrationInvoices, final boolean unpaidOnly, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.INVOICES;
 
         final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
                                                                                           JaxrsResource.QUERY_UNPAID_INVOICES_ONLY, String.valueOf(unpaidOnly),
+                                                                                          JaxrsResource.QUERY_WITH_MIGRATION_INVOICES, String.valueOf(includeMigrationInvoices),
                                                                                           JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Invoices.class);
@@ -674,6 +675,23 @@ public class KillBillClient {
 
         return httpClient.doPost(uri, externalCharges, queryParams, InvoiceItems.class);
     }
+
+    public Invoice createMigrationInvoice(final UUID accountId, final LocalDate targetDate, final Iterable<InvoiceItem> items, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.MIGRATION + "/" + accountId;
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        if (targetDate != null) {
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, targetDate.toString());
+        }
+        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
+
+
+        final Multimap<String, String> optionsForFollow = HashMultimap.<String, String>create();
+        optionsForFollow.put(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, "true");
+
+        return httpClient.doPostAndFollowLocation(uri, items, queryParams, optionsForFollow, Invoice.class);
+    }
+
 
     public void triggerInvoiceNotification(final UUID invoiceId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId.toString() + "/" + JaxrsResource.EMAIL_NOTIFICATIONS;

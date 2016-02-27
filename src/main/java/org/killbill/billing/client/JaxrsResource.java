@@ -81,6 +81,7 @@ public interface JaxrsResource {
     public static final String TENANTS_PATH = PREFIX + "/" + TENANTS;
     public static final String TIMELINE = "timeline";
     public static final String COMBO = "combo";
+    public static final String MIGRATION = "migration";
 
 
     public static final String BLOCK = "block";
@@ -136,6 +137,7 @@ public interface JaxrsResource {
     public static final String QUERY_UNPAID_INVOICES_ONLY = "unpaidInvoicesOnly";
     public static final String QUERY_PAYMENT_METHOD_PLUGIN_NAME = "pluginName";
     public static final String QUERY_WITH_PLUGIN_INFO = "withPluginInfo";
+    public static final String QUERY_WITH_MIGRATION_INVOICES = "withMigrationInvoices";
 
     public static final String UPCOMING_INVOICE_TARGET_DATE = "upcomingInvoiceTargetDate";
 
