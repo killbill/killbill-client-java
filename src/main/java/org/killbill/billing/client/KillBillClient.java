@@ -1,7 +1,7 @@
 /*
  * Copyright 2010-2013 Ning, Inc.
- * Copyright 2014 Groupon, Inc
- * Copyright 2014 The Billing Project, LLC
+ * Copyright 2014-2016 Groupon, Inc
+ * Copyright 2014-2016 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -35,6 +35,8 @@ import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
 import org.killbill.billing.catalog.api.ProductCategory;
 import org.killbill.billing.client.model.Account;
@@ -72,7 +74,9 @@ import org.killbill.billing.client.model.Permissions;
 import org.killbill.billing.client.model.PlanDetail;
 import org.killbill.billing.client.model.PlanDetails;
 import org.killbill.billing.client.model.RoleDefinition;
+import org.killbill.billing.client.model.RolledUpUsage;
 import org.killbill.billing.client.model.Subscription;
+import org.killbill.billing.client.model.SubscriptionUsageRecord;
 import org.killbill.billing.client.model.TagDefinition;
 import org.killbill.billing.client.model.TagDefinitions;
 import org.killbill.billing.client.model.Tags;
@@ -481,6 +485,31 @@ public class KillBillClient {
         final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
 
         httpClient.doPut(uri, null, queryParams);
+    }
+
+    public void createSubscriptionUsageRecord(final SubscriptionUsageRecord subscriptionUsageRecord, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(subscriptionUsageRecord.getSubscriptionId(), "SubscriptionUsageRecord#subscriptionId cannot be null");
+        Preconditions.checkNotNull(subscriptionUsageRecord.getUnitUsageRecords(), "SubscriptionUsageRecord#unitUsageRecords cannot be null");
+        Preconditions.checkArgument(!subscriptionUsageRecord.getUnitUsageRecords().isEmpty(), "SubscriptionUsageRecord#unitUsageRecords cannot be empty");
+
+        final String uri = JaxrsResource.USAGES_PATH;
+
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+
+        httpClient.doPost(uri, subscriptionUsageRecord, queryParams);
+    }
+
+    public RolledUpUsage getRolledUpUsage(final UUID subscriptionId, @Nullable final String unitType, final LocalDate startDate, final LocalDate endDate) throws KillBillClientException {
+        String uri = JaxrsResource.USAGES_PATH + "/" + subscriptionId;
+
+        if (unitType != null && !unitType.trim().isEmpty()) {
+            uri = uri.concat("/").concat(unitType);
+        }
+
+        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_START_DATE, startDate.toString(),
+                                                                                          JaxrsResource.QUERY_END_DATE, endDate.toString());
+
+        return httpClient.doGet(uri, queryParams, RolledUpUsage.class);
     }
 
     // Invoices
