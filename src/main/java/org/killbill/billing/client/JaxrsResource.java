@@ -46,6 +46,7 @@ public interface JaxrsResource {
     public static final String EMAIL_NOTIFICATIONS = "emailNotifications";
     public static final String FORM = "form";
     public static final String HOSTED = "hosted";
+    public static final String INVOICE_HTML = "html";
     public static final String INVOICES = "invoices";
     public static final String INVOICES_PATH = PREFIX + "/" + INVOICES;
     public static final String DRY_RUN = "dryRun";

@@ -35,8 +35,6 @@ import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
 import org.killbill.billing.catalog.api.ProductCategory;
 import org.killbill.billing.client.model.Account;
@@ -568,6 +566,11 @@ public class KillBillClient {
                                                                                           JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         return httpClient.doGet(uri, queryParams, Invoice.class);
+    }
+
+    public String getInvoiceAsHtml(final UUID invoiceId) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId + "/" + JaxrsResource.INVOICE_HTML;
+        return getResourceFile(uri, KillBillHttpClient.ACCEPT_HTML);
     }
 
     public Invoices getInvoicesForAccount(final UUID accountId) throws KillBillClientException {
