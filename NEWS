@@ -1,3 +1,7 @@
+0.20
+    Add support for usage APIs
+    Add method to retrieve HTML invoices
+
 0.19
     Add methods to retrieve a payment by its external key
 
