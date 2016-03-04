@@ -20,6 +20,8 @@ package org.killbill.billing.client;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -95,6 +97,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 
 import static org.killbill.billing.client.KillBillHttpClient.ACCEPT_XML;
@@ -715,9 +718,14 @@ public class KillBillClient {
         httpClient.doPost(uri, null, queryParams);
     }
 
-    public void uploadInvoiceTemplate(final String invoiceTemplate, final boolean manualPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public void uploadInvoiceTemplate(final String invoiceTemplateFilePath, final boolean manualPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES + (manualPay ? "/manualPayTemplate" : "/template");
-        uploadFile(invoiceTemplate, uri, "text/html", createdBy, reason, comment, null);
+        uploadFile(invoiceTemplateFilePath, uri, "text/html", createdBy, reason, comment, null);
+    }
+
+    public void uploadInvoiceTemplate(final InputStream invoiceTemplateInputStream, final boolean manualPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES + (manualPay ? "/manualPayTemplate" : "/template");
+        uploadFile(invoiceTemplateInputStream, uri, "text/html", createdBy, reason, comment, null);
     }
 
     public String getInvoiceTemplate(final boolean manualPay) throws KillBillClientException {
@@ -725,9 +733,14 @@ public class KillBillClient {
         return getResourceFile(uri, "text/html");
     }
 
-    public void uploadInvoiceTranslation(final String invoiceTemplate, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public void uploadInvoiceTranslation(final String invoiceTranslationFilePath, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES + "/translation/" + locale;
-        uploadFile(invoiceTemplate, uri, "text/plain", createdBy, reason, comment, null);
+        uploadFile(invoiceTranslationFilePath, uri, "text/plain", createdBy, reason, comment, null);
+    }
+
+    public void uploadInvoiceTranslation(final InputStream invoiceTranslationInputStream, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES + "/translation/" + locale;
+        uploadFile(invoiceTranslationInputStream, uri, "text/plain", createdBy, reason, comment, null);
     }
 
     public String getInvoiceTranslation(final String locale) throws KillBillClientException {
@@ -735,9 +748,14 @@ public class KillBillClient {
         return getResourceFile(uri, "text/plain");
     }
 
-    public void uploadCatalogTranslation(final String invoiceTemplate, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public void uploadCatalogTranslation(final String catalogTranslationFilePath, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES + "/catalogTranslation/" + locale;
-        uploadFile(invoiceTemplate, uri, "text/plain", createdBy, reason, comment, null);
+        uploadFile(catalogTranslationFilePath, uri, "text/plain", createdBy, reason, comment, null);
+    }
+
+    public void uploadCatalogTranslation(final InputStream catalogTranslationInputStream, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES + "/catalogTranslation/" + locale;
+        uploadFile(catalogTranslationInputStream, uri, "text/plain", createdBy, reason, comment, null);
     }
 
     public String getCatalogTranslation(final String locale) throws KillBillClientException {
@@ -1367,9 +1385,14 @@ public class KillBillClient {
 
     // Overdue
 
-    public void uploadXMLOverdueConfig(final String overdueConfigPath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public void uploadXMLOverdueConfig(final String overdueConfigFilePath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.OVERDUE_PATH;
-        uploadFile(overdueConfigPath, uri, "application/xml", createdBy, reason, comment, null);
+        uploadFile(overdueConfigFilePath, uri, "application/xml", createdBy, reason, comment, null);
+    }
+
+    public void uploadXMLOverdueConfig(final InputStream overdueConfigInputStream, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.OVERDUE_PATH;
+        uploadFile(overdueConfigInputStream, uri, "application/xml", createdBy, reason, comment, null);
     }
 
     public String getXMLOverdueConfig() throws KillBillClientException {
@@ -1727,9 +1750,14 @@ public class KillBillClient {
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, PlanDetails.class);
     }
 
-    public void uploadXMLCatalog(final String catalogPath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public void uploadXMLCatalog(final String catalogFilePath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH;
-        uploadFile(catalogPath, uri, CONTENT_TYPE_XML, createdBy, reason, comment, null);
+        uploadFile(catalogFilePath, uri, CONTENT_TYPE_XML, createdBy, reason, comment, null);
+    }
+
+    public void uploadXMLCatalog(final InputStream catalogInputStream, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.CATALOG_PATH;
+        uploadFile(catalogInputStream, uri, CONTENT_TYPE_XML, createdBy, reason, comment, null);
     }
 
     public Catalog getJSONCatalog() throws KillBillClientException {
@@ -1787,9 +1815,14 @@ public class KillBillClient {
     }
 
 
-    public TenantKey registerPluginConfigurationForTenant(final String pluginName, final String pluginConfigFileName, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public TenantKey registerPluginConfigurationForTenant(final String pluginName, final String pluginConfigFilePath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
-        return uploadFile(pluginConfigFileName, uri, "text/plain", createdBy, reason, comment, TenantKey.class);
+        return uploadFile(pluginConfigFilePath, uri, "text/plain", createdBy, reason, comment, TenantKey.class);
+    }
+
+    public TenantKey registerPluginConfigurationForTenant(final String pluginName, final InputStream pluginConfigInputStream, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
+        return uploadFile(pluginConfigInputStream, uri, "text/plain", createdBy, reason, comment, TenantKey.class);
     }
 
     public TenantKey postPluginConfigurationPropertiesForTenant(final String pluginName, final String pluginConfigProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
@@ -1913,23 +1946,35 @@ public class KillBillClient {
 
     private <ReturnType> ReturnType uploadFile(final String fileToUpload, final String uri, final String contentType, final String createdBy, final String reason, final String comment, final Class<ReturnType> followUpClass) throws KillBillClientException {
         Preconditions.checkNotNull(fileToUpload, "fileToUpload cannot be null");
-
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        queryParams.put(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, contentType);
-
         final File catalogFile = new File(fileToUpload);
         Preconditions.checkArgument(catalogFile.exists() && catalogFile.isFile() && catalogFile.canRead(), "file to upload needs to be a valid file");
         try {
             final String body = Files.toString(catalogFile, Charset.forName("UTF-8"));
-            if (followUpClass != null) {
-                return httpClient.doPostAndFollowLocation(uri, body, queryParams, followUpClass);
-
-            } else {
-                httpClient.doPost(uri, body, queryParams);
-                return null;
-            }
+            return doUploadFile(body, uri, contentType, createdBy, reason, comment, followUpClass);
         } catch (IOException e) {
             throw new KillBillClientException(e);
+        }
+    }
+
+    private <ReturnType> ReturnType uploadFile(final InputStream fileToUpload, final String uri, final String contentType, final String createdBy, final String reason, final String comment, final Class<ReturnType> followUpClass) throws KillBillClientException {
+        Preconditions.checkNotNull(fileToUpload, "fileToUpload cannot be null");
+        try {
+            final Readable reader = new InputStreamReader(fileToUpload, Charset.forName("UTF-8"));
+            final String body = CharStreams.toString(reader);
+            return doUploadFile(body, uri, contentType, createdBy, reason, comment, followUpClass);
+        } catch (IOException e) {
+            throw new KillBillClientException(e);
+        }
+    }
+
+    private <ReturnType> ReturnType doUploadFile(final String body, final String uri, final String contentType, final String createdBy, final String reason, final String comment, final Class<ReturnType> followUpClass) throws KillBillClientException {
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        queryParams.put(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, contentType);
+        if (followUpClass != null) {
+            return httpClient.doPostAndFollowLocation(uri, body, queryParams, followUpClass);
+        } else {
+            httpClient.doPost(uri, body, queryParams);
+            return null;
         }
     }
 
