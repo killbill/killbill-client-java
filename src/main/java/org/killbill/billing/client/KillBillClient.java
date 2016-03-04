@@ -1949,8 +1949,8 @@ public class KillBillClient {
         final File catalogFile = new File(fileToUpload);
         Preconditions.checkArgument(catalogFile.exists() && catalogFile.isFile() && catalogFile.canRead(), "file to upload needs to be a valid file");
         try {
-            final InputStream fileStream = Files.asByteSource(catalogFile).openStream();
-            return uploadFile(fileStream, uri, contentType, createdBy, reason, comment, followUpClass);
+            final String body = Files.toString(catalogFile, Charset.forName("UTF-8"));
+            return doUploadFile(body, uri, contentType, createdBy, reason, comment, followUpClass);
         } catch (IOException e) {
             throw new KillBillClientException(e);
         }
@@ -1958,22 +1958,23 @@ public class KillBillClient {
 
     private <ReturnType> ReturnType uploadFile(final InputStream fileToUpload, final String uri, final String contentType, final String createdBy, final String reason, final String comment, final Class<ReturnType> followUpClass) throws KillBillClientException {
         Preconditions.checkNotNull(fileToUpload, "fileToUpload cannot be null");
-
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        queryParams.put(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, contentType);
-
         try {
             final Readable reader = new InputStreamReader(fileToUpload, Charset.forName("UTF-8"));
             final String body = CharStreams.toString(reader);
-            if (followUpClass != null) {
-                return httpClient.doPostAndFollowLocation(uri, body, queryParams, followUpClass);
-
-            } else {
-                httpClient.doPost(uri, body, queryParams);
-                return null;
-            }
+            return doUploadFile(body, uri, contentType, createdBy, reason, comment, followUpClass);
         } catch (IOException e) {
             throw new KillBillClientException(e);
+        }
+    }
+
+    private <ReturnType> ReturnType doUploadFile(final String body, final String uri, final String contentType, final String createdBy, final String reason, final String comment, final Class<ReturnType> followUpClass) throws KillBillClientException {
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        queryParams.put(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, contentType);
+        if (followUpClass != null) {
+            return httpClient.doPostAndFollowLocation(uri, body, queryParams, followUpClass);
+        } else {
+            httpClient.doPost(uri, body, queryParams);
+            return null;
         }
     }
 
