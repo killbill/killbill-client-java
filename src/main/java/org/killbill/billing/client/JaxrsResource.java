@@ -1,6 +1,6 @@
 /*
- * Copyright 2014 Groupon, Inc
- * Copyright 2014 The Billing Project, LLC
+ * Copyright 2014-2016 Groupon, Inc
+ * Copyright 2014-2016 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -47,6 +47,7 @@ public interface JaxrsResource {
     public static final String EMAIL_NOTIFICATIONS = "emailNotifications";
     public static final String FORM = "form";
     public static final String HOSTED = "hosted";
+    public static final String INVOICE_HTML = "html";
     public static final String INVOICES = "invoices";
     public static final String INVOICES_PATH = PREFIX + "/" + INVOICES;
     public static final String DRY_RUN = "dryRun";
@@ -81,11 +82,11 @@ public interface JaxrsResource {
     public static final String TENANTS = "tenants";
     public static final String TENANTS_PATH = PREFIX + "/" + TENANTS;
     public static final String TIMELINE = "timeline";
+    public static final String USAGES = "usages";
+    public static final String USAGES_PATH = PREFIX + "/" + USAGES;
     public static final String COMBO = "combo";
-
-
+    public static final String MIGRATION = "migration";
     public static final String BLOCK = "block";
-
 
     /*
      * Multi-Tenancy headers
@@ -139,7 +140,9 @@ public interface JaxrsResource {
     public static final String QUERY_WITH_PLUGIN_INFO = "withPluginInfo";
     public static final String QUERY_INVOICE_ID = "invoiceId";
     public static final String QUERY_AUTO_COMMIT = "autoCommit";
+    public static final String QUERY_WITH_MIGRATION_INVOICES = "withMigrationInvoices";
 
     public static final String UPCOMING_INVOICE_TARGET_DATE = "upcomingInvoiceTargetDate";
-
+    public static final String QUERY_START_DATE = "startDate";
+    public static final String QUERY_END_DATE = "endDate";
 }
