@@ -44,6 +44,7 @@ public class Invoice extends KillBillObject {
     private String bundleKeys;
     private List<Credit> credits;
     private String status;
+    private Boolean isParentInvoice;
 
     public Invoice() {}
 
@@ -62,6 +63,7 @@ public class Invoice extends KillBillObject {
                    @JsonProperty("status") final String status,
                    @JsonProperty("credits") final List<Credit> credits,
                    @JsonProperty("items") final List<InvoiceItem> items,
+                   @JsonProperty("isParentInvoice") final Boolean isParentInvoice,
                    @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.amount = amount;
@@ -78,6 +80,7 @@ public class Invoice extends KillBillObject {
         this.credits = credits;
         this.items = items;
         this.status = status;
+        this.isParentInvoice = isParentInvoice;
     }
 
     public BigDecimal getAmount() {
@@ -192,6 +195,14 @@ public class Invoice extends KillBillObject {
         this.status = status;
     }
 
+    public Boolean getIsParentInvoice() {
+        return isParentInvoice;
+    }
+
+    public void setIsParentInvoice(final Boolean isParentInvoice) {
+        this.isParentInvoice = isParentInvoice;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Invoice{");
@@ -209,6 +220,7 @@ public class Invoice extends KillBillObject {
         sb.append(", bundleKeys='").append(bundleKeys).append('\'');
         sb.append(", credits=").append(credits);
         sb.append(", status=").append(status);
+        sb.append(", isParentInvoice=").append(isParentInvoice);
         sb.append('}');
         return sb.toString();
     }
@@ -266,6 +278,9 @@ public class Invoice extends KillBillObject {
         if (status != null ? !status.equals(invoice.status) : invoice.status != null) {
             return false;
         }
+        if (isParentInvoice != null ? !isParentInvoice.equals(invoice.isParentInvoice) : invoice.isParentInvoice != null) {
+            return false;
+        }
 
         return true;
     }
@@ -286,6 +301,7 @@ public class Invoice extends KillBillObject {
         result = 31 * result + (bundleKeys != null ? bundleKeys.hashCode() : 0);
         result = 31 * result + (credits != null ? credits.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (isParentInvoice != null ? isParentInvoice.hashCode() : 0);
         return result;
     }
 }

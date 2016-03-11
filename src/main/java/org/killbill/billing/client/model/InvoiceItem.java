@@ -34,6 +34,7 @@ public class InvoiceItem extends KillBillObject {
     private UUID invoiceId;
     private UUID linkedInvoiceItemId;
     private UUID accountId;
+    private UUID childAccountId;
     private UUID bundleId;
     private UUID subscriptionId;
     private String planName;
@@ -53,6 +54,7 @@ public class InvoiceItem extends KillBillObject {
                        @JsonProperty("invoiceId") final UUID invoiceId,
                        @JsonProperty("linkedInvoiceItemId") final UUID linkedInvoiceItemId,
                        @JsonProperty("accountId") final UUID accountId,
+                       @JsonProperty("childAccountId") final UUID childAccountId,
                        @JsonProperty("bundleId") final UUID bundleId,
                        @JsonProperty("subscriptionId") final UUID subscriptionId,
                        @JsonProperty("planName") final String planName,
@@ -70,6 +72,7 @@ public class InvoiceItem extends KillBillObject {
         this.invoiceId = invoiceId;
         this.linkedInvoiceItemId = linkedInvoiceItemId;
         this.accountId = accountId;
+        this.childAccountId = childAccountId;
         this.bundleId = bundleId;
         this.subscriptionId = subscriptionId;
         this.planName = planName;
@@ -112,6 +115,14 @@ public class InvoiceItem extends KillBillObject {
 
     public void setAccountId(final UUID accountId) {
         this.accountId = accountId;
+    }
+
+    public UUID getChildAccountId() {
+        return childAccountId;
+    }
+
+    public void setChildAccountId(final UUID childAccountId) {
+        this.childAccountId = childAccountId;
     }
 
     public UUID getBundleId() {
@@ -216,6 +227,9 @@ public class InvoiceItem extends KillBillObject {
         if (accountId != null ? !accountId.equals(that.accountId) : that.accountId != null) {
             return false;
         }
+        if (childAccountId != null ? !childAccountId.equals(that.childAccountId) : that.childAccountId != null) {
+            return false;
+        }
         if (amount != null ? amount.compareTo(that.amount) != 0 : that.amount != null) {
             return false;
         }
@@ -268,6 +282,7 @@ public class InvoiceItem extends KillBillObject {
         result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
         result = 31 * result + (linkedInvoiceItemId != null ? linkedInvoiceItemId.hashCode() : 0);
         result = 31 * result + (accountId != null ? accountId.hashCode() : 0);
+        result = 31 * result + (childAccountId != null ? childAccountId.hashCode() : 0);
         result = 31 * result + (bundleId != null ? bundleId.hashCode() : 0);
         result = 31 * result + (subscriptionId != null ? subscriptionId.hashCode() : 0);
         result = 31 * result + (planName != null ? planName.hashCode() : 0);
