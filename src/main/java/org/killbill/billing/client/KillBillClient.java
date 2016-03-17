@@ -1828,6 +1828,23 @@ public class KillBillClient {
         httpClient.doDelete(uri, queryParams);
     }
 
+    public TenantKey postConfigurationPropertiesForTenant(final String configProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PER_TENANT_CONFIG;
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        queryParams.put(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain");
+        return httpClient.doPostAndFollowLocation(uri, configProperties, queryParams, TenantKey.class);
+    }
+
+    public TenantKey getConfigurationForTenant() throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PER_TENANT_CONFIG;
+        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, TenantKey.class);
+    }
+
+    public void unregisterConfigurationForTenant(final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PER_TENANT_CONFIG;
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        httpClient.doDelete(uri, queryParams);
+    }
 
     public Permissions getPermissions() throws KillBillClientException {
         return httpClient.doGet(JaxrsResource.SECURITY_PATH + "/permissions", DEFAULT_EMPTY_QUERY, Permissions.class);
