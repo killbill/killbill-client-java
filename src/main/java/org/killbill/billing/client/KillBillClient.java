@@ -42,6 +42,7 @@ import org.killbill.billing.client.model.AccountEmails;
 import org.killbill.billing.client.model.AccountTimeline;
 import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.client.model.BlockingState;
+import org.killbill.billing.client.model.BlockingStates;
 import org.killbill.billing.client.model.Bundle;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Catalog;
@@ -80,6 +81,7 @@ import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.client.model.Tenant;
 import org.killbill.billing.client.model.TenantKey;
 import org.killbill.billing.client.model.UserRoles;
+import org.killbill.billing.entitlement.api.BlockingStateType;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.util.api.AuditLevel;
 
@@ -329,20 +331,53 @@ public class KillBillClient {
     }
 
 
-    public void setBlockingState(final UUID bundleId, final BlockingState blockingState, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public void setBlockingState(final UUID blockableId, final BlockingState blockingState, @Nullable final LocalDate requestedDate, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
 
-        Preconditions.checkNotNull(bundleId, "bundleId cannot be null");
+        Preconditions.checkNotNull(blockableId, "bundleId cannot be null");
 
         Preconditions.checkNotNull(blockingState.getService(), "Bundle#service cannot be null");
         Preconditions.checkNotNull(blockingState.getStateName(), "Bundle#stateName cannot be null");
-        Preconditions.checkNotNull(blockingState.getEffectiveDate(), "Bundle#effectiveDate cannot be null");
         Preconditions.checkNotNull(blockingState.getType(), "Bundle#type cannot be null");
 
-        final String uri = JaxrsResource.BUNDLES_PATH + "/" + bundleId + "/" + JaxrsResource.BLOCK;
+        final String resourcePath;
+        if (blockingState.getType() == BlockingStateType.ACCOUNT) {
+            resourcePath = JaxrsResource.ACCOUNTS_PATH;
+        } else if (blockingState.getType() == BlockingStateType.SUBSCRIPTION_BUNDLE) {
+            resourcePath = JaxrsResource.BUNDLES_PATH;
+        } else if (blockingState.getType() == BlockingStateType.SUBSCRIPTION) {
+            resourcePath = JaxrsResource.SUBSCRIPTIONS_PATH;
+        } else {
+            throw new IllegalArgumentException("Unexpected blockingState:type " + blockingState.getType());
+        }
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final String uri = resourcePath + "/" + blockableId + "/" + JaxrsResource.BLOCK;
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        if (requestedDate != null) {
+            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toString());
+        }
+        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
+        storePluginPropertiesAsParams(pluginProperties, queryParams);
 
         httpClient.doPut(uri, blockingState, queryParams);
+    }
+
+
+    public BlockingStates getBlockingStates(final UUID accountId, @Nullable final List<BlockingStateType> typeFilter, @Nullable final List<String> svcsFilter, final AuditLevel auditLevel) throws KillBillClientException {
+
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId.toString() + "/" + JaxrsResource.BLOCK;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
+        if (typeFilter != null) {
+            queryParams.put(JaxrsResource.QUERY_BLOCKING_STATE_TYPES, Joiner.on(",").join(typeFilter));
+        }
+        if (svcsFilter != null) {
+            queryParams.put(JaxrsResource.QUERY_BLOCKING_STATE_SVCS, Joiner.on(",").join(svcsFilter));
+        }
+        queryParams.put( JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        return httpClient.doGet(uri, queryParams, BlockingStates.class);
+
     }
 
     // Subscriptions and entitlements
