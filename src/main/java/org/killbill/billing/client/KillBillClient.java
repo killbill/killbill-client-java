@@ -105,6 +105,8 @@ import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_HTTP_TIMEOU
 
 public class KillBillClient {
 
+    private static final Joiner JOINER = Joiner.on(",");
+
     private final KillBillHttpClient httpClient;
 
     public KillBillClient() {
@@ -333,7 +335,7 @@ public class KillBillClient {
 
     public void setBlockingState(final UUID blockableId, final BlockingState blockingState, @Nullable final LocalDate requestedDate, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
 
-        Preconditions.checkNotNull(blockableId, "bundleId cannot be null");
+        Preconditions.checkNotNull(blockableId, "blockableId cannot be null");
 
         Preconditions.checkNotNull(blockingState.getService(), "Bundle#service cannot be null");
         Preconditions.checkNotNull(blockingState.getStateName(), "Bundle#stateName cannot be null");
@@ -369,10 +371,10 @@ public class KillBillClient {
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
         if (typeFilter != null) {
-            queryParams.put(JaxrsResource.QUERY_BLOCKING_STATE_TYPES, Joiner.on(",").join(typeFilter));
+            queryParams.put(JaxrsResource.QUERY_BLOCKING_STATE_TYPES, JOINER.join(typeFilter));
         }
         if (svcsFilter != null) {
-            queryParams.put(JaxrsResource.QUERY_BLOCKING_STATE_SVCS, Joiner.on(",").join(svcsFilter));
+            queryParams.put(JaxrsResource.QUERY_BLOCKING_STATE_SVCS, JOINER.join(svcsFilter));
         }
         queryParams.put( JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
@@ -1711,7 +1713,7 @@ public class KillBillClient {
 
         final Multimap<String, String> paramCustomFields = customFieldIds == null ?
                                                            ImmutableMultimap.<String, String>of() :
-                                                           ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+                                                           ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CUSTOM_FIELDS, JOINER.join(customFieldIds));
 
         final Multimap<String, String> queryParams = paramsWithAudit(paramCustomFields,
                                                                      createdBy,
@@ -1754,7 +1756,7 @@ public class KillBillClient {
 
         final Multimap<String, String> paramCustomFields = customFieldIds == null ?
                                                            ImmutableMultimap.<String, String>of() :
-                                                           ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+                                                           ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CUSTOM_FIELDS, JOINER.join(customFieldIds));
 
         final Multimap<String, String> queryParams = paramsWithAudit(paramCustomFields,
                                                                      createdBy,
