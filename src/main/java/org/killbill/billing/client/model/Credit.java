@@ -36,14 +36,14 @@ public class Credit extends KillBillObject {
     private LocalDate effectiveDate;
     private UUID accountId;
     private String description;
-    private Currency currency;
+    private String currency;
 
 
     public Credit() {}
 
     @JsonCreator
     public Credit(@JsonProperty("creditAmount") final BigDecimal creditAmount,
-                  @JsonProperty("currency") final Currency currency,
+                  @JsonProperty("currency") final String currency,
                   @JsonProperty("invoiceId") final UUID invoiceId,
                   @JsonProperty("invoiceNumber") final String invoiceNumber,
                   @JsonProperty("effectiveDate") final LocalDate effectiveDate,
@@ -68,11 +68,11 @@ public class Credit extends KillBillObject {
         this.creditAmount = creditAmount;
     }
 
-    public Currency getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(final Currency currency) {
+    public void setCurrency(final String currency) {
         this.currency = currency;
     }
 
@@ -147,7 +147,7 @@ public class Credit extends KillBillObject {
         if (creditAmount != null ? creditAmount.compareTo(credit.creditAmount) != 0 : credit.creditAmount != null) {
             return false;
         }
-        if (currency != credit.currency) {
+        if (currency != null ? !currency.equals(credit.currency) : credit.currency != null) {
             return false;
         }
         if (effectiveDate != null ? effectiveDate.compareTo(credit.effectiveDate) != 0 : credit.effectiveDate != null) {

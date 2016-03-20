@@ -44,7 +44,7 @@ public class InvoiceItem extends KillBillObject {
     private LocalDate startDate;
     private LocalDate endDate;
     private BigDecimal amount;
-    private Currency currency;
+    private String currency;
 
     public InvoiceItem() {}
 
@@ -63,7 +63,7 @@ public class InvoiceItem extends KillBillObject {
                        @JsonProperty("startDate") final LocalDate startDate,
                        @JsonProperty("endDate") final LocalDate endDate,
                        @JsonProperty("amount") final BigDecimal amount,
-                       @JsonProperty("currency") final Currency currency,
+                       @JsonProperty("currency") final String currency,
                        @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.invoiceItemId = invoiceItemId;
@@ -194,11 +194,11 @@ public class InvoiceItem extends KillBillObject {
         this.amount = amount;
     }
 
-    public Currency getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(final Currency currency) {
+    public void setCurrency(final String currency) {
         this.currency = currency;
     }
 
@@ -222,7 +222,7 @@ public class InvoiceItem extends KillBillObject {
         if (bundleId != null ? !bundleId.equals(that.bundleId) : that.bundleId != null) {
             return false;
         }
-        if (currency != that.currency) {
+        if (currency != null ? !currency.equals(that.currency) : that.currency != null) {
             return false;
         }
         if (description != null ? !description.equals(that.description) : that.description != null) {
