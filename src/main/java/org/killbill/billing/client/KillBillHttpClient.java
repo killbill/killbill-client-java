@@ -531,7 +531,7 @@ public class KillBillHttpClient {
         }
 
         if (username != null && password != null) {
-            final Realm realm = new RealmBuilder().setPrincipal(username).setPassword(password).build();
+            final Realm realm = new RealmBuilder().setPrincipal(username).setPassword(password).setScheme(Realm.AuthScheme.BASIC).setUsePreemptiveAuth(true).build();
             builder.setRealm(realm);
         }
 
