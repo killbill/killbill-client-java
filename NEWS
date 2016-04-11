@@ -1,3 +1,7 @@
+0.21
+    Add methods to upload files via InputStream
+    Send Authorization header preemptively
+
 0.20
     Add support for usage APIs
     Add method to retrieve HTML invoices
