@@ -139,4 +139,5 @@ public interface JaxrsResource {
     public static final String UPCOMING_INVOICE_TARGET_DATE = "upcomingInvoiceTargetDate";
     public static final String QUERY_START_DATE = "startDate";
     public static final String QUERY_END_DATE = "endDate";
+    public static final String QUERY_USE_REQUESTED_DATE_FOR_BILLING = "useRequestedDateForBilling";
 }
