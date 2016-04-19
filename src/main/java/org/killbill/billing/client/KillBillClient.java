@@ -461,6 +461,12 @@ public class KillBillClient {
 
     public void cancelSubscription(final UUID subscriptionId, @Nullable final DateTime requestedDate, @Nullable final EntitlementActionPolicy entitlementPolicy, @Nullable final BillingActionPolicy billingPolicy,
                                    final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+
+        cancelSubscription(subscriptionId, requestedDate, null, entitlementPolicy, billingPolicy, timeoutSec, createdBy, reason, comment);
+    }
+
+    public void cancelSubscription(final UUID subscriptionId, @Nullable final DateTime requestedDate, @Nullable final Boolean useRequestedDateForBilling, @Nullable final EntitlementActionPolicy entitlementPolicy,
+                                   @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec,  final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId;
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
@@ -474,6 +480,9 @@ public class KillBillClient {
         }
         if (billingPolicy != null) {
             params.put(JaxrsResource.QUERY_BILLING_POLICY, billingPolicy.toString());
+        }
+        if(useRequestedDateForBilling != null) {
+            params.put(JaxrsResource.QUERY_USE_REQUESTED_DATE_FOR_BILLING, useRequestedDateForBilling.toString());
         }
         final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
