@@ -1306,10 +1306,9 @@ public class KillBillClient {
     public PaymentMethods getPaymentMethodsForAccount(final UUID accountId, final Map<String, String> pluginProperties, boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS;
 
-        final Multimap<String, String> queryParams =
-                ImmutableMultimap.<String, String>of(
-                        JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo),
-                        JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
+        queryParams.put(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         storePluginPropertiesAsParams(pluginProperties, queryParams);
 
@@ -1378,9 +1377,10 @@ public class KillBillClient {
     public void refreshPaymentMethods(final UUID accountId, final String pluginName, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS + "/refresh";
 
-        Multimap<String, String> params = pluginName != null ?
-                ImmutableMultimap.of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_NAME, pluginName) :
-                ImmutableMultimap.<String, String>of();
+        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        if (pluginName != null) {
+            params.put(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_NAME, pluginName);
+        }
 
         storePluginPropertiesAsParams(pluginProperties, params);
 
