@@ -1,3 +1,7 @@
+0.22
+    Add parameter useRequestedDateForBilling to cancelSubscription
+    Fix getPaymentMethodsForAccount and refreshPaymentMethods implementation when passing properties
+
 0.21
     Add methods to upload files via InputStream
     Send Authorization header preemptively
