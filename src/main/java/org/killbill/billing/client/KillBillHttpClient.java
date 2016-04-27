@@ -95,6 +95,7 @@ public class KillBillHttpClient {
     private final String apiSecret;
     private final AsyncHttpClient httpClient;
     private final ObjectMapper mapper;
+    private final int requestTimeoutSec;
 
 
     /**
@@ -117,12 +118,22 @@ public class KillBillHttpClient {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
 
-
         final AsyncHttpClientConfig.Builder cfg = new AsyncHttpClientConfig.Builder();
+
+        if (requestTimeout != null) {
+            cfg.setRequestTimeout(requestTimeout);
+            int timeoutSec = (int) TimeUnit.MILLISECONDS.toSeconds(requestTimeout);
+            if (TimeUnit.SECONDS.toMillis(timeoutSec) != requestTimeout) {
+                timeoutSec+=1;
+            }
+            requestTimeoutSec = timeoutSec;
+        } else {
+            cfg.setRequestTimeout(DEFAULT_HTTP_TIMEOUT_SEC*1000);
+            requestTimeoutSec = DEFAULT_HTTP_TIMEOUT_SEC;
+        }
 
         cfg.setConnectTimeout(MoreObjects.firstNonNull(connectTimeOut, DEFAULT_HTTP_TIMEOUT_SEC * 1000));
         cfg.setReadTimeout(MoreObjects.firstNonNull(readTimeOut, DEFAULT_HTTP_TIMEOUT_SEC * 1000));
-        cfg.setRequestTimeout(MoreObjects.firstNonNull(requestTimeout, DEFAULT_HTTP_TIMEOUT_SEC * 1000));
         cfg.setUserAgent(USER_AGENT);
 
         if (proxyHost != null && proxyPort != null) {
@@ -163,7 +174,7 @@ public class KillBillHttpClient {
     }
 
     public <T> T doPost(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doPost(uri, body, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+        return doPost(uri, body, options, requestTimeoutSec, clazz);
     }
 
     public <T> T doPost(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
@@ -175,7 +186,7 @@ public class KillBillHttpClient {
     }
 
     public <T> T doPostAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Multimap<String, String> optionsForFollow, final Class<T> clazz) throws KillBillClientException {
-        return doPostAndFollowLocation(uri, body, options, optionsForFollow, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+        return doPostAndFollowLocation(uri, body, options, optionsForFollow, requestTimeoutSec, clazz);
     }
 
     public <T> T doPostAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
@@ -198,7 +209,7 @@ public class KillBillHttpClient {
     }
 
     public <T> T doPut(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doPut(uri, body, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+        return doPut(uri, body, options, requestTimeoutSec, clazz);
     }
 
     public <T> T doPut(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
@@ -206,7 +217,7 @@ public class KillBillHttpClient {
     }
 
     public <T> T doPutAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doPutAndFollowLocation(uri, body, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+        return doPutAndFollowLocation(uri, body, options, requestTimeoutSec, clazz);
     }
 
     public <T> T doPutAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
@@ -225,11 +236,11 @@ public class KillBillHttpClient {
     }
 
     public <T> T doDelete(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doDeleteAndMaybeFollowLocation(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz, false);
+        return doDeleteAndMaybeFollowLocation(uri, options, requestTimeoutSec, clazz, false);
     }
 
     public <T> T doDeleteAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doDeleteAndFollowLocation(uri, body, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+        return doDeleteAndFollowLocation(uri, body, options, requestTimeoutSec, clazz);
     }
 
     public <T> T doDeleteAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
@@ -253,7 +264,7 @@ public class KillBillHttpClient {
     }
 
     public <T> T doGet(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doGetWithUrl(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+        return doGetWithUrl(uri, options, requestTimeoutSec, clazz);
     }
 
     public <T> T doGet(final String uri, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
@@ -272,7 +283,7 @@ public class KillBillHttpClient {
     }
 
     public <T> T doHead(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doHeadWithUrl(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+        return doHeadWithUrl(uri, options, requestTimeoutSec, clazz);
     }
 
     public <T> T doHead(final String uri, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
@@ -291,7 +302,7 @@ public class KillBillHttpClient {
     }
 
     public <T> T doOptions(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doOptionsWithUrl(uri, options, DEFAULT_HTTP_TIMEOUT_SEC, clazz);
+        return doOptionsWithUrl(uri, options, requestTimeoutSec, clazz);
     }
 
     public <T> T doOptions(final String uri, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
