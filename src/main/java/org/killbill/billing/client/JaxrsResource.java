@@ -69,6 +69,7 @@ public interface JaxrsResource {
     public static final String REFUNDS = "refunds";
     public static final String REGISTER_NOTIFICATION_CALLBACK = "registerNotificationCallback";
     public static final String UPLOAD_PLUGIN_CONFIG = "uploadPluginConfig";
+    public static final String UPLOAD_PER_TENANT_CONFIG = "uploadPerTenantConfig";
     public static final String SEARCH = "search";
     public static final String SECURITY = "security";
     public static final String SECURITY_PATH = PREFIX + "/" + SECURITY;
@@ -141,6 +142,8 @@ public interface JaxrsResource {
     public static final String QUERY_INVOICE_ID = "invoiceId";
     public static final String QUERY_AUTO_COMMIT = "autoCommit";
     public static final String QUERY_WITH_MIGRATION_INVOICES = "withMigrationInvoices";
+    public static final String QUERY_BLOCKING_STATE_TYPES = "blockingStateTypes";
+    public static final String QUERY_BLOCKING_STATE_SVCS = "blockingStateSvcs";
 
     public static final String UPCOMING_INVOICE_TARGET_DATE = "upcomingInvoiceTargetDate";
     public static final String QUERY_START_DATE = "startDate";

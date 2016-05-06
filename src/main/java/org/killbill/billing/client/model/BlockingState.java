@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.killbill.billing.entitlement.api.BlockingStateType;
 
@@ -38,7 +39,7 @@ public class BlockingState extends KillBillObject {
     private Boolean blockChange;
     private Boolean blockEntitlement;
     private Boolean blockBilling;
-    private LocalDate effectiveDate;
+    private DateTime effectiveDate;
     private BlockingStateType type;
 
 
@@ -49,7 +50,7 @@ public class BlockingState extends KillBillObject {
                          @JsonProperty("blockChange") final Boolean blockChange,
                          @JsonProperty("blockEntitlement") final Boolean blockEntitlement,
                          @JsonProperty("blockBilling") final Boolean blockBilling,
-                         @JsonProperty("effectiveDate") final LocalDate effectiveDate,
+                         @JsonProperty("effectiveDate") final DateTime effectiveDate,
                          @JsonProperty("type") final BlockingStateType type,
                          @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
@@ -87,7 +88,7 @@ public class BlockingState extends KillBillObject {
         return blockBilling;
     }
 
-    public LocalDate getEffectiveDate() {
+    public DateTime getEffectiveDate() {
         return effectiveDate;
     }
 

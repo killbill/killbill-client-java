@@ -26,15 +26,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SubscriptionUsageRecord {
 
     private UUID subscriptionId;
+    private String trackingId;
     private List<UnitUsageRecord> unitUsageRecords;
 
     public SubscriptionUsageRecord() {}
 
     @JsonCreator
     public SubscriptionUsageRecord(@JsonProperty("subscriptionId") final UUID subscriptionId,
+                                   @JsonProperty("trackingId") final String trackingId,
                                    @JsonProperty("unitUsageRecords") final List<UnitUsageRecord> unitUsageRecords) {
         this.subscriptionId = subscriptionId;
         this.unitUsageRecords = unitUsageRecords;
+        this.trackingId = trackingId;
     }
 
     public UUID getSubscriptionId() {
@@ -43,6 +46,14 @@ public class SubscriptionUsageRecord {
 
     public void setSubscriptionId(final UUID subscriptionId) {
         this.subscriptionId = subscriptionId;
+    }
+
+    public String getTrackingId() {
+        return trackingId;
+    }
+
+    public void setTrackingId(final String trackingId) {
+        this.trackingId = trackingId;
     }
 
     public List<UnitUsageRecord> getUnitUsageRecords() {
@@ -57,6 +68,7 @@ public class SubscriptionUsageRecord {
     public String toString() {
         final StringBuilder sb = new StringBuilder("SubscriptionUsageRecord{");
         sb.append("subscriptionId=").append(subscriptionId);
+        sb.append("trackingId=").append(trackingId);
         sb.append(", unitUsageRecords=").append(unitUsageRecords);
         sb.append('}');
         return sb.toString();
@@ -76,6 +88,9 @@ public class SubscriptionUsageRecord {
         if (subscriptionId != null ? !subscriptionId.equals(that.subscriptionId) : that.subscriptionId != null) {
             return false;
         }
+        if (trackingId != null ? !trackingId.equals(that.trackingId) : that.trackingId != null) {
+            return false;
+        }
         return unitUsageRecords != null ? unitUsageRecords.equals(that.unitUsageRecords) : that.unitUsageRecords == null;
 
     }
@@ -83,6 +98,7 @@ public class SubscriptionUsageRecord {
     @Override
     public int hashCode() {
         int result = subscriptionId != null ? subscriptionId.hashCode() : 0;
+        result = 31 * result + (trackingId != null ? trackingId.hashCode() : 0);
         result = 31 * result + (unitUsageRecords != null ? unitUsageRecords.hashCode() : 0);
         return result;
     }

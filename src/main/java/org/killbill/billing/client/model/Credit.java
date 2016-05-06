@@ -23,6 +23,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import org.joda.time.LocalDate;
+import org.killbill.billing.catalog.api.Currency;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,11 +36,14 @@ public class Credit extends KillBillObject {
     private LocalDate effectiveDate;
     private UUID accountId;
     private String description;
+    private String currency;
+
 
     public Credit() {}
 
     @JsonCreator
     public Credit(@JsonProperty("creditAmount") final BigDecimal creditAmount,
+                  @JsonProperty("currency") final String currency,
                   @JsonProperty("invoiceId") final UUID invoiceId,
                   @JsonProperty("invoiceNumber") final String invoiceNumber,
                   @JsonProperty("effectiveDate") final LocalDate effectiveDate,
@@ -48,6 +52,7 @@ public class Credit extends KillBillObject {
                   @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.creditAmount = creditAmount;
+        this.currency = currency;
         this.invoiceId = invoiceId;
         this.invoiceNumber = invoiceNumber;
         this.effectiveDate = effectiveDate;
@@ -61,6 +66,14 @@ public class Credit extends KillBillObject {
 
     public void setCreditAmount(final BigDecimal creditAmount) {
         this.creditAmount = creditAmount;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(final String currency) {
+        this.currency = currency;
     }
 
     public UUID getInvoiceId() {
@@ -107,6 +120,7 @@ public class Credit extends KillBillObject {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Credit{");
         sb.append("creditAmount=").append(creditAmount);
+        sb.append("currency=").append(currency);
         sb.append(", invoiceId='").append(invoiceId).append('\'');
         sb.append(", invoiceNumber='").append(invoiceNumber).append('\'');
         sb.append(", effectiveDate=").append(effectiveDate);
@@ -133,6 +147,9 @@ public class Credit extends KillBillObject {
         if (creditAmount != null ? creditAmount.compareTo(credit.creditAmount) != 0 : credit.creditAmount != null) {
             return false;
         }
+        if (currency != null ? !currency.equals(credit.currency) : credit.currency != null) {
+            return false;
+        }
         if (effectiveDate != null ? effectiveDate.compareTo(credit.effectiveDate) != 0 : credit.effectiveDate != null) {
             return false;
         }
@@ -152,6 +169,7 @@ public class Credit extends KillBillObject {
     @Override
     public int hashCode() {
         int result = creditAmount != null ? creditAmount.hashCode() : 0;
+        result = 31 * result + (currency != null ? currency.hashCode() : 0);
         result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
         result = 31 * result + (invoiceNumber != null ? invoiceNumber.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
