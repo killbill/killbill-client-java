@@ -948,7 +948,7 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Payments.class);
     }
 
-    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment, String requestId) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.COMBO;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
@@ -957,12 +957,20 @@ public class KillBillClient {
             queryParams.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
         }
 
+        if (requestId != null) {
+            queryParams.put(JaxrsResource.HDR_REQUEST_ID, requestId);
+        }
+
         final Multimap<String, String> queryParamsWithAudit = paramsWithAudit(queryParams,
                 createdBy,
                 reason,
                 comment);
         storePluginPropertiesAsParams(pluginProperties, queryParams);
         return httpClient.doPostAndFollowLocation(uri, comboPaymentTransaction, queryParamsWithAudit, Payment.class);
+    }
+
+    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return this.createPayment(comboPaymentTransaction, controlPluginNames, pluginProperties, createdBy, reason, comment, null);
     }
 
     public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {

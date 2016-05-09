@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -346,6 +347,10 @@ public class KillBillHttpClient {
         if (password == null) {
             password = this.password;
         }
+        String requestId = getUniqueValue(options, JaxrsResource.HDR_REQUEST_ID);
+        if (requestId == null) {
+            requestId = UUID.randomUUID().toString();
+        }
 
         options.removeAll(AUDIT_OPTION_CREATED_BY);
         options.removeAll(AUDIT_OPTION_REASON);
@@ -354,6 +359,7 @@ public class KillBillHttpClient {
         options.removeAll(TENANT_OPTION_API_SECRET);
         options.removeAll(RBAC_OPTION_USERNAME);
         options.removeAll(RBAC_OPTION_PASSWORD);
+        options.removeAll(JaxrsResource.HDR_REQUEST_ID);
 
         final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery(verb, getKBServerUrl(uri), username, password, options);
 
@@ -374,6 +380,10 @@ public class KillBillHttpClient {
         if (comment != null) {
             builder.addHeader(JaxrsResource.HDR_COMMENT, comment);
         }
+        if (requestId != null) {
+            builder.addHeader(JaxrsResource.HDR_REQUEST_ID, requestId);
+        }
+
 
         if (!"GET".equals(verb) && !"HEAD".equals(verb)) {
             if (body != null) {
