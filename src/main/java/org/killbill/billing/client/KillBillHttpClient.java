@@ -75,6 +75,8 @@ public class KillBillHttpClient {
     public static final String HTTP_HEADER_ACCEPT = "Accept";
     public static final String HTTP_HEADER_CONTENT_TYPE = "Content-Type";
 
+    public static final int HTTP_PAYMENT_REQUIRED_STATUS = 402;
+
     public static final String ACCEPT_HTML = "text/html";
     public static final String ACCEPT_JSON = "application/json";
     public static final String ACCEPT_XML = "application/xml";
@@ -457,7 +459,8 @@ public class KillBillHttpClient {
             } else {
                 return null;
             }
-        } else if (response != null && response.getStatusCode() >= 400) {
+        } else if (response != null && response.getStatusCode() >= 400
+                   && response.getStatusCode() != HTTP_PAYMENT_REQUIRED_STATUS) {
             final BillingException exception = deserializeResponse(response, BillingException.class);
             log.warn("Error " + response.getStatusCode() + " from Kill Bill: " + exception.getMessage());
             throw new KillBillClientException(exception, response);
