@@ -61,7 +61,7 @@ public class KillBillHttpClient {
 
     public static final int DEFAULT_HTTP_TIMEOUT_SEC = 10;
 
-    public static final Multimap<String, String> DEFAULT_EMPTY_QUERY = ImmutableMultimap.of();
+    public static final Multimap<String, String> DEFAULT_EMPTY_QUERY = ImmutableMultimap.<String, String>of();
     public static final String AUDIT_OPTION_CREATED_BY = "__AUDIT_OPTION_CREATED_BY";
     public static final String AUDIT_OPTION_REASON = "__AUDIT_OPTION_REASON";
     public static final String AUDIT_OPTION_COMMENT = "__AUDIT_OPTION_COMMENT";
@@ -325,7 +325,7 @@ public class KillBillHttpClient {
     }
 
     private <T> T doPrepareRequestAndMaybeFollowLocation(final String verb, final String uri, final Object body, final Multimap<String, String> optionsRo, final Multimap<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
-        final Multimap<String, String> options = HashMultimap.create(optionsRo);
+        final Multimap<String, String> options = HashMultimap.<String, String>create(optionsRo);
 
         final String createdBy = getUniqueValue(options, AUDIT_OPTION_CREATED_BY);
         final String reason = getUniqueValue(options, AUDIT_OPTION_REASON);
