@@ -58,4 +58,37 @@ public class PhasePriceOverride {
     public BigDecimal getRecurringPrice() {
         return recurringPrice;
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof PhasePriceOverride)) {
+            return false;
+        }
+
+        final PhasePriceOverride that = (PhasePriceOverride) o;
+
+        if (phaseName != null ? !phaseName.equals(that.phaseName) : that.phaseName != null) {
+            return false;
+        }
+        if (phaseType != null ? !phaseType.equals(that.phaseType) : that.phaseType != null) {
+            return false;
+        }
+        if (fixedPrice != null ? !fixedPrice.equals(that.fixedPrice) : that.fixedPrice != null) {
+            return false;
+        }
+        return recurringPrice != null ? recurringPrice.equals(that.recurringPrice) : that.recurringPrice == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = phaseName != null ? phaseName.hashCode() : 0;
+        result = 31 * result + (phaseType != null ? phaseType.hashCode() : 0);
+        result = 31 * result + (fixedPrice != null ? fixedPrice.hashCode() : 0);
+        result = 31 * result + (recurringPrice != null ? recurringPrice.hashCode() : 0);
+        return result;
+    }
 }
