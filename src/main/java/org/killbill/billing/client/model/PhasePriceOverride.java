@@ -76,11 +76,13 @@ public class PhasePriceOverride {
         if (phaseType != null ? !phaseType.equals(that.phaseType) : that.phaseType != null) {
             return false;
         }
-        if (fixedPrice != null ? !fixedPrice.equals(that.fixedPrice) : that.fixedPrice != null) {
+        if (fixedPrice != null ? fixedPrice.compareTo(that.fixedPrice) != 0 : that.fixedPrice != null) {
             return false;
         }
-        return recurringPrice != null ? recurringPrice.equals(that.recurringPrice) : that.recurringPrice == null;
-
+        if (recurringPrice != null ? recurringPrice.compareTo(that.recurringPrice) != 0 : that.recurringPrice != null) {
+            return false;
+        }
+        return true;
     }
 
     @Override
