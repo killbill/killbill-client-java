@@ -391,23 +391,26 @@ public class KillBillHttpClient {
             }
         }
 
+        final Response response = request(builder, timeoutSec);
+        if (response.getStatusCode() == 404 || response.getStatusCode() == 204) {
+            return createEmptyResult(clazz);
+        }
+
         if (followLocation) {
-            final Response response = executeAndWait(builder, timeoutSec, Response.class);
-            if (response == null || response.getHeader("Location") == null) {
-                // 404, bad request, ...
-                return Response.class.isAssignableFrom(clazz) ? (T) response : null;
-            } else {
+            if (response.getHeader("Location") != null) {
                 final String location = response.getHeader("Location");
                 return doGetWithUrl(location, optionsForFollow, timeoutSec, clazz);
             }
-        } else {
-            return executeAndWait(builder, timeoutSec, clazz);
+            throwExceptionOnResponseError(response);
+            return Response.class.isAssignableFrom(clazz) ? clazz.cast(response) : null;
         }
+        throwExceptionOnResponseError(response);
+        return deserializeResponse(response, clazz);
     }
 
     private String getUniqueValue(final Multimap<String, String> options, final String key) {
         final Collection<String> values = options.get(key);
-        if (values == null || values.size() == 0) {
+        if (values == null || values.isEmpty()) {
             return null;
         } else {
             Preconditions.checkState(values.size() == 1, "You can only specify a unique value for " + key);
@@ -415,17 +418,15 @@ public class KillBillHttpClient {
         }
     }
 
-    private <T> T executeAndWait(final BoundRequestBuilder builder, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
-        Response response;
-        final ListenableFuture<Response> futureStatus;
+    private Response request(final BoundRequestBuilder builder, final int timeoutSec) throws KillBillClientException {
         try {
-            futureStatus = builder.execute(new AsyncCompletionHandler<Response>() {
+            final ListenableFuture<Response> futureStatus = builder.execute(new AsyncCompletionHandler<Response>() {
                 @Override
                 public Response onCompleted(final Response response) throws Exception {
                     return response;
                 }
             });
-            response = futureStatus.get(timeoutSec, TimeUnit.SECONDS);
+            return futureStatus.get(timeoutSec, TimeUnit.SECONDS);
         } catch (final InterruptedException e) {
             throw new KillBillClientException(e);
         } catch (final ExecutionException e) {
@@ -433,45 +434,78 @@ public class KillBillHttpClient {
         } catch (final TimeoutException e) {
             throw new KillBillClientException(e);
         }
+    }
 
-        if (response != null && response.getStatusCode() == 401) {
-            throw new KillBillClientException(new IllegalArgumentException("Unauthorized - did you configure your RBAC and/or tenant credentials?"),
-                                              response);
-        } else if (response != null && (response.getStatusCode() == 404 || response.getStatusCode() == 204)) {
-            // Return empty list for KillBillObjects instead of null for convenience
-            if (Iterable.class.isAssignableFrom(clazz)) {
-                for (final Constructor constructor : clazz.getConstructors()) {
-                    if (constructor.getParameterTypes().length == 0) {
-                        try {
-                            return (T) constructor.newInstance();
-                        } catch (InstantiationException e) {
-                            return null;
-                        } catch (IllegalAccessException e) {
-                            return null;
-                        } catch (InvocationTargetException e) {
-                            return null;
-                        }
-                    }
-                }
-                return null;
-            } else {
-                return null;
-            }
-        } else if (response != null && response.getStatusCode() >= 400) {
+    private void throwExceptionOnResponseError(final Response response) throws KillBillClientException {
+        if (response.getStatusCode() == 401) {
+            throw new KillBillClientException(
+                    new IllegalArgumentException("Unauthorized - did you configure your RBAC and/or tenant credentials?"), response);
+        }
+        if (response.getStatusCode() >= 400) {
             final BillingException exception = deserializeResponse(response, BillingException.class);
-            log.warn("Error " + response.getStatusCode() + " from Kill Bill: " + exception.getMessage());
+            if (exception != null) {
+                log.warn("Error " + response.getStatusCode() + " from Kill Bill: " + exception.getMessage());
+            } else {
+                log.warn("Error " + response.getStatusCode() + " from Kill Bill");
+            }
             throw new KillBillClientException(exception, response);
         }
-
-        // No deserialization required?
-        if (Response.class.isAssignableFrom(clazz)) {
-            return (T) response;
-        }
-
-        return deserializeResponse(response, clazz);
     }
 
     private <T> T deserializeResponse(final Response response, final Class<T> clazz) throws KillBillClientException {
+        // No deserialization required
+        if (Response.class.isAssignableFrom(clazz)) {
+            return clazz.cast(response);
+        }
+
+        final T result = unmarshalResponse(response, clazz);
+        if (KillBillObjects.class.isAssignableFrom(clazz)) {
+            final KillBillObjects objects = ((KillBillObjects) result);
+            final String paginationCurrentOffset = response.getHeader(JaxrsResource.HDR_PAGINATION_CURRENT_OFFSET);
+            if (paginationCurrentOffset != null) {
+                objects.setPaginationCurrentOffset(Integer.parseInt(paginationCurrentOffset));
+            }
+            final String paginationNextOffset = response.getHeader(JaxrsResource.HDR_PAGINATION_NEXT_OFFSET);
+            if (paginationNextOffset != null) {
+                objects.setPaginationNextOffset(Integer.parseInt(paginationNextOffset));
+            }
+            final String paginationTotalNbRecords = response.getHeader(JaxrsResource.HDR_PAGINATION_TOTAL_NB_RECORDS);
+            if (paginationTotalNbRecords != null) {
+                objects.setPaginationTotalNbRecords(Integer.parseInt(paginationTotalNbRecords));
+            }
+            final String paginationMaxNbRecords = response.getHeader(JaxrsResource.HDR_PAGINATION_MAX_NB_RECORDS);
+            if (paginationMaxNbRecords != null) {
+                objects.setPaginationMaxNbRecords(Integer.parseInt(paginationMaxNbRecords));
+            }
+            objects.setPaginationNextPageUri(response.getHeader(JaxrsResource.HDR_PAGINATION_NEXT_PAGE_URI));
+            objects.setKillBillHttpClient(this);
+        }
+
+        return result;
+    }
+
+    private <T> T createEmptyResult(final Class<T> clazz) {// Return empty list for KillBillObjects instead of null for convenience
+        if (Iterable.class.isAssignableFrom(clazz)) {
+            for (final Constructor constructor : clazz.getConstructors()) {
+                if (constructor.getParameterTypes().length == 0) {
+                    try {
+                        return clazz.cast(constructor.newInstance());
+                    } catch (InstantiationException e) {
+                        return null;
+                    } catch (IllegalAccessException e) {
+                        return null;
+                    } catch (InvocationTargetException e) {
+                        return null;
+                    }
+                }
+            }
+            return null;
+        } else {
+            return null;
+        }
+    }
+
+    private <T> T unmarshalResponse(final Response response, final Class<T> clazz) throws KillBillClientException {
         final T result;
         try {
             if (DEBUG) {
@@ -496,29 +530,6 @@ public class KillBillHttpClient {
         } catch (final IOException e) {
             throw new KillBillClientException(e, response);
         }
-
-        if (KillBillObjects.class.isAssignableFrom(clazz)) {
-            final KillBillObjects objects = ((KillBillObjects) result);
-            final String paginationCurrentOffset = response.getHeader(JaxrsResource.HDR_PAGINATION_CURRENT_OFFSET);
-            if (paginationCurrentOffset != null) {
-                objects.setPaginationCurrentOffset(Integer.parseInt(paginationCurrentOffset));
-            }
-            final String paginationNextOffset = response.getHeader(JaxrsResource.HDR_PAGINATION_NEXT_OFFSET);
-            if (paginationNextOffset != null) {
-                objects.setPaginationNextOffset(Integer.parseInt(paginationNextOffset));
-            }
-            final String paginationTotalNbRecords = response.getHeader(JaxrsResource.HDR_PAGINATION_TOTAL_NB_RECORDS);
-            if (paginationTotalNbRecords != null) {
-                objects.setPaginationTotalNbRecords(Integer.parseInt(paginationTotalNbRecords));
-            }
-            final String paginationMaxNbRecords = response.getHeader(JaxrsResource.HDR_PAGINATION_MAX_NB_RECORDS);
-            if (paginationMaxNbRecords != null) {
-                objects.setPaginationMaxNbRecords(Integer.parseInt(paginationMaxNbRecords));
-            }
-            objects.setPaginationNextPageUri(response.getHeader(JaxrsResource.HDR_PAGINATION_NEXT_PAGE_URI));
-            objects.setKillBillHttpClient(this);
-        }
-
         return result;
     }
 
@@ -584,7 +595,7 @@ public class KillBillHttpClient {
             } else {
                 return String.format("%s%s", kbServerUrl, uri);
             }
-        } catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             throw new KillBillClientException(e);
         }
     }
