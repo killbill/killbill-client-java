@@ -1,3 +1,7 @@
+
+    Payment apis changes (error codes, follow Location)
+    Fix PhasePriceOverride model
+
 0.22
     Add parameter useRequestedDateForBilling to cancelSubscription
     Fix getPaymentMethodsForAccount and refreshPaymentMethods implementation when passing properties
