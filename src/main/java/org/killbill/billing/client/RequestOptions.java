@@ -127,7 +127,7 @@ public class RequestOptions {
         return builder
                 .withRequestId(requestId)
                 .withUser(user).withPassword(password)
-                .withCreatedBy(createdBy).withCreatedBy(reason).withComment(comment)
+                .withCreatedBy(createdBy).withReason(reason).withComment(comment)
                 .withTenantApiKey(tenantApiKey).withTenantApiSecret(tenantApiSecret)
                 .withQueryParams(queryParams)
                 .withFollowLocation(followLocation).withQueryParamsForFollow(queryParamsForFollow);

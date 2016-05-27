@@ -949,20 +949,20 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Payments.class);
     }
 
-    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions options) throws KillBillClientException {
+    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.COMBO;
 
-        final Multimap<String, String> queryParams = HashMultimap.create(options.getQueryParams());
+        final Multimap<String, String> queryParams = HashMultimap.create(inputOptions.getQueryParams());
         if (controlPluginNames != null) {
             queryParams.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
         }
         storePluginPropertiesAsParams(pluginProperties, queryParams);
 
-        final Boolean followLocation = MoreObjects.firstNonNull(options.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions extendedOptions = options.extend()
-                                                      .withQueryParams(queryParams)
-                                                      .withFollowLocation(followLocation).build();
-        return httpClient.doPost(uri, comboPaymentTransaction, Payment.class, extendedOptions);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend()
+                                                          .withQueryParams(queryParams)
+                                                          .withFollowLocation(followLocation).build();
+        return httpClient.doPost(uri, comboPaymentTransaction, Payment.class, requestOptions);
     }
 
     public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
@@ -996,7 +996,7 @@ public class KillBillClient {
                              RequestOptions.builder().withCreatedBy(createdBy).withReason(reason).withComment(comment).build());
     }
 
-    public Payment createPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions options) throws KillBillClientException {
+    public Payment createPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "accountId cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getTransactionType(), "PaymentTransaction#transactionType cannot be null");
         Preconditions.checkArgument("AUTHORIZE".equals(paymentTransaction.getTransactionType()) ||
@@ -1009,7 +1009,7 @@ public class KillBillClient {
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENTS;
 
-        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
         if (paymentMethodId != null) {
             params.put("paymentMethodId", paymentMethodId.toString());
         }
@@ -1018,7 +1018,10 @@ public class KillBillClient {
         }
         storePluginPropertiesAsParams(pluginProperties, params);
 
-        final RequestOptions requestOptions = options.extend().withQueryParams(params).withFollowLocation(true).build();
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend()
+                                                          .withQueryParams(params)
+                                                          .withFollowLocation(followLocation).build();
         return httpClient.doPost(uri, paymentTransaction, Payment.class, requestOptions);
     }
 
