@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -181,6 +182,15 @@ public class KillBillHttpClient {
         return doPostAndMaybeFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, false);
     }
 
+    public <T> T doPost(final String uri, final Object body, final Class<T> returnClass, final RequestOptions options) throws KillBillClientException {
+        return doPost(uri, body, returnClass, options, this.requestTimeoutSec);
+    }
+
+    public <T> T doPost(final String uri, final Object body, final Class<T> returnClass, final RequestOptions options, final int timeoutSec) throws KillBillClientException {
+        final String verb = "POST";
+        return doPrepareRequest(verb, uri, body, returnClass, options, timeoutSec);
+    }
+
     public <T> T doPostAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
         return doPostAndFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, clazz);
     }
@@ -276,6 +286,11 @@ public class KillBillHttpClient {
         return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
     }
 
+    public <T> T doGet(final String uri, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
+        final String verb = "GET";
+        return doPrepareRequest(verb, uri, null, returnClass, requestOptions, timeoutSec);
+    }
+
     // HEAD
 
     public Response doHead(final String uri, final Multimap<String, String> options) throws KillBillClientException {
@@ -322,6 +337,70 @@ public class KillBillHttpClient {
 
     private <T> T doPrepareRequestAndMaybeFollowLocation(final String verb, final String uri, final Multimap<String, String> options, final Multimap<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
         return doPrepareRequestAndMaybeFollowLocation(verb, uri, null, options, optionsForFollow, timeoutSec, clazz, followLocation);
+    }
+
+    private <T> T doPrepareRequest(final String verb, final String uri, final Object body, final Class<T> returnClass, RequestOptions requestOptions, int timeoutSec) throws KillBillClientException {
+        final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery(verb, getKBServerUrl(uri), requestOptions);
+
+        // Multi-Tenancy headers
+        final String apiKey = MoreObjects.firstNonNull(requestOptions.getTenantApiKey(), this.apiKey);
+        addHeader(builder, JaxrsResource.HDR_API_KEY, apiKey);
+        final String apiSecret = MoreObjects.firstNonNull(requestOptions.getTenantApiSecret(), this.apiSecret);
+        addHeader(builder, JaxrsResource.HDR_API_SECRET, apiSecret);
+
+        // Metadata Additional headers
+        addHeader(builder, JaxrsResource.HDR_CREATED_BY, requestOptions.getCreatedBy());
+        addHeader(builder, JaxrsResource.HDR_REASON, requestOptions.getReason());
+        addHeader(builder, JaxrsResource.HDR_COMMENT, requestOptions.getComment());
+
+        addHeader(builder, JaxrsResource.HDR_REQUEST_ID, requestOptions.getRequestId());
+
+        if (!"GET".equals(verb) && !"HEAD".equals(verb)) {
+            if (body != null) {
+                if (body instanceof String) {
+                    builder.setBody((String) body);
+                } else {
+                    try {
+                        builder.setBody(mapper.writeValueAsString(body));
+                    } catch (JsonProcessingException e) {
+                        throw new KillBillClientException(e);
+                    }
+                }
+            } else {
+                builder.setBody("{}");
+            }
+        }
+
+        final Response response = doRequest(builder, timeoutSec);
+        if (response.getStatusCode() == 404 || response.getStatusCode() == 204) {
+            return createEmptyResult(returnClass);
+        }
+
+        if (requestOptions.shouldFollowLocation()) {
+            if (response.getHeader("Location") != null) {
+                final String location = response.getHeader("Location");
+                final RequestOptions optionsForFollow = RequestOptions.builder()
+                                                                      .withUser(requestOptions.getUser())
+                                                                      .withPassword(requestOptions.getPassword())
+                                                                      .withTenantApiKey(requestOptions.getTenantApiKey())
+                                                                      .withTenantApiSecret(requestOptions.getTenantApiSecret())
+                                                                      .withRequestId(requestOptions.getRequestId())
+                                                                      .withFollowLocation(false)
+                                                                      .withQueryParams(requestOptions.getQueryParamsForFollow())
+                                                                      .build();
+                return doGet(location, returnClass, optionsForFollow, timeoutSec);
+            }
+            throwExceptionOnResponseError(response);
+            return Response.class.isAssignableFrom(returnClass) ? returnClass.cast(response) : null;
+        }
+        throwExceptionOnResponseError(response);
+        return deserializeResponse(response, returnClass);
+    }
+
+    private static void addHeader(final BoundRequestBuilder builder, final String headerName, final String value) {
+        if (value != null) {
+            builder.addHeader(headerName, value);
+        }
     }
 
     private <T> T doPrepareRequestAndMaybeFollowLocation(final String verb, final String uri, final Object body, final Multimap<String, String> optionsRo, final Multimap<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
@@ -391,7 +470,7 @@ public class KillBillHttpClient {
             }
         }
 
-        final Response response = request(builder, timeoutSec);
+        final Response response = doRequest(builder, timeoutSec);
         if (response.getStatusCode() == 404 || response.getStatusCode() == 204) {
             return createEmptyResult(clazz);
         }
@@ -418,7 +497,7 @@ public class KillBillHttpClient {
         }
     }
 
-    private Response request(final BoundRequestBuilder builder, final int timeoutSec) throws KillBillClientException {
+    private static Response doRequest(final BoundRequestBuilder builder, final int timeoutSec) throws KillBillClientException {
         try {
             final ListenableFuture<Response> futureStatus = builder.execute(new AsyncCompletionHandler<Response>() {
                 @Override
@@ -484,7 +563,7 @@ public class KillBillHttpClient {
         return result;
     }
 
-    private <T> T createEmptyResult(final Class<T> clazz) {// Return empty list for KillBillObjects instead of null for convenience
+    private static <T> T createEmptyResult(final Class<T> clazz) {// Return empty list for KillBillObjects instead of null for convenience
         if (Iterable.class.isAssignableFrom(clazz)) {
             for (final Constructor constructor : clazz.getConstructors()) {
                 if (constructor.getParameterTypes().length == 0) {
@@ -579,6 +658,55 @@ public class KillBillHttpClient {
         for (final String key : options.keySet()) {
             if (options.get(key) != null) {
                 for (final String value : options.get(key)) {
+                    builder.addQueryParam(key, value);
+                }
+            }
+        }
+
+        return builder;
+    }
+
+    private BoundRequestBuilder getBuilderWithHeaderAndQuery(final String verb, final String url, final RequestOptions requestOptions) {
+        final BoundRequestBuilder builder;
+
+        if (verb.equals("GET")) {
+            builder = httpClient.prepareGet(url);
+        } else if (verb.equals("POST")) {
+            builder = httpClient.preparePost(url);
+        } else if (verb.equals("PUT")) {
+            builder = httpClient.preparePut(url);
+        } else if (verb.equals("DELETE")) {
+            builder = httpClient.prepareDelete(url);
+        } else if (verb.equals("HEAD")) {
+            builder = httpClient.prepareHead(url);
+        } else if (verb.equals("OPTIONS")) {
+            builder = httpClient.prepareOptions(url);
+        } else {
+            throw new IllegalArgumentException("Unrecognized verb: " + verb);
+        }
+
+        final String username = MoreObjects.firstNonNull(requestOptions.getUser(), this.username);
+        final String password = MoreObjects.firstNonNull(requestOptions.getPassword(), this.password);
+        if (username != null && password != null) {
+            final Realm realm = new RealmBuilder().setPrincipal(username).setPassword(password).setScheme(Realm.AuthScheme.BASIC).setUsePreemptiveAuth(true).build();
+            builder.setRealm(realm);
+        }
+
+        if (requestOptions.getHeaders().get(HTTP_HEADER_ACCEPT) == null) {
+            builder.addHeader(HTTP_HEADER_ACCEPT, ACCEPT_JSON);
+        }
+        if (requestOptions.getHeaders().get(HTTP_HEADER_CONTENT_TYPE) == null) {
+            builder.addHeader(HTTP_HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON);
+        }
+        for (final Entry<String, String> header : requestOptions.getHeaders().entrySet()) {
+            builder.addHeader(header.getKey(), header.getValue());
+        }
+
+        builder.setBodyEncoding("UTF-8");
+        final Multimap<String, String> queryParams = requestOptions.getQueryParams();
+        for (final String key : queryParams.keySet()) {
+            if (queryParams.get(key) != null) {
+                for (final String value : queryParams.get(key)) {
                     builder.addQueryParam(key, value);
                 }
             }

@@ -90,6 +90,7 @@ import com.ning.http.client.Response;
 import com.ning.http.util.UTF8UrlEncoder;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.HashMultimap;
@@ -948,21 +949,29 @@ public class KillBillClient {
         return httpClient.doGet(uri, queryParams, Payments.class);
     }
 
-    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions options) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.COMBO;
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
-
+        final Multimap<String, String> queryParams = HashMultimap.create(options.getQueryParams());
         if (controlPluginNames != null) {
             queryParams.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
         }
-
-        final Multimap<String, String> queryParamsWithAudit = paramsWithAudit(queryParams,
-                createdBy,
-                reason,
-                comment);
         storePluginPropertiesAsParams(pluginProperties, queryParams);
-        return httpClient.doPostAndFollowLocation(uri, comboPaymentTransaction, queryParamsWithAudit, Payment.class);
+
+        final Boolean followLocation = MoreObjects.firstNonNull(options.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions extendedOptions = options.extend()
+                                                      .withQueryParams(queryParams)
+                                                      .withFollowLocation(followLocation).build();
+        return httpClient.doPost(uri, comboPaymentTransaction, Payment.class, extendedOptions);
+    }
+
+    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final RequestOptions requestOptions = RequestOptions.builder()
+                                                            .withCreatedBy(createdBy)
+                                                            .withReason(reason)
+                                                            .withComment(comment).build();
+
+        return createPayment(comboPaymentTransaction, controlPluginNames, pluginProperties, requestOptions);
     }
 
     public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
@@ -983,6 +992,11 @@ public class KillBillClient {
     }
 
     public Payment createPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createPayment(accountId, paymentMethodId, paymentTransaction, null, pluginProperties,
+                             RequestOptions.builder().withCreatedBy(createdBy).withReason(reason).withComment(comment).build());
+    }
+
+    public Payment createPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions options) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "accountId cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getTransactionType(), "PaymentTransaction#transactionType cannot be null");
         Preconditions.checkArgument("AUTHORIZE".equals(paymentTransaction.getTransactionType()) ||
@@ -999,14 +1013,13 @@ public class KillBillClient {
         if (paymentMethodId != null) {
             params.put("paymentMethodId", paymentMethodId.toString());
         }
+        if (controlPluginNames != null) {
+            params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
+        }
         storePluginPropertiesAsParams(pluginProperties, params);
 
-        final Multimap<String, String> queryParams = paramsWithAudit(params,
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
-
-        return httpClient.doPostAndFollowLocation(uri, paymentTransaction, queryParams, Payment.class);
+        final RequestOptions requestOptions = options.extend().withQueryParams(params).withFollowLocation(true).build();
+        return httpClient.doPost(uri, paymentTransaction, Payment.class, requestOptions);
     }
 
     public Payment completePayment(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
@@ -1835,10 +1848,22 @@ public class KillBillClient {
     }
 
     public TenantKey postPluginConfigurationPropertiesForTenant(final String pluginName, final String pluginConfigProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final RequestOptions options = RequestOptions.builder()
+                                               .withCreatedBy(createdBy)
+                                               .withReason(reason)
+                                               .withComment(comment)
+                                               .build();
+        return postPluginConfigurationPropertiesForTenant(pluginName, pluginConfigProperties, options);
+    }
+
+    public TenantKey postPluginConfigurationPropertiesForTenant(final String pluginName, final String pluginConfigProperties, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        queryParams.put(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain");
-        return httpClient.doPostAndFollowLocation(uri, pluginConfigProperties, queryParams, TenantKey.class);
+
+        final RequestOptions options = inputOptions.extend()
+                                                   .withFollowLocation(true)
+                                                   .withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain")
+                                                   .build();
+        return httpClient.doPost(uri, pluginConfigProperties, TenantKey.class, options);
     }
 
     public TenantKey getPluginConfigurationForTenant(final String pluginName) throws KillBillClientException {
