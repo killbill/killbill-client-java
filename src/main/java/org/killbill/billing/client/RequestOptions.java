@@ -141,6 +141,14 @@ public class RequestOptions {
         return new RequestOptionsBuilder();
     }
 
+    /**
+     * Helper method for creating an empty RequestOptions object.
+     * @return an empty RequestOptions object.
+     */
+    public static RequestOptions empty() {
+        return new RequestOptionsBuilder().build();
+    }
+
     public static class RequestOptionsBuilder {
 
         private String requestId;

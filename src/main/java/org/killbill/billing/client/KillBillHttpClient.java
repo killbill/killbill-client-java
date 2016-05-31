@@ -18,6 +18,7 @@
 
 package org.killbill.billing.client;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -58,7 +59,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 
-public class KillBillHttpClient {
+public class KillBillHttpClient implements Closeable {
 
     public static final int DEFAULT_HTTP_TIMEOUT_SEC = 10;
 
@@ -164,6 +165,7 @@ public class KillBillHttpClient {
              System.getProperty("killbill.apiSecret", "lazar"));
     }
 
+    @Override
     public void close() {
         httpClient.close();
     }
@@ -182,13 +184,17 @@ public class KillBillHttpClient {
         return doPostAndMaybeFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, false);
     }
 
-    public <T> T doPost(final String uri, final Object body, final Class<T> returnClass, final RequestOptions options) throws KillBillClientException {
-        return doPost(uri, body, returnClass, options, this.requestTimeoutSec);
+    public Response doPost(final String uri, final Object body, final RequestOptions requestOptions) throws KillBillClientException {
+        return doPost(uri, body, Response.class, requestOptions);
     }
 
-    public <T> T doPost(final String uri, final Object body, final Class<T> returnClass, final RequestOptions options, final int timeoutSec) throws KillBillClientException {
+    public <T> T doPost(final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions) throws KillBillClientException {
+        return doPost(uri, body, returnClass, requestOptions, this.requestTimeoutSec);
+    }
+
+    public <T> T doPost(final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
         final String verb = "POST";
-        return doPrepareRequest(verb, uri, body, returnClass, options, timeoutSec);
+        return doPrepareRequest(verb, uri, body, returnClass, requestOptions, timeoutSec);
     }
 
     public <T> T doPostAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
@@ -239,6 +245,19 @@ public class KillBillHttpClient {
         return doPrepareRequestAndMaybeFollowLocation(verb, uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, followLocation);
     }
 
+    public Response doPut(final String uri, final Object body, final RequestOptions options) throws KillBillClientException {
+        return doPut(uri, body, Response.class, options);
+    }
+
+    public <T> T doPut(final String uri, final Object body, final Class<T> returnClass, final RequestOptions options) throws KillBillClientException {
+        return doPut(uri, body, returnClass, options, this.requestTimeoutSec);
+    }
+
+    public <T> T doPut(final String uri, final Object body, final Class<T> returnClass, final RequestOptions options, final int timeoutSec) throws KillBillClientException {
+        final String verb = "PUT";
+        return doPrepareRequest(verb, uri, body, returnClass, options, timeoutSec);
+    }
+
     // DELETE
 
     public Response doDelete(final String uri, final Multimap<String, String> options) throws KillBillClientException {
@@ -267,6 +286,19 @@ public class KillBillHttpClient {
         return doPrepareRequestAndMaybeFollowLocation(verb, uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, followLocation);
     }
 
+    public Response doDelete(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
+        return doDelete(uri, null, Response.class, requestOptions);
+    }
+
+    public <T> T doDelete(final String uri, Object body, Class<T> returnClass, final RequestOptions requestOptions) throws KillBillClientException {
+        return doDelete(uri, body, returnClass, requestOptions, this.requestTimeoutSec);
+    }
+
+    public <T> T doDelete(final String uri, Object body, Class<T> returnClass, final RequestOptions requestOptions, int timeoutSec) throws KillBillClientException {
+        final String verb = "DELETE";
+        return doPrepareRequest(verb, uri, body, returnClass, requestOptions, timeoutSec);
+    }
+
     // GET
 
     public Response doGet(final String uri, final Multimap<String, String> options) throws KillBillClientException {
@@ -284,6 +316,14 @@ public class KillBillHttpClient {
     public <T> T doGetWithUrl(final String url, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         final String verb = "GET";
         return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
+    }
+
+    public Response doGet(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
+        return doGet(uri, Response.class, requestOptions);
+    }
+
+    public <T> T doGet(final String uri, final Class<T> returnClass, final RequestOptions requestOptions) throws KillBillClientException {
+        return doGet(uri, returnClass, requestOptions, this.requestTimeoutSec);
     }
 
     public <T> T doGet(final String uri, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
@@ -310,6 +350,15 @@ public class KillBillHttpClient {
         return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
     }
 
+    public Response doHead(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
+        return doHead(uri, requestOptions, this.requestTimeoutSec);
+    }
+
+    public Response doHead(final String uri, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
+        final String verb = "HEAD";
+        return doPrepareRequest(verb, uri, null, Response.class, requestOptions, timeoutSec);
+    }
+
     // OPTIONS
 
     public Response doOptions(final String uri, final Multimap<String, String> options) throws KillBillClientException {
@@ -327,6 +376,15 @@ public class KillBillHttpClient {
     public <T> T doOptionsWithUrl(final String url, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         final String verb = "OPTIONS";
         return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
+    }
+
+    public Response doOptions(final String uri, RequestOptions requestOptions) throws KillBillClientException {
+        return doOptions(uri, requestOptions, this.requestTimeoutSec);
+    }
+
+    public Response doOptions(final String uri, RequestOptions requestOptions, int timeoutSec) throws KillBillClientException {
+        final String verb = "OPTIONS";
+        return doPrepareRequest(verb, uri, null, Response.class, requestOptions, timeoutSec);
     }
 
     // COMMON
