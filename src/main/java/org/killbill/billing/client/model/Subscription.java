@@ -51,6 +51,7 @@ public class Subscription extends KillBillObject {
     private LocalDate chargedThroughDate;
     private LocalDate billingStartDate;
     private LocalDate billingEndDate;
+    private Integer billCycleDayLocal;
     private List<EventSubscription> events;
     private List<PhasePriceOverride> priceOverrides;
 
@@ -73,6 +74,7 @@ public class Subscription extends KillBillObject {
                         @JsonProperty("chargedThroughDate") @Nullable final LocalDate chargedThroughDate,
                         @JsonProperty("billingStartDate") @Nullable final LocalDate billingStartDate,
                         @JsonProperty("billingEndDate") @Nullable final LocalDate billingEndDate,
+                        @JsonProperty("billCycleDayLocal") @Nullable final Integer billCycleDayLocal,
                         @JsonProperty("events") @Nullable final List<EventSubscription> events,
                         @JsonProperty("priceOverrides") @Nullable final List<PhasePriceOverride> priceOverrides,
                         @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
@@ -89,6 +91,7 @@ public class Subscription extends KillBillObject {
         this.chargedThroughDate = chargedThroughDate;
         this.billingStartDate = billingStartDate;
         this.billingEndDate = billingEndDate;
+        this.billCycleDayLocal = billCycleDayLocal;
         this.accountId = accountId;
         this.bundleId = bundleId;
         this.subscriptionId = subscriptionId;
@@ -241,6 +244,14 @@ public class Subscription extends KillBillObject {
         this.priceOverrides = priceOverrides;
     }
 
+    public Integer getBillCycleDayLocal() {
+        return billCycleDayLocal;
+    }
+
+    public void setBillCycleDayLocal(final Integer billCycleDayLocal) {
+        this.billCycleDayLocal = billCycleDayLocal;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Subscription{");
@@ -260,6 +271,7 @@ public class Subscription extends KillBillObject {
         sb.append(", chargedThroughDate=").append(chargedThroughDate);
         sb.append(", billingStartDate=").append(billingStartDate);
         sb.append(", billingEndDate=").append(billingEndDate);
+        sb.append(", billCycleDayLocal=").append(billCycleDayLocal);
         sb.append(", events=").append(events);
         sb.append(", priceOverrides=").append(priceOverrides);
         sb.append('}');
@@ -331,7 +343,9 @@ public class Subscription extends KillBillObject {
         if (subscriptionId != null ? !subscriptionId.equals(that.subscriptionId) : that.subscriptionId != null) {
             return false;
         }
-
+        if (billCycleDayLocal != null ? !billCycleDayLocal.equals(that.billCycleDayLocal) : that.billCycleDayLocal != null) {
+            return false;
+        }
         return true;
     }
 
@@ -353,6 +367,7 @@ public class Subscription extends KillBillObject {
         result = 31 * result + (chargedThroughDate != null ? chargedThroughDate.hashCode() : 0);
         result = 31 * result + (billingStartDate != null ? billingStartDate.hashCode() : 0);
         result = 31 * result + (billingEndDate != null ? billingEndDate.hashCode() : 0);
+        result = 31 * result + (billCycleDayLocal != null ? billCycleDayLocal.hashCode() : 0);
         result = 31 * result + (events != null ? events.hashCode() : 0);
         result = 31 * result + (priceOverrides != null ? priceOverrides.hashCode() : 0);
         return result;
