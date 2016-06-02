@@ -142,6 +142,8 @@ public interface JaxrsResource {
     public static final String QUERY_WITH_MIGRATION_INVOICES = "withMigrationInvoices";
     public static final String QUERY_BLOCKING_STATE_TYPES = "blockingStateTypes";
     public static final String QUERY_BLOCKING_STATE_SVCS = "blockingStateSvcs";
+    public static final String QUERY_ENTITLEMENT_EFFECTIVE_FROM_DT = "effectiveFromDate";
+
 
     public static final String UPCOMING_INVOICE_TARGET_DATE = "upcomingInvoiceTargetDate";
     public static final String QUERY_START_DATE = "startDate";
