@@ -487,10 +487,10 @@ public class KillBillClient {
 
         final Multimap<String, String> params = HashMultimap.<String, String>create();
         params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
-        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
         if (effectiveDateFrom != null) {
             params.put(JaxrsResource.QUERY_ENTITLEMENT_EFFECTIVE_FROM_DT, effectiveDateFrom.toString());
         }
+        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
         httpClient.doPut(uri, subscription, queryParams);
     }
