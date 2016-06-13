@@ -18,6 +18,7 @@
 
 package org.killbill.billing.client;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -25,6 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -57,7 +59,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 
-public class KillBillHttpClient {
+public class KillBillHttpClient implements Closeable {
 
     public static final int DEFAULT_HTTP_TIMEOUT_SEC = 10;
 
@@ -163,40 +165,62 @@ public class KillBillHttpClient {
              System.getProperty("killbill.apiSecret", "lazar"));
     }
 
+    @Override
     public void close() {
         httpClient.close();
     }
 
     // POST
 
+    @Deprecated
     public Response doPost(final String uri, final Object body, final Multimap<String, String> options) throws KillBillClientException {
         return doPost(uri, body, options, Response.class);
     }
 
+    @Deprecated
     public <T> T doPost(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
         return doPost(uri, body, options, requestTimeoutSec, clazz);
     }
 
+    @Deprecated
     public <T> T doPost(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         return doPostAndMaybeFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, false);
     }
 
+    public Response doPost(final String uri, final Object body, final RequestOptions requestOptions) throws KillBillClientException {
+        return doPost(uri, body, Response.class, requestOptions);
+    }
+
+    public <T> T doPost(final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions) throws KillBillClientException {
+        return doPost(uri, body, returnClass, requestOptions, this.requestTimeoutSec);
+    }
+
+    public <T> T doPost(final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
+        final String verb = "POST";
+        return doPrepareRequest(verb, uri, body, returnClass, requestOptions, timeoutSec);
+    }
+
+    @Deprecated
     public <T> T doPostAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
         return doPostAndFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, clazz);
     }
 
+    @Deprecated
     public <T> T doPostAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Multimap<String, String> optionsForFollow, final Class<T> clazz) throws KillBillClientException {
         return doPostAndFollowLocation(uri, body, options, optionsForFollow, requestTimeoutSec, clazz);
     }
 
+    @Deprecated
     public <T> T doPostAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         return doPostAndFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
     }
 
+    @Deprecated
     public <T> T doPostAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Multimap<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         return doPostAndMaybeFollowLocation(uri, body, options, optionsForFollow, timeoutSec, clazz, true);
     }
 
+    @Deprecated
     public <T> T doPostAndMaybeFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Multimap<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
         final String verb = "POST";
         return doPrepareRequestAndMaybeFollowLocation(verb, uri, body, options, optionsForFollow, timeoutSec, clazz, followLocation);
@@ -204,126 +228,242 @@ public class KillBillHttpClient {
 
     // PUT
 
+    @Deprecated
     public Response doPut(final String uri, final Object body, final Multimap<String, String> options) throws KillBillClientException {
         return doPut(uri, body, options, Response.class);
     }
 
+    @Deprecated
     public <T> T doPut(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
         return doPut(uri, body, options, requestTimeoutSec, clazz);
     }
 
+    @Deprecated
     public <T> T doPut(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         return doPutAndMaybeFollowLocation(uri, body, options, timeoutSec, clazz, false);
     }
 
+    @Deprecated
     public <T> T doPutAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
         return doPutAndFollowLocation(uri, body, options, requestTimeoutSec, clazz);
     }
 
+    @Deprecated
     public <T> T doPutAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         return doPutAndMaybeFollowLocation(uri, body, options, timeoutSec, clazz, true);
     }
 
+    @Deprecated
     public <T> T doPutAndMaybeFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
         final String verb = "PUT";
         return doPrepareRequestAndMaybeFollowLocation(verb, uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, followLocation);
     }
 
+    public Response doPut(final String uri, final Object body, final RequestOptions options) throws KillBillClientException {
+        return doPut(uri, body, Response.class, options);
+    }
+
+    public <T> T doPut(final String uri, final Object body, final Class<T> returnClass, final RequestOptions options) throws KillBillClientException {
+        return doPut(uri, body, returnClass, options, this.requestTimeoutSec);
+    }
+
+    public <T> T doPut(final String uri, final Object body, final Class<T> returnClass, final RequestOptions options, final int timeoutSec) throws KillBillClientException {
+        final String verb = "PUT";
+        return doPrepareRequest(verb, uri, body, returnClass, options, timeoutSec);
+    }
+
     // DELETE
 
+    @Deprecated
     public Response doDelete(final String uri, final Multimap<String, String> options) throws KillBillClientException {
         return doDelete(uri, options, Response.class);
     }
 
+    @Deprecated
     public <T> T doDelete(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
         return doDeleteAndMaybeFollowLocation(uri, options, requestTimeoutSec, clazz, false);
     }
 
-    public <T> T doDeleteAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doDeleteAndFollowLocation(uri, body, options, requestTimeoutSec, clazz);
-    }
-
-    public <T> T doDeleteAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
-        return doDeleteAndMaybeFollowLocation(uri, body, options, timeoutSec, clazz, true);
-    }
-
+    @Deprecated
     public <T> T doDeleteAndMaybeFollowLocation(final String uri, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
         final String verb = "DELETE";
         return doPrepareRequestAndMaybeFollowLocation(verb, uri, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, followLocation);
     }
 
-    public <T> T doDeleteAndMaybeFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
+    public Response doDelete(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
+        return doDelete(uri, null, Response.class, requestOptions);
+    }
+
+    public <T> T doDelete(final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions) throws KillBillClientException {
+        return doDelete(uri, body, returnClass, requestOptions, this.requestTimeoutSec);
+    }
+
+    public <T> T doDelete(final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
         final String verb = "DELETE";
-        return doPrepareRequestAndMaybeFollowLocation(verb, uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, followLocation);
+        return doPrepareRequest(verb, uri, body, returnClass, requestOptions, timeoutSec);
     }
 
     // GET
 
+    @Deprecated
     public Response doGet(final String uri, final Multimap<String, String> options) throws KillBillClientException {
         return doGet(uri, options, Response.class);
     }
 
+    @Deprecated
     public <T> T doGet(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
         return doGetWithUrl(uri, options, requestTimeoutSec, clazz);
     }
 
-    public <T> T doGet(final String uri, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
-        return doGetWithUrl(uri, options, timeoutSec, clazz);
-    }
-
+    @Deprecated
     public <T> T doGetWithUrl(final String url, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         final String verb = "GET";
         return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
     }
 
+    public Response doGet(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
+        return doGet(uri, Response.class, requestOptions);
+    }
+
+    public <T> T doGet(final String uri, final Class<T> returnClass, final RequestOptions requestOptions) throws KillBillClientException {
+        return doGet(uri, returnClass, requestOptions, this.requestTimeoutSec);
+    }
+
+    public <T> T doGet(final String uri, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
+        final String verb = "GET";
+        return doPrepareRequest(verb, uri, null, returnClass, requestOptions, timeoutSec);
+    }
+
     // HEAD
 
+    @Deprecated
     public Response doHead(final String uri, final Multimap<String, String> options) throws KillBillClientException {
         return doHead(uri, options, Response.class);
     }
 
+    @Deprecated
     public <T> T doHead(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
         return doHeadWithUrl(uri, options, requestTimeoutSec, clazz);
     }
 
-    public <T> T doHead(final String uri, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
-        return doHeadWithUrl(uri, options, timeoutSec, clazz);
-    }
-
+    @Deprecated
     public <T> T doHeadWithUrl(final String url, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         final String verb = "HEAD";
         return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
     }
 
+    public Response doHead(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
+        return doHead(uri, requestOptions, this.requestTimeoutSec);
+    }
+
+    public Response doHead(final String uri, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
+        final String verb = "HEAD";
+        return doPrepareRequest(verb, uri, null, Response.class, requestOptions, timeoutSec);
+    }
+
     // OPTIONS
 
+    @Deprecated
     public Response doOptions(final String uri, final Multimap<String, String> options) throws KillBillClientException {
         return doOptions(uri, options, Response.class);
     }
 
+    @Deprecated
     public <T> T doOptions(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
         return doOptionsWithUrl(uri, options, requestTimeoutSec, clazz);
     }
 
-    public <T> T doOptions(final String uri, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
-        return doOptionsWithUrl(uri, options, timeoutSec, clazz);
-    }
-
+    @Deprecated
     public <T> T doOptionsWithUrl(final String url, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         final String verb = "OPTIONS";
         return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
     }
 
-    // COMMON
+    public Response doOptions(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
+        return doOptions(uri, requestOptions, this.requestTimeoutSec);
+    }
 
+    public Response doOptions(final String uri, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
+        final String verb = "OPTIONS";
+        return doPrepareRequest(verb, uri, null, Response.class, requestOptions, timeoutSec);
+    }
+
+    // COMMON
+    @Deprecated
     private <T> T doPrepareRequestAndMaybeFollowLocation(final String verb, final String uri, final Multimap<String, String> options, final Multimap<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         return doPrepareRequestAndMaybeFollowLocation(verb, uri, null, options, optionsForFollow, timeoutSec, clazz, false);
     }
 
+    @Deprecated
     private <T> T doPrepareRequestAndMaybeFollowLocation(final String verb, final String uri, final Multimap<String, String> options, final Multimap<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
         return doPrepareRequestAndMaybeFollowLocation(verb, uri, null, options, optionsForFollow, timeoutSec, clazz, followLocation);
     }
 
+    private <T> T doPrepareRequest(final String verb, final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
+        final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery(verb, getKBServerUrl(uri), requestOptions);
+
+        // Multi-Tenancy headers
+        final String apiKey = MoreObjects.firstNonNull(requestOptions.getTenantApiKey(), this.apiKey);
+        addHeader(builder, JaxrsResource.HDR_API_KEY, apiKey);
+        final String apiSecret = MoreObjects.firstNonNull(requestOptions.getTenantApiSecret(), this.apiSecret);
+        addHeader(builder, JaxrsResource.HDR_API_SECRET, apiSecret);
+
+        // Metadata Additional headers
+        addHeader(builder, JaxrsResource.HDR_CREATED_BY, requestOptions.getCreatedBy());
+        addHeader(builder, JaxrsResource.HDR_REASON, requestOptions.getReason());
+        addHeader(builder, JaxrsResource.HDR_COMMENT, requestOptions.getComment());
+
+        addHeader(builder, JaxrsResource.HDR_REQUEST_ID, requestOptions.getRequestId());
+
+        if (!"GET".equals(verb) && !"HEAD".equals(verb)) {
+            if (body != null) {
+                if (body instanceof String) {
+                    builder.setBody((String) body);
+                } else {
+                    try {
+                        builder.setBody(mapper.writeValueAsString(body));
+                    } catch (JsonProcessingException e) {
+                        throw new KillBillClientException(e);
+                    }
+                }
+            } else {
+                builder.setBody("{}");
+            }
+        }
+
+        final Response response = doRequest(builder, timeoutSec);
+        if (response.getStatusCode() == 404 || response.getStatusCode() == 204) {
+            return createEmptyResult(returnClass);
+        }
+
+        if (requestOptions.shouldFollowLocation()) {
+            if (response.getHeader("Location") != null) {
+                final String location = response.getHeader("Location");
+                final RequestOptions optionsForFollow = RequestOptions.builder()
+                                                                      .withUser(requestOptions.getUser())
+                                                                      .withPassword(requestOptions.getPassword())
+                                                                      .withTenantApiKey(requestOptions.getTenantApiKey())
+                                                                      .withTenantApiSecret(requestOptions.getTenantApiSecret())
+                                                                      .withRequestId(requestOptions.getRequestId())
+                                                                      .withFollowLocation(false)
+                                                                      .withQueryParams(requestOptions.getQueryParamsForFollow())
+                                                                      .build();
+                return doGet(location, returnClass, optionsForFollow, timeoutSec);
+            }
+            throwExceptionOnResponseError(response);
+            return Response.class.isAssignableFrom(returnClass) ? returnClass.cast(response) : null;
+        }
+        throwExceptionOnResponseError(response);
+        return deserializeResponse(response, returnClass);
+    }
+
+    private static void addHeader(final BoundRequestBuilder builder, final String headerName, final String value) {
+        if (value != null) {
+            builder.addHeader(headerName, value);
+        }
+    }
+
+    @Deprecated
     private <T> T doPrepareRequestAndMaybeFollowLocation(final String verb, final String uri, final Object body, final Multimap<String, String> optionsRo, final Multimap<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
         final Multimap<String, String> options = HashMultimap.<String, String>create(optionsRo);
 
@@ -391,7 +531,7 @@ public class KillBillHttpClient {
             }
         }
 
-        final Response response = request(builder, timeoutSec);
+        final Response response = doRequest(builder, timeoutSec);
         if (response.getStatusCode() == 404 || response.getStatusCode() == 204) {
             return createEmptyResult(clazz);
         }
@@ -418,7 +558,7 @@ public class KillBillHttpClient {
         }
     }
 
-    private Response request(final BoundRequestBuilder builder, final int timeoutSec) throws KillBillClientException {
+    private static Response doRequest(final BoundRequestBuilder builder, final int timeoutSec) throws KillBillClientException {
         try {
             final ListenableFuture<Response> futureStatus = builder.execute(new AsyncCompletionHandler<Response>() {
                 @Override
@@ -484,7 +624,7 @@ public class KillBillHttpClient {
         return result;
     }
 
-    private <T> T createEmptyResult(final Class<T> clazz) {// Return empty list for KillBillObjects instead of null for convenience
+    private static <T> T createEmptyResult(final Class<T> clazz) {// Return empty list for KillBillObjects instead of null for convenience
         if (Iterable.class.isAssignableFrom(clazz)) {
             for (final Constructor constructor : clazz.getConstructors()) {
                 if (constructor.getParameterTypes().length == 0) {
@@ -533,6 +673,7 @@ public class KillBillHttpClient {
         return result;
     }
 
+    @Deprecated
     private BoundRequestBuilder getBuilderWithHeaderAndQuery(final String verb, final String url, @Nullable final String username, @Nullable final String password, final Multimap<String, String> options) {
         BoundRequestBuilder builder;
 
@@ -579,6 +720,55 @@ public class KillBillHttpClient {
         for (final String key : options.keySet()) {
             if (options.get(key) != null) {
                 for (final String value : options.get(key)) {
+                    builder.addQueryParam(key, value);
+                }
+            }
+        }
+
+        return builder;
+    }
+
+    private BoundRequestBuilder getBuilderWithHeaderAndQuery(final String verb, final String url, final RequestOptions requestOptions) {
+        final BoundRequestBuilder builder;
+
+        if (verb.equals("GET")) {
+            builder = httpClient.prepareGet(url);
+        } else if (verb.equals("POST")) {
+            builder = httpClient.preparePost(url);
+        } else if (verb.equals("PUT")) {
+            builder = httpClient.preparePut(url);
+        } else if (verb.equals("DELETE")) {
+            builder = httpClient.prepareDelete(url);
+        } else if (verb.equals("HEAD")) {
+            builder = httpClient.prepareHead(url);
+        } else if (verb.equals("OPTIONS")) {
+            builder = httpClient.prepareOptions(url);
+        } else {
+            throw new IllegalArgumentException("Unrecognized verb: " + verb);
+        }
+
+        final String username = MoreObjects.firstNonNull(requestOptions.getUser(), this.username);
+        final String password = MoreObjects.firstNonNull(requestOptions.getPassword(), this.password);
+        if (username != null && password != null) {
+            final Realm realm = new RealmBuilder().setPrincipal(username).setPassword(password).setScheme(Realm.AuthScheme.BASIC).setUsePreemptiveAuth(true).build();
+            builder.setRealm(realm);
+        }
+
+        if (requestOptions.getHeaders().get(HTTP_HEADER_ACCEPT) == null) {
+            builder.addHeader(HTTP_HEADER_ACCEPT, ACCEPT_JSON);
+        }
+        if (requestOptions.getHeaders().get(HTTP_HEADER_CONTENT_TYPE) == null) {
+            builder.addHeader(HTTP_HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON);
+        }
+        for (final Entry<String, String> header : requestOptions.getHeaders().entrySet()) {
+            builder.addHeader(header.getKey(), header.getValue());
+        }
+
+        builder.setBodyEncoding("UTF-8");
+        final Multimap<String, String> queryParams = requestOptions.getQueryParams();
+        for (final String key : queryParams.keySet()) {
+            if (queryParams.get(key) != null) {
+                for (final String value : queryParams.get(key)) {
                     builder.addQueryParam(key, value);
                 }
             }

@@ -103,6 +103,7 @@ public interface JaxrsResource {
     public static final String HDR_PAGINATION_TOTAL_NB_RECORDS = "X-Killbill-Pagination-TotalNbRecords";
     public static final String HDR_PAGINATION_MAX_NB_RECORDS = "X-Killbill-Pagination-MaxNbRecords";
     public static final String HDR_PAGINATION_NEXT_PAGE_URI = "X-Killbill-Pagination-NextPageUri";
+    public static final String HDR_REQUEST_ID = "X-Request-Id";
 
     /*
      * Query parameters
