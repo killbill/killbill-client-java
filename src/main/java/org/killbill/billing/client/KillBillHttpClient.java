@@ -403,9 +403,9 @@ public class KillBillHttpClient implements Closeable {
         final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery(verb, getKBServerUrl(uri), requestOptions);
 
         // Multi-Tenancy headers
-        final String apiKey = MoreObjects.firstNonNull(requestOptions.getTenantApiKey(), this.apiKey);
+        final String apiKey = requestOptions.getTenantApiKey() != null ? requestOptions.getTenantApiKey() : this.apiKey;
         addHeader(builder, JaxrsResource.HDR_API_KEY, apiKey);
-        final String apiSecret = MoreObjects.firstNonNull(requestOptions.getTenantApiSecret(), this.apiSecret);
+        final String apiSecret = requestOptions.getTenantApiSecret() != null ? requestOptions.getTenantApiSecret() : this.apiSecret;
         addHeader(builder, JaxrsResource.HDR_API_SECRET, apiSecret);
 
         // Metadata Additional headers
@@ -747,8 +747,8 @@ public class KillBillHttpClient implements Closeable {
             throw new IllegalArgumentException("Unrecognized verb: " + verb);
         }
 
-        final String username = MoreObjects.firstNonNull(requestOptions.getUser(), this.username);
-        final String password = MoreObjects.firstNonNull(requestOptions.getPassword(), this.password);
+        final String username = requestOptions.getUser() != null ? requestOptions.getUser() : this.username;
+        final String password = requestOptions.getPassword() != null ? requestOptions.getPassword() : this.password;
         if (username != null && password != null) {
             final Realm realm = new RealmBuilder().setPrincipal(username).setPassword(password).setScheme(Realm.AuthScheme.BASIC).setUsePreemptiveAuth(true).build();
             builder.setRealm(realm);

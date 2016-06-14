@@ -27,7 +27,6 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +39,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
 import org.killbill.billing.catalog.api.ProductCategory;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 import org.killbill.billing.client.model.Account;
 import org.killbill.billing.client.model.AccountEmail;
 import org.killbill.billing.client.model.AccountEmails;
@@ -97,14 +97,12 @@ import com.google.common.base.Strings;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 
 import static org.killbill.billing.client.KillBillHttpClient.ACCEPT_XML;
 import static org.killbill.billing.client.KillBillHttpClient.CONTENT_TYPE_XML;
-import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_EMPTY_QUERY;
 import static org.killbill.billing.client.KillBillHttpClient.DEFAULT_HTTP_TIMEOUT_SEC;
 
 public class KillBillClient implements Closeable {
@@ -126,220 +124,413 @@ public class KillBillClient implements Closeable {
 
     // Accounts
 
+    @Deprecated
     public Accounts getAccounts() throws KillBillClientException {
-        return getAccounts(0L, 100L);
+        return getAccounts(RequestOptions.empty());
     }
 
+    public Accounts getAccounts(final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccounts(0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public Accounts getAccounts(final Long offset, final Long limit) throws KillBillClientException {
-        return getAccounts(offset, limit, AuditLevel.NONE);
+        return getAccounts(offset, limit, RequestOptions.empty());
     }
 
+    public Accounts getAccounts(final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccounts(offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Accounts getAccounts(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return getAccounts(offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public Accounts getAccounts(final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, Accounts.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Accounts.class, requestOptions);
     }
 
+    @Deprecated
     public Account getAccount(final UUID accountId) throws KillBillClientException {
-        return getAccount(accountId, false, false);
+        return getAccount(accountId, RequestOptions.empty());
     }
 
+    public Account getAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccount(accountId, false, false, inputOptions);
+    }
+
+    @Deprecated
     public Account getAccount(final UUID accountId, final boolean withBalance, final boolean withCBA) throws KillBillClientException {
+        return getAccount(accountId, withBalance, withCBA, RequestOptions.empty());
+    }
+
+    public Account getAccount(final UUID accountId, final boolean withBalance, final boolean withCBA, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE, withBalance ? "true" : "false",
-                                                                                          JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE_AND_CBA, withCBA ? "true" : "false");
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE, withBalance ? "true" : "false");
+        queryParams.put(JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE_AND_CBA, withCBA ? "true" : "false");
 
-        return httpClient.doGet(uri, queryParams, Account.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Account.class, requestOptions);
     }
 
+    @Deprecated
     public Account getAccount(final String externalKey) throws KillBillClientException {
-        return getAccount(externalKey, false, false);
+        return getAccount(externalKey, RequestOptions.empty());
     }
 
+    public Account getAccount(final String externalKey, final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccount(externalKey, false, false, inputOptions);
+    }
+
+    @Deprecated
     public Account getAccount(final String externalKey, final boolean withBalance, final boolean withCBA) throws KillBillClientException {
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey,
-                                                                                          JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE, withBalance ? "true" : "false",
-                                                                                          JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE_AND_CBA, withCBA ? "true" : "false");
-
-        return httpClient.doGet(JaxrsResource.ACCOUNTS_PATH, queryParams, Account.class);
+        return getAccount(externalKey, withBalance, withCBA, RequestOptions.empty());
     }
 
+    public Account getAccount(final String externalKey, final boolean withBalance, final boolean withCBA, final RequestOptions inputOptions) throws KillBillClientException {
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
+        queryParams.put(JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE, withBalance ? "true" : "false");
+        queryParams.put(JaxrsResource.QUERY_ACCOUNT_WITH_BALANCE_AND_CBA, withCBA ? "true" : "false");
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(JaxrsResource.ACCOUNTS_PATH, Account.class, requestOptions);
+    }
+
+    @Deprecated
     public Accounts searchAccounts(final String key) throws KillBillClientException {
-        return searchAccounts(key, 0L, 100L);
+        return searchAccounts(key, RequestOptions.empty());
     }
 
+    public Accounts searchAccounts(final String key, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchAccounts(key, 0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public Accounts searchAccounts(final String key, final Long offset, final Long limit) throws KillBillClientException {
-        return searchAccounts(key, offset, limit, AuditLevel.NONE);
+        return searchAccounts(key, offset, limit, RequestOptions.empty());
     }
 
+    public Accounts searchAccounts(final String key, final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchAccounts(key, offset, limit, AuditLevel.NONE, RequestOptions.empty());
+    }
+
+    @Deprecated
     public Accounts searchAccounts(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return searchAccounts(key, offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public Accounts searchAccounts(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Accounts.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Accounts.class, requestOptions);
     }
 
+    @Deprecated
     public AccountTimeline getAccountTimeline(final UUID accountId) throws KillBillClientException {
-        return getAccountTimeline(accountId, AuditLevel.NONE);
+        return getAccountTimeline(accountId, RequestOptions.empty());
     }
 
+    public AccountTimeline getAccountTimeline(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccountTimeline(accountId, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public AccountTimeline getAccountTimeline(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
+        return getAccountTimeline(accountId, auditLevel, RequestOptions.empty());
+    }
+
+    public AccountTimeline getAccountTimeline(final UUID accountId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.TIMELINE;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, AccountTimeline.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, AccountTimeline.class, requestOptions);
     }
 
+    @Deprecated
     public Account createAccount(final Account account, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        return httpClient.doPostAndFollowLocation(JaxrsResource.ACCOUNTS_PATH, account, queryParams, Account.class);
+        return createAccount(account, RequestOptions.builder()
+                                                    .withCreatedBy(createdBy)
+                                                    .withReason(reason)
+                                                    .withComment(comment).build());
     }
 
+    public Account createAccount(final Account account, final RequestOptions inputOptions) throws KillBillClientException {
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
+        return httpClient.doPost(JaxrsResource.ACCOUNTS_PATH, account, Account.class, requestOptions);
+    }
+
+    @Deprecated
     public Account updateAccount(final Account account, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return updateAccount(account, RequestOptions.builder()
+                                                    .withCreatedBy(createdBy)
+                                                    .withReason(reason)
+                                                    .withComment(comment).build());
+    }
+
+    public Account updateAccount(final Account account, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(account.getAccountId(), "Account#accountId cannot be null");
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + account.getAccountId();
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        return httpClient.doPut(uri, account, queryParams, Account.class);
+        return httpClient.doPut(uri, account, Account.class, inputOptions);
     }
 
+    @Deprecated
     public AccountEmails getEmailsForAccount(final UUID accountId) throws KillBillClientException {
+        return getEmailsForAccount(accountId, RequestOptions.empty());
+    }
+
+    public AccountEmails getEmailsForAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.EMAILS;
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, AccountEmails.class);
+        return httpClient.doGet(uri, AccountEmails.class, inputOptions);
     }
 
+    @Deprecated
     public void addEmailToAccount(final AccountEmail email, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        addEmailToAccount(email, RequestOptions.builder()
+                                               .withCreatedBy(createdBy)
+                                               .withReason(reason)
+                                               .withComment(comment).build());
+    }
+
+    public void addEmailToAccount(final AccountEmail email, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(email.getAccountId(), "AccountEmail#accountId cannot be null");
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + email.getAccountId() + "/" + JaxrsResource.EMAILS;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        httpClient.doPost(uri, email, queryParams);
+        httpClient.doPost(uri, email, inputOptions);
     }
 
+    @Deprecated
     public void removeEmailFromAccount(final AccountEmail email, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        removeEmailFromAccount(email, RequestOptions.builder()
+                                                    .withCreatedBy(createdBy)
+                                                    .withReason(reason)
+                                                    .withComment(comment).build());
+    }
+
+    public void removeEmailFromAccount(final AccountEmail email, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(email.getAccountId(), "AccountEmail#accountId cannot be null");
         Preconditions.checkNotNull(email.getEmail(), "AccountEmail#email cannot be null");
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + email.getAccountId() + "/" + JaxrsResource.EMAILS + "/" + UTF8UrlEncoder.encode(email.getEmail());
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        httpClient.doDelete(uri, queryParams);
+        httpClient.doDelete(uri, inputOptions);
     }
 
+    @Deprecated
     public InvoiceEmail getEmailNotificationsForAccount(final UUID accountId) throws KillBillClientException {
+        return getEmailNotificationsForAccount(accountId, RequestOptions.empty());
+    }
+
+    public InvoiceEmail getEmailNotificationsForAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.EMAIL_NOTIFICATIONS;
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, InvoiceEmail.class);
+        return httpClient.doGet(uri, InvoiceEmail.class, inputOptions);
     }
 
+    @Deprecated
     public void updateEmailNotificationsForAccount(final InvoiceEmail invoiceEmail, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        updateEmailNotificationsForAccount(invoiceEmail, RequestOptions.builder()
+                                                                       .withCreatedBy(createdBy)
+                                                                       .withReason(reason)
+                                                                       .withComment(comment).build());
+    }
+
+    public void updateEmailNotificationsForAccount(final InvoiceEmail invoiceEmail, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceEmail.getAccountId(), "InvoiceEmail#accountId cannot be null");
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + invoiceEmail.getAccountId() + "/" + JaxrsResource.EMAIL_NOTIFICATIONS;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        httpClient.doPut(uri, invoiceEmail, queryParams);
+        httpClient.doPut(uri, invoiceEmail, inputOptions);
     }
 
     // Bundles
 
+    @Deprecated
     public Bundle getBundle(final UUID bundleId) throws KillBillClientException {
+        return getBundle(bundleId, RequestOptions.empty());
+    }
+
+    public Bundle getBundle(final UUID bundleId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.BUNDLES_PATH + "/" + bundleId;
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Bundle.class);
+        return httpClient.doGet(uri, Bundle.class, inputOptions);
     }
 
+    @Deprecated
     public Bundle getBundle(final String externalKey) throws KillBillClientException {
+        return getBundle(externalKey, RequestOptions.empty());
+    }
+
+    public Bundle getBundle(final String externalKey, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.BUNDLES_PATH;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
+        final Multimap<String, String> queryParams = HashMultimap.create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
 
-        return httpClient.doGet(uri, queryParams, Bundle.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Bundle.class, requestOptions);
     }
 
+    @Deprecated
     public Bundles getAccountBundles(final UUID accountId) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.BUNDLES;
-
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Bundles.class);
+        return getAccountBundles(accountId, RequestOptions.empty());
     }
 
+    public Bundles getAccountBundles(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.BUNDLES;
+
+        return httpClient.doGet(uri, Bundles.class, inputOptions);
+    }
+
+    @Deprecated
     public Bundles getAccountBundles(final UUID accountId, final String externalKey) throws KillBillClientException {
+        return getAccountBundles(accountId, externalKey, RequestOptions.empty());
+    }
+
+    public Bundles getAccountBundles(final UUID accountId, final String externalKey, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.BUNDLES;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
+        final Multimap<String, String> queryParams = HashMultimap.create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
 
-        return httpClient.doGet(uri, queryParams, Bundles.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
+    @Deprecated
     public Bundles getBundles() throws KillBillClientException {
-        return getBundles(0L, 100L);
+        return getBundles(RequestOptions.empty());
     }
 
+    public Bundles getBundles(final RequestOptions inputOptions) throws KillBillClientException {
+        return getBundles(0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public Bundles getBundles(final Long offset, final Long limit) throws KillBillClientException {
-        return getBundles(offset, limit, AuditLevel.NONE);
+        return getBundles(offset, limit, RequestOptions.empty());
     }
 
+    public Bundles getBundles(final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return getBundles(offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Bundles getBundles(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return getBundles(offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public Bundles getBundles(final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.BUNDLES_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, Bundles.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
+    @Deprecated
     public Bundles searchBundles(final String key) throws KillBillClientException {
-        return searchBundles(key, 0L, 100L);
+        return searchBundles(key, RequestOptions.empty());
     }
 
+    public Bundles searchBundles(final String key, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchBundles(key, 0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public Bundles searchBundles(final String key, final Long offset, final Long limit) throws KillBillClientException {
-        return searchBundles(key, offset, limit, AuditLevel.NONE);
+        return searchBundles(key, offset, limit, RequestOptions.empty());
     }
 
+    public Bundles searchBundles(final String key, final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchBundles(key, offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Bundles searchBundles(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return searchBundles(key, offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public Bundles searchBundles(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.BUNDLES_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Bundles.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
+    @Deprecated
     public Bundle transferBundle(final Bundle bundle, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return transferBundle(bundle, RequestOptions.builder()
+                                                    .withCreatedBy(createdBy)
+                                                    .withReason(reason)
+                                                    .withComment(comment).build());
+    }
+
+    public Bundle transferBundle(final Bundle bundle, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundle.getBundleId(), "Bundle#bundleId cannot be null");
         Preconditions.checkNotNull(bundle.getAccountId(), "Bundle#accountId cannot be null");
 
         final String uri = JaxrsResource.BUNDLES_PATH + "/" + bundle.getBundleId();
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
 
-        return httpClient.doPutAndFollowLocation(uri, bundle, queryParams, Bundle.class);
+        return httpClient.doPut(uri, bundle, Bundle.class, requestOptions);
     }
 
-
+    @Deprecated
     public void setBlockingState(final UUID bundleId, final BlockingState blockingState, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        setBlockingState(bundleId, blockingState, RequestOptions.builder()
+                                                                .withCreatedBy(createdBy)
+                                                                .withReason(reason)
+                                                                .withComment(comment).build());
+    }
 
+    public void setBlockingState(final UUID bundleId, final BlockingState blockingState, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "bundleId cannot be null");
-
         Preconditions.checkNotNull(blockingState.getService(), "Bundle#service cannot be null");
         Preconditions.checkNotNull(blockingState.getStateName(), "Bundle#stateName cannot be null");
         Preconditions.checkNotNull(blockingState.getEffectiveDate(), "Bundle#effectiveDate cannot be null");
@@ -347,28 +538,55 @@ public class KillBillClient implements Closeable {
 
         final String uri = JaxrsResource.BUNDLES_PATH + "/" + bundleId + "/" + JaxrsResource.BLOCK;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        httpClient.doPut(uri, blockingState, queryParams);
+        httpClient.doPut(uri, blockingState, inputOptions);
     }
 
     // Subscriptions and entitlements
 
+    @Deprecated
     public Subscription getSubscription(final UUID subscriptionId) throws KillBillClientException {
+        return getSubscription(subscriptionId, RequestOptions.empty());
+    }
+
+    public Subscription getSubscription(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId;
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Subscription.class);
+        return httpClient.doGet(uri, Subscription.class, inputOptions);
     }
 
+    @Deprecated
     public Subscription createSubscription(final Subscription subscription, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createSubscription(subscription, -1, createdBy, reason, comment);
+        return createSubscription(subscription, RequestOptions.builder()
+                                                              .withCreatedBy(createdBy)
+                                                              .withReason(reason)
+                                                              .withComment(comment).build());
     }
 
+    public Subscription createSubscription(final Subscription subscription, final RequestOptions inputOptions) throws KillBillClientException {
+        return createSubscription(subscription, -1, inputOptions);
+    }
+
+    @Deprecated
     public Subscription createSubscription(final Subscription subscription, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createSubscription(subscription, null, timeoutSec, createdBy, reason, comment);
+        return createSubscription(subscription, timeoutSec, RequestOptions.builder()
+                                                                          .withCreatedBy(createdBy)
+                                                                          .withReason(reason)
+                                                                          .withComment(comment).build());
     }
 
+    public Subscription createSubscription(final Subscription subscription, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
+        return createSubscription(subscription, null, timeoutSec, inputOptions);
+    }
+
+    @Deprecated
     public Subscription createSubscription(final Subscription subscription, final DateTime requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createSubscription(subscription, requestedDate, timeoutSec, RequestOptions.builder()
+                                                                                         .withCreatedBy(createdBy)
+                                                                                         .withReason(reason)
+                                                                                         .withComment(comment).build());
+    }
+
+    public Subscription createSubscription(final Subscription subscription, final DateTime requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscription.getAccountId(), "Subscription#accountId cannot be null");
         Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
         Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
@@ -378,24 +596,31 @@ public class KillBillClient implements Closeable {
             Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null");
         }
 
-        final Multimap<String, String> params = HashMultimap.<String, String>create();
-        params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
-        params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
+        queryParams.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
         if (requestedDate != null) {
-            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+            queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
         }
-        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
         final int httpTimeout = Math.max(DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec);
 
-        return httpClient.doPostAndFollowLocation(JaxrsResource.SUBSCRIPTIONS_PATH, subscription, queryParams, httpTimeout, Subscription.class);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(JaxrsResource.SUBSCRIPTIONS_PATH, subscription, Subscription.class, requestOptions, httpTimeout);
     }
 
+    @Deprecated
     public Bundle createSubscriptionWithAddOns(final Iterable<Subscription> subscriptions, final DateTime requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createSubscriptionWithAddOns(subscriptions, requestedDate, timeoutSec, RequestOptions.builder()
+                                                                                                    .withCreatedBy(createdBy)
+                                                                                                    .withReason(reason)
+                                                                                                    .withComment(comment).build());
+    }
 
-        final Iterator<Subscription> subscriptionsIterator = subscriptions.iterator();
-        while (subscriptionsIterator.hasNext()) {
-            Subscription subscription = subscriptionsIterator.next();
+    public Bundle createSubscriptionWithAddOns(final Iterable<Subscription> subscriptions, final DateTime requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
+        for (final Subscription subscription : subscriptions) {
             Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
             Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
             Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
@@ -405,29 +630,56 @@ public class KillBillClient implements Closeable {
             }
         }
 
-        final Multimap<String, String> params = HashMultimap.<String, String>create();
-        params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
-        params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
+        queryParams.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
         if (requestedDate != null) {
-            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+            queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
         }
-        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
         final int httpTimeout = Math.max(DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec);
 
-        String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/createEntitlementWithAddOns";
-        return httpClient.doPostAndFollowLocation(uri, subscriptions, queryParams, httpTimeout, Bundle.class);
+        final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/createEntitlementWithAddOns";
+
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, subscriptions, Bundle.class, requestOptions, httpTimeout);
     }
 
+    @Deprecated
     public Subscription updateSubscription(final Subscription subscription, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return updateSubscription(subscription, null, timeoutSec, createdBy, reason, comment);
+        return updateSubscription(subscription, timeoutSec, RequestOptions.builder()
+                                                                          .withCreatedBy(createdBy)
+                                                                          .withReason(reason)
+                                                                          .withComment(comment).build());
     }
 
+    public Subscription updateSubscription(final Subscription subscription, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
+        return updateSubscription(subscription, null, timeoutSec, inputOptions);
+    }
+
+    @Deprecated
     public Subscription updateSubscription(final Subscription subscription, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return updateSubscription(subscription, null, billingPolicy, timeoutSec, createdBy, reason, comment);
+        return updateSubscription(subscription, billingPolicy, timeoutSec, RequestOptions.builder()
+                                                                                         .withCreatedBy(createdBy)
+                                                                                         .withReason(reason)
+                                                                                         .withComment(comment).build());
     }
 
+    public Subscription updateSubscription(final Subscription subscription, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
+        return updateSubscription(subscription, null, billingPolicy, timeoutSec, inputOptions);
+    }
+
+    @Deprecated
     public Subscription updateSubscription(final Subscription subscription, @Nullable final DateTime requestedDate, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return updateSubscription(subscription, requestedDate, billingPolicy, timeoutSec, RequestOptions.builder()
+                                                                                                        .withCreatedBy(createdBy)
+                                                                                                        .withReason(reason)
+                                                                                                        .withComment(comment).build());
+    }
+
+    public Subscription updateSubscription(final Subscription subscription, @Nullable final DateTime requestedDate, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscription.getSubscriptionId(), "Subscription#subscriptionId cannot be null");
         Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
         Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
@@ -435,258 +687,477 @@ public class KillBillClient implements Closeable {
 
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscription.getSubscriptionId();
 
-        final Multimap<String, String> params = HashMultimap.<String, String>create();
-        params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
-        params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
+        queryParams.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
         if (requestedDate != null) {
-            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+            queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
         }
         if (billingPolicy != null) {
-            params.put(JaxrsResource.QUERY_BILLING_POLICY, billingPolicy.toString());
+            queryParams.put(JaxrsResource.QUERY_BILLING_POLICY, billingPolicy.toString());
         }
-        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
-        return httpClient.doPut(uri, subscription, queryParams, Subscription.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doPut(uri, subscription, Subscription.class, inputOptions);
     }
 
+    @Deprecated
     public void cancelSubscription(final UUID subscriptionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        cancelSubscription(subscriptionId, -1, createdBy, reason, comment);
+        cancelSubscription(subscriptionId, -1, RequestOptions.builder()
+                                                             .withCreatedBy(createdBy)
+                                                             .withReason(reason)
+                                                             .withComment(comment).build());
     }
 
+    public void cancelSubscription(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
+        cancelSubscription(subscriptionId, -1, inputOptions);
+    }
+
+    @Deprecated
     public void cancelSubscription(final UUID subscriptionId, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        cancelSubscription(subscriptionId, null, null, timeoutSec, createdBy, reason, comment);
+        cancelSubscription(subscriptionId, timeoutSec, RequestOptions.builder()
+                                                                     .withCreatedBy(createdBy)
+                                                                     .withReason(reason)
+                                                                     .withComment(comment).build());
+    }
+
+    public void cancelSubscription(final UUID subscriptionId, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
+        cancelSubscription(subscriptionId, null, null, timeoutSec, inputOptions);
+    }
+
+    @Deprecated
+    public void cancelSubscription(final UUID subscriptionId, @Nullable final EntitlementActionPolicy entitlementPolicy, @Nullable final BillingActionPolicy billingPolicy,
+                                   final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        cancelSubscription(subscriptionId, entitlementPolicy, billingPolicy, timeoutSec, RequestOptions.builder()
+                                                                                                       .withCreatedBy(createdBy)
+                                                                                                       .withReason(reason)
+                                                                                                       .withComment(comment).build());
     }
 
     public void cancelSubscription(final UUID subscriptionId, @Nullable final EntitlementActionPolicy entitlementPolicy, @Nullable final BillingActionPolicy billingPolicy,
+                                   final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
+        cancelSubscription(subscriptionId, null, entitlementPolicy, billingPolicy, timeoutSec, inputOptions);
+    }
+
+    @Deprecated
+    public void cancelSubscription(final UUID subscriptionId, @Nullable final DateTime requestedDate, @Nullable final EntitlementActionPolicy entitlementPolicy, @Nullable final BillingActionPolicy billingPolicy,
                                    final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        cancelSubscription(subscriptionId, null, entitlementPolicy, billingPolicy, timeoutSec, createdBy, reason, comment);
+        cancelSubscription(subscriptionId, requestedDate, entitlementPolicy, billingPolicy, timeoutSec, RequestOptions.builder()
+                                                                                                                      .withCreatedBy(createdBy)
+                                                                                                                      .withReason(reason)
+                                                                                                                      .withComment(comment).build());
     }
 
     public void cancelSubscription(final UUID subscriptionId, @Nullable final DateTime requestedDate, @Nullable final EntitlementActionPolicy entitlementPolicy, @Nullable final BillingActionPolicy billingPolicy,
-                                   final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+                                   final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
+        cancelSubscription(subscriptionId, requestedDate, null, entitlementPolicy, billingPolicy, timeoutSec, inputOptions);
+    }
 
-        cancelSubscription(subscriptionId, requestedDate, null, entitlementPolicy, billingPolicy, timeoutSec, createdBy, reason, comment);
+    @Deprecated
+    public void cancelSubscription(final UUID subscriptionId, @Nullable final DateTime requestedDate, @Nullable final Boolean useRequestedDateForBilling, @Nullable final EntitlementActionPolicy entitlementPolicy,
+                                   @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        cancelSubscription(subscriptionId, requestedDate, useRequestedDateForBilling, entitlementPolicy, billingPolicy, timeoutSec, RequestOptions.builder()
+                                                                                                                                                  .withCreatedBy(createdBy)
+                                                                                                                                                  .withReason(reason)
+                                                                                                                                                  .withComment(comment).build());
     }
 
     public void cancelSubscription(final UUID subscriptionId, @Nullable final DateTime requestedDate, @Nullable final Boolean useRequestedDateForBilling, @Nullable final EntitlementActionPolicy entitlementPolicy,
-                                   @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec,  final String createdBy, final String reason, final String comment) throws KillBillClientException {
+                                   @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId;
 
-        final Multimap<String, String> params = HashMultimap.<String, String>create();
-        params.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
-        params.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
+        queryParams.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
         if (requestedDate != null) {
-            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+            queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
         }
         if (entitlementPolicy != null) {
-            params.put(JaxrsResource.QUERY_ENTITLEMENT_POLICY, entitlementPolicy.toString());
+            queryParams.put(JaxrsResource.QUERY_ENTITLEMENT_POLICY, entitlementPolicy.toString());
         }
         if (billingPolicy != null) {
-            params.put(JaxrsResource.QUERY_BILLING_POLICY, billingPolicy.toString());
+            queryParams.put(JaxrsResource.QUERY_BILLING_POLICY, billingPolicy.toString());
         }
-        if(useRequestedDateForBilling != null) {
-            params.put(JaxrsResource.QUERY_USE_REQUESTED_DATE_FOR_BILLING, useRequestedDateForBilling.toString());
+        if (useRequestedDateForBilling != null) {
+            queryParams.put(JaxrsResource.QUERY_USE_REQUESTED_DATE_FOR_BILLING, useRequestedDateForBilling.toString());
         }
-        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
 
-        httpClient.doDelete(uri, queryParams);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        httpClient.doDelete(uri, requestOptions);
     }
 
+    @Deprecated
     public void uncancelSubscription(final UUID subscriptionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        uncancelSubscription(subscriptionId, RequestOptions.builder()
+                                                           .withCreatedBy(createdBy)
+                                                           .withReason(reason)
+                                                           .withComment(comment).build());
+    }
+
+    public void uncancelSubscription(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId + "/uncancel";
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        httpClient.doPut(uri, null, queryParams);
+        httpClient.doPut(uri, null, inputOptions);
     }
 
+    @Deprecated
     public void createSubscriptionUsageRecord(final SubscriptionUsageRecord subscriptionUsageRecord, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        createSubscriptionUsageRecord(subscriptionUsageRecord, RequestOptions.builder()
+                                                                             .withCreatedBy(createdBy)
+                                                                             .withReason(reason)
+                                                                             .withComment(comment).build());
+    }
+
+    public void createSubscriptionUsageRecord(final SubscriptionUsageRecord subscriptionUsageRecord, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionUsageRecord.getSubscriptionId(), "SubscriptionUsageRecord#subscriptionId cannot be null");
         Preconditions.checkNotNull(subscriptionUsageRecord.getUnitUsageRecords(), "SubscriptionUsageRecord#unitUsageRecords cannot be null");
         Preconditions.checkArgument(!subscriptionUsageRecord.getUnitUsageRecords().isEmpty(), "SubscriptionUsageRecord#unitUsageRecords cannot be empty");
 
         final String uri = JaxrsResource.USAGES_PATH;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        httpClient.doPost(uri, subscriptionUsageRecord, queryParams);
+        httpClient.doPost(uri, subscriptionUsageRecord, inputOptions);
     }
 
+    @Deprecated
     public RolledUpUsage getRolledUpUsage(final UUID subscriptionId, @Nullable final String unitType, final LocalDate startDate, final LocalDate endDate) throws KillBillClientException {
+        return getRolledUpUsage(subscriptionId, unitType, startDate, endDate, RequestOptions.empty());
+    }
+
+    public RolledUpUsage getRolledUpUsage(final UUID subscriptionId, @Nullable final String unitType, final LocalDate startDate, final LocalDate endDate, final RequestOptions inputOptions) throws KillBillClientException {
         String uri = JaxrsResource.USAGES_PATH + "/" + subscriptionId;
 
         if (unitType != null && !unitType.trim().isEmpty()) {
             uri = uri.concat("/").concat(unitType);
         }
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_START_DATE, startDate.toString(),
-                                                                                          JaxrsResource.QUERY_END_DATE, endDate.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_START_DATE, startDate.toString());
+        queryParams.put(JaxrsResource.QUERY_END_DATE, endDate.toString());
 
-        return httpClient.doGet(uri, queryParams, RolledUpUsage.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, RolledUpUsage.class, requestOptions);
     }
 
     // Invoices
 
+    @Deprecated
     public Invoices getInvoices() throws KillBillClientException {
-        return getInvoices(0L, 100L);
+        return getInvoices(RequestOptions.empty());
     }
 
+    public Invoices getInvoices(final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoices(0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public Invoices getInvoices(final Long offset, final Long limit) throws KillBillClientException {
-        return getInvoices(true, offset, limit, AuditLevel.NONE);
+        return getInvoices(offset, limit, RequestOptions.empty());
     }
 
+    public Invoices getInvoices(final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoices(true, offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Invoices getInvoices(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
-        return getInvoices(true, offset, limit, auditLevel);
+        return getInvoices(true, offset, limit, auditLevel, RequestOptions.empty());
     }
 
+    public Invoices getInvoices(final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoices(true, offset, limit, auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public Invoices getInvoices(final boolean withItems, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return getInvoices(withItems, offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public Invoices getInvoices(final boolean withItems, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, Invoices.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Invoices.class, requestOptions);
     }
 
+    @Deprecated
     public Invoice getInvoice(final UUID invoiceId) throws KillBillClientException {
-        return getInvoice(invoiceId, true);
+        return getInvoice(invoiceId, RequestOptions.empty());
     }
 
+    public Invoice getInvoice(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoice(invoiceId, true, inputOptions);
+    }
+
+    @Deprecated
     public Invoice getInvoice(final UUID invoiceId, final boolean withItems) throws KillBillClientException {
-        return getInvoice(invoiceId, withItems, AuditLevel.NONE);
+        return getInvoice(invoiceId, withItems, RequestOptions.empty());
     }
 
+    public Invoice getInvoice(final UUID invoiceId, final boolean withItems, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoice(invoiceId, withItems, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Invoice getInvoice(final UUID invoiceId, final boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
-        return getInvoiceByIdOrNumber(invoiceId.toString(), withItems, auditLevel);
+        return getInvoice(invoiceId, withItems, auditLevel, RequestOptions.empty());
     }
 
+    public Invoice getInvoice(final UUID invoiceId, final boolean withItems, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoiceByIdOrNumber(invoiceId.toString(), withItems, auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public Invoice getInvoice(final Integer invoiceNumber) throws KillBillClientException {
-        return getInvoice(invoiceNumber, true);
+        return getInvoice(invoiceNumber, RequestOptions.empty());
     }
 
+    public Invoice getInvoice(final Integer invoiceNumber, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoice(invoiceNumber, true, inputOptions);
+    }
+
+    @Deprecated
     public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems) throws KillBillClientException {
-        return getInvoice(invoiceNumber, withItems, AuditLevel.NONE);
+        return getInvoice(invoiceNumber, withItems, RequestOptions.empty());
     }
 
+    public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoice(invoiceNumber, withItems, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
-        return getInvoiceByIdOrNumber(invoiceNumber.toString(), withItems, auditLevel);
+        return getInvoice(invoiceNumber, withItems, auditLevel, RequestOptions.empty());
     }
 
+    public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoiceByIdOrNumber(invoiceNumber.toString(), withItems, auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public Invoice getInvoiceByIdOrNumber(final String invoiceIdOrNumber, final boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
+        return getInvoiceByIdOrNumber(invoiceIdOrNumber, withItems, auditLevel, RequestOptions.empty());
+    }
+
+    public Invoice getInvoiceByIdOrNumber(final String invoiceIdOrNumber, final boolean withItems, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceIdOrNumber;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, Invoice.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Invoice.class, requestOptions);
     }
 
+    @Deprecated
     public String getInvoiceAsHtml(final UUID invoiceId) throws KillBillClientException {
+        return getInvoiceAsHtml(invoiceId, RequestOptions.empty());
+    }
+
+    public String getInvoiceAsHtml(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId + "/" + JaxrsResource.INVOICE_HTML;
-        return getResourceFile(uri, KillBillHttpClient.ACCEPT_HTML);
+        return getResourceFile(uri, KillBillHttpClient.ACCEPT_HTML, inputOptions);
     }
 
+    @Deprecated
     public Invoices getInvoicesForAccount(final UUID accountId) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, true);
+        return getInvoicesForAccount(accountId, RequestOptions.empty());
     }
 
+    public Invoices getInvoicesForAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoicesForAccount(accountId, true, inputOptions);
+    }
+
+    @Deprecated
     public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, withItems, false, AuditLevel.NONE);
+        return getInvoicesForAccount(accountId, withItems, RequestOptions.empty());
     }
 
+    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoicesForAccount(accountId, withItems, false, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, withItems, unpaidOnly, AuditLevel.NONE);
+        return getInvoicesForAccount(accountId, withItems, unpaidOnly, RequestOptions.empty());
     }
 
+    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoicesForAccount(accountId, withItems, unpaidOnly, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly, final AuditLevel auditLevel) throws KillBillClientException {
+        return getInvoicesForAccount(accountId, withItems, unpaidOnly, auditLevel, RequestOptions.empty());
+    }
+
+    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.INVOICES;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems),
-                                                                                          JaxrsResource.QUERY_UNPAID_INVOICES_ONLY, String.valueOf(unpaidOnly),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems));
+        queryParams.put(JaxrsResource.QUERY_UNPAID_INVOICES_ONLY, String.valueOf(unpaidOnly));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, Invoices.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Invoices.class, requestOptions);
     }
 
+    @Deprecated
     public Invoices searchInvoices(final String key) throws KillBillClientException {
-        return searchInvoices(key, 0L, 100L);
+        return searchInvoices(key, RequestOptions.empty());
     }
 
+    public Invoices searchInvoices(final String key, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchInvoices(key, 0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public Invoices searchInvoices(final String key, final Long offset, final Long limit) throws KillBillClientException {
-        return searchInvoices(key, offset, limit, AuditLevel.NONE);
+        return searchInvoices(key, offset, limit, RequestOptions.empty());
     }
 
+    public Invoices searchInvoices(final String key, final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchInvoices(key, offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Invoices searchInvoices(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return searchInvoices(key, offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public Invoices searchInvoices(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, Invoices.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Invoices.class, requestOptions);
     }
 
+    @Deprecated
     public Invoice createDryRunInvoice(final UUID accountId, @Nullable final LocalDate futureDate, final InvoiceDryRun dryRunInfo, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createDryRunInvoice(accountId, futureDate, dryRunInfo, RequestOptions.builder()
+                                                                                    .withCreatedBy(createdBy)
+                                                                                    .withReason(reason)
+                                                                                    .withComment(comment).build());
+    }
+
+    public Invoice createDryRunInvoice(final UUID accountId, @Nullable final LocalDate futureDate, final InvoiceDryRun dryRunInfo, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.DRY_RUN;
 
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+
         final String futureDateOrUpcomingNextInvoice = (futureDate != null) ? futureDate.toString() : null;
-        final Multimap<String, String> rawQueryParams;
         if (futureDateOrUpcomingNextInvoice != null) {
-            rawQueryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
-                                                               JaxrsResource.QUERY_TARGET_DATE, futureDateOrUpcomingNextInvoice,
-                                                               JaxrsResource.QUERY_DRY_RUN, "true");
+            queryParams.put(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString());
+            queryParams.put(JaxrsResource.QUERY_TARGET_DATE, futureDateOrUpcomingNextInvoice);
+            queryParams.put(JaxrsResource.QUERY_DRY_RUN, "true");
         } else {
-            rawQueryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
-                                                               JaxrsResource.QUERY_DRY_RUN, "true");
+            queryParams.put(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString());
+            queryParams.put(JaxrsResource.QUERY_DRY_RUN, "true");
         }
-        final Multimap<String, String> queryParams = paramsWithAudit(rawQueryParams,
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment
-                                                                    );
-        return httpClient.doPost(uri, dryRunInfo, queryParams, Invoice.class);
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doPost(uri, dryRunInfo, Invoice.class, requestOptions);
     }
 
+    @Deprecated
     public Invoice createInvoice(final UUID accountId, final LocalDate futureDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createInvoice(accountId, futureDate, RequestOptions.builder()
+                                                                  .withCreatedBy(createdBy)
+                                                                  .withReason(reason)
+                                                                  .withComment(comment).build());
+    }
+
+    public Invoice createInvoice(final UUID accountId, final LocalDate futureDate, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString(),
-                                                                                                          JaxrsResource.QUERY_TARGET_DATE, futureDate.toString()),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment
-                                                                    );
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_ACCOUNT_ID, accountId.toString());
+        queryParams.put(JaxrsResource.QUERY_TARGET_DATE, futureDate.toString());
 
-        return httpClient.doPostAndFollowLocation(uri, null, queryParams, Invoice.class);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, null, Invoice.class, requestOptions);
     }
 
+    @Deprecated
     public Invoice adjustInvoiceItem(final InvoiceItem invoiceItem, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return adjustInvoiceItem(invoiceItem, new DateTime(DateTimeZone.UTC), createdBy, reason, comment);
+        return adjustInvoiceItem(invoiceItem, RequestOptions.builder()
+                                                            .withCreatedBy(createdBy)
+                                                            .withReason(reason)
+                                                            .withComment(comment).build());
     }
 
+    public Invoice adjustInvoiceItem(final InvoiceItem invoiceItem, final RequestOptions inputOptions) throws KillBillClientException {
+        return adjustInvoiceItem(invoiceItem, new DateTime(DateTimeZone.UTC), inputOptions);
+    }
+
+    @Deprecated
     public Invoice adjustInvoiceItem(final InvoiceItem invoiceItem, final DateTime requestedDate, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return adjustInvoiceItem(invoiceItem, requestedDate, RequestOptions.builder()
+                                                                           .withCreatedBy(createdBy)
+                                                                           .withReason(reason)
+                                                                           .withComment(comment).build());
+    }
+
+    public Invoice adjustInvoiceItem(final InvoiceItem invoiceItem, final DateTime requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItem.getAccountId(), "InvoiceItem#accountId cannot be null");
         Preconditions.checkNotNull(invoiceItem.getInvoiceId(), "InvoiceItem#invoiceId cannot be null");
         Preconditions.checkNotNull(invoiceItem.getInvoiceItemId(), "InvoiceItem#invoiceItemId cannot be null");
 
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceItem.getInvoiceId();
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString()),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
 
-        return httpClient.doPostAndFollowLocation(uri, invoiceItem, queryParams, Invoice.class);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, invoiceItem, Invoice.class, requestOptions);
     }
 
+    @Deprecated
     public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final List<InvoiceItem> externalCharges = createExternalCharges(ImmutableList.<InvoiceItem>of(externalCharge), requestedDate, autoPay, createdBy, reason, comment);
+        return createExternalCharge(externalCharge, requestedDate, autoPay, RequestOptions.builder()
+                                                                                          .withCreatedBy(createdBy)
+                                                                                          .withReason(reason)
+                                                                                          .withComment(comment).build());
+    }
+
+    public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, final DateTime requestedDate, final Boolean autoPay, final RequestOptions inputOptions) throws KillBillClientException {
+        final List<InvoiceItem> externalCharges = createExternalCharges(ImmutableList.<InvoiceItem>of(externalCharge), requestedDate, autoPay, inputOptions);
         return externalCharges.isEmpty() ? null : externalCharges.get(0);
     }
 
+    @Deprecated
     public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createExternalCharges(externalCharges, requestedDate, autoPay, RequestOptions.builder()
+                                                                                            .withCreatedBy(createdBy)
+                                                                                            .withReason(reason)
+                                                                                            .withComment(comment).build());
+    }
+
+    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final RequestOptions inputOptions) throws KillBillClientException {
         final Map<UUID, Collection<InvoiceItem>> externalChargesPerAccount = new HashMap<UUID, Collection<InvoiceItem>>();
         for (final InvoiceItem externalCharge : externalCharges) {
             Preconditions.checkNotNull(externalCharge.getAccountId(), "InvoiceItem#accountId cannot be null");
@@ -702,185 +1173,346 @@ public class KillBillClient implements Closeable {
 
         final List<InvoiceItem> createdExternalCharges = new LinkedList<InvoiceItem>();
         for (final UUID accountId : externalChargesPerAccount.keySet()) {
-            final List<InvoiceItem> invoiceItems = createExternalCharges(accountId, externalChargesPerAccount.get(accountId), requestedDate, autoPay, createdBy, reason, comment);
+            final List<InvoiceItem> invoiceItems = createExternalCharges(accountId, externalChargesPerAccount.get(accountId), requestedDate, autoPay, inputOptions);
             createdExternalCharges.addAll(invoiceItems);
         }
 
         return createdExternalCharges;
     }
 
-    private List<InvoiceItem> createExternalCharges(final UUID accountId, final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    private List<InvoiceItem> createExternalCharges(final UUID accountId, final Iterable<InvoiceItem> externalCharges, final DateTime requestedDate, final Boolean autoPay, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.CHARGES + "/" + accountId;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString(),
-                                                                                                          JaxrsResource.QUERY_PAY_INVOICE, autoPay.toString()),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment
-                                                                    );
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+        queryParams.put(JaxrsResource.QUERY_PAY_INVOICE, autoPay.toString());
 
-        return httpClient.doPost(uri, externalCharges, queryParams, InvoiceItems.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doPost(uri, externalCharges, InvoiceItems.class, requestOptions);
     }
 
+    @Deprecated
     public void triggerInvoiceNotification(final UUID invoiceId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        triggerInvoiceNotification(invoiceId, RequestOptions.builder()
+                                                            .withCreatedBy(createdBy)
+                                                            .withReason(reason)
+                                                            .withComment(comment).build());
+    }
+
+    public void triggerInvoiceNotification(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId.toString() + "/" + JaxrsResource.EMAIL_NOTIFICATIONS;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        httpClient.doPost(uri, null, queryParams);
+        httpClient.doPost(uri, null, inputOptions);
     }
 
+    @Deprecated
     public void uploadInvoiceTemplate(final String invoiceTemplateFilePath, final boolean manualPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES + (manualPay ? "/manualPayTemplate" : "/template");
-        uploadFile(invoiceTemplateFilePath, uri, "text/html", createdBy, reason, comment, null);
+        uploadInvoiceTemplate(invoiceTemplateFilePath, manualPay, RequestOptions.builder()
+                                                                                .withCreatedBy(createdBy)
+                                                                                .withReason(reason)
+                                                                                .withComment(comment).build());
     }
 
+    public void uploadInvoiceTemplate(final String invoiceTemplateFilePath, final boolean manualPay, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES + (manualPay ? "/manualPayTemplate" : "/template");
+        uploadFile(invoiceTemplateFilePath, uri, "text/html", inputOptions, null);
+    }
+
+    @Deprecated
     public void uploadInvoiceTemplate(final InputStream invoiceTemplateInputStream, final boolean manualPay, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES + (manualPay ? "/manualPayTemplate" : "/template");
-        uploadFile(invoiceTemplateInputStream, uri, "text/html", createdBy, reason, comment, null);
+        uploadInvoiceTemplate(invoiceTemplateInputStream, manualPay, RequestOptions.builder()
+                                                                                   .withCreatedBy(createdBy)
+                                                                                   .withReason(reason)
+                                                                                   .withComment(comment).build());
     }
 
+    public void uploadInvoiceTemplate(final InputStream invoiceTemplateInputStream, final boolean manualPay, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES + (manualPay ? "/manualPayTemplate" : "/template");
+        uploadFile(invoiceTemplateInputStream, uri, "text/html", inputOptions, null);
+    }
+
+    @Deprecated
     public String getInvoiceTemplate(final boolean manualPay) throws KillBillClientException {
+        return getInvoiceTemplate(manualPay, RequestOptions.empty());
+    }
+
+    public String getInvoiceTemplate(final boolean manualPay, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES + (manualPay ? "/manualPayTemplate" : "/template");
-        return getResourceFile(uri, "text/html");
+        return getResourceFile(uri, "text/html", inputOptions);
     }
 
+    @Deprecated
     public void uploadInvoiceTranslation(final String invoiceTranslationFilePath, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES + "/translation/" + locale;
-        uploadFile(invoiceTranslationFilePath, uri, "text/plain", createdBy, reason, comment, null);
+        uploadInvoiceTranslation(invoiceTranslationFilePath, locale, RequestOptions.builder()
+                                                                                   .withCreatedBy(createdBy)
+                                                                                   .withReason(reason)
+                                                                                   .withComment(comment).build());
     }
 
+    public void uploadInvoiceTranslation(final String invoiceTranslationFilePath, final String locale, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES + "/translation/" + locale;
+        uploadFile(invoiceTranslationFilePath, uri, "text/plain", inputOptions, null);
+    }
+
+    @Deprecated
     public void uploadInvoiceTranslation(final InputStream invoiceTranslationInputStream, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES + "/translation/" + locale;
-        uploadFile(invoiceTranslationInputStream, uri, "text/plain", createdBy, reason, comment, null);
+        uploadInvoiceTranslation(invoiceTranslationInputStream, locale, RequestOptions.builder()
+                                                                                      .withCreatedBy(createdBy)
+                                                                                      .withReason(reason)
+                                                                                      .withComment(comment).build());
     }
 
+    public void uploadInvoiceTranslation(final InputStream invoiceTranslationInputStream, final String locale, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES + "/translation/" + locale;
+        uploadFile(invoiceTranslationInputStream, uri, "text/plain", inputOptions, null);
+    }
+
+    @Deprecated
     public String getInvoiceTranslation(final String locale) throws KillBillClientException {
+        return getInvoiceTranslation(locale, RequestOptions.empty());
+    }
+
+    public String getInvoiceTranslation(final String locale, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES + "/translation/" + locale;
-        return getResourceFile(uri, "text/plain");
+        return getResourceFile(uri, "text/plain", inputOptions);
     }
 
+    @Deprecated
     public void uploadCatalogTranslation(final String catalogTranslationFilePath, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES + "/catalogTranslation/" + locale;
-        uploadFile(catalogTranslationFilePath, uri, "text/plain", createdBy, reason, comment, null);
+        uploadCatalogTranslation(catalogTranslationFilePath, locale, RequestOptions.builder()
+                                                                                   .withCreatedBy(createdBy)
+                                                                                   .withReason(reason)
+                                                                                   .withComment(comment).build());
     }
 
+    public void uploadCatalogTranslation(final String catalogTranslationFilePath, final String locale, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES + "/catalogTranslation/" + locale;
+        uploadFile(catalogTranslationFilePath, uri, "text/plain", inputOptions, null);
+    }
+
+    @Deprecated
     public void uploadCatalogTranslation(final InputStream catalogTranslationInputStream, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES + "/catalogTranslation/" + locale;
-        uploadFile(catalogTranslationInputStream, uri, "text/plain", createdBy, reason, comment, null);
+        uploadCatalogTranslation(catalogTranslationInputStream, locale, RequestOptions.builder()
+                                                                                      .withCreatedBy(createdBy)
+                                                                                      .withReason(reason)
+                                                                                      .withComment(comment).build());
     }
 
-    public String getCatalogTranslation(final String locale) throws KillBillClientException {
+    public void uploadCatalogTranslation(final InputStream catalogTranslationInputStream, final String locale, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES + "/catalogTranslation/" + locale;
-        return getResourceFile(uri, "text/plain");
+        uploadFile(catalogTranslationInputStream, uri, "text/plain", inputOptions, null);
+    }
+
+    @Deprecated
+    public String getCatalogTranslation(final String locale) throws KillBillClientException {
+        return getCatalogTranslation(locale, RequestOptions.empty());
+    }
+
+    public String getCatalogTranslation(final String locale, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES + "/catalogTranslation/" + locale;
+        return getResourceFile(uri, "text/plain", inputOptions);
     }
 
     // Credits
 
+    @Deprecated
     public Credit getCredit(final UUID creditId) throws KillBillClientException {
-        return getCredit(creditId, AuditLevel.NONE);
+        return getCredit(creditId, RequestOptions.empty());
     }
 
+    public Credit getCredit(final UUID creditId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getCredit(creditId, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Credit getCredit(final UUID creditId, final AuditLevel auditLevel) throws KillBillClientException {
+        return getCredit(creditId, auditLevel, RequestOptions.empty());
+    }
+
+    public Credit getCredit(final UUID creditId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.CREDITS_PATH + "/" + creditId;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, Credit.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Credit.class, requestOptions);
     }
 
+    @Deprecated
     public Credit createCredit(final Credit credit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createCredit(credit, RequestOptions.builder()
+                                                  .withCreatedBy(createdBy)
+                                                  .withReason(reason)
+                                                  .withComment(comment).build());
+    }
+
+    public Credit createCredit(final Credit credit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(credit.getAccountId(), "Credt#accountId cannot be null");
         Preconditions.checkNotNull(credit.getCreditAmount(), "Credt#creditAmount cannot be null");
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
 
-        return httpClient.doPostAndFollowLocation(JaxrsResource.CREDITS_PATH, credit, queryParams, Credit.class);
+        return httpClient.doPost(JaxrsResource.CREDITS_PATH, credit, Credit.class, requestOptions);
     }
 
+    @Deprecated
     public Payments searchPayments(final String key) throws KillBillClientException {
-        return searchPayments(key, 0L, 100L);
+        return searchPayments(key, RequestOptions.empty());
     }
 
+    public Payments searchPayments(final String key, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchPayments(key, 0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public Payments searchPayments(final String key, final Long offset, final Long limit) throws KillBillClientException {
-        return searchPayments(key, offset, limit, AuditLevel.NONE);
+        return searchPayments(key, offset, limit, RequestOptions.empty());
     }
 
+    public Payments searchPayments(final String key, final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchPayments(key, offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Payments searchPayments(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return searchPayments(key, offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public Payments searchPayments(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, Payments.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Payments.class, requestOptions);
     }
 
+    @Deprecated
     public InvoicePayments getInvoicePaymentsForAccount(final UUID accountId) throws KillBillClientException {
-        return getInvoicePaymentsForAccount(accountId, AuditLevel.NONE);
+        return getInvoicePaymentsForAccount(accountId, RequestOptions.empty());
     }
 
+    public InvoicePayments getInvoicePaymentsForAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoicePaymentsForAccount(accountId, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public InvoicePayments getInvoicePaymentsForAccount(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.INVOICE_PAYMENTS;
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
-        return httpClient.doGet(uri, queryParams, InvoicePayments.class);
+        return getInvoicePaymentsForAccount(accountId, auditLevel, RequestOptions.empty());
     }
 
+    public InvoicePayments getInvoicePaymentsForAccount(final UUID accountId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.INVOICE_PAYMENTS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, InvoicePayments.class, requestOptions);
+    }
+
+    @Deprecated
     public InvoicePayments getInvoicePayment(final UUID invoiceId) throws KillBillClientException {
+        return getInvoicePayment(invoiceId, RequestOptions.empty());
+    }
+
+    public InvoicePayments getInvoicePayment(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId + "/" + JaxrsResource.PAYMENTS;
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, InvoicePayments.class);
+        return httpClient.doGet(uri, InvoicePayments.class, inputOptions);
     }
 
+    @Deprecated
     public void payAllInvoices(final UUID accountId, final boolean externalPayment, final BigDecimal paymentAmount, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        payAllInvoices(accountId, externalPayment, paymentAmount, RequestOptions.builder()
+                                                                                .withCreatedBy(createdBy)
+                                                                                .withReason(reason)
+                                                                                .withComment(comment).build());
+    }
+
+    public void payAllInvoices(final UUID accountId, final boolean externalPayment, final BigDecimal paymentAmount, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.INVOICE_PAYMENTS;
 
-        final Multimap<String, String> params = HashMultimap.<String, String>create();
-        params.put(JaxrsResource.QUERY_PAYMENT_EXTERNAL, String.valueOf(externalPayment));
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_PAYMENT_EXTERNAL, String.valueOf(externalPayment));
         if (paymentAmount != null) {
-            params.put("paymentAmount", String.valueOf(paymentAmount));
+            queryParams.put("paymentAmount", String.valueOf(paymentAmount));
         }
 
-        final Multimap<String, String> queryParams = paramsWithAudit(params,
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment
-                                                                    );
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
-        httpClient.doPost(uri, null, queryParams);
+        httpClient.doPost(uri, null, requestOptions);
     }
 
+    @Deprecated
     public InvoicePayment createInvoicePayment(final InvoicePayment payment, final boolean isExternal, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createInvoicePayment(payment, isExternal, RequestOptions.builder()
+                                                                       .withCreatedBy(createdBy)
+                                                                       .withReason(reason)
+                                                                       .withComment(comment).build());
+    }
+
+    public InvoicePayment createInvoicePayment(final InvoicePayment payment, final boolean isExternal, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(payment.getAccountId(), "InvoiceItem#accountId cannot be null");
         Preconditions.checkNotNull(payment.getTargetInvoiceId(), "InvoiceItem#invoiceId cannot be null");
         Preconditions.checkNotNull(payment.getPurchasedAmount(), "InvoiceItem#amount cannot be null");
 
         final String uri = JaxrsResource.INVOICES_PATH + "/" + payment.getTargetInvoiceId() + "/" + JaxrsResource.PAYMENTS;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of("externalPayment", String.valueOf(isExternal)),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put("externalPayment", String.valueOf(isExternal));
 
-        return httpClient.doPostAndFollowLocation(uri, payment, queryParams, InvoicePayment.class);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, payment, InvoicePayment.class, requestOptions);
     }
 
+    @Deprecated
     public Payments getPayments() throws KillBillClientException {
-        return getPayments(0L, 100L);
+        return getPayments(RequestOptions.empty());
     }
 
+    public Payments getPayments(final RequestOptions inputOptions) throws KillBillClientException {
+        return getPayments(0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public Payments getPayments(final Long offset, final Long limit) throws KillBillClientException {
-        return getPayments(offset, limit, AuditLevel.NONE);
+        return getPayments(offset, limit, RequestOptions.empty());
     }
 
+    public Payments getPayments(final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPayments(offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Payments getPayments(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
-        return getPayments(offset, limit, null, ImmutableMap.<String, String>of(), auditLevel);
+        return getPayments(offset, limit, auditLevel, RequestOptions.empty());
     }
 
+    public Payments getPayments(final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPayments(offset, limit, null, ImmutableMap.<String, String>of(), auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public Payments getPayments(final Long offset, final Long limit, @Nullable final String pluginName, final Map<String, String> pluginProperties, final AuditLevel auditLevel) throws KillBillClientException {
+        return getPayments(offset, limit, pluginName, pluginProperties, auditLevel, RequestOptions.empty());
+    }
+
+    public Payments getPayments(final Long offset, final Long limit, @Nullable final String pluginName, final Map<String, String> pluginProperties, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         if (pluginName != null) {
             queryParams.put(JaxrsResource.QUERY_PAYMENT_PLUGIN_NAME, pluginName);
         }
@@ -889,66 +1521,125 @@ public class KillBillClient implements Closeable {
         queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
         storePluginPropertiesAsParams(pluginProperties, queryParams);
 
-        return httpClient.doGet(uri, queryParams, Payments.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Payments.class, requestOptions);
     }
 
+    @Deprecated
     public Payment getPayment(final UUID paymentId) throws KillBillClientException {
-        return getPayment(paymentId, true);
+        return getPayment(paymentId, RequestOptions.empty());
     }
 
+    public Payment getPayment(final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPayment(paymentId, true, inputOptions);
+    }
+
+    @Deprecated
     public Payment getPayment(final UUID paymentId, final boolean withPluginInfo) throws KillBillClientException {
-        return getPayment(paymentId, withPluginInfo, AuditLevel.NONE);
+        return getPayment(paymentId, withPluginInfo, RequestOptions.empty());
     }
 
+    public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPayment(paymentId, withPluginInfo, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
-        return getPayment(paymentId, withPluginInfo, ImmutableMap.<String, String>of(), auditLevel);
+        return getPayment(paymentId, withPluginInfo, auditLevel, RequestOptions.empty());
     }
 
+    public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPayment(paymentId, withPluginInfo, ImmutableMap.<String, String>of(), auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, final Map<String, String> pluginProperties, final AuditLevel auditLevel) throws KillBillClientException {
+        return getPayment(paymentId, withPluginInfo, pluginProperties, auditLevel, RequestOptions.empty());
+    }
+
+    public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, final Map<String, String> pluginProperties, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId;
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo));
         queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
         storePluginPropertiesAsParams(pluginProperties, queryParams);
 
-        return httpClient.doGet(uri, queryParams, Payment.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Payment.class, requestOptions);
     }
 
+    @Deprecated
     public Payment getPaymentByExternalKey(final String externalKey) throws KillBillClientException {
-        return getPaymentByExternalKey(externalKey, true);
+        return getPaymentByExternalKey(externalKey, RequestOptions.empty());
     }
 
+    public Payment getPaymentByExternalKey(final String externalKey, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentByExternalKey(externalKey, true, inputOptions);
+    }
+
+    @Deprecated
     public Payment getPaymentByExternalKey(final String externalKey, final boolean withPluginInfo) throws KillBillClientException {
+        return getPaymentByExternalKey(externalKey, withPluginInfo, RequestOptions.empty());
+    }
+
+    public Payment getPaymentByExternalKey(final String externalKey, final boolean withPluginInfo, final RequestOptions inputOptions) throws KillBillClientException {
         return getPaymentByExternalKey(externalKey, withPluginInfo, AuditLevel.NONE);
     }
 
+    @Deprecated
     public Payment getPaymentByExternalKey(final String externalKey, final boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
-        return getPaymentByExternalKey(externalKey, withPluginInfo, ImmutableMap.<String, String>of(), auditLevel);
+        return getPaymentByExternalKey(externalKey, withPluginInfo, auditLevel, RequestOptions.empty());
     }
 
+    public Payment getPaymentByExternalKey(final String externalKey, final boolean withPluginInfo, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentByExternalKey(externalKey, withPluginInfo, ImmutableMap.<String, String>of(), auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public Payment getPaymentByExternalKey(final String externalKey, final boolean withPluginInfo, final Map<String, String> pluginProperties, final AuditLevel auditLevel) throws KillBillClientException {
+        return getPaymentByExternalKey(externalKey, withPluginInfo, pluginProperties, auditLevel, RequestOptions.empty());
+    }
+
+    public Payment getPaymentByExternalKey(final String externalKey, final boolean withPluginInfo, final Map<String, String> pluginProperties, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH;
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
         queryParams.put(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo));
         queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
         storePluginPropertiesAsParams(pluginProperties, queryParams);
 
-        return httpClient.doGet(uri, queryParams, Payment.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Payment.class, requestOptions);
     }
 
+    @Deprecated
     public Payments getPaymentsForAccount(final UUID accountId) throws KillBillClientException {
-        return getPaymentsForAccount(accountId, AuditLevel.NONE);
+        return getPaymentsForAccount(accountId, RequestOptions.empty());
     }
 
+    public Payments getPaymentsForAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentsForAccount(accountId, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Payments getPaymentsForAccount(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
+        return getPaymentsForAccount(accountId, auditLevel, RequestOptions.empty());
+    }
+
+    public Payments getPaymentsForAccount(final UUID accountId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENTS;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, Payments.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Payments.class, requestOptions);
     }
 
     @Deprecated
@@ -964,14 +1655,14 @@ public class KillBillClient implements Closeable {
     }
 
     @Deprecated
-    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return createPayment(comboPaymentTransaction, controlPluginNames, pluginProperties, RequestOptions.builder()
                                                                                                           .withCreatedBy(createdBy)
                                                                                                           .withReason(reason)
                                                                                                           .withComment(comment).build());
     }
 
-    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.COMBO;
 
         final Multimap<String, String> queryParams = HashMultimap.create(inputOptions.getQueryParams());
@@ -1007,7 +1698,7 @@ public class KillBillClient implements Closeable {
                                                                                             .withComment(comment).build());
     }
 
-    public Payment createPayment(final UUID accountId, final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, RequestOptions inputOptions) throws KillBillClientException {
+    public Payment createPayment(final UUID accountId, final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         return createPayment(accountId, null, paymentTransaction, null, pluginProperties, inputOptions);
     }
 
@@ -1036,7 +1727,7 @@ public class KillBillClient implements Closeable {
         return createPayment(accountId, paymentMethodId, paymentTransaction, null, pluginProperties, inputOptions);
     }
 
-    public Payment createPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment createPayment(final UUID accountId, @Nullable final UUID paymentMethodId, final PaymentTransaction paymentTransaction, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "accountId cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getTransactionType(), "PaymentTransaction#transactionType cannot be null");
         Preconditions.checkArgument("AUTHORIZE".equals(paymentTransaction.getTransactionType()) ||
@@ -1118,7 +1809,7 @@ public class KillBillClient implements Closeable {
     }
 
     @Deprecated
-    public Payment captureAuthorization(final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment captureAuthorization(final PaymentTransaction paymentTransaction, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return captureAuthorization(paymentTransaction, controlPluginNames, pluginProperties, RequestOptions.builder()
                                                                                                             .withCreatedBy(createdBy)
                                                                                                             .withReason(reason)
@@ -1126,7 +1817,7 @@ public class KillBillClient implements Closeable {
                                                                                                             .build());
     }
 
-    public Payment captureAuthorization(final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment captureAuthorization(final PaymentTransaction paymentTransaction, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkState(paymentTransaction.getPaymentId() != null || paymentTransaction.getPaymentExternalKey() != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
 
@@ -1162,7 +1853,7 @@ public class KillBillClient implements Closeable {
     }
 
     @Deprecated
-    public Payment refundPayment(final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment refundPayment(final PaymentTransaction paymentTransaction, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return refundPayment(paymentTransaction, controlPluginNames, pluginProperties, RequestOptions.builder()
                                                                                                      .withCreatedBy(createdBy)
                                                                                                      .withReason(reason)
@@ -1170,7 +1861,7 @@ public class KillBillClient implements Closeable {
                                                                                                      .build());
     }
 
-    public Payment refundPayment(final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment refundPayment(final PaymentTransaction paymentTransaction, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkState(paymentTransaction.getPaymentId() != null || paymentTransaction.getPaymentExternalKey() != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
         Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
 
@@ -1192,7 +1883,6 @@ public class KillBillClient implements Closeable {
         return httpClient.doPost(uri, paymentTransaction, Payment.class, requestOptions);
     }
 
-
     @Deprecated
     public Payment chargebackPayment(final PaymentTransaction paymentTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return chargebackPayment(paymentTransaction, RequestOptions.builder()
@@ -1207,7 +1897,7 @@ public class KillBillClient implements Closeable {
     }
 
     @Deprecated
-    public Payment chargebackPayment(final PaymentTransaction paymentTransaction, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment chargebackPayment(final PaymentTransaction paymentTransaction, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return chargebackPayment(paymentTransaction, controlPluginNames, pluginProperties, RequestOptions.builder()
                                                                                                          .withCreatedBy(createdBy)
                                                                                                          .withReason(reason)
@@ -1220,7 +1910,7 @@ public class KillBillClient implements Closeable {
         Preconditions.checkNotNull(paymentTransaction.getAmount(), "PaymentTransaction#amount cannot be null");
 
         final String uri = (paymentTransaction.getPaymentId() != null) ?
-                           JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() + "/" + JaxrsResource.CHARGEBACKS:
+                           JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() + "/" + JaxrsResource.CHARGEBACKS :
                            JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.CHARGEBACKS;
 
         final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
@@ -1236,7 +1926,6 @@ public class KillBillClient implements Closeable {
         return httpClient.doPost(uri, paymentTransaction, Payment.class, requestOptions);
     }
 
-
     @Deprecated
     public Payment voidPayment(final UUID paymentId, final String transactionExternalKey, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return voidPayment(paymentId, transactionExternalKey, RequestOptions.builder()
@@ -1251,7 +1940,7 @@ public class KillBillClient implements Closeable {
     }
 
     @Deprecated
-    public Payment voidPayment(final UUID paymentId, final String paymentExternalKey, final String transactionExternalKey, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Payment voidPayment(final UUID paymentId, final String paymentExternalKey, final String transactionExternalKey, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return voidPayment(paymentId, paymentExternalKey, transactionExternalKey, controlPluginNames, pluginProperties, RequestOptions.builder()
                                                                                                                                       .withCreatedBy(createdBy)
                                                                                                                                       .withReason(reason)
@@ -1259,7 +1948,7 @@ public class KillBillClient implements Closeable {
                                                                                                                                       .build());
     }
 
-    public Payment voidPayment(final UUID paymentId, final String paymentExternalKey, final String transactionExternalKey, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment voidPayment(final UUID paymentId, final String paymentExternalKey, final String transactionExternalKey, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
 
         Preconditions.checkState(paymentId != null || paymentExternalKey != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
         final String uri = (paymentId != null) ?
@@ -1299,7 +1988,7 @@ public class KillBillClient implements Closeable {
         return buildFormDescriptor(fields, kbAccountId, kbPaymentMethodId, null, pluginProperties, inputOptions);
     }
 
-    public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields fields, final UUID kbAccountId, @Nullable final UUID kbPaymentMethodId, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
+    public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields fields, final UUID kbAccountId, @Nullable final UUID kbPaymentMethodId, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_GATEWAYS_PATH + "/" + JaxrsResource.HOSTED + "/" + JaxrsResource.FORM + "/" + kbAccountId;
 
         final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
@@ -1332,7 +2021,7 @@ public class KillBillClient implements Closeable {
     }
 
     @Deprecated
-    public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return buildFormDescriptor(comboHostedPaymentPage, null, pluginProperties, RequestOptions.builder()
                                                                                                  .withCreatedBy(createdBy)
                                                                                                  .withReason(reason)
@@ -1340,7 +2029,7 @@ public class KillBillClient implements Closeable {
                                                                                                  .build());
     }
 
-    public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, @Nullable List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
+    public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_GATEWAYS_PATH + "/" + JaxrsResource.HOSTED + "/" + JaxrsResource.FORM;
 
         final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
@@ -1356,21 +2045,36 @@ public class KillBillClient implements Closeable {
         return httpClient.doPost(uri, comboHostedPaymentPage, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
 
+    @Deprecated
     public Response processNotification(final String notification, final String pluginName, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENT_GATEWAYS_PATH + "/" + JaxrsResource.NOTIFICATION + "/" + pluginName;
-
-        final Multimap<String, String> params = HashMultimap.<String, String>create();
-        storePluginPropertiesAsParams(pluginProperties, params);
-
-        final Multimap<String, String> queryParams = paramsWithAudit(params,
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
-
-        return httpClient.doPost(uri, notification, queryParams);
+        return processNotification(notification, pluginName, pluginProperties, RequestOptions.builder()
+                                                                                             .withCreatedBy(createdBy)
+                                                                                             .withReason(reason)
+                                                                                             .withComment(comment)
+                                                                                             .build());
     }
 
+    public Response processNotification(final String notification, final String pluginName, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_GATEWAYS_PATH + "/" + JaxrsResource.NOTIFICATION + "/" + pluginName;
+
+        final Multimap<String, String> params = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        storePluginPropertiesAsParams(pluginProperties, params);
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(params).build();
+
+        return httpClient.doPost(uri, notification, requestOptions);
+    }
+
+    @Deprecated
     public InvoicePayment createInvoicePaymentRefund(final InvoicePaymentTransaction refundTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createInvoicePaymentRefund(refundTransaction, RequestOptions.builder()
+                                                                           .withCreatedBy(createdBy)
+                                                                           .withReason(reason)
+                                                                           .withComment(comment)
+                                                                           .build());
+    }
+
+    public InvoicePayment createInvoicePaymentRefund(final InvoicePaymentTransaction refundTransaction, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(refundTransaction.getPaymentId(), "InvoicePaymentTransaction#paymentId cannot be null");
 
         // Specify isAdjusted for invoice adjustment and invoice item adjustment
@@ -1383,637 +2087,1279 @@ public class KillBillClient implements Closeable {
 
         final String uri = JaxrsResource.INVOICE_PAYMENTS_PATH + "/" + refundTransaction.getPaymentId() + "/" + JaxrsResource.REFUNDS;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
 
-        return httpClient.doPostAndFollowLocation(uri, refundTransaction, queryParams, InvoicePayment.class);
+        return httpClient.doPost(uri, refundTransaction, InvoicePayment.class, requestOptions);
     }
 
     // Chargebacks
+
+    @Deprecated
     public InvoicePayment createInvoicePaymentChargeback(final InvoicePaymentTransaction chargebackTransaction, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createInvoicePaymentChargeback(chargebackTransaction, RequestOptions.builder()
+                                                                                   .withCreatedBy(createdBy)
+                                                                                   .withReason(reason)
+                                                                                   .withComment(comment)
+                                                                                   .build());
+    }
+
+    public InvoicePayment createInvoicePaymentChargeback(final InvoicePaymentTransaction chargebackTransaction, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(chargebackTransaction.getPaymentId(), "InvoicePaymentTransaction#paymentId cannot be null");
 
         final String uri = JaxrsResource.INVOICE_PAYMENTS_PATH + "/" + chargebackTransaction.getPaymentId() + "/" + JaxrsResource.CHARGEBACKS;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        return httpClient.doPostAndFollowLocation(uri, chargebackTransaction, queryParams, InvoicePayment.class);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, chargebackTransaction, InvoicePayment.class, requestOptions);
     }
 
     // Payment methods
 
+    @Deprecated
     public PaymentMethods getPaymentMethods() throws KillBillClientException {
-        return getPaymentMethods(0L, 100L);
+        return getPaymentMethods(RequestOptions.empty());
     }
 
+    public PaymentMethods getPaymentMethods(final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethods(0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public PaymentMethods getPaymentMethods(final Long offset, final Long limit) throws KillBillClientException {
-        return getPaymentMethods(offset, limit, AuditLevel.NONE);
+        return getPaymentMethods(offset, limit, RequestOptions.empty());
     }
 
+    public PaymentMethods getPaymentMethods(final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethods(offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public PaymentMethods getPaymentMethods(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return getPaymentMethods(offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public PaymentMethods getPaymentMethods(final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, PaymentMethods.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, PaymentMethods.class, requestOptions);
     }
 
+    @Deprecated
     public PaymentMethods searchPaymentMethods(final String key) throws KillBillClientException {
-        return searchPaymentMethods(key, 0L, 100L);
+        return searchPaymentMethods(key, RequestOptions.empty());
     }
 
+    public PaymentMethods searchPaymentMethods(final String key, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchPaymentMethods(key, 0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public PaymentMethods searchPaymentMethods(final String key, final Long offset, final Long limit) throws KillBillClientException {
-        return searchPaymentMethods(key, offset, limit, AuditLevel.NONE);
+        return searchPaymentMethods(key, offset, limit, RequestOptions.empty());
     }
 
+    public PaymentMethods searchPaymentMethods(final String key, final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchPaymentMethods(key, offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public PaymentMethods searchPaymentMethods(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return searchPaymentMethods(key, offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public PaymentMethods searchPaymentMethods(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, PaymentMethods.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, PaymentMethods.class, requestOptions);
     }
 
+    @Deprecated
     public PaymentMethod getPaymentMethod(final UUID paymentMethodId) throws KillBillClientException {
-        return getPaymentMethod(paymentMethodId, false);
+        return getPaymentMethod(paymentMethodId, RequestOptions.empty());
     }
 
+    public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethod(paymentMethodId, false, inputOptions);
+    }
+
+    @Deprecated
     public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final boolean withPluginInfo) throws KillBillClientException {
-        return getPaymentMethod(paymentMethodId, withPluginInfo, AuditLevel.NONE);
+        return getPaymentMethod(paymentMethodId, withPluginInfo, RequestOptions.empty());
     }
 
+    public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final boolean withPluginInfo, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethod(paymentMethodId, withPluginInfo, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
+        return getPaymentMethod(paymentMethodId, withPluginInfo, auditLevel, RequestOptions.empty());
+    }
+
+    public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final boolean withPluginInfo, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
-
-        return httpClient.doGet(uri, queryParams, PaymentMethod.class);
-    }
-
-    public PaymentMethod getPaymentMethodByKey(final String externalKey) throws KillBillClientException {
-        return getPaymentMethodByKey(externalKey, false);
-    }
-
-    public PaymentMethod getPaymentMethodByKey(final String externalKey, final boolean withPluginInfo) throws KillBillClientException {
-        return getPaymentMethodByKey(externalKey, withPluginInfo, AuditLevel.NONE);
-    }
-
-    public PaymentMethod getPaymentMethodByKey(final String externalKey, final boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENT_METHODS_PATH;
-
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey,
-                                                                                          JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
-
-        return httpClient.doGet(uri, queryParams, PaymentMethod.class);
-    }
-
-    public PaymentMethods getPaymentMethodsForAccount(final UUID accountId) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS;
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, PaymentMethods.class);
-    }
-
-    public PaymentMethods getPaymentMethodsForAccount(final UUID accountId, final Map<String, String> pluginProperties, boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS;
-
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create();
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo));
         queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, PaymentMethod.class, requestOptions);
+    }
+
+    @Deprecated
+    public PaymentMethod getPaymentMethodByKey(final String externalKey) throws KillBillClientException {
+        return getPaymentMethodByKey(externalKey, RequestOptions.empty());
+    }
+
+    public PaymentMethod getPaymentMethodByKey(final String externalKey, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethodByKey(externalKey, false, inputOptions);
+    }
+
+    @Deprecated
+    public PaymentMethod getPaymentMethodByKey(final String externalKey, final boolean withPluginInfo) throws KillBillClientException {
+        return getPaymentMethodByKey(externalKey, withPluginInfo, RequestOptions.empty());
+    }
+
+    public PaymentMethod getPaymentMethodByKey(final String externalKey, final boolean withPluginInfo, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethodByKey(externalKey, withPluginInfo, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
+    public PaymentMethod getPaymentMethodByKey(final String externalKey, final boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
+        return getPaymentMethodByKey(externalKey, withPluginInfo, auditLevel, RequestOptions.empty());
+    }
+
+    public PaymentMethod getPaymentMethodByKey(final String externalKey, final boolean withPluginInfo, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
+        queryParams.put(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, PaymentMethod.class, requestOptions);
+    }
+
+    @Deprecated
+    public PaymentMethods getPaymentMethodsForAccount(final UUID accountId) throws KillBillClientException {
+        return getPaymentMethodsForAccount(accountId, RequestOptions.empty());
+    }
+
+    public PaymentMethods getPaymentMethodsForAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS;
+        return httpClient.doGet(uri, PaymentMethods.class, inputOptions);
+    }
+
+    @Deprecated
+    public PaymentMethods getPaymentMethodsForAccount(final UUID accountId, final Map<String, String> pluginProperties, final boolean withPluginInfo, final AuditLevel auditLevel) throws KillBillClientException {
+        return getPaymentMethodsForAccount(accountId, pluginProperties, withPluginInfo, auditLevel, RequestOptions.empty());
+    }
+
+    public PaymentMethods getPaymentMethodsForAccount(final UUID accountId, final Map<String, String> pluginProperties, final boolean withPluginInfo, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
         storePluginPropertiesAsParams(pluginProperties, queryParams);
 
-        return httpClient.doGet(uri, queryParams, PaymentMethods.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, PaymentMethods.class, requestOptions);
     }
 
+    @Deprecated
     public PaymentMethods searchPaymentMethodsByKey(final String key) throws KillBillClientException {
-        return searchPaymentMethodsByKeyAndPlugin(key, null);
+        return searchPaymentMethodsByKey(key, RequestOptions.empty());
     }
 
+    public PaymentMethods searchPaymentMethodsByKey(final String key, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchPaymentMethodsByKeyAndPlugin(key, null, inputOptions);
+    }
+
+    @Deprecated
     public PaymentMethods searchPaymentMethodsByKey(final String key, final boolean withPluginInfo) throws KillBillClientException {
-        return searchPaymentMethodsByKeyAndPlugin(key, withPluginInfo, null, AuditLevel.NONE);
+        return searchPaymentMethodsByKey(key, withPluginInfo, RequestOptions.empty());
     }
 
+    public PaymentMethods searchPaymentMethodsByKey(final String key, final boolean withPluginInfo, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchPaymentMethodsByKeyAndPlugin(key, withPluginInfo, null, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, @Nullable final String pluginName) throws KillBillClientException {
-        return searchPaymentMethodsByKeyAndPlugin(key, pluginName, AuditLevel.NONE);
+        return searchPaymentMethodsByKeyAndPlugin(key, pluginName, AuditLevel.NONE, RequestOptions.empty());
     }
 
+    public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, @Nullable final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchPaymentMethodsByKeyAndPlugin(key, pluginName, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, @Nullable final String pluginName, final AuditLevel auditLevel) throws KillBillClientException {
-        return searchPaymentMethodsByKeyAndPlugin(key, pluginName != null, pluginName, auditLevel);
+        return searchPaymentMethodsByKeyAndPlugin(key, pluginName, auditLevel, RequestOptions.empty());
     }
 
+    public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, @Nullable final String pluginName, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchPaymentMethodsByKeyAndPlugin(key, pluginName != null, pluginName, auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, final boolean withPluginInfo, @Nullable final String pluginName, final AuditLevel auditLevel) throws KillBillClientException {
+        return searchPaymentMethodsByKeyAndPlugin(key, withPluginInfo, pluginName, auditLevel, RequestOptions.empty());
+    }
+
+    public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, final boolean withPluginInfo, @Nullable final String pluginName, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_NAME, Strings.nullToEmpty(pluginName),
-                                                                                          JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_NAME, Strings.nullToEmpty(pluginName));
+        queryParams.put(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, PaymentMethods.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, PaymentMethods.class, requestOptions);
     }
 
+    @Deprecated
     public PaymentMethod createPaymentMethod(final PaymentMethod paymentMethod, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createPaymentMethod(paymentMethod, RequestOptions.builder()
+                                                                .withCreatedBy(createdBy)
+                                                                .withReason(reason)
+                                                                .withComment(comment)
+                                                                .build());
+    }
+
+    public PaymentMethod createPaymentMethod(final PaymentMethod paymentMethod, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentMethod.getAccountId(), "PaymentMethod#accountId cannot be null");
         Preconditions.checkNotNull(paymentMethod.getPluginName(), "PaymentMethod#pluginName cannot be null");
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + paymentMethod.getAccountId() + "/" + JaxrsResource.PAYMENT_METHODS;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_PAYMENT_METHOD_IS_DEFAULT, paymentMethod.getIsDefault() ? "true" : "false"),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_PAYMENT_METHOD_IS_DEFAULT, paymentMethod.getIsDefault() ? "true" : "false");
 
-        return httpClient.doPostAndFollowLocation(uri, paymentMethod, queryParams, PaymentMethod.class);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, paymentMethod, PaymentMethod.class, requestOptions);
     }
 
+    @Deprecated
     public void updateDefaultPaymentMethod(final UUID accountId, final UUID paymentMethodId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        updateDefaultPaymentMethod(accountId, paymentMethodId, RequestOptions.builder()
+                                                                             .withCreatedBy(createdBy)
+                                                                             .withReason(reason)
+                                                                             .withComment(comment)
+                                                                             .build());
+    }
+
+    public void updateDefaultPaymentMethod(final UUID accountId, final UUID paymentMethodId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS + "/" + paymentMethodId + "/" + JaxrsResource.PAYMENT_METHODS_DEFAULT_PATH_POSTFIX;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        httpClient.doPut(uri, null, queryParams);
+        httpClient.doPut(uri, null, inputOptions);
     }
 
+    @Deprecated
     public void deletePaymentMethod(final UUID paymentMethodId, final Boolean deleteDefault, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deletePaymentMethod(paymentMethodId, deleteDefault, RequestOptions.builder()
+                                                                          .withCreatedBy(createdBy)
+                                                                          .withReason(reason)
+                                                                          .withComment(comment)
+                                                                          .build());
+    }
+
+    public void deletePaymentMethod(final UUID paymentMethodId, final Boolean deleteDefault, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF, deleteDefault.toString()),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF, deleteDefault.toString());
 
-        httpClient.doDelete(uri, queryParams);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        httpClient.doDelete(uri, requestOptions);
     }
 
+    @Deprecated
     public void refreshPaymentMethods(final UUID accountId, final String pluginName, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        refreshPaymentMethods(accountId, pluginName, pluginProperties, RequestOptions.builder()
+                                                                                     .withCreatedBy(createdBy)
+                                                                                     .withReason(reason)
+                                                                                     .withComment(comment)
+                                                                                     .build());
+    }
+
+    public void refreshPaymentMethods(final UUID accountId, final String pluginName, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENT_METHODS + "/refresh";
 
-        final Multimap<String, String> params = HashMultimap.<String, String>create();
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         if (pluginName != null) {
-            params.put(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_NAME, pluginName);
+            queryParams.put(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_NAME, pluginName);
         }
+        storePluginPropertiesAsParams(pluginProperties, queryParams);
 
-        storePluginPropertiesAsParams(pluginProperties, params);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
-        final Multimap<String, String> queryParams = paramsWithAudit(params, createdBy, reason, comment);
-        httpClient.doPost(uri, null, queryParams);
+        httpClient.doPost(uri, null, requestOptions);
     }
 
+    @Deprecated
     public void refreshPaymentMethods(final UUID accountId, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        refreshPaymentMethods(accountId, null, pluginProperties, createdBy, reason, comment);
+        refreshPaymentMethods(accountId, pluginProperties, RequestOptions.builder()
+                                                                         .withCreatedBy(createdBy)
+                                                                         .withReason(reason)
+                                                                         .withComment(comment)
+                                                                         .build());
+    }
+
+    public void refreshPaymentMethods(final UUID accountId, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
+        refreshPaymentMethods(accountId, null, pluginProperties, inputOptions);
     }
 
     // Overdue
 
+    @Deprecated
     public void uploadXMLOverdueConfig(final String overdueConfigFilePath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.OVERDUE_PATH;
-        uploadFile(overdueConfigFilePath, uri, "application/xml", createdBy, reason, comment, null);
+        uploadXMLOverdueConfig(overdueConfigFilePath, RequestOptions.builder()
+                                                                    .withCreatedBy(createdBy)
+                                                                    .withReason(reason)
+                                                                    .withComment(comment)
+                                                                    .build());
     }
 
+    public void uploadXMLOverdueConfig(final String overdueConfigFilePath, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.OVERDUE_PATH;
+        uploadFile(overdueConfigFilePath, uri, "application/xml", inputOptions, null);
+    }
+
+    @Deprecated
     public void uploadXMLOverdueConfig(final InputStream overdueConfigInputStream, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.OVERDUE_PATH;
-        uploadFile(overdueConfigInputStream, uri, "application/xml", createdBy, reason, comment, null);
+        uploadXMLOverdueConfig(overdueConfigInputStream, RequestOptions.builder()
+                                                                       .withCreatedBy(createdBy)
+                                                                       .withReason(reason)
+                                                                       .withComment(comment)
+                                                                       .build());
     }
 
+    public void uploadXMLOverdueConfig(final InputStream overdueConfigInputStream, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.OVERDUE_PATH;
+        uploadFile(overdueConfigInputStream, uri, "application/xml", inputOptions, null);
+    }
+
+    @Deprecated
     public String getXMLOverdueConfig() throws KillBillClientException {
-        final String uri = JaxrsResource.OVERDUE_PATH;
-        return getResourceFile(uri, "application/xml");
+        return getXMLOverdueConfig(RequestOptions.empty());
     }
 
+    public String getXMLOverdueConfig(final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.OVERDUE_PATH;
+        return getResourceFile(uri, "application/xml", inputOptions);
+    }
+
+    @Deprecated
     public OverdueState getOverdueStateForAccount(final UUID accountId) throws KillBillClientException {
+        return getOverdueStateForAccount(accountId, RequestOptions.empty());
+    }
+
+    public OverdueState getOverdueStateForAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.OVERDUE;
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, OverdueState.class);
+        return httpClient.doGet(uri, OverdueState.class, inputOptions);
     }
 
     // Tag definitions
 
+    @Deprecated
     public TagDefinitions getTagDefinitions() throws KillBillClientException {
-        return httpClient.doGet(JaxrsResource.TAG_DEFINITIONS_PATH, DEFAULT_EMPTY_QUERY, TagDefinitions.class);
+        return getTagDefinitions(RequestOptions.empty());
     }
 
+    public TagDefinitions getTagDefinitions(final RequestOptions inputOptions) throws KillBillClientException {
+        return httpClient.doGet(JaxrsResource.TAG_DEFINITIONS_PATH, TagDefinitions.class, inputOptions);
+    }
+
+    @Deprecated
     public TagDefinition getTagDefinition(final UUID tagDefinitionId) throws KillBillClientException {
-        final String uri = JaxrsResource.TAG_DEFINITIONS_PATH + "/" + tagDefinitionId;
-
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, TagDefinition.class);
+        return getTagDefinition(tagDefinitionId, RequestOptions.empty());
     }
 
+    public TagDefinition getTagDefinition(final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.TAG_DEFINITIONS_PATH + "/" + tagDefinitionId;
+
+        return httpClient.doGet(uri, TagDefinition.class, inputOptions);
+    }
+
+    @Deprecated
     public TagDefinition createTagDefinition(final TagDefinition tagDefinition, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        return httpClient.doPostAndFollowLocation(JaxrsResource.TAG_DEFINITIONS_PATH, tagDefinition, queryParams, TagDefinition.class);
+        return createTagDefinition(tagDefinition, RequestOptions.builder()
+                                                                .withCreatedBy(createdBy)
+                                                                .withReason(reason)
+                                                                .withComment(comment)
+                                                                .build());
     }
 
+    public TagDefinition createTagDefinition(final TagDefinition tagDefinition, final RequestOptions inputOptions) throws KillBillClientException {
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(JaxrsResource.TAG_DEFINITIONS_PATH, tagDefinition, TagDefinition.class, requestOptions);
+    }
+
+    @Deprecated
     public void deleteTagDefinition(final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deleteTagDefinition(tagDefinitionId, RequestOptions.builder()
+                                                           .withCreatedBy(createdBy)
+                                                           .withReason(reason)
+                                                           .withComment(comment)
+                                                           .build());
+    }
+
+    public void deleteTagDefinition(final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.TAG_DEFINITIONS_PATH + "/" + tagDefinitionId;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        httpClient.doDelete(uri, queryParams);
+        httpClient.doDelete(uri, inputOptions);
     }
 
     // Tags
 
+    @Deprecated
     public Tags getTags() throws KillBillClientException {
-        return getTags(0L, 100L);
+        return getTags(RequestOptions.empty());
     }
 
+    public Tags getTags(final RequestOptions inputOptions) throws KillBillClientException {
+        return getTags(0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public Tags getTags(final Long offset, final Long limit) throws KillBillClientException {
-        return getTags(offset, limit, AuditLevel.NONE);
+        return getTags(offset, limit, RequestOptions.empty());
     }
 
+    public Tags getTags(final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return getTags(offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Tags getTags(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return getTags(offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public Tags getTags(final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.TAGS_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, Tags.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
+    @Deprecated
     public Tags searchTags(final String key) throws KillBillClientException {
-        return searchTags(key, 0L, 100L);
+        return searchTags(key, RequestOptions.empty());
     }
 
+    public Tags searchTags(final String key, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchTags(key, 0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public Tags searchTags(final String key, final Long offset, final Long limit) throws KillBillClientException {
-        return searchTags(key, offset, limit, AuditLevel.NONE);
+        return searchTags(key, offset, limit, RequestOptions.empty());
     }
 
+    public Tags searchTags(final String key, final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchTags(key, offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Tags searchTags(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return searchTags(key, offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public Tags searchTags(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.TAGS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Tags.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
+    @Deprecated
     public Tags getAllAccountTags(final UUID accountId, final String objectType) throws KillBillClientException {
-        return getAllAccountTags(accountId, objectType);
+        return getAllAccountTags(accountId, objectType, RequestOptions.empty());
     }
 
+    public Tags getAllAccountTags(final UUID accountId, final String objectType, final RequestOptions inputOptions) throws KillBillClientException {
+        return getAllAccountTags(accountId, objectType, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Tags getAllAccountTags(final UUID accountId, @Nullable final String objectType, final AuditLevel auditLevel) throws KillBillClientException {
+        return getAllAccountTags(accountId, objectType, auditLevel, RequestOptions.empty());
+    }
+
+    public Tags getAllAccountTags(final UUID accountId, @Nullable final String objectType, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.ALL_TAGS;
 
-        final ImmutableMultimap.Builder mapBuilder = ImmutableMultimap.builder().put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
         if (objectType != null) {
-            mapBuilder.put(JaxrsResource.QUERY_OBJECT_TYPE, objectType);
+            queryParams.put(JaxrsResource.QUERY_OBJECT_TYPE, objectType);
         }
-        return httpClient.doGet(uri, mapBuilder.build(), Tags.class);
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-
+    @Deprecated
     public Tags getAccountTags(final UUID accountId) throws KillBillClientException {
-        return getAccountTags(accountId, AuditLevel.NONE);
+        return getAccountTags(accountId, RequestOptions.empty());
     }
 
+    public Tags getAccountTags(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccountTags(accountId, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Tags getAccountTags(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
-        return getObjectTags(accountId, JaxrsResource.ACCOUNTS_PATH, auditLevel);
+        return getAccountTags(accountId, auditLevel, RequestOptions.empty());
     }
 
+    public Tags getAccountTags(final UUID accountId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getObjectTags(accountId, JaxrsResource.ACCOUNTS_PATH, auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public Tags createAccountTag(final UUID accountId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createObjectTag(accountId, JaxrsResource.ACCOUNTS_PATH, tagDefinitionId, createdBy, reason, comment);
+        return createAccountTag(accountId, tagDefinitionId, RequestOptions.builder()
+                                                                          .withCreatedBy(createdBy)
+                                                                          .withReason(reason)
+                                                                          .withComment(comment)
+                                                                          .build());
     }
 
+    public Tags createAccountTag(final UUID accountId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return createObjectTag(accountId, JaxrsResource.ACCOUNTS_PATH, tagDefinitionId, inputOptions);
+    }
+
+    @Deprecated
     public void deleteAccountTag(final UUID accountId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        deleteObjectTag(accountId, JaxrsResource.ACCOUNTS_PATH, tagDefinitionId, createdBy, reason, comment);
+        deleteAccountTag(accountId, tagDefinitionId, RequestOptions.builder()
+                                                                   .withCreatedBy(createdBy)
+                                                                   .withReason(reason)
+                                                                   .withComment(comment)
+                                                                   .build());
     }
 
+    public void deleteAccountTag(final UUID accountId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteObjectTag(accountId, JaxrsResource.ACCOUNTS_PATH, tagDefinitionId, inputOptions);
+    }
 
+    @Deprecated
     public Tags getBundleTags(final UUID bundleId) throws KillBillClientException {
-        return getBundleTags(bundleId, AuditLevel.NONE);
+        return getBundleTags(bundleId, RequestOptions.empty());
     }
 
+    public Tags getBundleTags(final UUID bundleId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getBundleTags(bundleId, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Tags getBundleTags(final UUID bundleId, final AuditLevel auditLevel) throws KillBillClientException {
-        return getObjectTags(bundleId, JaxrsResource.BUNDLES_PATH, auditLevel);
+        return getBundleTags(bundleId, auditLevel, RequestOptions.empty());
     }
 
+    public Tags getBundleTags(final UUID bundleId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getObjectTags(bundleId, JaxrsResource.BUNDLES_PATH, auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public Tags createBundleTag(final UUID bundleId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createObjectTag(bundleId, JaxrsResource.BUNDLES_PATH, tagDefinitionId, createdBy, reason, comment);
+        return createBundleTag(bundleId, tagDefinitionId, RequestOptions.builder()
+                                                                        .withCreatedBy(createdBy)
+                                                                        .withReason(reason)
+                                                                        .withComment(comment)
+                                                                        .build());
     }
 
+    public Tags createBundleTag(final UUID bundleId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return createObjectTag(bundleId, JaxrsResource.BUNDLES_PATH, tagDefinitionId, inputOptions);
+    }
 
+    @Deprecated
     public void deleteBundleTag(final UUID bundleId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        deleteObjectTag(bundleId, JaxrsResource.BUNDLES_PATH, tagDefinitionId, createdBy, reason, comment);
+        deleteBundleTag(bundleId, tagDefinitionId, RequestOptions.builder()
+                                                                 .withCreatedBy(createdBy)
+                                                                 .withReason(reason)
+                                                                 .withComment(comment)
+                                                                 .build());
     }
 
+    public void deleteBundleTag(final UUID bundleId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteObjectTag(bundleId, JaxrsResource.BUNDLES_PATH, tagDefinitionId, inputOptions);
+    }
 
+    @Deprecated
     public Tags getSubscriptionTags(final UUID subscriptionId) throws KillBillClientException {
-        return getBundleTags(subscriptionId, AuditLevel.NONE);
+        return getSubscriptionTags(subscriptionId, RequestOptions.empty());
     }
 
+    public Tags getSubscriptionTags(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getSubscriptionTags(subscriptionId, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Tags getSubscriptionTags(final UUID subscriptionId, final AuditLevel auditLevel) throws KillBillClientException {
-        return getObjectTags(subscriptionId, JaxrsResource.SUBSCRIPTIONS_PATH, auditLevel);
+        return getSubscriptionTags(subscriptionId, auditLevel, RequestOptions.empty());
     }
 
+    public Tags getSubscriptionTags(final UUID subscriptionId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getObjectTags(subscriptionId, JaxrsResource.SUBSCRIPTIONS_PATH, auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public Tags createSubscriptionTag(final UUID subscriptionId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createObjectTag(subscriptionId, JaxrsResource.SUBSCRIPTIONS_PATH, tagDefinitionId, createdBy, reason, comment);
+        return createSubscriptionTag(subscriptionId, tagDefinitionId, RequestOptions.builder()
+                                                                                    .withCreatedBy(createdBy)
+                                                                                    .withReason(reason)
+                                                                                    .withComment(comment)
+                                                                                    .build());
     }
 
+    public Tags createSubscriptionTag(final UUID subscriptionId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return createObjectTag(subscriptionId, JaxrsResource.SUBSCRIPTIONS_PATH, tagDefinitionId, inputOptions);
+    }
 
+    @Deprecated
     public void deleteSubscriptionTag(final UUID subscriptionId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        deleteObjectTag(subscriptionId, JaxrsResource.SUBSCRIPTIONS_PATH, tagDefinitionId, createdBy, reason, comment);
+        deleteSubscriptionTag(subscriptionId, tagDefinitionId, RequestOptions.builder()
+                                                                             .withCreatedBy(createdBy)
+                                                                             .withReason(reason)
+                                                                             .withComment(comment)
+                                                                             .build());
     }
 
+    public void deleteSubscriptionTag(final UUID subscriptionId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteObjectTag(subscriptionId, JaxrsResource.SUBSCRIPTIONS_PATH, tagDefinitionId, inputOptions);
+    }
+
+    @Deprecated
     public Tags getInvoiceTags(final UUID invoiceId) throws KillBillClientException {
-        return getBundleTags(invoiceId, AuditLevel.NONE);
+        return getInvoiceTags(invoiceId, RequestOptions.empty());
     }
 
+    public Tags getInvoiceTags(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoiceTags(invoiceId, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Tags getInvoiceTags(final UUID invoiceId, final AuditLevel auditLevel) throws KillBillClientException {
-        return getObjectTags(invoiceId, JaxrsResource.INVOICES_PATH, auditLevel);
+        return getInvoiceTags(invoiceId, auditLevel, RequestOptions.empty());
     }
 
+    public Tags getInvoiceTags(final UUID invoiceId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getObjectTags(invoiceId, JaxrsResource.INVOICES_PATH, auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public Tags createInvoiceTag(final UUID invoiceId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createObjectTag(invoiceId, JaxrsResource.INVOICES_PATH, tagDefinitionId, createdBy, reason, comment);
+        return createInvoiceTag(invoiceId, tagDefinitionId, RequestOptions.builder()
+                                                                          .withCreatedBy(createdBy)
+                                                                          .withReason(reason)
+                                                                          .withComment(comment)
+                                                                          .build());
     }
 
+    public Tags createInvoiceTag(final UUID invoiceId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return createObjectTag(invoiceId, JaxrsResource.INVOICES_PATH, tagDefinitionId, inputOptions);
+    }
 
+    @Deprecated
     public void deleteInvoiceTag(final UUID invoiceId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        deleteObjectTag(invoiceId, JaxrsResource.INVOICES_PATH, tagDefinitionId, createdBy, reason, comment);
+        deleteInvoiceTag(invoiceId, tagDefinitionId, RequestOptions.builder()
+                                                                   .withCreatedBy(createdBy)
+                                                                   .withReason(reason)
+                                                                   .withComment(comment)
+                                                                   .build());
     }
 
+    public void deleteInvoiceTag(final UUID invoiceId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteObjectTag(invoiceId, JaxrsResource.INVOICES_PATH, tagDefinitionId, inputOptions);
+    }
 
+    @Deprecated
     public Tags getPaymentTags(final UUID paymentId) throws KillBillClientException {
-        return getBundleTags(paymentId, AuditLevel.NONE);
+        return getPaymentTags(paymentId, RequestOptions.empty());
     }
 
+    public Tags getPaymentTags(final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentTags(paymentId, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public Tags getPaymentTags(final UUID paymentId, final AuditLevel auditLevel) throws KillBillClientException {
-        return getObjectTags(paymentId, JaxrsResource.PAYMENTS_PATH, auditLevel);
+        return getPaymentTags(paymentId, auditLevel, RequestOptions.empty());
     }
 
+    public Tags getPaymentTags(final UUID paymentId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getObjectTags(paymentId, JaxrsResource.PAYMENTS_PATH, auditLevel, inputOptions);
+    }
+
+    @Deprecated
     public Tags createPaymentTag(final UUID paymentId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createObjectTag(paymentId, JaxrsResource.PAYMENTS_PATH, tagDefinitionId, createdBy, reason, comment);
+        return createPaymentTag(paymentId, tagDefinitionId, RequestOptions.builder()
+                                                                          .withCreatedBy(createdBy)
+                                                                          .withReason(reason)
+                                                                          .withComment(comment)
+                                                                          .build());
     }
 
+    public Tags createPaymentTag(final UUID paymentId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return createObjectTag(paymentId, JaxrsResource.PAYMENTS_PATH, tagDefinitionId, inputOptions);
+    }
 
+    @Deprecated
     public void deletePaymentTag(final UUID paymentId, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        deleteObjectTag(paymentId, JaxrsResource.PAYMENTS_PATH, tagDefinitionId, createdBy, reason, comment);
+        deletePaymentTag(paymentId, tagDefinitionId, RequestOptions.builder()
+                                                                   .withCreatedBy(createdBy)
+                                                                   .withReason(reason)
+                                                                   .withComment(comment)
+                                                                   .build());
     }
 
-
-    private Tags getObjectTags(final UUID objectId, final String resourcePathPrefix, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = resourcePathPrefix + "/" + objectId + "/" + JaxrsResource.TAGS;
-
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
-
-        return httpClient.doGet(uri, queryParams, Tags.class);
+    public void deletePaymentTag(final UUID paymentId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteObjectTag(paymentId, JaxrsResource.PAYMENTS_PATH, tagDefinitionId, inputOptions);
     }
 
-
-
-    private Tags createObjectTag(final UUID objectId, final String resourcePathPrefix, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    private Tags getObjectTags(final UUID objectId, final String resourcePathPrefix, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = resourcePathPrefix + "/" + objectId + "/" + JaxrsResource.TAGS;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_TAGS, tagDefinitionId.toString()),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doPostAndFollowLocation(uri, null, queryParams, Tags.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-
-    private void deleteObjectTag(final UUID objectId, final String resourcePathPrefix, final UUID tagDefinitionId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    private Tags createObjectTag(final UUID objectId, final String resourcePathPrefix, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = resourcePathPrefix + "/" + objectId + "/" + JaxrsResource.TAGS;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_TAGS, tagDefinitionId.toString()),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_TAGS, tagDefinitionId.toString());
 
-        httpClient.doDelete(uri, queryParams);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, null, Tags.class, requestOptions);
+    }
+
+    private void deleteObjectTag(final UUID objectId, final String resourcePathPrefix, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = resourcePathPrefix + "/" + objectId + "/" + JaxrsResource.TAGS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_TAGS, tagDefinitionId.toString());
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        httpClient.doDelete(uri, requestOptions);
     }
 
     // Custom fields
 
+    @Deprecated
     public CustomFields getCustomFields() throws KillBillClientException {
-        return getCustomFields(0L, 100L);
+        return getCustomFields(RequestOptions.empty());
     }
 
+    public CustomFields getCustomFields(final RequestOptions inputOptions) throws KillBillClientException {
+        return getCustomFields(0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public CustomFields getCustomFields(final Long offset, final Long limit) throws KillBillClientException {
-        return getCustomFields(offset, limit, AuditLevel.NONE);
+        return getCustomFields(offset, limit, RequestOptions.empty());
     }
 
+    public CustomFields getCustomFields(final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return getCustomFields(offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public CustomFields getCustomFields(final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return getCustomFields(offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public CustomFields getCustomFields(final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.CUSTOM_FIELDS_PATH + "/" + JaxrsResource.PAGINATION;
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, queryParams, CustomFields.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
+    @Deprecated
     public CustomFields searchCustomFields(final String key) throws KillBillClientException {
-        return searchCustomFields(key, 0L, 100L);
+        return searchCustomFields(key, RequestOptions.empty());
     }
 
+    public CustomFields searchCustomFields(final String key, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchCustomFields(key, 0L, 100L, inputOptions);
+    }
+
+    @Deprecated
     public CustomFields searchCustomFields(final String key, final Long offset, final Long limit) throws KillBillClientException {
-        return searchCustomFields(key, offset, limit, AuditLevel.NONE);
+        return searchCustomFields(key, offset, limit, RequestOptions.empty());
     }
 
+    public CustomFields searchCustomFields(final String key, final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchCustomFields(key, offset, limit, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public CustomFields searchCustomFields(final String key, final Long offset, final Long limit, final AuditLevel auditLevel) throws KillBillClientException {
+        return searchCustomFields(key, offset, limit, auditLevel, RequestOptions.empty());
+    }
+
+    public CustomFields searchCustomFields(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.CUSTOM_FIELDS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset),
-                                                                                          JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit),
-                                                                                          JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
+        queryParams.put(JaxrsResource.QUERY_SEARCH_LIMIT, String.valueOf(limit));
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, CustomFields.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
+    @Deprecated
     public CustomFields getAccountCustomFields(final UUID accountId) throws KillBillClientException {
-        return getAccountCustomFields(accountId, AuditLevel.NONE);
+        return getAccountCustomFields(accountId, RequestOptions.empty());
     }
 
+    public CustomFields getAccountCustomFields(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccountCustomFields(accountId, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public CustomFields getAccountCustomFields(final UUID accountId, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.CUSTOM_FIELDS;
-
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
-
-        return httpClient.doGet(uri, queryParams, CustomFields.class);
+        return getAccountCustomFields(accountId, auditLevel, RequestOptions.empty());
     }
 
+    public CustomFields getAccountCustomFields(final UUID accountId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    @Deprecated
     public CustomFields createAccountCustomField(final UUID accountId, final CustomField customField, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createAccountCustomFields(accountId, ImmutableList.<CustomField>of(customField), createdBy, reason, comment);
+        return createAccountCustomField(accountId, customField, RequestOptions.builder()
+                                                                              .withCreatedBy(createdBy)
+                                                                              .withReason(reason)
+                                                                              .withComment(comment)
+                                                                              .build());
     }
 
+    public CustomFields createAccountCustomField(final UUID accountId, final CustomField customField, final RequestOptions inputOptions) throws KillBillClientException {
+        return createAccountCustomFields(accountId, ImmutableList.<CustomField>of(customField), inputOptions);
+    }
+
+    @Deprecated
     public CustomFields createAccountCustomFields(final UUID accountId, final Iterable<CustomField> customFields, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.CUSTOM_FIELDS;
-
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        return httpClient.doPostAndFollowLocation(uri, customFields, queryParams, CustomFields.class);
+        return createAccountCustomFields(accountId, customFields, RequestOptions.builder()
+                                                                                .withCreatedBy(createdBy)
+                                                                                .withReason(reason)
+                                                                                .withComment(comment)
+                                                                                .build());
     }
 
+    public CustomFields createAccountCustomFields(final UUID accountId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
+    }
+
+    @Deprecated
     public void deleteAccountCustomField(final UUID accountId, final UUID customFieldId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        deleteAccountCustomFields(accountId, ImmutableList.<UUID>of(customFieldId), createdBy, reason, comment);
+        deleteAccountCustomField(accountId, customFieldId, RequestOptions.builder()
+                                                                         .withCreatedBy(createdBy)
+                                                                         .withReason(reason)
+                                                                         .withComment(comment)
+                                                                         .build());
     }
 
+    public void deleteAccountCustomField(final UUID accountId, final UUID customFieldId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteAccountCustomFields(accountId, ImmutableList.<UUID>of(customFieldId), inputOptions);
+    }
+
+    @Deprecated
     public void deleteAccountCustomFields(final UUID accountId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        deleteAccountCustomFields(accountId, null, createdBy, reason, comment);
+        deleteAccountCustomFields(accountId, RequestOptions.builder()
+                                                           .withCreatedBy(createdBy)
+                                                           .withReason(reason)
+                                                           .withComment(comment)
+                                                           .build());
     }
 
+    public void deleteAccountCustomFields(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteAccountCustomFields(accountId, null, inputOptions);
+    }
+
+    @Deprecated
     public void deleteAccountCustomFields(final UUID accountId, @Nullable final Iterable<UUID> customFieldIds, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deleteAccountCustomFields(accountId, customFieldIds, RequestOptions.builder()
+                                                                           .withCreatedBy(createdBy)
+                                                                           .withReason(reason)
+                                                                           .withComment(comment)
+                                                                           .build());
+    }
+
+    public void deleteAccountCustomFields(final UUID accountId, @Nullable final Iterable<UUID> customFieldIds, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.CUSTOM_FIELDS;
 
-        final Multimap<String, String> paramCustomFields = customFieldIds == null ?
-                                                           ImmutableMultimap.<String, String>of() :
-                                                           ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (customFieldIds != null) {
+            queryParams.put(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+        }
 
-        final Multimap<String, String> queryParams = paramsWithAudit(paramCustomFields,
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
-        httpClient.doDelete(uri, queryParams);
+        httpClient.doDelete(uri, requestOptions);
     }
 
+    @Deprecated
     public CustomFields getPaymentMethodCustomFields(final UUID paymentMethodId) throws KillBillClientException {
-        return getPaymentMethodCustomFields(paymentMethodId, AuditLevel.NONE);
+        return getPaymentMethodCustomFields(paymentMethodId, RequestOptions.empty());
     }
 
+    public CustomFields getPaymentMethodCustomFields(final UUID paymentMethodId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethodCustomFields(paymentMethodId, AuditLevel.NONE, inputOptions);
+    }
+
+    @Deprecated
     public CustomFields getPaymentMethodCustomFields(final UUID paymentMethodId, final AuditLevel auditLevel) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.CUSTOM_FIELDS;
-
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
-
-        return httpClient.doGet(uri, queryParams, CustomFields.class);
+        return getPaymentMethodCustomFields(paymentMethodId, auditLevel, RequestOptions.empty());
     }
 
+    public CustomFields getPaymentMethodCustomFields(final UUID paymentMethodId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    @Deprecated
     public CustomFields createPaymentMethodCustomField(final UUID paymentMethodId, final CustomField customField, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createPaymentMethodCustomFields(paymentMethodId, ImmutableList.of(customField), createdBy, reason, comment);
+        return createPaymentMethodCustomField(paymentMethodId, customField, RequestOptions.builder()
+                                                                                          .withCreatedBy(createdBy)
+                                                                                          .withReason(reason)
+                                                                                          .withComment(comment)
+                                                                                          .build());
     }
 
+    public CustomFields createPaymentMethodCustomField(final UUID paymentMethodId, final CustomField customField, final RequestOptions inputOptions) throws KillBillClientException {
+        return createPaymentMethodCustomFields(paymentMethodId, ImmutableList.of(customField), inputOptions);
+    }
+
+    @Deprecated
     public CustomFields createPaymentMethodCustomFields(final UUID paymentMethodId, final Iterable<CustomField> customFields, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.CUSTOM_FIELDS;
-
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-
-        return httpClient.doPostAndFollowLocation(uri, customFields, queryParams, CustomFields.class);
+        return createPaymentMethodCustomFields(paymentMethodId, customFields, RequestOptions.builder()
+                                                                                            .withCreatedBy(createdBy)
+                                                                                            .withReason(reason)
+                                                                                            .withComment(comment)
+                                                                                            .build());
     }
 
+    public CustomFields createPaymentMethodCustomFields(final UUID paymentMethodId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
+    }
+
+    @Deprecated
     public void deletePaymentMethodCustomFields(final UUID paymentMethodId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        deletePaymentMethodCustomFields(paymentMethodId, null, createdBy, reason, comment);
+        deletePaymentMethodCustomFields(paymentMethodId, RequestOptions.builder()
+                                                                       .withCreatedBy(createdBy)
+                                                                       .withReason(reason)
+                                                                       .withComment(comment)
+                                                                       .build());
     }
 
+    public void deletePaymentMethodCustomFields(final UUID paymentMethodId, final RequestOptions inputOptions) throws KillBillClientException {
+        deletePaymentMethodCustomFields(paymentMethodId, null, inputOptions);
+    }
+
+    @Deprecated
     public void deletePaymentMethodCustomFields(final UUID paymentMethodId, @Nullable final Iterable<UUID> customFieldIds, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deletePaymentMethodCustomFields(paymentMethodId, customFieldIds, RequestOptions.builder()
+                                                                                       .withCreatedBy(createdBy)
+                                                                                       .withReason(reason)
+                                                                                       .withComment(comment)
+                                                                                       .build());
+    }
+
+    public void deletePaymentMethodCustomFields(final UUID paymentMethodId, @Nullable final Iterable<UUID> customFieldIds, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.CUSTOM_FIELDS;
 
-        final Multimap<String, String> paramCustomFields = customFieldIds == null ?
-                                                           ImmutableMultimap.<String, String>of() :
-                                                           ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (customFieldIds != null) {
+            queryParams.put(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+        }
 
-        final Multimap<String, String> queryParams = paramsWithAudit(paramCustomFields,
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
-        httpClient.doDelete(uri, queryParams);
+        httpClient.doDelete(uri, requestOptions);
     }
 
     // Catalog
 
+    @Deprecated
     public List<PlanDetail> getAvailableAddons(final String baseProductName) throws KillBillClientException {
+        return getAvailableAddons(baseProductName, RequestOptions.empty());
+    }
+
+    public List<PlanDetail> getAvailableAddons(final String baseProductName, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH + "/availableAddons";
 
-        final Multimap<String, String> queryParams = ImmutableMultimap.<String, String>of("baseProductName", baseProductName);
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put("baseProductName", baseProductName);
 
-        return httpClient.doGet(uri, queryParams, PlanDetails.class);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, PlanDetails.class, requestOptions);
     }
 
+    @Deprecated
     public List<PlanDetail> getBasePlans() throws KillBillClientException {
+        return getBasePlans(RequestOptions.empty());
+    }
+
+    public List<PlanDetail> getBasePlans(final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH + "/availableBasePlans";
 
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, PlanDetails.class);
+        return httpClient.doGet(uri, PlanDetails.class, inputOptions);
     }
 
+    @Deprecated
     public void uploadXMLCatalog(final String catalogFilePath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.CATALOG_PATH;
-        uploadFile(catalogFilePath, uri, CONTENT_TYPE_XML, createdBy, reason, comment, null);
+        uploadXMLCatalog(catalogFilePath, RequestOptions.builder()
+                                                        .withCreatedBy(createdBy)
+                                                        .withReason(reason)
+                                                        .withComment(comment)
+                                                        .build());
     }
 
+    public void uploadXMLCatalog(final String catalogFilePath, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.CATALOG_PATH;
+        uploadFile(catalogFilePath, uri, CONTENT_TYPE_XML, inputOptions, null);
+    }
+
+    @Deprecated
     public void uploadXMLCatalog(final InputStream catalogInputStream, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        uploadXMLCatalog(catalogInputStream, RequestOptions.builder()
+                                                           .withCreatedBy(createdBy)
+                                                           .withReason(reason)
+                                                           .withComment(comment)
+                                                           .build());
+    }
+
+    public void uploadXMLCatalog(final InputStream catalogInputStream, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH;
-        uploadFile(catalogInputStream, uri, CONTENT_TYPE_XML, createdBy, reason, comment, null);
+        uploadFile(catalogInputStream, uri, CONTENT_TYPE_XML, inputOptions, null);
     }
 
+    @Deprecated
     public Catalog getJSONCatalog() throws KillBillClientException {
-        return this.getJSONCatalog(null);
+        return getJSONCatalog(RequestOptions.empty());
     }
 
-    public Catalog getJSONCatalog(final DateTime requestedDate) throws KillBillClientException {
+    public Catalog getJSONCatalog(final RequestOptions inputOptions) throws KillBillClientException {
+        return this.getJSONCatalog(null, inputOptions);
+    }
 
-        final Multimap<String, String> params = HashMultimap.<String, String>create();
+    @Deprecated
+    public Catalog getJSONCatalog(final DateTime requestedDate) throws KillBillClientException {
+        return getJSONCatalog(requestedDate, RequestOptions.empty());
+    }
+
+    public Catalog getJSONCatalog(final DateTime requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            params.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
+            queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
         }
 
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
         final String uri = JaxrsResource.CATALOG_PATH;
-        return httpClient.doGet(uri, params, Catalog.class);
+        return httpClient.doGet(uri, Catalog.class, requestOptions);
     }
 
+    @Deprecated
     public String getXMLCatalog() throws KillBillClientException {
+        return getXMLCatalog(RequestOptions.empty());
+    }
+
+    public String getXMLCatalog(final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH;
-        return getResourceFile(uri, ACCEPT_XML);
+        return getResourceFile(uri, ACCEPT_XML, inputOptions);
     }
 
     // Tenants
 
+    @Deprecated
     public Tenant createTenant(final Tenant tenant, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createTenant(tenant, RequestOptions.builder()
+                                                  .withCreatedBy(createdBy)
+                                                  .withReason(reason)
+                                                  .withComment(comment)
+                                                  .build());
+    }
+
+    public Tenant createTenant(final Tenant tenant, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(tenant.getApiKey(), "Tenant#apiKey cannot be null");
         Preconditions.checkNotNull(tenant.getApiSecret(), "Tenant#apiSecret cannot be null");
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
 
-        return httpClient.doPostAndFollowLocation(JaxrsResource.TENANTS_PATH, tenant, queryParams, Tenant.class);
+        return httpClient.doPost(JaxrsResource.TENANTS_PATH, tenant, Tenant.class, requestOptions);
     }
 
+    @Deprecated
     public TenantKey registerCallbackNotificationForTenant(final String callback, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.REGISTER_NOTIFICATION_CALLBACK;
-
-        final Multimap<String, String> queryParams = paramsWithAudit(ImmutableMultimap.<String, String>of(JaxrsResource.QUERY_NOTIFICATION_CALLBACK, callback),
-                                                                     createdBy,
-                                                                     reason,
-                                                                     comment);
-
-        return httpClient.doPostAndFollowLocation(uri, null, queryParams, TenantKey.class);
+        return registerCallbackNotificationForTenant(callback, RequestOptions.builder()
+                                                                             .withCreatedBy(createdBy)
+                                                                             .withReason(reason)
+                                                                             .withComment(comment)
+                                                                             .build());
     }
 
+    public TenantKey registerCallbackNotificationForTenant(final String callback, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.REGISTER_NOTIFICATION_CALLBACK;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_NOTIFICATION_CALLBACK, callback);
+
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, null, TenantKey.class, requestOptions);
+    }
+
+    @Deprecated
     public TenantKey getCallbackNotificationForTenant() throws KillBillClientException {
-        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.REGISTER_NOTIFICATION_CALLBACK;
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, TenantKey.class);
+        return getCallbackNotificationForTenant(RequestOptions.empty());
     }
 
+    public TenantKey getCallbackNotificationForTenant(final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.REGISTER_NOTIFICATION_CALLBACK;
+        return httpClient.doGet(uri, TenantKey.class, inputOptions);
+    }
+
+    @Deprecated
     public void unregisterCallbackNotificationForTenant(final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        unregisterCallbackNotificationForTenant(RequestOptions.builder()
+                                                              .withCreatedBy(createdBy)
+                                                              .withReason(reason)
+                                                              .withComment(comment)
+                                                              .build());
+    }
+
+    public void unregisterCallbackNotificationForTenant(final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.REGISTER_NOTIFICATION_CALLBACK;
 
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        httpClient.doDelete(uri, queryParams);
+        httpClient.doDelete(uri, inputOptions);
     }
 
-
+    @Deprecated
     public TenantKey registerPluginConfigurationForTenant(final String pluginName, final String pluginConfigFilePath, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
-        return uploadFile(pluginConfigFilePath, uri, "text/plain", createdBy, reason, comment, TenantKey.class);
+        return registerPluginConfigurationForTenant(pluginName, pluginConfigFilePath, RequestOptions.builder()
+                                                                                                    .withCreatedBy(createdBy)
+                                                                                                    .withReason(reason)
+                                                                                                    .withComment(comment)
+                                                                                                    .build());
     }
 
-    public TenantKey registerPluginConfigurationForTenant(final String pluginName, final InputStream pluginConfigInputStream, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public TenantKey registerPluginConfigurationForTenant(final String pluginName, final String pluginConfigFilePath, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
-        return uploadFile(pluginConfigInputStream, uri, "text/plain", createdBy, reason, comment, TenantKey.class);
+        return uploadFile(pluginConfigFilePath, uri, "text/plain", inputOptions, TenantKey.class);
+    }
+
+    @Deprecated
+    public TenantKey registerPluginConfigurationForTenant(final String pluginName, final InputStream pluginConfigInputStream, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return registerPluginConfigurationForTenant(pluginName, pluginConfigInputStream, RequestOptions.builder()
+                                                                                                       .withCreatedBy(createdBy)
+                                                                                                       .withReason(reason)
+                                                                                                       .withComment(comment)
+                                                                                                       .build());
+    }
+
+    public TenantKey registerPluginConfigurationForTenant(final String pluginName, final InputStream pluginConfigInputStream, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
+        return uploadFile(pluginConfigInputStream, uri, "text/plain", inputOptions, TenantKey.class);
     }
 
     @Deprecated
     public TenantKey postPluginConfigurationPropertiesForTenant(final String pluginName, final String pluginConfigProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final RequestOptions options = RequestOptions.builder()
-                                               .withCreatedBy(createdBy)
-                                               .withReason(reason)
-                                               .withComment(comment)
-                                               .build();
+                                                     .withCreatedBy(createdBy)
+                                                     .withReason(reason)
+                                                     .withComment(comment)
+                                                     .build();
         return postPluginConfigurationPropertiesForTenant(pluginName, pluginConfigProperties, options);
     }
 
@@ -2027,165 +3373,242 @@ public class KillBillClient implements Closeable {
         return httpClient.doPost(uri, pluginConfigProperties, TenantKey.class, options);
     }
 
+    @Deprecated
     public TenantKey getPluginConfigurationForTenant(final String pluginName) throws KillBillClientException {
-        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG +  "/" + pluginName;
-        return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, TenantKey.class);
+        return getPluginConfigurationForTenant(pluginName, RequestOptions.empty());
     }
 
-    public void unregisterPluginConfigurationForTenant(final String pluginName, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public TenantKey getPluginConfigurationForTenant(final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        httpClient.doDelete(uri, queryParams);
+        return httpClient.doGet(uri, TenantKey.class, inputOptions);
     }
 
+    @Deprecated
+    public void unregisterPluginConfigurationForTenant(final String pluginName, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        unregisterPluginConfigurationForTenant(pluginName, RequestOptions.builder()
+                                                                         .withCreatedBy(createdBy)
+                                                                         .withReason(reason)
+                                                                         .withComment(comment)
+                                                                         .build());
+    }
 
+    public void unregisterPluginConfigurationForTenant(final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
+        httpClient.doDelete(uri, inputOptions);
+    }
+
+    @Deprecated
     public Permissions getPermissions() throws KillBillClientException {
-        return httpClient.doGet(JaxrsResource.SECURITY_PATH + "/permissions", DEFAULT_EMPTY_QUERY, Permissions.class);
+        return getPermissions(RequestOptions.empty());
     }
 
-
-    public Response addUserRoles(final UserRoles userRoles, String createdBy, String reason, String comment) throws KillBillClientException {
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        return httpClient.doPost(JaxrsResource.SECURITY_PATH + "/users", userRoles, queryParams);
+    public Permissions getPermissions(final RequestOptions inputOptions) throws KillBillClientException {
+        return httpClient.doGet(JaxrsResource.SECURITY_PATH + "/permissions", Permissions.class, inputOptions);
     }
 
+    @Deprecated
+    public Response addUserRoles(final UserRoles userRoles, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return addUserRoles(userRoles, RequestOptions.builder()
+                                                     .withCreatedBy(createdBy)
+                                                     .withReason(reason)
+                                                     .withComment(comment)
+                                                     .build());
+    }
 
-    public Response updateUserPassword(final String username, final String newPassword, String createdBy, String reason, String comment) throws KillBillClientException {
+    public Response addUserRoles(final UserRoles userRoles, final RequestOptions inputOptions) throws KillBillClientException {
+        return httpClient.doPost(JaxrsResource.SECURITY_PATH + "/users", userRoles, inputOptions);
+    }
+
+    @Deprecated
+    public Response updateUserPassword(final String username, final String newPassword, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return updateUserPassword(username, newPassword, RequestOptions.builder()
+                                                                       .withCreatedBy(createdBy)
+                                                                       .withReason(reason)
+                                                                       .withComment(comment)
+                                                                       .build());
+    }
+
+    public Response updateUserPassword(final String username, final String newPassword, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.SECURITY_PATH + "/users/" + username + "/password";
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
         final UserRoles userRoles = new UserRoles(username, newPassword, ImmutableList.<String>of());
-        return httpClient.doPut(uri, userRoles, queryParams);
+        return httpClient.doPut(uri, userRoles, inputOptions);
     }
 
-    public Response updateUserRoles(final String username, final List<String> newRoles, String createdBy, String reason, String comment) throws KillBillClientException {
+    @Deprecated
+    public Response updateUserRoles(final String username, final List<String> newRoles, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return updateUserRoles(username, newRoles, RequestOptions.builder()
+                                                                 .withCreatedBy(createdBy)
+                                                                 .withReason(reason)
+                                                                 .withComment(comment)
+                                                                 .build());
+    }
+
+    public Response updateUserRoles(final String username, final List<String> newRoles, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.SECURITY_PATH + "/users/" + username + "/roles";
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
         final UserRoles userRoles = new UserRoles(username, null, newRoles);
-        return httpClient.doPut(uri, userRoles, queryParams);
+        return httpClient.doPut(uri, userRoles, inputOptions);
     }
 
-    public Response invalidateUser(final String username, String createdBy, String reason, String comment) throws KillBillClientException {
+    @Deprecated
+    public Response invalidateUser(final String username, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return invalidateUser(username, RequestOptions.builder()
+                                                      .withCreatedBy(createdBy)
+                                                      .withReason(reason)
+                                                      .withComment(comment)
+                                                      .build());
+    }
+
+    public Response invalidateUser(final String username, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.SECURITY_PATH + "/users/" + username;
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        return httpClient.doDelete(uri, queryParams);
+        return httpClient.doDelete(uri, inputOptions);
     }
 
+    @Deprecated
+    public Response addRoleDefinition(final RoleDefinition roleDefinition, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return addRoleDefinition(roleDefinition, RequestOptions.builder()
+                                                               .withCreatedBy(createdBy)
+                                                               .withReason(reason)
+                                                               .withComment(comment)
+                                                               .build());
+    }
 
-    public Response addRoleDefinition(final RoleDefinition roleDefinition, String createdBy, String reason, String comment) throws KillBillClientException {
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        return httpClient.doPost(JaxrsResource.SECURITY_PATH + "/roles", roleDefinition, queryParams);
+    public Response addRoleDefinition(final RoleDefinition roleDefinition, final RequestOptions inputOptions) throws KillBillClientException {
+        return httpClient.doPost(JaxrsResource.SECURITY_PATH + "/roles", roleDefinition, inputOptions);
     }
 
     // Plugin endpoints
 
+    @Deprecated
     public Response pluginGET(final String uri) throws Exception {
-        return pluginGET(uri, DEFAULT_EMPTY_QUERY);
+        return pluginGET(uri, RequestOptions.empty());
     }
 
+    @Deprecated
     public Response pluginGET(final String uri, final Multimap<String, String> queryParams) throws Exception {
-        return httpClient.doGet(JaxrsResource.PLUGINS_PATH + "/" + uri, queryParams);
+        return pluginGET(uri, RequestOptions.builder().withQueryParams(queryParams).build());
     }
 
+    public Response pluginGET(final String uri, final RequestOptions inputOptions) throws Exception {
+        return httpClient.doGet(JaxrsResource.PLUGINS_PATH + "/" + uri, inputOptions);
+    }
+
+    @Deprecated
     public Response pluginHEAD(final String uri) throws Exception {
-        return pluginHEAD(uri, DEFAULT_EMPTY_QUERY);
+        return pluginHEAD(uri, RequestOptions.empty());
     }
 
+    @Deprecated
     public Response pluginHEAD(final String uri, final Multimap<String, String> queryParams) throws Exception {
-        return httpClient.doHead(JaxrsResource.PLUGINS_PATH + "/" + uri, queryParams);
+        return pluginHEAD(uri, RequestOptions.builder().withQueryParams(queryParams).build());
     }
 
+    public Response pluginHEAD(final String uri, final RequestOptions inputOptions) throws Exception {
+        return httpClient.doHead(JaxrsResource.PLUGINS_PATH + "/" + uri, inputOptions);
+    }
+
+    @Deprecated
     public Response pluginPOST(final String uri, @Nullable final String body) throws Exception {
-        return pluginPOST(uri, body, DEFAULT_EMPTY_QUERY);
+        return pluginPOST(uri, body, RequestOptions.empty());
     }
 
+    @Deprecated
     public Response pluginPOST(final String uri, @Nullable final String body, final Multimap<String, String> queryParams) throws Exception {
-        return httpClient.doPost(JaxrsResource.PLUGINS_PATH + "/" + uri, body, queryParams);
+        return pluginPOST(uri, body, RequestOptions.builder().withQueryParams(queryParams).build());
     }
 
+    public Response pluginPOST(final String uri, @Nullable final String body, final RequestOptions inputOptions) throws Exception {
+        return httpClient.doPost(JaxrsResource.PLUGINS_PATH + "/" + uri, body, inputOptions);
+    }
+
+    @Deprecated
     public Response pluginPUT(final String uri, @Nullable final String body) throws Exception {
-        return pluginPUT(uri, body, DEFAULT_EMPTY_QUERY);
+        return pluginPUT(uri, body, RequestOptions.empty());
     }
 
+    @Deprecated
     public Response pluginPUT(final String uri, @Nullable final String body, final Multimap<String, String> queryParams) throws Exception {
-        return httpClient.doPut(JaxrsResource.PLUGINS_PATH + "/" + uri, body, queryParams);
+        return pluginPUT(uri, body, RequestOptions.builder().withQueryParams(queryParams).build());
     }
 
+    public Response pluginPUT(final String uri, @Nullable final String body, final RequestOptions inputOptions) throws Exception {
+        return httpClient.doPut(JaxrsResource.PLUGINS_PATH + "/" + uri, body, inputOptions);
+    }
+
+    @Deprecated
     public Response pluginDELETE(final String uri) throws Exception {
-        return pluginDELETE(uri, DEFAULT_EMPTY_QUERY);
+        return pluginDELETE(uri, RequestOptions.empty());
     }
 
+    @Deprecated
     public Response pluginDELETE(final String uri, final Multimap<String, String> queryParams) throws Exception {
-        return httpClient.doDelete(JaxrsResource.PLUGINS_PATH + "/" + uri, queryParams);
+        return pluginDELETE(uri, RequestOptions.builder().withQueryParams(queryParams).build());
     }
 
+    public Response pluginDELETE(final String uri, final RequestOptions inputOptions) throws Exception {
+        return httpClient.doDelete(JaxrsResource.PLUGINS_PATH + "/" + uri, inputOptions);
+    }
+
+    @Deprecated
     public Response pluginOPTIONS(final String uri) throws Exception {
-        return pluginOPTIONS(uri, DEFAULT_EMPTY_QUERY);
+        return pluginOPTIONS(uri, RequestOptions.empty());
     }
 
+    @Deprecated
     public Response pluginOPTIONS(final String uri, final Multimap<String, String> queryParams) throws Exception {
-        return httpClient.doOptions(JaxrsResource.PLUGINS_PATH + "/" + uri, queryParams);
+        return pluginOPTIONS(uri, RequestOptions.builder().withQueryParams(queryParams).build());
+    }
+
+    public Response pluginOPTIONS(final String uri, final RequestOptions inputOptions) throws Exception {
+        return httpClient.doOptions(JaxrsResource.PLUGINS_PATH + "/" + uri, inputOptions);
     }
 
     // Utilities
 
-    private String getResourceFile(final String uri, final String contentType) throws KillBillClientException {
-        final Multimap<String, String> queryParams = HashMultimap.create();
-        queryParams.put(KillBillHttpClient.HTTP_HEADER_ACCEPT, contentType);
-        final Response response = httpClient.doGet(uri, queryParams);
+    private String getResourceFile(final String uri, final String contentType, final RequestOptions inputOptions) throws KillBillClientException {
+        final RequestOptions requestOptions = inputOptions.extend().withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, contentType).build();
+        final Response response = httpClient.doGet(uri, requestOptions);
         try {
             return response.getResponseBody("UTF-8");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new KillBillClientException(e);
         }
     }
 
-    private <ReturnType> ReturnType uploadFile(final String fileToUpload, final String uri, final String contentType, final String createdBy, final String reason, final String comment, final Class<ReturnType> followUpClass) throws KillBillClientException {
+    private <ReturnType> ReturnType uploadFile(final String fileToUpload, final String uri, final String contentType, final RequestOptions inputOptions, final Class<ReturnType> followUpClass) throws KillBillClientException {
         Preconditions.checkNotNull(fileToUpload, "fileToUpload cannot be null");
         final File catalogFile = new File(fileToUpload);
         Preconditions.checkArgument(catalogFile.exists() && catalogFile.isFile() && catalogFile.canRead(), "file to upload needs to be a valid file");
         try {
             final String body = Files.toString(catalogFile, Charset.forName("UTF-8"));
-            return doUploadFile(body, uri, contentType, createdBy, reason, comment, followUpClass);
-        } catch (IOException e) {
+            return doUploadFile(body, uri, contentType, inputOptions, followUpClass);
+        } catch (final IOException e) {
             throw new KillBillClientException(e);
         }
     }
 
-    private <ReturnType> ReturnType uploadFile(final InputStream fileToUpload, final String uri, final String contentType, final String createdBy, final String reason, final String comment, final Class<ReturnType> followUpClass) throws KillBillClientException {
+    private <ReturnType> ReturnType uploadFile(final InputStream fileToUpload, final String uri, final String contentType, final RequestOptions inputOptions, final Class<ReturnType> followUpClass) throws KillBillClientException {
         Preconditions.checkNotNull(fileToUpload, "fileToUpload cannot be null");
         try {
             final Readable reader = new InputStreamReader(fileToUpload, Charset.forName("UTF-8"));
             final String body = CharStreams.toString(reader);
-            return doUploadFile(body, uri, contentType, createdBy, reason, comment, followUpClass);
-        } catch (IOException e) {
+            return doUploadFile(body, uri, contentType, inputOptions, followUpClass);
+        } catch (final IOException e) {
             throw new KillBillClientException(e);
         }
     }
 
-    private <ReturnType> ReturnType doUploadFile(final String body, final String uri, final String contentType, final String createdBy, final String reason, final String comment, final Class<ReturnType> followUpClass) throws KillBillClientException {
-        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
-        queryParams.put(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, contentType);
+    private <ReturnType> ReturnType doUploadFile(final String body, final String uri, final String contentType, final RequestOptions inputOptions, final Class<ReturnType> followUpClass) throws KillBillClientException {
+        final RequestOptionsBuilder requestOptionsBuilder = inputOptions.extend().withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, contentType);
+
         if (followUpClass != null) {
-            return httpClient.doPostAndFollowLocation(uri, body, queryParams, followUpClass);
+            final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+            final RequestOptions requestOptions = requestOptionsBuilder.withFollowLocation(followLocation).build();
+            return httpClient.doPost(uri, body, followUpClass, requestOptions);
         } else {
-            httpClient.doPost(uri, body, queryParams);
+            final RequestOptions requestOptions = requestOptionsBuilder.build();
+            httpClient.doPost(uri, body, requestOptions);
             return null;
         }
-    }
-
-    private Multimap<String, String> paramsWithAudit(final Multimap<String, String> queryParams, final String createdBy, final String reason, final String comment) {
-        final Multimap<String, String> queryParamsWithAudit = HashMultimap.<String, String>create();
-        queryParamsWithAudit.putAll(queryParams);
-        queryParamsWithAudit.putAll(paramsWithAudit(createdBy, reason, comment));
-        return queryParamsWithAudit;
-    }
-
-    private Multimap<String, String> paramsWithAudit(final String createdBy, final String reason, final String comment) {
-        final Multimap result = HashMultimap.create();
-        result.put(KillBillHttpClient.AUDIT_OPTION_CREATED_BY, createdBy);
-        result.put(KillBillHttpClient.AUDIT_OPTION_REASON, reason);
-        result.put(KillBillHttpClient.AUDIT_OPTION_COMMENT, comment);
-        return result;
     }
 
     private void storePluginPropertiesAsParams(final Map<String, String> pluginProperties, final Multimap<String, String> params) {
