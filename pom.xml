@@ -21,10 +21,10 @@
     <parent>
         <artifactId>killbill-oss-parent</artifactId>
         <groupId>org.kill-bill.billing</groupId>
-        <version>0.69</version>
+        <version>0.98</version>
     </parent>
     <artifactId>killbill-client-java</artifactId>
-    <version>0.21.seventeen-SNAPSHOT</version>
+    <version>0.24-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Kill Bill Client Java</name>
     <description>Kill Bill Java client library</description>
