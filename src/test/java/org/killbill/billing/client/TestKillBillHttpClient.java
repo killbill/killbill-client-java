@@ -1,7 +1,7 @@
 /*
- * Copyright 2010-2013 Ning, Inc.
- * Copyright 2016 Groupon, Inc
- * Copyright 2016 The Billing Project, LLC
+ * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014-2016 Groupon, Inc
+ * Copyright 2014-2016 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -34,20 +34,35 @@ import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.google.common.collect.ImmutableMultimap;
 
-import static org.testng.Assert.*;
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.delete;
+import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.head;
+import static com.github.tomakehurst.wiremock.client.WireMock.headRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.options;
+import static com.github.tomakehurst.wiremock.client.WireMock.optionsRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.put;
+import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
-/**
- * Created by arodrigues on 5/28/16.
- */
 @Test(groups = "fast")
 public class TestKillBillHttpClient {
 
-    private WireMockServer server;
-
-    private KillBillHttpClient httpClient;
     private final String apiKey = "bob";
     private final String apiSecret = "lazar";
+    private WireMockServer server;
+    private KillBillHttpClient httpClient;
 
     @BeforeClass
     public void startServer() {
@@ -59,6 +74,7 @@ public class TestKillBillHttpClient {
     public void stopServer() {
         server.stop();
     }
+
     private String serverBaseUrl() {
         return String.format("http://localhost:%d", server.port());
     }
@@ -86,7 +102,6 @@ public class TestKillBillHttpClient {
                         .withHeader(JaxrsResource.HDR_COMMENT, equalTo(comment))
                         .willReturn(aResponse().withStatus(200)))
                );
-
 
         final RequestOptions options = RequestOptions.builder()
                                                      .withRequestId(requestId)
@@ -123,10 +138,10 @@ public class TestKillBillHttpClient {
                );
         final String responseBody = "Success";
         stubFor(get(urlEqualTo(locationToFollow))
-                .withHeader("X-Request-Id", equalTo(requestId))
-                .willReturn(aResponse()
-                            .withStatus(200)
-                            .withBody(responseBody)));
+                        .withHeader("X-Request-Id", equalTo(requestId))
+                        .willReturn(aResponse()
+                                            .withStatus(200)
+                                            .withBody(responseBody)));
 
         final RequestOptions options = RequestOptions.builder()
                                                      .withRequestId(requestId)
@@ -158,17 +173,17 @@ public class TestKillBillHttpClient {
         final String queryParam = randomString();
         final String locationToFollow = "/location-to-follow";
         stubFor(post(urlPathEqualTo(path))
-                .withQueryParam(paramName, equalTo(queryParam))
-                .willReturn(aResponse()
-                            .withStatus(201)
-                            .withHeader("Location", serverBaseUrl() + locationToFollow)));
+                        .withQueryParam(paramName, equalTo(queryParam))
+                        .willReturn(aResponse()
+                                            .withStatus(201)
+                                            .withHeader("Location", serverBaseUrl() + locationToFollow)));
 
         final String followParamName = "follow-param";
         final String followParam = randomString();
         stubFor(get(urlPathEqualTo(locationToFollow))
-                .withQueryParam(followParamName, equalTo(followParam))
-                .willReturn(aResponse()
-                            .withStatus(200)));
+                        .withQueryParam(followParamName, equalTo(followParam))
+                        .willReturn(aResponse()
+                                            .withStatus(200)));
 
         final RequestOptions options = RequestOptions.builder()
                                                      .withQueryParams(ImmutableMultimap.of(paramName, queryParam))
@@ -190,8 +205,8 @@ public class TestKillBillHttpClient {
         final String path = "/some-path";
         final String acceptHeader = randomString();
         stubFor(get(urlPathEqualTo(path))
-                    .withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, equalTo(acceptHeader))
-                    .willReturn(aResponse().withStatus(200)));
+                        .withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, equalTo(acceptHeader))
+                        .willReturn(aResponse().withStatus(200)));
 
         final RequestOptions options = RequestOptions.builder()
                                                      .withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, acceptHeader).build();
@@ -208,9 +223,9 @@ public class TestKillBillHttpClient {
         final String body = randomString();
         final String contentType = randomString();
         stubFor(put(urlPathEqualTo(path))
-                .withRequestBody(equalTo(body))
-                .withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, equalTo(contentType))
-                .willReturn(aResponse().withStatus(200)));
+                        .withRequestBody(equalTo(body))
+                        .withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, equalTo(contentType))
+                        .willReturn(aResponse().withStatus(200)));
 
         final RequestOptions options = RequestOptions.builder()
                                                      .withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, contentType)
@@ -218,8 +233,8 @@ public class TestKillBillHttpClient {
         final Response response = httpClient.doPut(path, body, options);
 
         verify(putRequestedFor(urlPathEqualTo(path))
-               .withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, equalTo(contentType))
-               .withRequestBody(equalTo(body)));
+                       .withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, equalTo(contentType))
+                       .withRequestBody(equalTo(body)));
         assertNotNull(response);
         assertEquals(response.getStatusCode(), 200);
     }
