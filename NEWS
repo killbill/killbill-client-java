@@ -1,3 +1,6 @@
+
+    Update client-java to 0.24 for KB release 0.17
+
 0.20
     Add support for usage APIs
     Add method to retrieve HTML invoices
