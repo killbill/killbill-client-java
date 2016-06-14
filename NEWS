@@ -1,4 +1,7 @@
+0.24
+    Add RequestOptions to all methods (existing methods are now deprecated)
 
+0.23
     Payment apis changes (error codes, follow Location)
     Fix PhasePriceOverride model
 
