@@ -106,6 +106,7 @@ public interface JaxrsResource {
     public static final String HDR_PAGINATION_TOTAL_NB_RECORDS = "X-Killbill-Pagination-TotalNbRecords";
     public static final String HDR_PAGINATION_MAX_NB_RECORDS = "X-Killbill-Pagination-MaxNbRecords";
     public static final String HDR_PAGINATION_NEXT_PAGE_URI = "X-Killbill-Pagination-NextPageUri";
+    public static final String HDR_REQUEST_ID = "X-Request-Id";
 
     /*
      * Query parameters
@@ -148,4 +149,5 @@ public interface JaxrsResource {
     public static final String UPCOMING_INVOICE_TARGET_DATE = "upcomingInvoiceTargetDate";
     public static final String QUERY_START_DATE = "startDate";
     public static final String QUERY_END_DATE = "endDate";
+    public static final String QUERY_USE_REQUESTED_DATE_FOR_BILLING = "useRequestedDateForBilling";
 }
