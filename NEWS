@@ -1,4 +1,4 @@
-0.24
+0.23.1
     Add RequestOptions to all methods (existing methods are now deprecated)
 
 0.23
