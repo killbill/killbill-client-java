@@ -109,6 +109,44 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>com.ning.maven.plugins</groupId>
+                <artifactId>maven-dependency-versions-check-plugin</artifactId>
+                <configuration>
+                    <exceptions>
+                        <exception>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-annotations</artifactId>
+                            <expectedVersion>2.6.0</expectedVersion>
+                            <resolvedVersion>${jackson.version}</resolvedVersion>
+                        </exception>
+                        <exception>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-core</artifactId>
+                            <expectedVersion>2.6.0</expectedVersion>
+                            <resolvedVersion>${jackson.version}</resolvedVersion>
+                        </exception>
+                        <exception>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-databind</artifactId>
+                            <expectedVersion>2.6.0</expectedVersion>
+                            <resolvedVersion>${jackson.version}</resolvedVersion>
+                        </exception>
+                        <exception>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-datatype-joda</artifactId>
+                            <expectedVersion>2.6.0</expectedVersion>
+                            <resolvedVersion>${jackson.version}</resolvedVersion>
+                        </exception>
+                        <exception>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-code</artifactId>
+                            <expectedVersion>2.6.0</expectedVersion>
+                            <resolvedVersion>${jackson.version}</resolvedVersion>
+                        </exception>
+                    </exceptions>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
