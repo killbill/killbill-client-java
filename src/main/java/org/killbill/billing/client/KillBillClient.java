@@ -2022,7 +2022,7 @@ public class KillBillClient implements Closeable {
 
     @Deprecated
     public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return buildFormDescriptor(comboHostedPaymentPage, null, pluginProperties, RequestOptions.builder()
+        return buildFormDescriptor(comboHostedPaymentPage, controlPluginNames, pluginProperties, RequestOptions.builder()
                                                                                                  .withCreatedBy(createdBy)
                                                                                                  .withReason(reason)
                                                                                                  .withComment(comment)
