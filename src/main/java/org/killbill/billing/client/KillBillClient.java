@@ -264,6 +264,16 @@ public class KillBillClient {
         return httpClient.doGet(uri, DEFAULT_EMPTY_QUERY, Accounts.class);
     }
 
+    public void transferChildCreditToParent(final UUID childAccountId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        Preconditions.checkNotNull(childAccountId, "Account#childAccountId cannot be null");
+
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + childAccountId + "/" + JaxrsResource.TRANSFER_CREDIT;
+
+        final Multimap<String, String> queryParams = paramsWithAudit(createdBy, reason, comment);
+
+        httpClient.doPost(uri, childAccountId, queryParams);
+    }
+
     // Bundles
 
     public Bundle getBundle(final UUID bundleId) throws KillBillClientException {
