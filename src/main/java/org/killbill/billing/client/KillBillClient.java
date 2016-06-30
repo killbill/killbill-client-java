@@ -2092,7 +2092,7 @@ public class KillBillClient implements Closeable {
 
     @Deprecated
     public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return buildFormDescriptor(comboHostedPaymentPage, null, pluginProperties, RequestOptions.builder()
+        return buildFormDescriptor(comboHostedPaymentPage, controlPluginNames, pluginProperties, RequestOptions.builder()
                                                                                                  .withCreatedBy(createdBy)
                                                                                                  .withReason(reason)
                                                                                                  .withComment(comment)
@@ -3482,6 +3482,36 @@ public class KillBillClient implements Closeable {
 
     public void unregisterPluginConfigurationForTenant(final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_CONFIG + "/" + pluginName;
+        httpClient.doDelete(uri, inputOptions);
+    }
+
+    public TenantKey registerPluginPaymentStateMachineConfigurationForTenant(final String pluginName, final String pluginPaymentStateMachineConfigFilePath, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_PAYMENT_STATE_MACHINE_CONFIG + "/" + pluginName;
+        return uploadFile(pluginPaymentStateMachineConfigFilePath, uri, "text/plain", inputOptions, TenantKey.class);
+    }
+
+    public TenantKey registerPluginPaymentStateMachineConfigurationForTenant(final String pluginName, final InputStream pluginPaymentStateMachineConfigInputStream, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_PAYMENT_STATE_MACHINE_CONFIG + "/" + pluginName;
+        return uploadFile(pluginPaymentStateMachineConfigInputStream, uri, "text/plain", inputOptions, TenantKey.class);
+    }
+
+    public TenantKey postPluginPaymentStateMachineConfigurationXMLForTenant(final String pluginName, final String pluginPaymentStateMachineConfigXML, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_PAYMENT_STATE_MACHINE_CONFIG + "/" + pluginName;
+
+        final RequestOptions options = inputOptions.extend()
+                                                   .withFollowLocation(true)
+                                                   .withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain")
+                                                   .build();
+        return httpClient.doPost(uri, pluginPaymentStateMachineConfigXML, TenantKey.class, options);
+    }
+
+    public TenantKey getPluginPaymentStateMachineConfigurationForTenant(final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_PAYMENT_STATE_MACHINE_CONFIG + "/" + pluginName;
+        return httpClient.doGet(uri, TenantKey.class, inputOptions);
+    }
+
+    public void unregisterPluginPaymentStateMachineConfigurationForTenant(final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_PAYMENT_STATE_MACHINE_CONFIG + "/" + pluginName;
         httpClient.doDelete(uri, inputOptions);
     }
 
