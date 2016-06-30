@@ -1,3 +1,7 @@
+0.23.2
+    Fix buildFormDescriptor (controlPluginNames weren't passed properly)
+    Add methods to manipulate payment state machines
+
 0.23.1
     Add RequestOptions to all methods (existing methods are now deprecated)
 
