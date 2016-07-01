@@ -39,6 +39,8 @@ public class PaymentTransaction extends KillBillObject {
     private String status;
     private BigDecimal amount;
     private String currency;
+    private BigDecimal processedAmount;
+    private String processedCurrency;
     private String gatewayErrorCode;
     private String gatewayErrorMsg;
     // Plugin specific fields
@@ -59,6 +61,8 @@ public class PaymentTransaction extends KillBillObject {
                               @JsonProperty("amount") final BigDecimal amount,
                               @JsonProperty("currency") final String currency,
                               @JsonProperty("effectiveDate") final DateTime effectiveDate,
+                              @JsonProperty("processedAmount") final BigDecimal processedAmount,
+                              @JsonProperty("processedCurrency") final String processedCurrency,
                               @JsonProperty("status") final String status,
                               @JsonProperty("gatewayErrorCode") final String gatewayErrorCode,
                               @JsonProperty("gatewayErrorMsg") final String gatewayErrorMsg,
@@ -76,6 +80,8 @@ public class PaymentTransaction extends KillBillObject {
         this.status = status;
         this.amount = amount;
         this.currency = currency;
+        this.processedAmount = processedAmount;
+        this.processedCurrency = processedCurrency;
         this.gatewayErrorCode = gatewayErrorCode;
         this.gatewayErrorMsg = gatewayErrorMsg;
         this.firstPaymentReferenceId = firstPaymentReferenceId;
@@ -155,6 +161,22 @@ public class PaymentTransaction extends KillBillObject {
         this.currency = currency;
     }
 
+    public BigDecimal getProcessedAmount() {
+        return processedAmount;
+    }
+
+    public void setProcessedAmount(final BigDecimal processedAmount) {
+        this.processedAmount = processedAmount;
+    }
+
+    public String getProcessedCurrency() {
+        return processedCurrency;
+    }
+
+    public void setProcessedCurrency(final String processedCurrency) {
+        this.processedCurrency = processedCurrency;
+    }
+
     public String getGatewayErrorCode() {
         return gatewayErrorCode;
     }
@@ -209,6 +231,8 @@ public class PaymentTransaction extends KillBillObject {
         sb.append(", status='").append(status).append('\'');
         sb.append(", amount=").append(amount);
         sb.append(", currency='").append(currency).append('\'');
+        sb.append(", processedAmount=").append(processedAmount);
+        sb.append(", processedCurrency='").append(processedCurrency).append('\'');
         sb.append(", gatewayErrorCode='").append(gatewayErrorCode).append('\'');
         sb.append(", gatewayErrorMsg='").append(gatewayErrorMsg).append('\'');
         sb.append(", firstPaymentReferenceId='").append(firstPaymentReferenceId).append('\'');
@@ -232,7 +256,13 @@ public class PaymentTransaction extends KillBillObject {
         if (amount != null ? amount.compareTo(that.amount) != 0 : that.amount != null) {
             return false;
         }
+        if (processedAmount != null ? processedAmount.compareTo(that.processedAmount) != 0 : that.processedAmount != null) {
+            return false;
+        }
         if (currency != null ? !currency.equals(that.currency) : that.currency != null) {
+            return false;
+        }
+        if (processedCurrency != null ? !processedCurrency.equals(that.processedCurrency) : that.processedCurrency != null) {
             return false;
         }
         if (paymentExternalKey != null ? !paymentExternalKey.equals(that.paymentExternalKey) : that.paymentExternalKey != null) {
@@ -286,6 +316,8 @@ public class PaymentTransaction extends KillBillObject {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
+        result = 31 * result + (processedAmount != null ? processedAmount.hashCode() : 0);
+        result = 31 * result + (processedCurrency != null ? processedCurrency.hashCode() : 0);
         result = 31 * result + (gatewayErrorCode != null ? gatewayErrorCode.hashCode() : 0);
         result = 31 * result + (gatewayErrorMsg != null ? gatewayErrorMsg.hashCode() : 0);
         result = 31 * result + (firstPaymentReferenceId != null ? firstPaymentReferenceId.hashCode() : 0);

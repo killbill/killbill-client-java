@@ -21,7 +21,7 @@
     <parent>
         <artifactId>killbill-oss-parent</artifactId>
         <groupId>org.kill-bill.billing</groupId>
-        <version>0.69</version>
+        <version>0.98</version>
     </parent>
     <artifactId>killbill-client-java</artifactId>
     <version>0.21.ha-SNAPSHOT</version>
@@ -54,6 +54,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-joda</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>1.58</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -102,6 +108,44 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.ning.maven.plugins</groupId>
+                <artifactId>maven-dependency-versions-check-plugin</artifactId>
+                <configuration>
+                    <exceptions>
+                        <exception>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-annotations</artifactId>
+                            <expectedVersion>2.6.0</expectedVersion>
+                            <resolvedVersion>${jackson.version}</resolvedVersion>
+                        </exception>
+                        <exception>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-core</artifactId>
+                            <expectedVersion>2.6.0</expectedVersion>
+                            <resolvedVersion>${jackson.version}</resolvedVersion>
+                        </exception>
+                        <exception>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-databind</artifactId>
+                            <expectedVersion>2.6.0</expectedVersion>
+                            <resolvedVersion>${jackson.version}</resolvedVersion>
+                        </exception>
+                        <exception>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-datatype-joda</artifactId>
+                            <expectedVersion>2.6.0</expectedVersion>
+                            <resolvedVersion>${jackson.version}</resolvedVersion>
+                        </exception>
+                        <exception>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-code</artifactId>
+                            <expectedVersion>2.6.0</expectedVersion>
+                            <resolvedVersion>${jackson.version}</resolvedVersion>
+                        </exception>
+                    </exceptions>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

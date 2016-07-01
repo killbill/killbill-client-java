@@ -1,3 +1,31 @@
+0.26
+    0.23.2 merge for 0.17.x
+
+0.25
+    Merged version for KB 0.17.0
+
+0.24
+    Release version for KB 0.17.0
+
+0.23.2
+    Fix buildFormDescriptor (controlPluginNames weren't passed properly)
+    Add methods to manipulate payment state machines
+
+0.23.1
+    Add RequestOptions to all methods (existing methods are now deprecated)
+
+0.23
+    Payment apis changes (error codes, follow Location)
+    Fix PhasePriceOverride model
+
+0.22
+    Add parameter useRequestedDateForBilling to cancelSubscription
+    Fix getPaymentMethodsForAccount and refreshPaymentMethods implementation when passing properties
+
+0.21
+    Add methods to upload files via InputStream
+    Send Authorization header preemptively
+
 0.20
     Add support for usage APIs
     Add method to retrieve HTML invoices

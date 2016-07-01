@@ -70,6 +70,7 @@ public interface JaxrsResource {
     public static final String REGISTER_NOTIFICATION_CALLBACK = "registerNotificationCallback";
     public static final String UPLOAD_PLUGIN_CONFIG = "uploadPluginConfig";
     public static final String UPLOAD_PER_TENANT_CONFIG = "uploadPerTenantConfig";
+    public static final String UPLOAD_PLUGIN_PAYMENT_STATE_MACHINE_CONFIG = "uploadPluginPaymentStateMachineConfig";
     public static final String SEARCH = "search";
     public static final String SECURITY = "security";
     public static final String SECURITY_PATH = PREFIX + "/" + SECURITY;
@@ -88,6 +89,7 @@ public interface JaxrsResource {
     public static final String COMBO = "combo";
     public static final String MIGRATION = "migration";
     public static final String BLOCK = "block";
+    public static final String BCD = "bcd";
 
     /*
      * Multi-Tenancy headers
@@ -106,6 +108,7 @@ public interface JaxrsResource {
     public static final String HDR_PAGINATION_TOTAL_NB_RECORDS = "X-Killbill-Pagination-TotalNbRecords";
     public static final String HDR_PAGINATION_MAX_NB_RECORDS = "X-Killbill-Pagination-MaxNbRecords";
     public static final String HDR_PAGINATION_NEXT_PAGE_URI = "X-Killbill-Pagination-NextPageUri";
+    public static final String HDR_REQUEST_ID = "X-Request-Id";
 
     /*
      * Query parameters
@@ -144,8 +147,11 @@ public interface JaxrsResource {
     public static final String QUERY_WITH_MIGRATION_INVOICES = "withMigrationInvoices";
     public static final String QUERY_BLOCKING_STATE_TYPES = "blockingStateTypes";
     public static final String QUERY_BLOCKING_STATE_SVCS = "blockingStateSvcs";
+    public static final String QUERY_ENTITLEMENT_EFFECTIVE_FROM_DT = "effectiveFromDate";
+
 
     public static final String UPCOMING_INVOICE_TARGET_DATE = "upcomingInvoiceTargetDate";
     public static final String QUERY_START_DATE = "startDate";
     public static final String QUERY_END_DATE = "endDate";
+    public static final String QUERY_USE_REQUESTED_DATE_FOR_BILLING = "useRequestedDateForBilling";
 }
