@@ -387,6 +387,13 @@ public class KillBillClient implements Closeable {
         return httpClient.doGet(uri, Accounts.class, requestOptions);
     }
 
+    public void transferChildCreditToParent(final UUID childAccountId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(childAccountId, "Account#childAccountId cannot be null");
+
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + childAccountId + "/" + JaxrsResource.TRANSFER_CREDIT;
+        httpClient.doPost(uri, null, inputOptions);
+    }
+
     // Bundles
 
     @Deprecated
