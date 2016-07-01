@@ -68,6 +68,7 @@ public interface JaxrsResource {
     public static final String REFUNDS = "refunds";
     public static final String REGISTER_NOTIFICATION_CALLBACK = "registerNotificationCallback";
     public static final String UPLOAD_PLUGIN_CONFIG = "uploadPluginConfig";
+    public static final String UPLOAD_PLUGIN_PAYMENT_STATE_MACHINE_CONFIG = "uploadPluginPaymentStateMachineConfig";
     public static final String SEARCH = "search";
     public static final String SECURITY = "security";
     public static final String SECURITY_PATH = PREFIX + "/" + SECURITY;
