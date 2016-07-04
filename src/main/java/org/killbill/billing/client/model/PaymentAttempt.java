@@ -29,39 +29,89 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PaymentAttempt extends KillBillObject {
 
-    private UUID paymentId;
+    private UUID accountId;
+    private UUID paymentMethodId;
+    private String paymentExternalKey;
+    private UUID transactionId;
+    private String transactionExternalKey;
     private String transactionType;
     private DateTime effectiveDate;
-    private String status;
+    private String stateName;
     private BigDecimal amount;
     private String currency;
+    private String pluginName;
+    private List<PluginProperty> pluginProperties;
 
     public PaymentAttempt() {
     }
 
     @JsonCreator
-    public PaymentAttempt(@JsonProperty("paymentId") final UUID paymentId,
+    public PaymentAttempt(@JsonProperty("accountId") final UUID accountId,
+                          @JsonProperty("paymentMethodId") final UUID paymentMethodId,
+                          @JsonProperty("paymentExternalKey") final String paymentExternalKey,
+                          @JsonProperty("transactionId") final UUID transactionId,
+                          @JsonProperty("transactionExternalKey") final String transactionExternalKey,
                           @JsonProperty("transactionType") final String transactionType,
                           @JsonProperty("effectiveDate") final DateTime effectiveDate,
-                          @JsonProperty("status") final String status,
+                          @JsonProperty("stateName") final String stateName,
                           @JsonProperty("amount") final BigDecimal amount,
                           @JsonProperty("currency") final String currency,
+                          @JsonProperty("pluginName") final String pluginName,
+                          @JsonProperty("pluginProperties") @Nullable final List<PluginProperty> pluginProperties,
                           @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
-        this.paymentId = paymentId;
+        this.accountId = accountId;
+        this.paymentMethodId = paymentMethodId;
+        this.paymentExternalKey = paymentExternalKey;
+        this.transactionId = transactionId;
+        this.transactionExternalKey = transactionExternalKey;
         this.transactionType = transactionType;
         this.effectiveDate = effectiveDate;
-        this.status = status;
+        this.stateName = stateName;
         this.amount = amount;
         this.currency = currency;
+        this.pluginName = pluginName;
+        setPluginProperties(pluginProperties);
     }
 
-    public UUID getPaymentId() {
-        return paymentId;
+    public UUID getAccountId() {
+        return accountId;
     }
 
-    public void setPaymentId(final UUID paymentId) {
-        this.paymentId = paymentId;
+    public void setAccountId(final UUID accountId) {
+        this.accountId = accountId;
+    }
+
+    public UUID getPaymentMethodId() {
+        return paymentMethodId;
+    }
+
+    public void setPaymentMethodId(final UUID paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
+    }
+
+    public String getPaymentExternalKey() {
+        return paymentExternalKey;
+    }
+
+    public void setPaymentExternalKey(final String paymentExternalKey) {
+        this.paymentExternalKey = paymentExternalKey;
+    }
+
+    public UUID getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(final UUID transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public String getTransactionExternalKey() {
+        return transactionExternalKey;
+    }
+
+    public void setTransactionExternalKey(final String transactionExternalKey) {
+        this.transactionExternalKey = transactionExternalKey;
     }
 
     public String getTransactionType() {
@@ -80,12 +130,12 @@ public class PaymentAttempt extends KillBillObject {
         this.effectiveDate = effectiveDate;
     }
 
-    public String getStatus() {
-        return status;
+    public String getStateName() {
+        return stateName;
     }
 
-    public void setStatus(final String status) {
-        this.status = status;
+    public void setStateName(final String stateName) {
+        this.stateName = stateName;
     }
 
     public BigDecimal getAmount() {
@@ -104,15 +154,39 @@ public class PaymentAttempt extends KillBillObject {
         this.currency = currency;
     }
 
+    public String getPluginName() {
+        return pluginName;
+    }
+
+    public void setPluginName(final String pluginName) {
+        this.pluginName = pluginName;
+    }
+
+    public List<PluginProperty> getPluginProperties() {
+        return pluginProperties;
+    }
+
+    public void setPluginProperties(final List<PluginProperty> pluginProperties) {
+        if (pluginProperties != null) {
+            this.pluginProperties = pluginProperties;
+        }
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("PaymentAttempt{");
-        sb.append("paymentId=").append(paymentId);
+        sb.append("accountId=").append(accountId);
+        sb.append(", paymentMethodId='").append(paymentMethodId).append('\'');
+        sb.append(", paymentExternalKey='").append(paymentExternalKey).append('\'');
+        sb.append(", transactionId='").append(transactionId).append('\'');
+        sb.append(", transactionExternalKey='").append(transactionExternalKey).append('\'');
         sb.append(", transactionType='").append(transactionType).append('\'');
         sb.append(", effectiveDate=").append(effectiveDate);
-        sb.append(", status='").append(status).append('\'');
+        sb.append(", stateName='").append(stateName).append('\'');
         sb.append(", amount=").append(amount);
         sb.append(", currency='").append(currency).append('\'');
+        sb.append(", pluginName='").append(pluginName).append('\'');
+        sb.append(", pluginProperties='").append(pluginProperties).append('\'');
         sb.append('}');
         return sb.toString();
     }
@@ -128,22 +202,40 @@ public class PaymentAttempt extends KillBillObject {
 
         final PaymentAttempt that = (PaymentAttempt) o;
 
+        if (accountId != null ? !accountId.equals(that.accountId) : that.accountId != null) {
+            return false;
+        }
+        if (paymentMethodId != null ? !paymentMethodId.equals(that.paymentMethodId) : that.paymentMethodId != null) {
+            return false;
+        }
+        if (paymentExternalKey != null ? !paymentExternalKey.equals(that.paymentExternalKey) : that.paymentExternalKey != null) {
+            return false;
+        }
+        if (transactionId != null ? !transactionId.equals(that.transactionId) : that.transactionId != null) {
+            return false;
+        }
+        if (transactionExternalKey != null ? !transactionExternalKey.equals(that.transactionExternalKey) : that.transactionExternalKey!= null) {
+            return false;
+        }
+        if (transactionType != null ? !transactionType.equals(that.transactionType) : that.transactionType != null) {
+            return false;
+        }
+        if (effectiveDate != null ? effectiveDate.compareTo(that.effectiveDate) != 0 : that.effectiveDate != null) {
+            return false;
+        }
+        if (stateName != null ? !stateName.equals(that.stateName) : that.stateName!= null) {
+            return false;
+        }
         if (amount != null ? amount.compareTo(that.amount) != 0 : that.amount != null) {
             return false;
         }
         if (currency != null ? !currency.equals(that.currency) : that.currency != null) {
             return false;
         }
-        if (paymentId != null ? !paymentId.equals(that.paymentId) : that.paymentId != null) {
+        if (pluginName != null ? !pluginName.equals(that.pluginName) : that.pluginName != null) {
             return false;
         }
-        if (effectiveDate != null ? effectiveDate.compareTo(that.effectiveDate) != 0 : that.effectiveDate != null) {
-            return false;
-        }
-        if (status != null ? !status.equals(that.status) : that.status != null) {
-            return false;
-        }
-        if (transactionType != null ? !transactionType.equals(that.transactionType) : that.transactionType != null) {
+        if (pluginProperties != null ? !pluginProperties.equals(that.pluginProperties) : that.pluginProperties != null) {
             return false;
         }
 
@@ -152,12 +244,18 @@ public class PaymentAttempt extends KillBillObject {
 
     @Override
     public int hashCode() {
-        int result = paymentId != null ? paymentId.hashCode() : 0;
+        int result = accountId != null ? accountId.hashCode() : 0;
+        result = 31 * result + (paymentMethodId != null ? paymentMethodId.hashCode() : 0);
+        result = 31 * result + (paymentExternalKey != null ? paymentExternalKey.hashCode() : 0);
+        result = 31 * result + (transactionId != null ? transactionId.hashCode() : 0);
+        result = 31 * result + (transactionExternalKey != null ? transactionExternalKey.hashCode() : 0);
         result = 31 * result + (transactionType != null ? transactionType.hashCode() : 0);
         result = 31 * result + (effectiveDate != null ? effectiveDate.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (stateName != null ? stateName.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
+        result = 31 * result + (pluginName != null ? pluginName.hashCode() : 0);
+        result = 31 * result + (pluginProperties != null ? pluginProperties.hashCode() : 0);
         return result;
     }
 }
