@@ -420,7 +420,18 @@ public class KillBillClient implements Closeable {
 
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
-        return httpClient.doGet(uri, Bundle.class, requestOptions);
+        final Bundles bundles =  httpClient.doGet(uri, Bundles.class, requestOptions);
+        return bundles.get(0);
+    }
+
+    public Bundles getAllBundlesForExternalKey(final String externalKey, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.BUNDLES_PATH;
+
+        final Multimap<String, String> queryParams = HashMultimap.create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_EXTERNAL_KEY, externalKey);
+        queryParams.put(JaxrsResource.QUERY_INCLUDED_DELETED, "true");
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
     @Deprecated

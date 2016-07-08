@@ -155,4 +155,6 @@ public interface JaxrsResource {
     public static final String QUERY_START_DATE = "startDate";
     public static final String QUERY_END_DATE = "endDate";
     public static final String QUERY_USE_REQUESTED_DATE_FOR_BILLING = "useRequestedDateForBilling";
+    public static final String QUERY_INCLUDED_DELETED = "includedDeleted";
+
 }
