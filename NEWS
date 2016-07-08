@@ -1,4 +1,5 @@
 
+    Add ability to also retrieve deleted bundles when using external bundle externalKey
     Merge HA branch
 
 0.26
