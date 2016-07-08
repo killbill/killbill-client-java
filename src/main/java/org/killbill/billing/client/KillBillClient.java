@@ -421,7 +421,7 @@ public class KillBillClient implements Closeable {
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
         final Bundles bundles =  httpClient.doGet(uri, Bundles.class, requestOptions);
-        return bundles.get(0);
+        return bundles.isEmpty() ? null : bundles.get(0);
     }
 
     public Bundles getAllBundlesForExternalKey(final String externalKey, final RequestOptions inputOptions) throws KillBillClientException {
