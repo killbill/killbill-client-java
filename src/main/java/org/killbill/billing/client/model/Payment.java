@@ -170,9 +170,13 @@ public class Payment extends KillBillObject {
         this.transactions = transactions;
     }
 
-    public List<PaymentAttempt> getPaymentAttempts() { return paymentAttempts; }
+    public List<PaymentAttempt> getPaymentAttempts() {
+        return paymentAttempts;
+    }
 
-    public void setPaymentAttempts(final List<PaymentAttempt> paymentAttempts) { this.paymentAttempts = paymentAttempts; }
+    public void setPaymentAttempts(final List<PaymentAttempt> paymentAttempts) {
+        this.paymentAttempts = paymentAttempts;
+    }
 
     @Override
     public boolean equals(final Object o) {
