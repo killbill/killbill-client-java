@@ -1670,10 +1670,15 @@ public class KillBillClient implements Closeable {
     }
 
     public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, final Map<String, String> pluginProperties, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPayment(paymentId, withPluginInfo, false, pluginProperties, auditLevel, inputOptions);
+    }
+
+    public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, boolean withAttempts, final Map<String, String> pluginProperties, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo));
+        queryParams.put(JaxrsResource.QUERY_WITH_ATTEMPTS, String.valueOf(withAttempts));
         queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
         storePluginPropertiesAsParams(pluginProperties, queryParams);
 
