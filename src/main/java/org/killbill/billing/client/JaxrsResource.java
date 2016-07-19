@@ -123,6 +123,7 @@ public interface JaxrsResource {
     public static final String QUERY_CALL_TIMEOUT = "callTimeoutSec";
     public static final String QUERY_CUSTOM_FIELDS = "customFieldList";
     public static final String QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF = "deleteDefaultPmWithAutoPayOff";
+    public static final String QUERY_FORCE_DEFAULT_PM_DELETION = "forceDefaultPmDeletion";
     public static final String QUERY_DRY_RUN = "dryRun";
     public static final String QUERY_ENTITLEMENT_POLICY = "entitlementPolicy";
     public static final String QUERY_EXTERNAL_KEY = "externalKey";
@@ -143,7 +144,6 @@ public interface JaxrsResource {
     public static final String QUERY_UNPAID_INVOICES_ONLY = "unpaidInvoicesOnly";
     public static final String QUERY_PAYMENT_METHOD_PLUGIN_NAME = "pluginName";
     public static final String QUERY_WITH_PLUGIN_INFO = "withPluginInfo";
-    public static final String QUERY_INVOICE_ID = "invoiceId";
     public static final String QUERY_AUTO_COMMIT = "autoCommit";
     public static final String QUERY_WITH_MIGRATION_INVOICES = "withMigrationInvoices";
     public static final String QUERY_BLOCKING_STATE_TYPES = "blockingStateTypes";
@@ -151,6 +151,7 @@ public interface JaxrsResource {
     public static final String QUERY_ENTITLEMENT_EFFECTIVE_FROM_DT = "effectiveFromDate";
 
 
+    public static final String QUERY_WITH_ATTEMPTS = "withAttempts";
     public static final String UPCOMING_INVOICE_TARGET_DATE = "upcomingInvoiceTargetDate";
     public static final String QUERY_START_DATE = "startDate";
     public static final String QUERY_END_DATE = "endDate";

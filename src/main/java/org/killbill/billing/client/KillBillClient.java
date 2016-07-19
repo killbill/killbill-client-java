@@ -1670,10 +1670,15 @@ public class KillBillClient implements Closeable {
     }
 
     public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, final Map<String, String> pluginProperties, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPayment(paymentId, withPluginInfo, false, pluginProperties, auditLevel, inputOptions);
+    }
+
+    public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, boolean withAttempts, final Map<String, String> pluginProperties, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_WITH_PLUGIN_INFO, String.valueOf(withPluginInfo));
+        queryParams.put(JaxrsResource.QUERY_WITH_ATTEMPTS, String.valueOf(withAttempts));
         queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
         storePluginPropertiesAsParams(pluginProperties, queryParams);
 
@@ -2493,19 +2498,20 @@ public class KillBillClient implements Closeable {
     }
 
     @Deprecated
-    public void deletePaymentMethod(final UUID paymentMethodId, final Boolean deleteDefault, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        deletePaymentMethod(paymentMethodId, deleteDefault, RequestOptions.builder()
+    public void deletePaymentMethod(final UUID paymentMethodId, final Boolean deleteDefault, final Boolean forceDeleteDefault, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        deletePaymentMethod(paymentMethodId, deleteDefault, forceDeleteDefault, RequestOptions.builder()
                                                                           .withCreatedBy(createdBy)
                                                                           .withReason(reason)
                                                                           .withComment(comment)
                                                                           .build());
     }
 
-    public void deletePaymentMethod(final UUID paymentMethodId, final Boolean deleteDefault, final RequestOptions inputOptions) throws KillBillClientException {
+    public void deletePaymentMethod(final UUID paymentMethodId, final Boolean deleteDefault, final Boolean forceDeleteDefault, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF, deleteDefault.toString());
+        queryParams.put(JaxrsResource.QUERY_FORCE_DEFAULT_PM_DELETION, forceDeleteDefault.toString());
 
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
