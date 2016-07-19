@@ -123,6 +123,7 @@ public interface JaxrsResource {
     public static final String QUERY_CALL_TIMEOUT = "callTimeoutSec";
     public static final String QUERY_CUSTOM_FIELDS = "customFieldList";
     public static final String QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF = "deleteDefaultPmWithAutoPayOff";
+    public static final String QUERY_FORCE_DEFAULT_PM_DELETION = "forceDefaultPmDeletion";
     public static final String QUERY_DRY_RUN = "dryRun";
     public static final String QUERY_ENTITLEMENT_POLICY = "entitlementPolicy";
     public static final String QUERY_EXTERNAL_KEY = "externalKey";
