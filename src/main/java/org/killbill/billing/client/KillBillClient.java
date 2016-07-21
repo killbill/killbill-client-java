@@ -1214,19 +1214,20 @@ public class KillBillClient implements Closeable {
 
 
     @Deprecated
-    public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final List<InvoiceItem> externalCharges = createExternalCharges(ImmutableList.<InvoiceItem>of(externalCharge), requestedDate, autoPay, autoCommit, createdBy, reason, comment);
+    public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final List<InvoiceItem> externalCharges = createExternalCharges(ImmutableList.<InvoiceItem>of(externalCharge), requestedDate, autoPay, autoCommit, paymentExternalKey, transactionExternalKey, createdBy, reason, comment);
         return externalCharges.isEmpty() ? null : externalCharges.get(0);
     }
 
-    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createExternalCharges(externalCharges, requestedDate, autoPay, autoCommit, RequestOptions.builder()
-                                                                                            .withCreatedBy(createdBy)
-                                                                                            .withReason(reason)
-                                                                                            .withComment(comment).build());
+    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createExternalCharges(externalCharges, requestedDate, autoPay, autoCommit, paymentExternalKey, transactionExternalKey,
+                                     RequestOptions.builder()
+                                                   .withCreatedBy(createdBy)
+                                                   .withReason(reason)
+                                                   .withComment(comment).build());
     }
 
-    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final RequestOptions inputOptions) throws KillBillClientException {
+    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
         final Map<UUID, Collection<InvoiceItem>> externalChargesPerAccount = new HashMap<UUID, Collection<InvoiceItem>>();
         for (final InvoiceItem externalCharge : externalCharges) {
             Preconditions.checkNotNull(externalCharge.getAccountId(), "InvoiceItem#accountId cannot be null");
@@ -1242,14 +1243,14 @@ public class KillBillClient implements Closeable {
 
         final List<InvoiceItem> createdExternalCharges = new LinkedList<InvoiceItem>();
         for (final UUID accountId : externalChargesPerAccount.keySet()) {
-            final List<InvoiceItem> invoiceItems = createExternalCharges(accountId, externalChargesPerAccount.get(accountId), requestedDate, autoPay, autoCommit, inputOptions);
+            final List<InvoiceItem> invoiceItems = createExternalCharges(accountId, externalChargesPerAccount.get(accountId), requestedDate, autoPay, autoCommit, paymentExternalKey, transactionExternalKey, inputOptions);
             createdExternalCharges.addAll(invoiceItems);
         }
 
         return createdExternalCharges;
     }
 
-    private List<InvoiceItem> createExternalCharges(final UUID accountId, final Iterable<InvoiceItem> externalCharges, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final RequestOptions inputOptions) throws KillBillClientException {
+    private List<InvoiceItem> createExternalCharges(final UUID accountId, final Iterable<InvoiceItem> externalCharges, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.CHARGES + "/" + accountId;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
@@ -1258,6 +1259,12 @@ public class KillBillClient implements Closeable {
         }
         queryParams.put(JaxrsResource.QUERY_PAY_INVOICE, autoPay.toString());
         queryParams.put(JaxrsResource.QUERY_AUTO_COMMIT, autoCommit.toString());
+        if (paymentExternalKey != null) {
+            queryParams.put(JaxrsResource.QUERY_PAYMENT_EXT_KEY, paymentExternalKey);
+        }
+        if (transactionExternalKey != null) {
+            queryParams.put(JaxrsResource.QUERY_TRANSACTION_EXT_KEY, transactionExternalKey);
+        }
 
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
         return httpClient.doPost(uri, externalCharges, InvoiceItems.class, requestOptions);
