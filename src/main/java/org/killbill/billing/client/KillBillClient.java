@@ -1214,13 +1214,13 @@ public class KillBillClient implements Closeable {
 
 
     @Deprecated
-    public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        final List<InvoiceItem> externalCharges = createExternalCharges(ImmutableList.<InvoiceItem>of(externalCharge), requestedDate, autoPay, autoCommit, paymentExternalKey, transactionExternalKey, createdBy, reason, comment);
+    public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        final List<InvoiceItem> externalCharges = createExternalCharges(ImmutableList.<InvoiceItem>of(externalCharge), requestedDate, autoPay, autoCommit, createdBy, reason, comment);
         return externalCharges.isEmpty() ? null : externalCharges.get(0);
     }
 
-    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createExternalCharges(externalCharges, requestedDate, autoPay, autoCommit, paymentExternalKey, transactionExternalKey,
+    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+        return createExternalCharges(externalCharges, requestedDate, autoPay, autoCommit, null, null,
                                      RequestOptions.builder()
                                                    .withCreatedBy(createdBy)
                                                    .withReason(reason)
