@@ -1219,12 +1219,17 @@ public class KillBillClient implements Closeable {
         return externalCharges.isEmpty() ? null : externalCharges.get(0);
     }
 
+    @Deprecated
     public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createExternalCharges(externalCharges, requestedDate, autoPay, autoCommit, null, null,
+        return createExternalCharges(externalCharges, requestedDate, autoPay, autoCommit,
                                      RequestOptions.builder()
                                                    .withCreatedBy(createdBy)
                                                    .withReason(reason)
                                                    .withComment(comment).build());
+    }
+
+    public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final RequestOptions inputOptions) throws KillBillClientException {
+        return createExternalCharges(externalCharges, requestedDate, autoPay, autoCommit, null, null, inputOptions);
     }
 
     public List<InvoiceItem> createExternalCharges(final Iterable<InvoiceItem> externalCharges, final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
