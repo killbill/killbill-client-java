@@ -968,25 +968,25 @@ public class KillBillClient implements Closeable {
     }
 
     public Invoice getInvoice(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoice(invoiceId, true, inputOptions);
+        return getInvoice(invoiceId, true, false, inputOptions);
     }
 
     @Deprecated
     public Invoice getInvoice(final UUID invoiceId, final boolean withItems) throws KillBillClientException {
-        return getInvoice(invoiceId, withItems, RequestOptions.empty());
+        return getInvoice(invoiceId, withItems, false, RequestOptions.empty());
     }
 
-    public Invoice getInvoice(final UUID invoiceId, final boolean withItems, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoice(invoiceId, withItems, AuditLevel.NONE, inputOptions);
+    public Invoice getInvoice(final UUID invoiceId, final boolean withItems, final boolean withChildrenItems, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoice(invoiceId, withItems, withChildrenItems, AuditLevel.NONE, inputOptions);
     }
 
     @Deprecated
     public Invoice getInvoice(final UUID invoiceId, final boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
-        return getInvoice(invoiceId, withItems, auditLevel, RequestOptions.empty());
+        return getInvoice(invoiceId, withItems, false, auditLevel, RequestOptions.empty());
     }
 
-    public Invoice getInvoice(final UUID invoiceId, final boolean withItems, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoiceByIdOrNumber(invoiceId.toString(), withItems, auditLevel, inputOptions);
+    public Invoice getInvoice(final UUID invoiceId, final boolean withItems, final boolean withChildrenItems, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoiceByIdOrNumber(invoiceId.toString(), withItems, withChildrenItems, auditLevel, inputOptions);
     }
 
     @Deprecated
@@ -995,37 +995,38 @@ public class KillBillClient implements Closeable {
     }
 
     public Invoice getInvoice(final Integer invoiceNumber, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoice(invoiceNumber, true, inputOptions);
+        return getInvoice(invoiceNumber, true, false, inputOptions);
     }
 
     @Deprecated
     public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems) throws KillBillClientException {
-        return getInvoice(invoiceNumber, withItems, RequestOptions.empty());
+        return getInvoice(invoiceNumber, withItems, false, RequestOptions.empty());
     }
 
-    public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoice(invoiceNumber, withItems, AuditLevel.NONE, inputOptions);
+    public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems, final boolean withChildrenItems, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoice(invoiceNumber, withItems, withChildrenItems, AuditLevel.NONE, inputOptions);
     }
 
     @Deprecated
     public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
-        return getInvoice(invoiceNumber, withItems, auditLevel, RequestOptions.empty());
+        return getInvoice(invoiceNumber, withItems, false, auditLevel, RequestOptions.empty());
     }
 
-    public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoiceByIdOrNumber(invoiceNumber.toString(), withItems, auditLevel, inputOptions);
+    public Invoice getInvoice(final Integer invoiceNumber, final boolean withItems, final boolean withChildrenItems, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoiceByIdOrNumber(invoiceNumber.toString(), withItems, withChildrenItems, auditLevel, inputOptions);
     }
 
     @Deprecated
     public Invoice getInvoiceByIdOrNumber(final String invoiceIdOrNumber, final boolean withItems, final AuditLevel auditLevel) throws KillBillClientException {
-        return getInvoiceByIdOrNumber(invoiceIdOrNumber, withItems, auditLevel, RequestOptions.empty());
+        return getInvoiceByIdOrNumber(invoiceIdOrNumber, withItems, false, auditLevel, RequestOptions.empty());
     }
 
-    public Invoice getInvoiceByIdOrNumber(final String invoiceIdOrNumber, final boolean withItems, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice getInvoiceByIdOrNumber(final String invoiceIdOrNumber, final boolean withItems, final boolean withChildrenItems, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceIdOrNumber;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems));
+        queryParams.put(JaxrsResource.QUERY_INVOICE_WITH_CHILDREN_ITEMS, String.valueOf(withChildrenItems));
         queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
