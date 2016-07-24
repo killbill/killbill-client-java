@@ -91,6 +91,8 @@ public interface JaxrsResource {
     public static final String BLOCK = "block";
     public static final String BCD = "bcd";
     public static final String TRANSFER_CREDIT = "transferCredit";
+    public static final String SIMPLE_PLAN = "simplePlan";
+
 
     /*
      * Multi-Tenancy headers

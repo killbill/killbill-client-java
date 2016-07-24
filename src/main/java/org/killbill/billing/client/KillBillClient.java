@@ -76,6 +76,7 @@ import org.killbill.billing.client.model.PlanDetail;
 import org.killbill.billing.client.model.PlanDetails;
 import org.killbill.billing.client.model.RoleDefinition;
 import org.killbill.billing.client.model.RolledUpUsage;
+import org.killbill.billing.client.model.SimplePlan;
 import org.killbill.billing.client.model.Subscription;
 import org.killbill.billing.client.model.SubscriptionUsageRecord;
 import org.killbill.billing.client.model.TagDefinition;
@@ -3373,6 +3374,14 @@ public class KillBillClient implements Closeable {
         final String uri = JaxrsResource.CATALOG_PATH;
         return getResourceFile(uri, ACCEPT_XML, inputOptions);
     }
+
+
+    public void addSimplePan(final SimplePlan simplePlan, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.CATALOG_PATH + "/" + JaxrsResource.SIMPLE_PLAN;
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(false).build();
+        httpClient.doPost(uri, simplePlan, requestOptions);
+    }
+
 
     // Tenants
 
