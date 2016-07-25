@@ -91,6 +91,8 @@ public interface JaxrsResource {
     public static final String BLOCK = "block";
     public static final String BCD = "bcd";
     public static final String TRANSFER_CREDIT = "transferCredit";
+    public static final String SIMPLE_PLAN = "simplePlan";
+
 
     /*
      * Multi-Tenancy headers
@@ -128,6 +130,7 @@ public interface JaxrsResource {
     public static final String QUERY_ENTITLEMENT_POLICY = "entitlementPolicy";
     public static final String QUERY_EXTERNAL_KEY = "externalKey";
     public static final String QUERY_INVOICE_WITH_ITEMS = "withItems";
+    public static final String QUERY_INVOICE_WITH_CHILDREN_ITEMS = "withChildrenItems";
     public static final String QUERY_NOTIFICATION_CALLBACK = "cb";
     public static final String QUERY_PAYMENT_EXTERNAL = "externalPayment";
     public static final String QUERY_PAYMENT_METHOD_ID = "paymentMethodId";

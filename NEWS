@@ -1,4 +1,6 @@
 
+    Add catalog api to create simple plans
+    Add missing invoice HA api to retrieve all children items
     Payment api changes for retrieving attempts and ability to delete default payment method
     Add ability to also retrieve deleted bundles when using external bundle externalKey
     Merge HA branch

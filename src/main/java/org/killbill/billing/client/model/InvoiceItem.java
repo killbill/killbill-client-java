@@ -46,6 +46,7 @@ public class InvoiceItem extends KillBillObject {
     private LocalDate endDate;
     private BigDecimal amount;
     private String currency;
+    private List<InvoiceItem> childItems;
 
     public InvoiceItem() {}
 
@@ -66,6 +67,7 @@ public class InvoiceItem extends KillBillObject {
                        @JsonProperty("endDate") final LocalDate endDate,
                        @JsonProperty("amount") final BigDecimal amount,
                        @JsonProperty("currency") final String currency,
+                       @JsonProperty("childItems") final List<InvoiceItem> childItems,
                        @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.invoiceItemId = invoiceItemId;
@@ -83,6 +85,7 @@ public class InvoiceItem extends KillBillObject {
         this.endDate = endDate;
         this.amount = amount;
         this.currency = currency;
+        this.childItems = childItems;
     }
 
     public UUID getInvoiceItemId() {
@@ -213,6 +216,14 @@ public class InvoiceItem extends KillBillObject {
         this.currency = currency;
     }
 
+    public List<InvoiceItem> getChildItems() {
+        return childItems;
+    }
+
+    public void setChildItems(final List<InvoiceItem> childItems) {
+        this.childItems = childItems;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -272,6 +283,9 @@ public class InvoiceItem extends KillBillObject {
         if (subscriptionId != null ? !subscriptionId.equals(that.subscriptionId) : that.subscriptionId != null) {
             return false;
         }
+        if (childItems != null ? !childItems.equals(that.childItems) : that.childItems != null) {
+            return false;
+        }
 
         return true;
     }
@@ -294,6 +308,7 @@ public class InvoiceItem extends KillBillObject {
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
+        result = 31 * result + (childItems != null ? childItems.hashCode() : 0);
         return result;
     }
 }
