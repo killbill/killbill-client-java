@@ -28,8 +28,8 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
     private UUID kbAccountId;
     private String formMethod;
     private String formUrl;
-    private Map<String, String> formFields;
-    private Map<String, String> properties;
+    private Map<String, Object> formFields;
+    private Map<String, Object> properties;
 
     public HostedPaymentPageFormDescriptor() {}
 
@@ -37,8 +37,8 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
     public HostedPaymentPageFormDescriptor(@JsonProperty("kbAccountId") final UUID kbAccountId,
                                            @JsonProperty("formMethod") final String formMethod,
                                            @JsonProperty("formUrl") final String formUrl,
-                                           @JsonProperty("formFields") final Map<String, String> formFields,
-                                           @JsonProperty("properties") final Map<String, String> properties) {
+                                           @JsonProperty("formFields") final Map<String, Object> formFields,
+                                           @JsonProperty("properties") final Map<String, Object> properties) {
         super();
         this.kbAccountId = kbAccountId;
         this.formMethod = formMethod;
@@ -71,19 +71,19 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
         this.formUrl = formUrl;
     }
 
-    public Map<String, String> getFormFields() {
+    public Map<String, Object> getFormFields() {
         return formFields;
     }
 
-    public void setFormFields(final Map<String, String> formFields) {
+    public void setFormFields(final Map<String, Object> formFields) {
         this.formFields = formFields;
     }
 
-    public Map<String, String> getProperties() {
+    public Map<String, Object> getProperties() {
         return properties;
     }
 
-    public void setProperties(final Map<String, String> properties) {
+    public void setProperties(final Map<String, Object> properties) {
         this.properties = properties;
     }
 
