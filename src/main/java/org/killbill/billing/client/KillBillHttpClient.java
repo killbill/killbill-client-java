@@ -25,6 +25,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
 import java.util.Collection;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
@@ -99,7 +100,6 @@ public class KillBillHttpClient implements Closeable {
     private final ObjectMapper mapper;
     private final int requestTimeoutSec;
 
-
     /**
      * @param kbServerUrl Kill Bill url
      * @param username Kill Bill username
@@ -113,7 +113,46 @@ public class KillBillHttpClient implements Closeable {
      * @param requestTimeout request timeout in milliseconds
      *
      */
-    public KillBillHttpClient(final String kbServerUrl, final String username, final String password, final String apiKey, final String apiSecret, final String proxyHost, final Integer proxyPort, final Integer connectTimeOut, final Integer readTimeOut, final Integer requestTimeout) {
+    public KillBillHttpClient(final String kbServerUrl,
+                              final String username,
+                              final String password,
+                              final String apiKey,
+                              final String apiSecret,
+                              final String proxyHost,
+                              final Integer proxyPort,
+                              final Integer connectTimeOut,
+                              final Integer readTimeOut,
+                              final Integer requestTimeout) {
+        this(kbServerUrl, username, password, apiKey, apiSecret, proxyHost, proxyPort, connectTimeOut, readTimeOut, requestTimeout, null, null);
+    }
+
+    /**
+     * @param kbServerUrl Kill Bill url
+     * @param username Kill Bill username
+     * @param password Kill Bill password
+     * @param apiKey Kill Bill api key
+     * @param apiSecret Kill Bill api secret
+     * @param proxyHost hostname of a proxy server that the client should use
+     * @param proxyPort port number of a proxy server that the client should use
+     * @param connectTimeOut connect timeout in milliseconds
+     * @param readTimeOut read timeout in milliseconds
+     * @param requestTimeout request timeout in milliseconds
+     * @param strictSSL whether to bypass SSL certificates validation
+     * @param SSLProtocol SSL protocol to use
+     *
+     */
+    public KillBillHttpClient(final String kbServerUrl,
+                              final String username,
+                              final String password,
+                              final String apiKey,
+                              final String apiSecret,
+                              final String proxyHost,
+                              final Integer proxyPort,
+                              final Integer connectTimeOut,
+                              final Integer readTimeOut,
+                              final Integer requestTimeout,
+                              final Boolean strictSSL,
+                              final String SSLProtocol) {
         this.kbServerUrl = kbServerUrl;
         this.username = username;
         this.password = password;
@@ -141,6 +180,14 @@ public class KillBillHttpClient implements Closeable {
         if (proxyHost != null && proxyPort != null) {
             final ProxyServer proxyServer = new ProxyServer(proxyHost, proxyPort);
             cfg.setProxyServer(proxyServer);
+        }
+
+        if (strictSSL != null) {
+            try {
+                cfg.setSSLContext(SslUtils.getInstance().getSSLContext(strictSSL, SSLProtocol));
+            } catch (final GeneralSecurityException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         this.httpClient = new AsyncHttpClient(cfg.build());
