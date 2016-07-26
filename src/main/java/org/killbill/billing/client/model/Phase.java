@@ -27,16 +27,19 @@ public class Phase extends KillBillObject {
     private List<Price> prices;
     private final List<Price> fixedPrices;
     private final Duration duration;
+    private final List<Usage> usages;
 
     @JsonCreator
     public Phase(@JsonProperty("type") final String type,
                  @JsonProperty("prices") final List<Price> prices,
                  @JsonProperty("fixedPrices") final List<Price> fixedPrices,
-                 @JsonProperty("duration") final Duration duration) {
+                 @JsonProperty("duration") final Duration duration,
+                 @JsonProperty("usages") final List<Usage> usages) {
         this.type = type;
         this.prices = prices;
         this.fixedPrices = fixedPrices;
         this.duration = duration;
+        this.usages = usages;
     }
 
     public String getType() {
@@ -63,6 +66,10 @@ public class Phase extends KillBillObject {
         return duration;
     }
 
+    public List<Usage> getUsages() {
+        return usages;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Phase{");
@@ -70,6 +77,7 @@ public class Phase extends KillBillObject {
         sb.append(", prices=").append(prices);
         sb.append(", fixedPrices=").append(fixedPrices);
         sb.append(", duration=").append(duration);
+        sb.append(", usages=").append(usages);
         sb.append('}');
         return sb.toString();
     }
@@ -97,6 +105,9 @@ public class Phase extends KillBillObject {
         if (duration != null ? !duration.equals(phase.duration) : phase.duration != null) {
             return false;
         }
+        if (usages != null ? !usages.equals(phase.usages) : phase.usages != null) {
+            return false;
+        }
 
         return true;
     }
@@ -107,6 +118,7 @@ public class Phase extends KillBillObject {
         result = 31 * result + (prices != null ? prices.hashCode() : 0);
         result = 31 * result + (fixedPrices != null ? fixedPrices.hashCode() : 0);
         result = 31 * result + (duration != null ? duration.hashCode() : 0);
+        result = 31 * result + (usages != null ? usages.hashCode() : 0);
         return result;
     }
 }
