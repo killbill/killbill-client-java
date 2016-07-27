@@ -16,49 +16,40 @@
 
 package org.killbill.billing.client.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TieredBlock {
+public class Limit {
 
-    private final String unit;
-    private final String size;
+    private final Unit unit;
     private final String max;
-    private final List<Price> prices;
+    private final String min;
 
     @JsonCreator
-    public TieredBlock(@JsonProperty("unit") final String unit,
-                       @JsonProperty("size") final String size,
-                       @JsonProperty("max") final String max,
-                       @JsonProperty("prices") final List<Price> prices) {
+    public Limit(@JsonProperty("unit") final Unit unit,
+                 @JsonProperty("max") final String max,
+                 @JsonProperty("min") final String min) {
         this.unit = unit;
-        this.size = size;
         this.max = max;
-        this.prices = prices;
+        this.min = min;
     }
 
-    public String getUnit() {
+    public Unit getUnit() {
         return unit;
     }
     public String getSize() {
-        return size;
+        return min;
     }
     public String getMax() {
         return max;
     }
-    public List<Price> getPrices() {
-        return prices;
-    }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("TieredBlock{");
+        final StringBuilder sb = new StringBuilder("Limit{");
         sb.append("unit='").append(unit).append('\'');
-        sb.append(", size=").append(size);
         sb.append(", max=").append(max);
-        sb.append(", prices=").append(prices);
+        sb.append(", min=").append(min);
         sb.append('}');
         return sb.toString();
     }
@@ -72,18 +63,15 @@ public class TieredBlock {
             return false;
         }
 
-        final TieredBlock block = (TieredBlock) o;
+        final Limit limit = (Limit) o;
 
-        if (unit != null ? !unit.equals(block.unit) : block.unit != null) {
+        if (unit != null ? !unit.equals(limit.unit) : limit.unit != null) {
             return false;
         }
-        if (size != null ? !size.equals(block.size) : block.size != null) {
+        if (min != null ? !min.equals(limit.min) : limit.min != null) {
             return false;
         }
-        if (max != null ? !max.equals(block.max) : block.max != null) {
-            return false;
-        }
-        if (prices != null ? !prices.equals(block.prices) : block.prices != null) {
+        if (max != null ? !max.equals(limit.max) : limit.max != null) {
             return false;
         }
 
@@ -93,9 +81,8 @@ public class TieredBlock {
     @Override
     public int hashCode() {
         int result = unit != null ? unit.hashCode() : 0;
-        result = 31 * result + (size != null ? size.hashCode() : 0);
         result = 31 * result + (max != null ? max.hashCode() : 0);
-        result = 31 * result + (prices != null ? prices.hashCode() : 0);
+        result = 31 * result + (min != null ? min.hashCode() : 0);
         return result;
     }
 }
