@@ -21,12 +21,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Limit {
 
-    private final Unit unit;
+    private final String unit;
     private final String max;
     private final String min;
 
     @JsonCreator
-    public Limit(@JsonProperty("unit") final Unit unit,
+    public Limit(@JsonProperty("unit") final String unit,
                  @JsonProperty("max") final String max,
                  @JsonProperty("min") final String min) {
         this.unit = unit;
@@ -34,7 +34,7 @@ public class Limit {
         this.min = min;
     }
 
-    public Unit getUnit() {
+    public String getUnit() {
         return unit;
     }
     public String getSize() {
