@@ -1,4 +1,5 @@
 
+    Add catalog usage info
     Allow to set payment externalKey when creating external charges
     Add catalog api to create simple plans
     Add missing invoice HA api to retrieve all children items
