@@ -97,6 +97,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
@@ -1665,7 +1666,7 @@ public class KillBillClient implements Closeable {
     public Payment createPayment(final ComboPaymentTransaction comboPaymentTransaction, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.COMBO;
 
-        final Multimap<String, String> queryParams = HashMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginNames != null) {
             queryParams.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
         }
@@ -1740,7 +1741,7 @@ public class KillBillClient implements Closeable {
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.PAYMENTS;
 
-        final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> params = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (paymentMethodId != null) {
             params.put("paymentMethodId", paymentMethodId.toString());
         }
@@ -1825,7 +1826,7 @@ public class KillBillClient implements Closeable {
                            JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() :
                            JaxrsResource.PAYMENTS_PATH;
 
-        final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> params = LinkedListMultimap.create(inputOptions.getQueryParams());
         storePluginPropertiesAsParams(pluginProperties, params);
         if (controlPluginNames != null) {
             params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
@@ -1869,7 +1870,7 @@ public class KillBillClient implements Closeable {
                            JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() + "/" + JaxrsResource.REFUNDS :
                            JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.REFUNDS;
 
-        final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> params = LinkedListMultimap.create(inputOptions.getQueryParams());
         storePluginPropertiesAsParams(pluginProperties, params);
         if (controlPluginNames != null) {
             params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
@@ -1913,7 +1914,7 @@ public class KillBillClient implements Closeable {
                            JaxrsResource.PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId() + "/" + JaxrsResource.CHARGEBACKS :
                            JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.CHARGEBACKS;
 
-        final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> params = LinkedListMultimap.create(inputOptions.getQueryParams());
         storePluginPropertiesAsParams(pluginProperties, params);
         if (controlPluginNames != null) {
             params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
@@ -1961,7 +1962,7 @@ public class KillBillClient implements Closeable {
         }
         paymentTransaction.setTransactionExternalKey(transactionExternalKey);
 
-        final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> params = LinkedListMultimap.create(inputOptions.getQueryParams());
         storePluginPropertiesAsParams(pluginProperties, params);
         if (controlPluginNames != null) {
             params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
@@ -1991,7 +1992,7 @@ public class KillBillClient implements Closeable {
     public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields fields, final UUID kbAccountId, @Nullable final UUID kbPaymentMethodId, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_GATEWAYS_PATH + "/" + JaxrsResource.HOSTED + "/" + JaxrsResource.FORM + "/" + kbAccountId;
 
-        final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> params = LinkedListMultimap.create(inputOptions.getQueryParams());
         storePluginPropertiesAsParams(pluginProperties, params);
         if (controlPluginNames != null) {
             params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
@@ -2032,7 +2033,7 @@ public class KillBillClient implements Closeable {
     public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_GATEWAYS_PATH + "/" + JaxrsResource.HOSTED + "/" + JaxrsResource.FORM;
 
-        final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> params = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginNames != null) {
             params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
         }
