@@ -18,9 +18,11 @@
 package org.killbill.billing.client.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.catalog.api.Currency;
+import org.killbill.billing.catalog.api.ProductCategory;
 import org.killbill.billing.catalog.api.TimeUnit;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,27 +32,33 @@ public class SimplePlan /* extends KillBillObject */ {
 
     private final String planId;
     private final String productName;
+    private final ProductCategory productCategory;
     private final Currency currency;
     private final BigDecimal amount;
     private final BillingPeriod billingPeriod;
     private final Integer trialLength;
     private final TimeUnit trialTimeUnit;
+    private final List<String> availableBaseProducts;
 
     @JsonCreator
     public SimplePlan(@JsonProperty("planId") final String planId,
                       @JsonProperty("productName") final String productName,
+                      @JsonProperty("productCategory")  final ProductCategory productCategory,
                       @JsonProperty("currency") final Currency currency,
                       @JsonProperty("amount") final BigDecimal amount,
                       @JsonProperty("billingPeriod") final BillingPeriod billingPeriod,
                       @JsonProperty("trialLength") final Integer trialLength,
-                      @JsonProperty("trialTimeUnit") final TimeUnit trialTimeUnit) {
+                      @JsonProperty("trialTimeUnit") final TimeUnit trialTimeUnit,
+                      @JsonProperty("availableBaseProducts") final List<String> availableBaseProducts) {
         this.planId = planId;
         this.productName = productName;
+        this.productCategory = productCategory;
         this.currency = currency;
         this.amount = amount;
         this.billingPeriod = billingPeriod;
         this.trialLength = trialLength;
         this.trialTimeUnit = trialTimeUnit;
+        this.availableBaseProducts = availableBaseProducts;
     }
 
     public String getPlanId() {
@@ -59,6 +67,14 @@ public class SimplePlan /* extends KillBillObject */ {
 
     public String getProductName() {
         return productName;
+    }
+
+    public ProductCategory getProductCategory() {
+        return productCategory;
+    }
+
+    public List<String> getAvailableBaseProducts() {
+        return availableBaseProducts;
     }
 
     public Currency getCurrency() {
@@ -98,6 +114,9 @@ public class SimplePlan /* extends KillBillObject */ {
         if (productName != null ? !productName.equals(that.productName) : that.productName != null) {
             return false;
         }
+        if (productCategory != null ? !productCategory.equals(that.productCategory) : that.productCategory != null) {
+            return false;
+        }
         if (currency != that.currency) {
             return false;
         }
@@ -110,6 +129,9 @@ public class SimplePlan /* extends KillBillObject */ {
         if (trialLength != null ? !trialLength.equals(that.trialLength) : that.trialLength != null) {
             return false;
         }
+        if (availableBaseProducts != null ? !availableBaseProducts.equals(that.availableBaseProducts) : that.availableBaseProducts != null) {
+            return false;
+        }
         return trialTimeUnit == that.trialTimeUnit;
 
     }
@@ -118,11 +140,13 @@ public class SimplePlan /* extends KillBillObject */ {
     public int hashCode() {
         int result = planId != null ? planId.hashCode() : 0;
         result = 31 * result + (productName != null ? productName.hashCode() : 0);
+        result = 31 * result + (productCategory != null ? productCategory.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (billingPeriod != null ? billingPeriod.hashCode() : 0);
         result = 31 * result + (trialLength != null ? trialLength.hashCode() : 0);
         result = 31 * result + (trialTimeUnit != null ? trialTimeUnit.hashCode() : 0);
+        result = 31 * result + (availableBaseProducts != null ? availableBaseProducts.hashCode() : 0);
         return result;
     }
 }

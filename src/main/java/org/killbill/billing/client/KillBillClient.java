@@ -49,6 +49,7 @@ import org.killbill.billing.client.model.BlockingStates;
 import org.killbill.billing.client.model.Bundle;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Catalog;
+import org.killbill.billing.client.model.Catalogs;
 import org.killbill.billing.client.model.ComboHostedPaymentPage;
 import org.killbill.billing.client.model.ComboPaymentTransaction;
 import org.killbill.billing.client.model.Credit;
@@ -3352,20 +3353,20 @@ public class KillBillClient implements Closeable {
     }
 
     @Deprecated
-    public Catalog getJSONCatalog() throws KillBillClientException {
+    public List<Catalog> getJSONCatalog() throws KillBillClientException {
         return getJSONCatalog(RequestOptions.empty());
     }
 
-    public Catalog getJSONCatalog(final RequestOptions inputOptions) throws KillBillClientException {
+    public List<Catalog> getJSONCatalog(final RequestOptions inputOptions) throws KillBillClientException {
         return this.getJSONCatalog(null, inputOptions);
     }
 
     @Deprecated
-    public Catalog getJSONCatalog(final DateTime requestedDate) throws KillBillClientException {
+    public List<Catalog> getJSONCatalog(final DateTime requestedDate) throws KillBillClientException {
         return getJSONCatalog(requestedDate, RequestOptions.empty());
     }
 
-    public Catalog getJSONCatalog(final DateTime requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
+    public List<Catalog> getJSONCatalog(final DateTime requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toDateTimeISO().toString());
@@ -3374,7 +3375,7 @@ public class KillBillClient implements Closeable {
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
         final String uri = JaxrsResource.CATALOG_PATH;
-        return httpClient.doGet(uri, Catalog.class, requestOptions);
+        return httpClient.doGet(uri, Catalogs.class, requestOptions);
     }
 
     @Deprecated
