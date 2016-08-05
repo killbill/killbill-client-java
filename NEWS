@@ -1,3 +1,6 @@
+0.23.3
+    Preserve ordering of control plugins
+
 0.23.2
     Fix buildFormDescriptor (controlPluginNames weren't passed properly)
     Add methods to manipulate payment state machines
