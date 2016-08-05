@@ -1,11 +1,26 @@
-
+0.34
     Enhance SimplePlan model and add ability to return all catalog versions (JSON)
+
+0.33
     Add catalog usage info
+
+0.32
     Allow to set payment externalKey when creating external charges
+
+0.31
     Add catalog api to create simple plans
+    SSL support
+
+0.30
     Add missing invoice HA api to retrieve all children items
+
+0.29
     Payment api changes for retrieving attempts and ability to delete default payment method
+
+0.28
     Add ability to also retrieve deleted bundles when using external bundle externalKey
+
+0.27
     Merge HA branch
 
 0.26
@@ -16,6 +31,9 @@
 
 0.24
     Release version for KB 0.17.0
+
+0.23.3
+    Preserve ordering of control plugins
 
 0.23.2
     Fix buildFormDescriptor (controlPluginNames weren't passed properly)
