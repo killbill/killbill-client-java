@@ -3400,20 +3400,23 @@ public class KillBillClient implements Closeable {
 
     @Deprecated
     public Tenant createTenant(final Tenant tenant, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createTenant(tenant, RequestOptions.builder()
+        return createTenant(tenant, true, RequestOptions.builder()
                                                   .withCreatedBy(createdBy)
                                                   .withReason(reason)
                                                   .withComment(comment)
                                                   .build());
     }
 
-    public Tenant createTenant(final Tenant tenant, final RequestOptions inputOptions) throws KillBillClientException {
+    public Tenant createTenant(final Tenant tenant, final boolean useGlobalDefault, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(tenant.getApiKey(), "Tenant#apiKey cannot be null");
         Preconditions.checkNotNull(tenant.getApiSecret(), "Tenant#apiSecret cannot be null");
 
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
 
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_TENANT_USE_GLOBAL_DEFAULT, String.valueOf(useGlobalDefault));
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation)
+                                                          .withQueryParams(queryParams).build();
         return httpClient.doPost(JaxrsResource.TENANTS_PATH, tenant, Tenant.class, requestOptions);
     }
 
