@@ -700,7 +700,7 @@ public class KillBillClient implements Closeable {
 
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
-        return httpClient.doPut(uri, subscription, Subscription.class, inputOptions);
+        return httpClient.doPut(uri, subscription, Subscription.class, requestOptions);
     }
 
     @Deprecated
