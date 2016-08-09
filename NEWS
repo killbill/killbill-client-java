@@ -1,3 +1,6 @@
+
+    Add new query parameter useGlobalDefault for tenant creation + bug fixes
+
 0.34
     Enhance SimplePlan model and add ability to return all catalog versions (JSON)
 
