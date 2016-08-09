@@ -1,3 +1,6 @@
+0.23.4
+    Fix issue in updateSubscription where query parameters are not correctly passsed
+
 0.23.3
     Preserve ordering of control plugins
 
