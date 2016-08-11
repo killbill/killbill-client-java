@@ -3588,6 +3588,19 @@ public class KillBillClient implements Closeable {
         httpClient.doDelete(uri, inputOptions);
     }
 
+    // Tests
+
+    public void invalidateCache(final String cacheName, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.TEST_PATH + "/" + JaxrsResource.CACHE;
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_CACHE_NAME, cacheName);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        httpClient.doPost(uri, null, requestOptions);
+    }
+
+
+    // Security
+
     @Deprecated
     public Permissions getPermissions() throws KillBillClientException {
         return getPermissions(RequestOptions.empty());
