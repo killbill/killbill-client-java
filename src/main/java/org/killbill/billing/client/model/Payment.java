@@ -39,6 +39,7 @@ public class Payment extends KillBillObject {
     private String currency;
     private UUID paymentMethodId;
     private List<PaymentTransaction> transactions;
+    private List<PaymentAttempt> paymentAttempts;
 
     public Payment() {}
 
@@ -55,6 +56,7 @@ public class Payment extends KillBillObject {
                    @JsonProperty("currency") final String currency,
                    @JsonProperty("paymentMethodId") final UUID paymentMethodId,
                    @JsonProperty("transactions") final List<PaymentTransaction> transactions,
+                   @JsonProperty("paymentAttempts") final List<PaymentAttempt> paymentAttempts,
                    @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.accountId = accountId;
@@ -69,6 +71,7 @@ public class Payment extends KillBillObject {
         this.currency = currency;
         this.paymentMethodId = paymentMethodId;
         this.transactions = transactions;
+        this.paymentAttempts = paymentAttempts;
     }
 
     public UUID getAccountId() {
@@ -167,6 +170,14 @@ public class Payment extends KillBillObject {
         this.transactions = transactions;
     }
 
+    public List<PaymentAttempt> getPaymentAttempts() {
+        return paymentAttempts;
+    }
+
+    public void setPaymentAttempts(final List<PaymentAttempt> paymentAttempts) {
+        this.paymentAttempts = paymentAttempts;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -214,6 +225,9 @@ public class Payment extends KillBillObject {
         if (transactions != null ? !transactions.equals(payment.transactions) : payment.transactions != null) {
             return false;
         }
+        if (paymentAttempts != null ? !paymentAttempts.equals(payment.paymentAttempts) : payment.paymentAttempts != null) {
+            return false;
+        }
 
         return true;
     }
@@ -232,6 +246,7 @@ public class Payment extends KillBillObject {
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
         result = 31 * result + (paymentMethodId != null ? paymentMethodId.hashCode() : 0);
         result = 31 * result + (transactions != null ? transactions.hashCode() : 0);
+        result = 31 * result + (paymentAttempts != null ? paymentAttempts.hashCode() : 0);
         return result;
     }
 }
