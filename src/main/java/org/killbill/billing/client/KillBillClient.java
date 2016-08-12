@@ -3588,16 +3588,31 @@ public class KillBillClient implements Closeable {
         httpClient.doDelete(uri, inputOptions);
     }
 
-    // Tests
+    // Admin
 
-    public void invalidateCache(final String cacheName, final RequestOptions inputOptions) throws KillBillClientException {
-        final String uri = JaxrsResource.TEST_PATH + "/" + JaxrsResource.CACHE;
+    public void invalidatesAllCaches(final RequestOptions inputOptions) throws KillBillClientException {
+        invalidatesCacheByName(null, inputOptions);
+    }
+
+    public void invalidatesCacheByName(@Nullable final String cacheName, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE;
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put(JaxrsResource.QUERY_CACHE_NAME, cacheName);
+        if (null != cacheName) {
+            queryParams.put(JaxrsResource.QUERY_CACHE_NAME, cacheName);
+        }
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
         httpClient.doPost(uri, null, requestOptions);
     }
 
+    public void invalidatesCacheByAccount(final String accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE + "/" + JaxrsResource.ACCOUNTS + "/" + accountId;
+        httpClient.doPost(uri, null, inputOptions);
+    }
+
+    public void invalidatesCacheByTenant(final String tenantId, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE + "/" + JaxrsResource.TENANTS + "/" + tenantId;
+        httpClient.doPost(uri, null, inputOptions);
+    }
 
     // Security
 

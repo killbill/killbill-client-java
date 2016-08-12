@@ -83,8 +83,8 @@ public interface JaxrsResource {
     public static final String TAG_DEFINITIONS_PATH = PREFIX + "/" + TAG_DEFINITIONS;
     public static final String TENANTS = "tenants";
     public static final String TENANTS_PATH = PREFIX + "/" + TENANTS;
-    public static final String TEST = "test";
-    public static final String TEST_PATH = PREFIX + "/" + TEST;
+    public static final String ADMIN = "admin";
+    public static final String ADMIN_PATH = PREFIX + "/" + ADMIN;
     public static final String CACHE = "cache";
     public static final String TIMELINE = "timeline";
     public static final String USAGES = "usages";
