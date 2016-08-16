@@ -2105,6 +2105,25 @@ public class KillBillClient implements Closeable {
         return httpClient.doDelete(uri, paymentTransaction, Payment.class, requestOptions);
     }
 
+
+    public void cancelScheduledPaymentTransaction(final UUID paymentTransactionId, final String paymentTransactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
+
+        Preconditions.checkState(paymentTransactionId != null || paymentTransactionExternalKey != null, "PaymentTransaction#paymentTransactionId or PaymentTransaction#paymentTransactionExternalKey cannot be null");
+        final String uri = (paymentTransactionId != null) ?
+                           JaxrsResource.PAYMENTS_PATH + "/" + paymentTransactionId + "/" + JaxrsResource.CANCEL_SCHEDULED_PAYMENT_TRANSACTION :
+                           JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.CANCEL_SCHEDULED_PAYMENT_TRANSACTION;
+
+        final Multimap<String, String> params = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (paymentTransactionExternalKey != null) {
+            params.put(JaxrsResource.QUERY_TRANSACTION_EXT_KEY, paymentTransactionExternalKey);
+        }
+
+        final RequestOptions requestOptions = inputOptions.extend()
+                                                          .withQueryParams(params).build();
+        httpClient.doDelete(uri, requestOptions);
+    }
+
+
     // Hosted payment pages
     @Deprecated
     public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields fields, final UUID kbAccountId, @Nullable final UUID kbPaymentMethodId, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
