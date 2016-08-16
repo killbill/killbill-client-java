@@ -3609,9 +3609,14 @@ public class KillBillClient implements Closeable {
         httpClient.doPost(uri, null, inputOptions);
     }
 
-    public void invalidateCacheByTenant(final String tenantId, final RequestOptions inputOptions) throws KillBillClientException {
-        final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE + "/" + JaxrsResource.TENANTS + "/" + tenantId;
-        httpClient.doPost(uri, null, inputOptions);
+    public void invalidateCacheByTenant(final String tenantApiKey, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE + "/" + JaxrsResource.TENANTS;
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (null != tenantApiKey) {
+            queryParams.put(JaxrsResource.QUERY_TENANT_API_KEY, tenantApiKey);
+        }
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        httpClient.doPost(uri, null, requestOptions);
     }
 
     // Security
