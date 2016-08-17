@@ -95,6 +95,7 @@ public interface JaxrsResource {
     public static final String BCD = "bcd";
     public static final String TRANSFER_CREDIT = "transferCredit";
     public static final String SIMPLE_PLAN = "simplePlan";
+    public static final String CANCEL_SCHEDULED_PAYMENT_TRANSACTION = "cancelScheduledPaymentTransaction";
 
 
     /*
