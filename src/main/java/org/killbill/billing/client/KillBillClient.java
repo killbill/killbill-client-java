@@ -3620,17 +3620,17 @@ public class KillBillClient implements Closeable {
             queryParams.put(JaxrsResource.QUERY_CACHE_NAME, cacheName);
         }
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
-        httpClient.doPost(uri, null, requestOptions);
+        httpClient.doDelete(uri, requestOptions);
     }
 
     public void invalidateCacheByAccount(final String accountId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE + "/" + JaxrsResource.ACCOUNTS + "/" + accountId;
-        httpClient.doPost(uri, null, inputOptions);
+        httpClient.doDelete(uri, inputOptions);
     }
 
     public void invalidateCacheByTenant(final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE + "/" + JaxrsResource.TENANTS;
-        httpClient.doPost(uri, null, inputOptions);
+        httpClient.doDelete(uri, inputOptions);
     }
 
     // Security
