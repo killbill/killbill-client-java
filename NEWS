@@ -1,4 +1,5 @@
 
+    Implement new api cancelScheduledPaymentTransaction
     Add new query parameter useGlobalDefault for tenant creation + bug fixes
 
 0.34
