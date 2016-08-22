@@ -46,6 +46,7 @@ public class Account extends KillBillObject {
     private String country;
     private String locale;
     private String phone;
+    private String notes;
     private Boolean isMigrated;
     private Boolean isNotifiedForInvoices;
 
@@ -72,6 +73,7 @@ public class Account extends KillBillObject {
                    @JsonProperty("country") final String country,
                    @JsonProperty("locale") final String locale,
                    @JsonProperty("phone") final String phone,
+                   @JsonProperty("notes") final String notes,
                    @JsonProperty("isMigrated") final Boolean isMigrated,
                    @JsonProperty("isNotifiedForInvoices") final Boolean isNotifiedForInvoices,
                    @JsonProperty("accountBalance") final BigDecimal accountBalance,
@@ -98,6 +100,7 @@ public class Account extends KillBillObject {
         this.country = country;
         this.locale = locale;
         this.phone = phone;
+        this.notes = notes;
         this.isMigrated = isMigrated;
         this.isNotifiedForInvoices = isNotifiedForInvoices;
         this.accountCBA = accountCBA;
@@ -279,6 +282,14 @@ public class Account extends KillBillObject {
         this.phone = phone;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(final String notes) {
+        this.notes = notes;
+    }
+
     public Boolean getIsMigrated() {
         return isMigrated;
     }
@@ -320,6 +331,7 @@ public class Account extends KillBillObject {
         sb.append(", country='").append(country).append('\'');
         sb.append(", locale='").append(locale).append('\'');
         sb.append(", phone='").append(phone).append('\'');
+        sb.append(", notes='").append(notes).append('\'');
         sb.append(", isMigrated=").append(isMigrated);
         sb.append(", isNotifiedForInvoices=").append(isNotifiedForInvoices);
         sb.append('}');
@@ -400,6 +412,9 @@ public class Account extends KillBillObject {
         if (phone != null ? !phone.equals(account.phone) : account.phone != null) {
             return false;
         }
+        if (notes != null ? !notes.equals(account.notes) : account.notes != null) {
+            return false;
+        }
         if (postalCode != null ? !postalCode.equals(account.postalCode) : account.postalCode != null) {
             return false;
         }
@@ -437,6 +452,7 @@ public class Account extends KillBillObject {
         result = 31 * result + (country != null ? country.hashCode() : 0);
         result = 31 * result + (locale != null ? locale.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (notes != null ? notes.hashCode() : 0);
         result = 31 * result + (isMigrated != null ? isMigrated.hashCode() : 0);
         result = 31 * result + (isNotifiedForInvoices != null ? isNotifiedForInvoices.hashCode() : 0);
         return result;
