@@ -83,6 +83,9 @@ public interface JaxrsResource {
     public static final String TAG_DEFINITIONS_PATH = PREFIX + "/" + TAG_DEFINITIONS;
     public static final String TENANTS = "tenants";
     public static final String TENANTS_PATH = PREFIX + "/" + TENANTS;
+    public static final String ADMIN = "admin";
+    public static final String ADMIN_PATH = PREFIX + "/" + ADMIN;
+    public static final String CACHE = "cache";
     public static final String TIMELINE = "timeline";
     public static final String USAGES = "usages";
     public static final String USAGES_PATH = PREFIX + "/" + USAGES;
@@ -121,6 +124,8 @@ public interface JaxrsResource {
     public static final String QUERY_ACCOUNT_WITH_BALANCE = "accountWithBalance";
     public static final String QUERY_ACCOUNT_WITH_BALANCE_AND_CBA = "accountWithBalanceAndCBA";
     public static final String QUERY_AUDIT = "audit";
+    public static final String QUERY_CACHE_NAME = "cacheName";
+    public static final String QUERY_TENANT_API_KEY = "tenantApiKey";
     public static final String QUERY_BILLING_POLICY = "billingPolicy";
     public static final String QUERY_CALL_COMPLETION = "callCompletion";
     public static final String QUERY_CALL_TIMEOUT = "callTimeoutSec";

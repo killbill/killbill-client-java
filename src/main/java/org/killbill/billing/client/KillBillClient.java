@@ -3607,6 +3607,34 @@ public class KillBillClient implements Closeable {
         httpClient.doDelete(uri, inputOptions);
     }
 
+    // Admin
+
+    public void invalidateAllCaches(final RequestOptions inputOptions) throws KillBillClientException {
+        invalidateCacheByName(null, inputOptions);
+    }
+
+    public void invalidateCacheByName(@Nullable final String cacheName, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE;
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (null != cacheName) {
+            queryParams.put(JaxrsResource.QUERY_CACHE_NAME, cacheName);
+        }
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        httpClient.doDelete(uri, requestOptions);
+    }
+
+    public void invalidateCacheByAccount(final String accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE + "/" + JaxrsResource.ACCOUNTS + "/" + accountId;
+        httpClient.doDelete(uri, inputOptions);
+    }
+
+    public void invalidateCacheByTenant(final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE + "/" + JaxrsResource.TENANTS;
+        httpClient.doDelete(uri, inputOptions);
+    }
+
+    // Security
+
     @Deprecated
     public Permissions getPermissions() throws KillBillClientException {
         return getPermissions(RequestOptions.empty());
