@@ -2206,6 +2206,10 @@ public class KillBillClient implements Closeable {
     }
 
     public InvoicePayment createInvoicePaymentRefund(final InvoicePaymentTransaction refundTransaction, final RequestOptions inputOptions) throws KillBillClientException {
+        return createInvoicePaymentRefund(refundTransaction, false, inputOptions);
+    }
+
+    public InvoicePayment createInvoicePaymentRefund(final InvoicePaymentTransaction refundTransaction, final boolean externalPayment, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(refundTransaction.getPaymentId(), "InvoicePaymentTransaction#paymentId cannot be null");
 
         // Specify isAdjusted for invoice adjustment and invoice item adjustment
@@ -2216,10 +2220,13 @@ public class KillBillClient implements Closeable {
             }
         }
 
+        final Multimap<String, String> params = LinkedListMultimap.create(inputOptions.getQueryParams());
+        params.put(JaxrsResource.QUERY_PAYMENT_EXTERNAL, String.valueOf(externalPayment));
+
         final String uri = JaxrsResource.INVOICE_PAYMENTS_PATH + "/" + refundTransaction.getPaymentId() + "/" + JaxrsResource.REFUNDS;
 
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(params).withFollowLocation(followLocation).build();
 
         return httpClient.doPost(uri, refundTransaction, InvoicePayment.class, requestOptions);
     }
