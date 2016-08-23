@@ -645,11 +645,13 @@ public class KillBillClient implements Closeable {
     }
 
     public Subscription createSubscription(final Subscription subscription, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscription.getAccountId(), "Subscription#accountId cannot be null");
-        Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
-        Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
-        Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
-        Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+        if (subscription.getPlanName() == null) {
+            Preconditions.checkNotNull(subscription.getAccountId(), "Subscription#accountId cannot be null");
+            Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
+            Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
+            Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
+            Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+        }
         if (subscription.getProductCategory() == ProductCategory.BASE) {
             Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null");
         }
@@ -679,12 +681,14 @@ public class KillBillClient implements Closeable {
 
     public Bundle createSubscriptionWithAddOns(final Iterable<Subscription> subscriptions, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
         for (final Subscription subscription : subscriptions) {
-            Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
-            Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
-            Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
-            Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
-            if (subscription.getProductCategory() == ProductCategory.BASE) {
-                Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null for base subscription");
+            if (subscription.getPlanName() == null) {
+                Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
+                Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
+                Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
+                Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+                if (subscription.getProductCategory() == ProductCategory.BASE) {
+                    Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null for base subscription");
+                }
             }
         }
 
@@ -739,9 +743,11 @@ public class KillBillClient implements Closeable {
 
     public Subscription updateSubscription(final Subscription subscription, @Nullable final LocalDate requestedDate, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscription.getSubscriptionId(), "Subscription#subscriptionId cannot be null");
-        Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
-        Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
-        Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+        if (subscription.getPlanName() == null) {
+            Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
+            Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
+            Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+        }
 
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscription.getSubscriptionId();
 
