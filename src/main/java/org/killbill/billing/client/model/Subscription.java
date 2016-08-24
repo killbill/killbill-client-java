@@ -45,6 +45,7 @@ public class Subscription extends KillBillObject {
     private BillingPeriod billingPeriod;
     private PhaseType phaseType;
     private String priceList;
+    private String planName;
     private EntitlementState state;
     private EntitlementSourceType sourceType;
     private LocalDate cancelledDate;
@@ -68,6 +69,7 @@ public class Subscription extends KillBillObject {
                         @JsonProperty("billingPeriod") @Nullable final BillingPeriod billingPeriod,
                         @JsonProperty("phaseType") @Nullable final PhaseType phaseType,
                         @JsonProperty("priceList") @Nullable final String priceList,
+                        @JsonProperty("planName") @Nullable final String planName,
                         @JsonProperty("state") @Nullable final EntitlementState state,
                         @JsonProperty("sourceType") @Nullable final EntitlementSourceType sourceType,
                         @JsonProperty("cancelledDate") @Nullable final LocalDate cancelledDate,
@@ -85,6 +87,7 @@ public class Subscription extends KillBillObject {
         this.billingPeriod = billingPeriod;
         this.phaseType = phaseType;
         this.priceList = priceList;
+        this.planName = planName;
         this.state = state;
         this.sourceType = sourceType;
         this.cancelledDate = cancelledDate;
@@ -180,6 +183,14 @@ public class Subscription extends KillBillObject {
         this.priceList = priceList;
     }
 
+    public String getPlanName() {
+        return planName;
+    }
+
+    public void setPlanName(final String planName) {
+        this.planName = planName;
+    }
+
     public EntitlementState getState() {
         return state;
     }
@@ -265,6 +276,7 @@ public class Subscription extends KillBillObject {
         sb.append(", billingPeriod=").append(billingPeriod);
         sb.append(", phaseType=").append(phaseType);
         sb.append(", priceList='").append(priceList).append('\'');
+        sb.append(", planName='").append(planName).append('\'');
         sb.append(", state=").append(state);
         sb.append(", sourceType=").append(sourceType);
         sb.append(", cancelledDate=").append(cancelledDate);
@@ -325,6 +337,9 @@ public class Subscription extends KillBillObject {
         if (priceList != null ? !priceList.equals(that.priceList) : that.priceList != null) {
             return false;
         }
+        if (planName != null ? !planName.equals(that.planName) : that.planName != null) {
+            return false;
+        }
         if (productCategory != that.productCategory) {
             return false;
         }
@@ -361,6 +376,7 @@ public class Subscription extends KillBillObject {
         result = 31 * result + (billingPeriod != null ? billingPeriod.hashCode() : 0);
         result = 31 * result + (phaseType != null ? phaseType.hashCode() : 0);
         result = 31 * result + (priceList != null ? priceList.hashCode() : 0);
+        result = 31 * result + (planName != null ? planName.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (sourceType != null ? sourceType.hashCode() : 0);
         result = 31 * result + (cancelledDate != null ? cancelledDate.hashCode() : 0);

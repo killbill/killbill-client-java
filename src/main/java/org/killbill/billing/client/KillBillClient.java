@@ -645,11 +645,13 @@ public class KillBillClient implements Closeable {
     }
 
     public Subscription createSubscription(final Subscription subscription, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscription.getAccountId(), "Subscription#accountId cannot be null");
-        Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
-        Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
-        Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
-        Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+        if (subscription.getPlanName() == null) {
+            Preconditions.checkNotNull(subscription.getAccountId(), "Subscription#accountId cannot be null");
+            Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
+            Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
+            Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
+            Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+        }
         if (subscription.getProductCategory() == ProductCategory.BASE) {
             Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null");
         }
@@ -679,12 +681,14 @@ public class KillBillClient implements Closeable {
 
     public Bundle createSubscriptionWithAddOns(final Iterable<Subscription> subscriptions, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
         for (final Subscription subscription : subscriptions) {
-            Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
-            Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
-            Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
-            Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
-            if (subscription.getProductCategory() == ProductCategory.BASE) {
-                Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null for base subscription");
+            if (subscription.getPlanName() == null) {
+                Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
+                Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
+                Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
+                Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+                if (subscription.getProductCategory() == ProductCategory.BASE) {
+                    Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null for base subscription");
+                }
             }
         }
 
@@ -739,9 +743,11 @@ public class KillBillClient implements Closeable {
 
     public Subscription updateSubscription(final Subscription subscription, @Nullable final LocalDate requestedDate, @Nullable final BillingActionPolicy billingPolicy, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscription.getSubscriptionId(), "Subscription#subscriptionId cannot be null");
-        Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
-        Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
-        Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+        if (subscription.getPlanName() == null) {
+            Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
+            Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
+            Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+        }
 
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscription.getSubscriptionId();
 
@@ -2104,6 +2110,25 @@ public class KillBillClient implements Closeable {
                                                           .withFollowLocation(followLocation).build();
         return httpClient.doDelete(uri, paymentTransaction, Payment.class, requestOptions);
     }
+
+
+    public void cancelScheduledPaymentTransaction(final UUID paymentTransactionId, final String paymentTransactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
+
+        Preconditions.checkState(paymentTransactionId != null || paymentTransactionExternalKey != null, "PaymentTransaction#paymentTransactionId or PaymentTransaction#paymentTransactionExternalKey cannot be null");
+        final String uri = (paymentTransactionId != null) ?
+                           JaxrsResource.PAYMENTS_PATH + "/" + paymentTransactionId + "/" + JaxrsResource.CANCEL_SCHEDULED_PAYMENT_TRANSACTION :
+                           JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.CANCEL_SCHEDULED_PAYMENT_TRANSACTION;
+
+        final Multimap<String, String> params = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (paymentTransactionExternalKey != null) {
+            params.put(JaxrsResource.QUERY_TRANSACTION_EXT_KEY, paymentTransactionExternalKey);
+        }
+
+        final RequestOptions requestOptions = inputOptions.extend()
+                                                          .withQueryParams(params).build();
+        httpClient.doDelete(uri, requestOptions);
+    }
+
 
     // Hosted payment pages
     @Deprecated
@@ -3594,6 +3619,34 @@ public class KillBillClient implements Closeable {
         final String uri = JaxrsResource.TENANTS_PATH + "/" + JaxrsResource.UPLOAD_PLUGIN_PAYMENT_STATE_MACHINE_CONFIG + "/" + pluginName;
         httpClient.doDelete(uri, inputOptions);
     }
+
+    // Admin
+
+    public void invalidateAllCaches(final RequestOptions inputOptions) throws KillBillClientException {
+        invalidateCacheByName(null, inputOptions);
+    }
+
+    public void invalidateCacheByName(@Nullable final String cacheName, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE;
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (null != cacheName) {
+            queryParams.put(JaxrsResource.QUERY_CACHE_NAME, cacheName);
+        }
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        httpClient.doDelete(uri, requestOptions);
+    }
+
+    public void invalidateCacheByAccount(final String accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE + "/" + JaxrsResource.ACCOUNTS + "/" + accountId;
+        httpClient.doDelete(uri, inputOptions);
+    }
+
+    public void invalidateCacheByTenant(final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ADMIN_PATH + "/" + JaxrsResource.CACHE + "/" + JaxrsResource.TENANTS;
+        httpClient.doDelete(uri, inputOptions);
+    }
+
+    // Security
 
     @Deprecated
     public Permissions getPermissions() throws KillBillClientException {

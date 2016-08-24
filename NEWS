@@ -1,4 +1,9 @@
 
+    Notes for account
+    Add an endpoint to invalidate Kill Bill ehcache
+    Catalog cleanup
+    Modify Subscription model to include the new planName
+    Implement new api cancelScheduledPaymentTransaction
     Add new query parameter useGlobalDefault for tenant creation + bug fixes
 
 0.34
