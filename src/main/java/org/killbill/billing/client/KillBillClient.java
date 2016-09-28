@@ -3030,6 +3030,15 @@ public class KillBillClient implements Closeable {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
+    // Payment Transaction Tags
+    public Tags getPaymentTransactionTags(final UUID paymentTransactionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getObjectTags(paymentTransactionId, JaxrsResource.PAYMENT_TRANSACTIONS_PATH, AuditLevel.NONE, inputOptions);
+    }
+
+    public Tags createPaymentTransactionTag(final UUID paymentTransactionId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return createObjectTag(paymentTransactionId, JaxrsResource.PAYMENT_TRANSACTIONS_PATH, tagDefinitionId, inputOptions);
+    }
+
     private Tags createObjectTag(final UUID objectId, final String resourcePathPrefix, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = resourcePathPrefix + "/" + objectId + "/" + JaxrsResource.TAGS;
 
