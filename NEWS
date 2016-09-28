@@ -1,4 +1,6 @@
 
+    Fix payment api to allow retrieving payment transaction tags
+    Implementing external refund on a paymentMethod sent by query param
     Notes for account
     Add an endpoint to invalidate Kill Bill ehcache
     Catalog cleanup
