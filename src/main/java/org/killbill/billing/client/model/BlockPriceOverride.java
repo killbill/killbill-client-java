@@ -72,7 +72,6 @@ public class BlockPriceOverride {
 
         final BlockPriceOverride that = (BlockPriceOverride) o;
 
-
         if (unitName != null ? !unitName.equals(that.unitName) : that.unitName != null) {
             return false;
         }
