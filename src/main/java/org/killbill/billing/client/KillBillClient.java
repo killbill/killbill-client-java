@@ -2559,7 +2559,7 @@ public class KillBillClient implements Closeable {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + paymentMethod.getAccountId() + "/" + JaxrsResource.PAYMENT_METHODS;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put(JaxrsResource.QUERY_PAYMENT_METHOD_IS_DEFAULT, paymentMethod.getIsDefault() ? "true" : "false");
+        queryParams.put(JaxrsResource.QUERY_PAYMENT_METHOD_IS_DEFAULT, Boolean.TRUE.equals(paymentMethod.getIsDefault()) ? "true" : "false");
 
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
