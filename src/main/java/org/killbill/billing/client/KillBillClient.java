@@ -46,6 +46,7 @@ import org.killbill.billing.client.model.AccountTimeline;
 import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.client.model.BlockingState;
 import org.killbill.billing.client.model.BlockingStates;
+import org.killbill.billing.client.model.BulkBaseSubscriptionAndAddOns;
 import org.killbill.billing.client.model.Bundle;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Catalog;
@@ -707,6 +708,39 @@ public class KillBillClient implements Closeable {
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
 
         return httpClient.doPost(uri, subscriptions, Bundle.class, requestOptions, httpTimeout);
+    }
+
+    public Bundles createSubscriptionsWithAddOns(final Iterable<BulkBaseSubscriptionAndAddOns> subscriptionsBulk, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
+
+        for (final BulkBaseSubscriptionAndAddOns bulk : subscriptionsBulk) {
+            for (final Subscription subscription : bulk.getBaseEntitlementAndAddOns()) {
+                if (subscription.getPlanName() == null) {
+                    Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
+                    Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
+                    Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
+                    Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
+                    if (subscription.getProductCategory() == ProductCategory.BASE) {
+                        Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null for base subscription");
+                    }
+                }
+            }
+        }
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
+        queryParams.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
+        if (requestedDate != null) {
+            queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toString());
+        }
+
+        final int httpTimeout = Math.max(DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec);
+
+        final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/createEntitlementsWithAddOns";
+
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, subscriptionsBulk, Bundles.class, requestOptions, httpTimeout);
     }
 
     @Deprecated
