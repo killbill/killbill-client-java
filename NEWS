@@ -1,11 +1,22 @@
-    shopping cart API
+0.40
+    Shopping cart API
+
+0.39
     Fix payment api to allow retrieving payment transaction tags
     Implementing external refund on a paymentMethod sent by query param
+
+0.38
     Notes for account
     Add an endpoint to invalidate Kill Bill ehcache
     Catalog cleanup
+
+0.37
     Modify Subscription model to include the new planName
+
+0.36
     Implement new api cancelScheduledPaymentTransaction
+
+0.35
     Add new query parameter useGlobalDefault for tenant creation + bug fixes
 
 0.34
