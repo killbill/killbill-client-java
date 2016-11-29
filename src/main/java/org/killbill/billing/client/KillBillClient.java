@@ -633,19 +633,22 @@ public class KillBillClient implements Closeable {
     }
 
     public Subscription createSubscription(final Subscription subscription, final RequestOptions inputOptions) throws KillBillClientException {
-        return createSubscription(subscription, null, -1, inputOptions);
+        return createSubscription(subscription, null, -1, null, inputOptions);
     }
-
 
     @Deprecated
     public Subscription createSubscription(final Subscription subscription, final LocalDate requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
-        return createSubscription(subscription, requestedDate, timeoutSec, RequestOptions.builder()
+        return createSubscription(subscription, requestedDate, timeoutSec, null, RequestOptions.builder()
                                                                                          .withCreatedBy(createdBy)
                                                                                          .withReason(reason)
                                                                                          .withComment(comment).build());
     }
 
     public Subscription createSubscription(final Subscription subscription, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
+        return createSubscription(subscription, requestedDate, timeoutSec, null, inputOptions);
+    }
+
+    public Subscription createSubscription(final Subscription subscription, final LocalDate requestedDate, final int timeoutSec, final Boolean isMigrated, final RequestOptions inputOptions) throws KillBillClientException {
         if (subscription.getPlanName() == null) {
             Preconditions.checkNotNull(subscription.getAccountId(), "Subscription#accountId cannot be null");
             Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
@@ -662,6 +665,9 @@ public class KillBillClient implements Closeable {
         queryParams.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
         if (requestedDate != null) {
             queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toString());
+        }
+        if(isMigrated != null) {
+            queryParams.put(JaxrsResource.QUERY_MIGRATED, isMigrated.toString());
         }
 
         final int httpTimeout = Math.max(DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec);
