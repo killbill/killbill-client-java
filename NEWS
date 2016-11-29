@@ -1,3 +1,6 @@
+0.40.1
+    Remove EventSubscription#requestedDate (deprecated)
+
 0.40
     Shopping cart API
 
