@@ -31,7 +31,6 @@ public class EventSubscription extends KillBillObject {
 
     private String eventId;
     private String billingPeriod;
-    private LocalDate requestedDate;
     private LocalDate effectiveDate;
     private String product;
     private String priceList;
@@ -45,7 +44,6 @@ public class EventSubscription extends KillBillObject {
     @JsonCreator
     public EventSubscription(@JsonProperty("eventId") final String eventId,
                              @JsonProperty("billingPeriod") final String billingPeriod,
-                             @JsonProperty("requestedDt") final LocalDate requestedDate,
                              @JsonProperty("effectiveDt") final LocalDate effectiveDate,
                              @JsonProperty("product") final String product,
                              @JsonProperty("priceList") final String priceList,
@@ -59,7 +57,6 @@ public class EventSubscription extends KillBillObject {
         super(auditLogs);
         this.eventId = eventId;
         this.billingPeriod = billingPeriod;
-        this.requestedDate = requestedDate;
         this.effectiveDate = effectiveDate;
         this.product = product;
         this.priceList = priceList;
@@ -85,14 +82,6 @@ public class EventSubscription extends KillBillObject {
 
     public void setBillingPeriod(final String billingPeriod) {
         this.billingPeriod = billingPeriod;
-    }
-
-    public LocalDate getRequestedDate() {
-        return requestedDate;
-    }
-
-    public void setRequestedDate(final LocalDate requestedDate) {
-        this.requestedDate = requestedDate;
     }
 
     public LocalDate getEffectiveDate() {
@@ -172,7 +161,6 @@ public class EventSubscription extends KillBillObject {
         final StringBuilder sb = new StringBuilder("EventSubscriptionJson{");
         sb.append("eventId='").append(eventId).append('\'');
         sb.append(", billingPeriod='").append(billingPeriod).append('\'');
-        sb.append(", requestedDate=").append(requestedDate);
         sb.append(", effectiveDate=").append(effectiveDate);
         sb.append(", product='").append(product).append('\'');
         sb.append(", priceList='").append(priceList).append('\'');
@@ -224,9 +212,6 @@ public class EventSubscription extends KillBillObject {
         if (product != null ? !product.equals(that.product) : that.product != null) {
             return false;
         }
-        if (requestedDate != null ? requestedDate.compareTo(that.requestedDate) != 0 : that.requestedDate != null) {
-            return false;
-        }
         if (serviceName != null ? !serviceName.equals(that.serviceName) : that.serviceName != null) {
             return false;
         }
@@ -241,7 +226,6 @@ public class EventSubscription extends KillBillObject {
     public int hashCode() {
         int result = eventId != null ? eventId.hashCode() : 0;
         result = 31 * result + (billingPeriod != null ? billingPeriod.hashCode() : 0);
-        result = 31 * result + (requestedDate != null ? requestedDate.hashCode() : 0);
         result = 31 * result + (effectiveDate != null ? effectiveDate.hashCode() : 0);
         result = 31 * result + (product != null ? product.hashCode() : 0);
         result = 31 * result + (priceList != null ? priceList.hashCode() : 0);
