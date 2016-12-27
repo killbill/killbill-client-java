@@ -27,20 +27,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PhasePriceOverride {
 
+    private final String planName;
     private final String phaseName;
     private final String phaseType;
     private final BigDecimal fixedPrice;
     private final BigDecimal recurringPrice;
 
     @JsonCreator
-    public PhasePriceOverride(@JsonProperty("phaseName") final String phaseName,
+    public PhasePriceOverride(@JsonProperty("planName") final String planName,
+                              @JsonProperty("phaseName") final String phaseName,
                               @JsonProperty("phaseType") final String phaseType,
                               @Nullable @JsonProperty("fixedPrice") final BigDecimal fixedPrice,
                               @Nullable @JsonProperty("recurringPrice") final BigDecimal recurringPrice) {
+        this.planName = planName;
         this.phaseName = phaseName;
         this.phaseType = phaseType;
         this.fixedPrice = fixedPrice;
         this.recurringPrice = recurringPrice;
+    }
+
+    public String getPlanName() {
+        return planName;
     }
 
     public String getPhaseName() {
@@ -70,6 +77,9 @@ public class PhasePriceOverride {
 
         final PhasePriceOverride that = (PhasePriceOverride) o;
 
+        if (planName != null ? !planName.equals(that.planName) : that.planName != null) {
+            return false;
+        }
         if (phaseName != null ? !phaseName.equals(that.phaseName) : that.phaseName != null) {
             return false;
         }
@@ -88,6 +98,7 @@ public class PhasePriceOverride {
     @Override
     public int hashCode() {
         int result = phaseName != null ? phaseName.hashCode() : 0;
+        result = 31 * result + (planName != null ? planName.hashCode() : 0);
         result = 31 * result + (phaseType != null ? phaseType.hashCode() : 0);
         result = 31 * result + (fixedPrice != null ? fixedPrice.hashCode() : 0);
         result = 31 * result + (recurringPrice != null ? recurringPrice.hashCode() : 0);
