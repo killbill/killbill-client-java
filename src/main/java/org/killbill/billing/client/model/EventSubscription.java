@@ -31,8 +31,8 @@ public class EventSubscription extends KillBillObject {
 
     private String eventId;
     private String billingPeriod;
-    private LocalDate requestedDate;
     private LocalDate effectiveDate;
+    private String plan;
     private String product;
     private String priceList;
     private String eventType;
@@ -45,8 +45,8 @@ public class EventSubscription extends KillBillObject {
     @JsonCreator
     public EventSubscription(@JsonProperty("eventId") final String eventId,
                              @JsonProperty("billingPeriod") final String billingPeriod,
-                             @JsonProperty("requestedDt") final LocalDate requestedDate,
                              @JsonProperty("effectiveDt") final LocalDate effectiveDate,
+                             @JsonProperty("plan") final String plan,
                              @JsonProperty("product") final String product,
                              @JsonProperty("priceList") final String priceList,
                              @JsonProperty("eventType") final String eventType,
@@ -59,8 +59,8 @@ public class EventSubscription extends KillBillObject {
         super(auditLogs);
         this.eventId = eventId;
         this.billingPeriod = billingPeriod;
-        this.requestedDate = requestedDate;
         this.effectiveDate = effectiveDate;
+        this.plan = plan;
         this.product = product;
         this.priceList = priceList;
         this.eventType = eventType;
@@ -69,6 +69,14 @@ public class EventSubscription extends KillBillObject {
         this.serviceName = serviceName;
         this.serviceStateName = serviceStateName;
         this.phase = phase;
+    }
+
+    public String getPlan() {
+        return plan;
+    }
+
+    public void setPlan(final String plan) {
+        this.plan = plan;
     }
 
     public String getEventId() {
@@ -85,14 +93,6 @@ public class EventSubscription extends KillBillObject {
 
     public void setBillingPeriod(final String billingPeriod) {
         this.billingPeriod = billingPeriod;
-    }
-
-    public LocalDate getRequestedDate() {
-        return requestedDate;
-    }
-
-    public void setRequestedDate(final LocalDate requestedDate) {
-        this.requestedDate = requestedDate;
     }
 
     public LocalDate getEffectiveDate() {
@@ -172,8 +172,8 @@ public class EventSubscription extends KillBillObject {
         final StringBuilder sb = new StringBuilder("EventSubscriptionJson{");
         sb.append("eventId='").append(eventId).append('\'');
         sb.append(", billingPeriod='").append(billingPeriod).append('\'');
-        sb.append(", requestedDate=").append(requestedDate);
         sb.append(", effectiveDate=").append(effectiveDate);
+        sb.append(", plan='").append(plan).append('\'');
         sb.append(", product='").append(product).append('\'');
         sb.append(", priceList='").append(priceList).append('\'');
         sb.append(", eventType='").append(eventType).append('\'');
@@ -221,10 +221,10 @@ public class EventSubscription extends KillBillObject {
         if (priceList != null ? !priceList.equals(that.priceList) : that.priceList != null) {
             return false;
         }
-        if (product != null ? !product.equals(that.product) : that.product != null) {
+        if (plan != null ? !plan.equals(that.plan) : that.plan != null) {
             return false;
         }
-        if (requestedDate != null ? requestedDate.compareTo(that.requestedDate) != 0 : that.requestedDate != null) {
+        if (product != null ? !product.equals(that.product) : that.product != null) {
             return false;
         }
         if (serviceName != null ? !serviceName.equals(that.serviceName) : that.serviceName != null) {
@@ -241,8 +241,8 @@ public class EventSubscription extends KillBillObject {
     public int hashCode() {
         int result = eventId != null ? eventId.hashCode() : 0;
         result = 31 * result + (billingPeriod != null ? billingPeriod.hashCode() : 0);
-        result = 31 * result + (requestedDate != null ? requestedDate.hashCode() : 0);
         result = 31 * result + (effectiveDate != null ? effectiveDate.hashCode() : 0);
+        result = 31 * result + (plan != null ? plan.hashCode() : 0);
         result = 31 * result + (product != null ? product.hashCode() : 0);
         result = 31 * result + (priceList != null ? priceList.hashCode() : 0);
         result = 31 * result + (eventType != null ? eventType.hashCode() : 0);
