@@ -1,3 +1,6 @@
+0.40.2
+    Subscription model enhancements
+
 0.40.1
     Remove EventSubscription#requestedDate (deprecated)
 
