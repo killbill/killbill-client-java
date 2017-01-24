@@ -309,6 +309,18 @@ public class KillBillClient implements Closeable {
         return httpClient.doPut(uri, account, Account.class, inputOptions);
     }
 
+    public Account updateAccount(final Account account, final boolean treatNullAsReset, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(account.getAccountId(), "Account#accountId cannot be null");
+
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + account.getAccountId();
+
+        final Multimap<String, String> queryParams = HashMultimap.create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_ACCOUNT_TREAT_NULL_AS_RESET, treatNullAsReset ? "true" : "false");
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doPut(uri, account, Account.class, requestOptions);
+    }
+
     @Deprecated
     public AccountEmails getEmailsForAccount(final UUID accountId) throws KillBillClientException {
         return getEmailsForAccount(accountId, RequestOptions.empty());
