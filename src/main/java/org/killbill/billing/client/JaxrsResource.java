@@ -125,6 +125,7 @@ public interface JaxrsResource {
     public static final String QUERY_ACCOUNT_ID = "accountId";
     public static final String QUERY_ACCOUNT_WITH_BALANCE = "accountWithBalance";
     public static final String QUERY_ACCOUNT_WITH_BALANCE_AND_CBA = "accountWithBalanceAndCBA";
+    public static final String QUERY_ACCOUNT_TREAT_NULL_AS_RESET = "treatNullAsReset";
     public static final String QUERY_AUDIT = "audit";
     public static final String QUERY_CACHE_NAME = "cacheName";
     public static final String QUERY_TENANT_API_KEY = "tenantApiKey";

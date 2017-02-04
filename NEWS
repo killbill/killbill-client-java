@@ -1,3 +1,9 @@
+0.40.3
+    Add new account update api with treatNullAsReset flag
+
+0.40.2
+    Subscription model enhancements
+
 0.40.1
     Remove EventSubscription#requestedDate (deprecated)
 

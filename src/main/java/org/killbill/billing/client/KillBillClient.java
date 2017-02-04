@@ -302,11 +302,19 @@ public class KillBillClient implements Closeable {
     }
 
     public Account updateAccount(final Account account, final RequestOptions inputOptions) throws KillBillClientException {
+        return updateAccount(account, false, inputOptions);
+    }
+
+    public Account updateAccount(final Account account, final boolean treatNullAsReset, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(account.getAccountId(), "Account#accountId cannot be null");
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + account.getAccountId();
 
-        return httpClient.doPut(uri, account, Account.class, inputOptions);
+        final Multimap<String, String> queryParams = HashMultimap.create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_ACCOUNT_TREAT_NULL_AS_RESET, treatNullAsReset ? "true" : "false");
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doPut(uri, account, Account.class, requestOptions);
     }
 
     @Deprecated
@@ -3369,6 +3377,51 @@ public class KillBillClient implements Closeable {
 
     public void deletePaymentMethodCustomFields(final UUID paymentMethodId, @Nullable final Iterable<UUID> customFieldIds, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (customFieldIds != null) {
+            queryParams.put(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+        }
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        httpClient.doDelete(uri, requestOptions);
+    }
+
+    public CustomFields getPaymentCustomFields(final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentCustomFields(paymentId, AuditLevel.NONE, inputOptions);
+    }
+
+    public CustomFields getPaymentCustomFields(final UUID paymentId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public CustomFields createPaymentCustomField(final UUID paymentId, final CustomField customField, final RequestOptions inputOptions) throws KillBillClientException {
+        return createPaymentCustomFields(paymentId, ImmutableList.of(customField), inputOptions);
+    }
+
+    public CustomFields createPaymentCustomFields(final UUID paymentId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
+    }
+
+    public void deletePaymentCustomFields(final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
+        deletePaymentCustomFields(paymentId, null, inputOptions);
+    }
+
+    public void deletePaymentCustomFields(final UUID paymentId, @Nullable final Iterable<UUID> customFieldIds, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId + "/" + JaxrsResource.CUSTOM_FIELDS;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         if (customFieldIds != null) {
