@@ -302,11 +302,7 @@ public class KillBillClient implements Closeable {
     }
 
     public Account updateAccount(final Account account, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(account.getAccountId(), "Account#accountId cannot be null");
-
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + account.getAccountId();
-
-        return httpClient.doPut(uri, account, Account.class, inputOptions);
+        return updateAccount(account, false, inputOptions);
     }
 
     public Account updateAccount(final Account account, final boolean treatNullAsReset, final RequestOptions inputOptions) throws KillBillClientException {
