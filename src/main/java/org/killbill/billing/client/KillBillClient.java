@@ -931,6 +931,98 @@ public class KillBillClient implements Closeable {
         httpClient.doPut(uri, null, inputOptions);
     }
 
+
+
+    public CustomFields getSubscriptionCustomFields(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getSubscriptionCustomFields(subscriptionId, AuditLevel.NONE, inputOptions);
+    }
+
+    public CustomFields getSubscriptionCustomFields(final UUID subscriptionId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public CustomFields createSubscriptionCustomField(final UUID subscriptionId, final CustomField customField, final RequestOptions inputOptions) throws KillBillClientException {
+        return createSubscriptionCustomFields(subscriptionId, ImmutableList.of(customField), inputOptions);
+    }
+
+    public CustomFields createSubscriptionCustomFields(final UUID subscriptionId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
+    }
+
+    public void deleteSubscriptionCustomFields(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteSubscriptionCustomFields(subscriptionId, null, inputOptions);
+    }
+
+    public void deleteSubscriptionCustomFields(final UUID subscriptionId, @Nullable final Iterable<UUID> customFieldIds, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (customFieldIds != null) {
+            queryParams.put(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+        }
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        httpClient.doDelete(uri, requestOptions);
+    }
+
+    public CustomFields getBundleCustomFields(final UUID bundleId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getBundleCustomFields(bundleId, AuditLevel.NONE, inputOptions);
+    }
+
+    public CustomFields getBundleCustomFields(final UUID bundleId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.BUNDLES_PATH + "/" + bundleId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public CustomFields createBundleCustomField(final UUID bundleId, final CustomField customField, final RequestOptions inputOptions) throws KillBillClientException {
+        return createBundleCustomFields(bundleId, ImmutableList.of(customField), inputOptions);
+    }
+
+    public CustomFields createBundleCustomFields(final UUID bundleId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.BUNDLES_PATH + "/" + bundleId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
+    }
+
+    public void deleteBundleCustomFields(final UUID bundleId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteBundleCustomFields(bundleId, null, inputOptions);
+    }
+
+    public void deleteBundleCustomFields(final UUID bundleId, @Nullable final Iterable<UUID> customFieldIds, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.BUNDLES_PATH + "/" + bundleId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (customFieldIds != null) {
+            queryParams.put(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+        }
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        httpClient.doDelete(uri, requestOptions);
+    }
+
     @Deprecated
     public void createSubscriptionUsageRecord(final SubscriptionUsageRecord subscriptionUsageRecord, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         createSubscriptionUsageRecord(subscriptionUsageRecord, RequestOptions.builder()
