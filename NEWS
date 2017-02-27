@@ -1,3 +1,6 @@
+0.40.4
+     Add custom field apis for Subscription and Bundles
+
 0.40.3
     Add new account update api with treatNullAsReset flag
 
