@@ -2056,6 +2056,10 @@ public class KillBillClient implements Closeable {
     }
 
     public Payment completePayment(final PaymentTransaction paymentTransaction, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
+        return completePayment(paymentTransaction, null, pluginProperties, inputOptions);
+    }
+
+    public Payment completePayment(final PaymentTransaction paymentTransaction, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkState(paymentTransaction.getPaymentId() != null || paymentTransaction.getPaymentExternalKey() != null, "PaymentTransaction#paymentId or PaymentTransaction#paymentExternalKey cannot be null");
 
         final String uri = (paymentTransaction.getPaymentId() != null) ?
@@ -2063,6 +2067,9 @@ public class KillBillClient implements Closeable {
                            JaxrsResource.PAYMENTS_PATH;
 
         final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
+        if (controlPluginNames != null) {
+            params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
+        }
         storePluginPropertiesAsParams(pluginProperties, params);
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
         final RequestOptions requestOptions = inputOptions.extend()
