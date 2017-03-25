@@ -1,3 +1,6 @@
+0.40.6
+    Enhance createSubscriptionsWithAddOns to allow passing bundle of subscription with en empty BASE specifier
+
 0.40.5
     Add completePayment api to include controlPluginNames paramas (similar to other payment apis)
     Æ
