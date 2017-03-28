@@ -687,55 +687,36 @@ public class KillBillClient implements Closeable {
     }
 
     @Deprecated
-    public Bundle createSubscriptionWithAddOns(final Iterable<Subscription> subscriptions, final LocalDate requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
+    public Bundle createSubscriptionWithAddOns(final List<Subscription> subscriptions, final LocalDate requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return createSubscriptionWithAddOns(subscriptions, requestedDate, timeoutSec, RequestOptions.builder()
                                                                                                     .withCreatedBy(createdBy)
                                                                                                     .withReason(reason)
                                                                                                     .withComment(comment).build());
     }
 
-    public Bundle createSubscriptionWithAddOns(final Iterable<Subscription> subscriptions, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
-        for (final Subscription subscription : subscriptions) {
-            if (subscription.getPlanName() == null) {
-                Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
-                Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
-                Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
-                Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
-                if (subscription.getProductCategory() == ProductCategory.BASE) {
-                    Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null for base subscription");
-                }
-            }
-        }
-
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
-        queryParams.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
-        if (requestedDate != null) {
-            queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toString());
-        }
-
-        final int httpTimeout = Math.max(DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec);
-
-        final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/createEntitlementWithAddOns";
-
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).withFollowLocation(followLocation).build();
-
-        return httpClient.doPost(uri, subscriptions, Bundle.class, requestOptions, httpTimeout);
+    public Bundle createSubscriptionWithAddOns(final List<Subscription> subscriptions, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
+        final Bundles bundles  = createSubscriptionsWithAddOns(ImmutableList.<BulkBaseSubscriptionAndAddOns>of(new BulkBaseSubscriptionAndAddOns(subscriptions)), requestedDate, timeoutSec, inputOptions);
+        return bundles != null && bundles.size() > 0 ? bundles.get(0) : null;
     }
 
     public Bundles createSubscriptionsWithAddOns(final Iterable<BulkBaseSubscriptionAndAddOns> subscriptionsBulk, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
 
         for (final BulkBaseSubscriptionAndAddOns bulk : subscriptionsBulk) {
+
+            boolean first = true;
             for (final Subscription subscription : bulk.getBaseEntitlementAndAddOns()) {
-                if (subscription.getPlanName() == null) {
-                    Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
-                    Preconditions.checkNotNull(subscription.getProductCategory(), "Subscription#productCategory cannot be null");
-                    Preconditions.checkNotNull(subscription.getBillingPeriod(), "Subscription#billingPeriod cannot be null");
-                    Preconditions.checkNotNull(subscription.getPriceList(), "Subscription#priceList cannot be null");
-                    if (subscription.getProductCategory() == ProductCategory.BASE) {
-                        Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null for base subscription");
-                    }
+                if (first) {
+                    Preconditions.checkState(subscription.getProductCategory() == ProductCategory.BASE, "First subscription must be a reference to the Base");
+                    Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null for base subscription");
+                    //Preconditions.checkNotNull(subscription.getExternalKey(), "Bundle#externalKey cannot be null for base subscription");
+                    first = false;
+                } else {
+                    Preconditions.checkState(subscription.getPlanName() != null ||
+                                             ((subscription.getProductName() != null) &&
+                                              (subscription.getProductCategory() != null) &&
+                                              (subscription.getBillingPeriod() != null) &&
+                                              (subscription.getPriceList() != null)),
+                                             "A valid subscription descriptor must be provided (planName or {productName, productCategory, billingPeriod, priceList}");
                 }
             }
         }
