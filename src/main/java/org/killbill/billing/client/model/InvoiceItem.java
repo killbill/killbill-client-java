@@ -40,6 +40,11 @@ public class InvoiceItem extends KillBillObject {
     private String planName;
     private String phaseName;
     private String usageName;
+
+    private String prettyPlanName;
+    private String prettyPhaseName;
+    private String prettyUsageName;
+
     private String itemType;
     private String description;
     private LocalDate startDate;
@@ -61,6 +66,9 @@ public class InvoiceItem extends KillBillObject {
                        @JsonProperty("planName") final String planName,
                        @JsonProperty("phaseName") final String phaseName,
                        @JsonProperty("usageName") final String usageName,
+                       @JsonProperty("prettyPlanName") final String prettyPlanName,
+                       @JsonProperty("prettyPhaseName") final String prettyPhaseName,
+                       @JsonProperty("prettyUsageName") final String prettyUsageName,
                        @JsonProperty("itemType") final String itemType,
                        @JsonProperty("description") final String description,
                        @JsonProperty("startDate") final LocalDate startDate,
@@ -79,6 +87,10 @@ public class InvoiceItem extends KillBillObject {
         this.subscriptionId = subscriptionId;
         this.planName = planName;
         this.phaseName = phaseName;
+        this.usageName = usageName;
+        this.prettyPlanName = prettyPlanName;
+        this.prettyPhaseName = prettyPhaseName;
+        this.prettyUsageName = prettyUsageName;
         this.itemType = itemType;
         this.description = description;
         this.startDate = startDate;
@@ -166,6 +178,30 @@ public class InvoiceItem extends KillBillObject {
 
     public void setUsageName(final String usageName) {
         this.usageName = usageName;
+    }
+
+    public String getPrettyPlanName() {
+        return prettyPlanName;
+    }
+
+    public void setPrettyPlanName(final String prettyPlanName) {
+        this.prettyPlanName = prettyPlanName;
+    }
+
+    public String getPrettyPhaseName() {
+        return prettyPhaseName;
+    }
+
+    public void setPrettyPhaseName(final String prettyPhaseName) {
+        this.prettyPhaseName = prettyPhaseName;
+    }
+
+    public String getPrettyUsageName() {
+        return prettyUsageName;
+    }
+
+    public void setPrettyUsageName(final String prettyUsageName) {
+        this.prettyUsageName = prettyUsageName;
     }
 
     public String getItemType() {
