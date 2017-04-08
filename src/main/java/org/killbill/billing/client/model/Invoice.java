@@ -59,7 +59,7 @@ public class Invoice extends KillBillObject {
                    @JsonProperty("invoiceNumber") final Integer invoiceNumber,
                    @JsonProperty("balance") final BigDecimal balance,
                    @JsonProperty("accountId") final UUID accountId,
-                   @JsonProperty("externalBundleKeys") final String bundleKeys,
+                   @JsonProperty("bundleKeys") final String bundleKeys,
                    @JsonProperty("status") final String status,
                    @JsonProperty("credits") final List<Credit> credits,
                    @JsonProperty("items") final List<InvoiceItem> items,
