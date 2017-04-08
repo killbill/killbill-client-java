@@ -1,3 +1,6 @@
+0.40.7
+    Rename Invoice#bundleKeys (externalBundleKeys -> bundleKeys)
+
 0.40.6
     Enhance createSubscriptionsWithAddOns to allow passing bundle of subscription with en empty BASE specifier
 
