@@ -25,6 +25,7 @@ public class Product extends KillBillObject {
 
     private String type;
     private String name;
+    private String prettyName;
     private List<Plan> plans;
     private List<String> included;
     private List<String> available;
@@ -32,11 +33,13 @@ public class Product extends KillBillObject {
     @JsonCreator
     public Product(@JsonProperty("type") final String type,
                    @JsonProperty("name") final String name,
+                   @JsonProperty("prettyName") final String prettyName,
                    @JsonProperty("plans") final List<Plan> plans,
                    @JsonProperty("included") final List<String> included,
                    @JsonProperty("available") final List<String> available) {
         this.type = type;
         this.name = name;
+        this.prettyName = prettyName;
         this.plans = plans;
         this.included = included;
         this.available = available;
@@ -56,6 +59,14 @@ public class Product extends KillBillObject {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public String getPrettyName() {
+        return prettyName;
+    }
+
+    public void setPrettyName(final String prettyName) {
+        this.prettyName = prettyName;
     }
 
     public List<Plan> getPlans() {
@@ -87,6 +98,7 @@ public class Product extends KillBillObject {
         final StringBuilder sb = new StringBuilder("Product{");
         sb.append("type='").append(type).append('\'');
         sb.append(", name='").append(name).append('\'');
+        sb.append(", prettyName='").append(prettyName).append('\'');
         sb.append(", plans=").append(plans);
         sb.append(", included=").append(included);
         sb.append(", available=").append(available);

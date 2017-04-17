@@ -26,20 +26,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Plan extends KillBillObject {
 
     private final String name;
+    private final String prettyName;
     private final BillingPeriod billingPeriod;
     private final List<Phase> phases;
 
     @JsonCreator
     public Plan(@JsonProperty("name") final String name,
+                @JsonProperty("prettyName") final String prettyName,
                 @JsonProperty("billingPeriod") final BillingPeriod billingPeriod,
                 @JsonProperty("phases") final List<Phase> phases) {
         this.name = name;
+        this.prettyName = prettyName;
         this.billingPeriod = billingPeriod;
         this.phases = phases;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getPrettyName() {
+        return prettyName;
     }
 
     public BillingPeriod getBillingPeriod() {
@@ -54,6 +61,7 @@ public class Plan extends KillBillObject {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Plan{");
         sb.append("name='").append(name).append('\'');
+        sb.append(", prettyName='").append(prettyName).append('\'');
         sb.append(", billingPeriod='").append(billingPeriod).append('\'');
         sb.append(", phases=").append(phases);
         sb.append('}');
