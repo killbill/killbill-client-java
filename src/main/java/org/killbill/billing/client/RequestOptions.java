@@ -18,7 +18,6 @@
 
 package org.killbill.billing.client;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,9 +26,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 
-/**
- * Created by arodrigues on 5/24/16.
- */
 public class RequestOptions {
 
     private final String requestId;

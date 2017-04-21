@@ -697,7 +697,7 @@ public class KillBillClient implements Closeable {
 
     public Bundle createSubscriptionWithAddOns(final List<Subscription> subscriptions, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
         final Bundles bundles  = createSubscriptionsWithAddOns(ImmutableList.<BulkBaseSubscriptionAndAddOns>of(new BulkBaseSubscriptionAndAddOns(subscriptions)), requestedDate, timeoutSec, inputOptions);
-        return bundles != null && bundles.size() > 0 ? bundles.get(0) : null;
+        return bundles != null && !bundles.isEmpty() ? bundles.get(0) : null;
     }
 
     public Bundles createSubscriptionsWithAddOns(final Iterable<BulkBaseSubscriptionAndAddOns> subscriptionsBulk, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
@@ -1816,7 +1816,7 @@ public class KillBillClient implements Closeable {
         return getPayment(paymentId, withPluginInfo, false, pluginProperties, auditLevel, inputOptions);
     }
 
-    public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, boolean withAttempts, final Map<String, String> pluginProperties, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, final boolean withAttempts, final Map<String, String> pluginProperties, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
