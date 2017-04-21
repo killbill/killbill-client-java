@@ -94,6 +94,7 @@ import org.killbill.billing.util.api.AuditLevel;
 import com.ning.http.client.Response;
 import com.ning.http.util.UTF8UrlEncoder;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -4048,9 +4049,10 @@ public class KillBillClient implements Closeable {
         }
     }
 
-    private void storePluginPropertiesAsParams(final Map<String, String> pluginProperties, final Multimap<String, String> params) {
+    @VisibleForTesting
+    void storePluginPropertiesAsParams(final Map<String, String> pluginProperties, final Multimap<String, String> params) {
         for (final String key : pluginProperties.keySet()) {
-            params.put(JaxrsResource.QUERY_PLUGIN_PROPERTY, String.format("%s=%s", UTF8UrlEncoder.encodePath(key), UTF8UrlEncoder.encodePath(pluginProperties.get(key))));
+            params.put(JaxrsResource.QUERY_PLUGIN_PROPERTY, String.format("%s=%s", UTF8UrlEncoder.encodeQueryElement(key), UTF8UrlEncoder.encodeQueryElement(pluginProperties.get(key))));
         }
     }
 }
