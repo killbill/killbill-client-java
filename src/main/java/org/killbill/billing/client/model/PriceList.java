@@ -28,6 +28,8 @@ public class PriceList {
     private String name;
     private List<String> plans;
 
+    public PriceList() {}
+
     @JsonCreator
     public PriceList(@JsonProperty("name") final String name,
                          @JsonProperty("plans") final List<String> plans) {
@@ -39,8 +41,16 @@ public class PriceList {
         return name;
     }
 
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     public List<String> getPlans() {
         return plans;
+    }
+
+    public void setPlans(final List<String> plans) {
+        this.plans = plans;
     }
 
     @Override

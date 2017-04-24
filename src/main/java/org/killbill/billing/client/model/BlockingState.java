@@ -24,14 +24,12 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.killbill.billing.entitlement.api.BlockingStateType;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BlockingState extends KillBillObject {
-
 
     private UUID blockedId;
     private String stateName;
@@ -42,6 +40,7 @@ public class BlockingState extends KillBillObject {
     private DateTime effectiveDate;
     private BlockingStateType type;
 
+    public BlockingState() {}
 
     @JsonCreator
     public BlockingState(@JsonProperty("blockedId") final UUID blockedId,
@@ -68,32 +67,64 @@ public class BlockingState extends KillBillObject {
         return blockedId;
     }
 
+    public void setBlockedId(final UUID blockedId) {
+        this.blockedId = blockedId;
+    }
+
     public String getStateName() {
         return stateName;
+    }
+
+    public void setStateName(final String stateName) {
+        this.stateName = stateName;
     }
 
     public String getService() {
         return service;
     }
 
+    public void setService(final String service) {
+        this.service = service;
+    }
+
     public Boolean getBlockChange() {
         return blockChange;
+    }
+
+    public void setBlockChange(final Boolean blockChange) {
+        this.blockChange = blockChange;
     }
 
     public Boolean getBlockEntitlement() {
         return blockEntitlement;
     }
 
+    public void setBlockEntitlement(final Boolean blockEntitlement) {
+        this.blockEntitlement = blockEntitlement;
+    }
+
     public Boolean getBlockBilling() {
         return blockBilling;
+    }
+
+    public void setBlockBilling(final Boolean blockBilling) {
+        this.blockBilling = blockBilling;
     }
 
     public DateTime getEffectiveDate() {
         return effectiveDate;
     }
 
+    public void setEffectiveDate(final DateTime effectiveDate) {
+        this.effectiveDate = effectiveDate;
+    }
+
     public BlockingStateType getType() {
         return type;
+    }
+
+    public void setType(final BlockingStateType type) {
+        this.type = type;
     }
 
     @Override

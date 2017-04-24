@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
+import org.killbill.billing.client.RequestOptions;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -50,7 +51,7 @@ public abstract class KillBillObjects<T extends KillBillObject> extends ArrayLis
         if (killBillHttpClient == null || paginationNextPageUri == null) {
             return null;
         }
-        return killBillHttpClient.doGet(paginationNextPageUri, KillBillHttpClient.DEFAULT_EMPTY_QUERY, clazz);
+        return killBillHttpClient.doGet(paginationNextPageUri, clazz, RequestOptions.empty());
     }
 
     @JsonIgnore

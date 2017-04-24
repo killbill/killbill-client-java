@@ -469,7 +469,7 @@ public class KillBillHttpClient implements Closeable {
                 } else {
                     try {
                         builder.setBody(mapper.writeValueAsString(body));
-                    } catch (JsonProcessingException e) {
+                    } catch (final JsonProcessingException e) {
                         throw new KillBillClientException(e);
                     }
                 }
@@ -569,7 +569,7 @@ public class KillBillHttpClient implements Closeable {
                 } else {
                     try {
                         builder.setBody(mapper.writeValueAsString(body));
-                    } catch (JsonProcessingException e) {
+                    } catch (final JsonProcessingException e) {
                         throw new KillBillClientException(e);
                     }
                 }
@@ -677,11 +677,11 @@ public class KillBillHttpClient implements Closeable {
                 if (constructor.getParameterTypes().length == 0) {
                     try {
                         return clazz.cast(constructor.newInstance());
-                    } catch (InstantiationException e) {
+                    } catch (final InstantiationException e) {
                         return null;
-                    } catch (IllegalAccessException e) {
+                    } catch (final IllegalAccessException e) {
                         return null;
-                    } catch (InvocationTargetException e) {
+                    } catch (final InvocationTargetException e) {
                         return null;
                     }
                 }
@@ -708,7 +708,7 @@ public class KillBillHttpClient implements Closeable {
                     if (in != null) {
                         try {
                             in.close();
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
                             log.warn("Failed to close http-client - provided InputStream: {}", e.getLocalizedMessage());
                         }
                     }
@@ -722,19 +722,19 @@ public class KillBillHttpClient implements Closeable {
 
     @Deprecated
     private BoundRequestBuilder getBuilderWithHeaderAndQuery(final String verb, final String url, @Nullable final String username, @Nullable final String password, final Multimap<String, String> options) {
-        BoundRequestBuilder builder;
+        final BoundRequestBuilder builder;
 
-        if (verb.equals("GET")) {
+        if ("GET".equals(verb)) {
             builder = httpClient.prepareGet(url);
-        } else if (verb.equals("POST")) {
+        } else if ("POST".equals(verb)) {
             builder = httpClient.preparePost(url);
-        } else if (verb.equals("PUT")) {
+        } else if ("PUT".equals(verb)) {
             builder = httpClient.preparePut(url);
-        } else if (verb.equals("DELETE")) {
+        } else if ("DELETE".equals(verb)) {
             builder = httpClient.prepareDelete(url);
-        } else if (verb.equals("HEAD")) {
+        } else if ("HEAD".equals(verb)) {
             builder = httpClient.prepareHead(url);
-        } else if (verb.equals("OPTIONS")) {
+        } else if ("OPTIONS".equals(verb)) {
             builder = httpClient.prepareOptions(url);
         } else {
             throw new IllegalArgumentException("Unrecognized verb: " + verb);
@@ -778,17 +778,17 @@ public class KillBillHttpClient implements Closeable {
     private BoundRequestBuilder getBuilderWithHeaderAndQuery(final String verb, final String url, final RequestOptions requestOptions) {
         final BoundRequestBuilder builder;
 
-        if (verb.equals("GET")) {
+        if ("GET".equals(verb)) {
             builder = httpClient.prepareGet(url);
-        } else if (verb.equals("POST")) {
+        } else if ("POST".equals(verb)) {
             builder = httpClient.preparePost(url);
-        } else if (verb.equals("PUT")) {
+        } else if ("PUT".equals(verb)) {
             builder = httpClient.preparePut(url);
-        } else if (verb.equals("DELETE")) {
+        } else if ("DELETE".equals(verb)) {
             builder = httpClient.prepareDelete(url);
-        } else if (verb.equals("HEAD")) {
+        } else if ("HEAD".equals(verb)) {
             builder = httpClient.prepareHead(url);
-        } else if (verb.equals("OPTIONS")) {
+        } else if ("OPTIONS".equals(verb)) {
             builder = httpClient.prepareOptions(url);
         } else {
             throw new IllegalArgumentException("Unrecognized verb: " + verb);

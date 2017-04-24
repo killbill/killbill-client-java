@@ -94,6 +94,7 @@ import org.killbill.billing.util.api.AuditLevel;
 import com.ning.http.client.Response;
 import com.ning.http.util.UTF8UrlEncoder;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -242,7 +243,7 @@ public class KillBillClient implements Closeable {
     }
 
     public Accounts searchAccounts(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encodePath(key);
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
@@ -356,7 +357,7 @@ public class KillBillClient implements Closeable {
         Preconditions.checkNotNull(email.getAccountId(), "AccountEmail#accountId cannot be null");
         Preconditions.checkNotNull(email.getEmail(), "AccountEmail#email cannot be null");
 
-        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + email.getAccountId() + "/" + JaxrsResource.EMAILS + "/" + UTF8UrlEncoder.encode(email.getEmail());
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + email.getAccountId() + "/" + JaxrsResource.EMAILS + "/" + UTF8UrlEncoder.encodePath(email.getEmail());
 
         httpClient.doDelete(uri, inputOptions);
     }
@@ -532,7 +533,7 @@ public class KillBillClient implements Closeable {
     }
 
     public Bundles searchBundles(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
-        final String uri = JaxrsResource.BUNDLES_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
+        final String uri = JaxrsResource.BUNDLES_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encodePath(key);
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
@@ -696,7 +697,7 @@ public class KillBillClient implements Closeable {
 
     public Bundle createSubscriptionWithAddOns(final List<Subscription> subscriptions, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
         final Bundles bundles  = createSubscriptionsWithAddOns(ImmutableList.<BulkBaseSubscriptionAndAddOns>of(new BulkBaseSubscriptionAndAddOns(subscriptions)), requestedDate, timeoutSec, inputOptions);
-        return bundles != null && bundles.size() > 0 ? bundles.get(0) : null;
+        return bundles != null && !bundles.isEmpty() ? bundles.get(0) : null;
     }
 
     public Bundles createSubscriptionsWithAddOns(final Iterable<BulkBaseSubscriptionAndAddOns> subscriptionsBulk, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
@@ -1243,7 +1244,7 @@ public class KillBillClient implements Closeable {
     }
 
     public Invoices searchInvoices(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
-        final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encodePath(key);
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
@@ -1636,7 +1637,7 @@ public class KillBillClient implements Closeable {
     }
 
     public Payments searchPayments(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encodePath(key);
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
@@ -1815,7 +1816,7 @@ public class KillBillClient implements Closeable {
         return getPayment(paymentId, withPluginInfo, false, pluginProperties, auditLevel, inputOptions);
     }
 
-    public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, boolean withAttempts, final Map<String, String> pluginProperties, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment getPayment(final UUID paymentId, final boolean withPluginInfo, final boolean withAttempts, final Map<String, String> pluginProperties, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
@@ -2472,7 +2473,7 @@ public class KillBillClient implements Closeable {
     }
 
     public PaymentMethods searchPaymentMethods(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encodePath(key);
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
@@ -2625,7 +2626,7 @@ public class KillBillClient implements Closeable {
     }
 
     public PaymentMethods searchPaymentMethodsByKeyAndPlugin(final String key, final boolean withPluginInfo, @Nullable final String pluginName, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
-        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encodePath(key);
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_PAYMENT_METHOD_PLUGIN_NAME, Strings.nullToEmpty(pluginName));
@@ -2899,7 +2900,7 @@ public class KillBillClient implements Closeable {
     }
 
     public Tags searchTags(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
-        final String uri = JaxrsResource.TAGS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
+        final String uri = JaxrsResource.TAGS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encodePath(key);
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
@@ -3263,7 +3264,7 @@ public class KillBillClient implements Closeable {
     }
 
     public CustomFields searchCustomFields(final String key, final Long offset, final Long limit, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
-        final String uri = JaxrsResource.CUSTOM_FIELDS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encode(key);
+        final String uri = JaxrsResource.CUSTOM_FIELDS_PATH + "/" + JaxrsResource.SEARCH + "/" + UTF8UrlEncoder.encodePath(key);
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_SEARCH_OFFSET, String.valueOf(offset));
@@ -4048,9 +4049,10 @@ public class KillBillClient implements Closeable {
         }
     }
 
-    private void storePluginPropertiesAsParams(final Map<String, String> pluginProperties, final Multimap<String, String> params) {
+    @VisibleForTesting
+    void storePluginPropertiesAsParams(final Map<String, String> pluginProperties, final Multimap<String, String> params) {
         for (final String key : pluginProperties.keySet()) {
-            params.put(JaxrsResource.QUERY_PLUGIN_PROPERTY, String.format("%s=%s", UTF8UrlEncoder.encode(key), UTF8UrlEncoder.encode(pluginProperties.get(key))));
+            params.put(JaxrsResource.QUERY_PLUGIN_PROPERTY, String.format("%s=%s", UTF8UrlEncoder.encodeQueryElement(key), UTF8UrlEncoder.encodeQueryElement(pluginProperties.get(key))));
         }
     }
 }
