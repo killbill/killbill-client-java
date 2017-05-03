@@ -318,6 +318,18 @@ public class KillBillClient implements Closeable {
         return httpClient.doPut(uri, account, Account.class, requestOptions);
     }
 
+    public void closeAccount(final UUID accountId, final boolean cancelAllSubscriptions, final boolean writeOffUnpaidInvoices, final boolean itemAdjustUnpaidInvoices, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId;
+
+        final Multimap<String, String> queryParams = HashMultimap.create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_CANCEL_ALL_SUBSCRIPTIONS, cancelAllSubscriptions ? "true" : "false");
+        queryParams.put(JaxrsResource.QUERY_WRITE_OFF_UNPAID_INVOICES, writeOffUnpaidInvoices ? "true" : "false");
+        queryParams.put(JaxrsResource.QUERY_ITEM_ADJUST_UNPAID_INVOICES, itemAdjustUnpaidInvoices ? "true" : "false");
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        httpClient.doDelete(uri, requestOptions);
+    }
+
     @Deprecated
     public AccountEmails getEmailsForAccount(final UUID accountId) throws KillBillClientException {
         return getEmailsForAccount(accountId, RequestOptions.empty());

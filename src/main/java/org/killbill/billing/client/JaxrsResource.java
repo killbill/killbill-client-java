@@ -173,4 +173,7 @@ public interface JaxrsResource {
     public static final String QUERY_INCLUDED_DELETED = "includedDeleted";
     public static final String QUERY_MIGRATED = "migrated";
 
+    public static final String QUERY_CANCEL_ALL_SUBSCRIPTIONS = "cancelAllSubscriptions";
+    public static final String QUERY_WRITE_OFF_UNPAID_INVOICES = "writeOffUnpaidInvoices";
+    public static final String QUERY_ITEM_ADJUST_UNPAID_INVOICES = "itemAdjustUnpaidInvoices";
 }
