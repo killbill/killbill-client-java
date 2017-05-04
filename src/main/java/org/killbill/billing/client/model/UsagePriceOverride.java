@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.killbill.billing.catalog.api.BillingMode;
+import org.killbill.billing.catalog.api.TierBlockPolicy;
 import org.killbill.billing.catalog.api.UsageType;
 
 public class UsagePriceOverride {
@@ -34,16 +35,20 @@ public class UsagePriceOverride {
 
     private final BillingMode billingMode;
 
+    private final TierBlockPolicy tierBlockPolicy;
+
     private final List<TierPriceOverride> tierPriceOverrides;
 
     @JsonCreator
     public UsagePriceOverride(@JsonProperty("usageName") final String usageName,
                               @Nullable @JsonProperty("usageType") final UsageType usageType,
                               @Nullable @JsonProperty("billingMode") final BillingMode billingMode,
+                              @Nullable @JsonProperty("tierBlockPolicy") final TierBlockPolicy tierBlockPolicy,
                               @Nullable @JsonProperty("tierPriceOverrides") final List<TierPriceOverride> tierPriceOverrides ) {
         this.usageName = usageName;
         this.usageType = usageType;
         this.billingMode = billingMode;
+        this.tierBlockPolicy = tierBlockPolicy;
         this.tierPriceOverrides = tierPriceOverrides;
     }
 
@@ -57,6 +62,10 @@ public class UsagePriceOverride {
 
     public BillingMode getBillingMode() {
         return billingMode;
+    }
+
+    public TierBlockPolicy getTierBlockPolicy() {
+        return tierBlockPolicy;
     }
 
     public List<TierPriceOverride> getTierPriceOverrides() {
@@ -83,6 +92,9 @@ public class UsagePriceOverride {
         if (billingMode != null ? !billingMode.equals(that.billingMode) : that.billingMode != null) {
             return false;
         }
+        if (tierBlockPolicy != null ? !tierBlockPolicy.equals(that.tierBlockPolicy) : that.tierBlockPolicy != null) {
+            return false;
+        }
         if (tierPriceOverrides != null ? !tierPriceOverrides.equals(that.tierPriceOverrides)  : that.tierPriceOverrides != null) {
             return false;
         }
@@ -94,6 +106,7 @@ public class UsagePriceOverride {
         int result = usageName != null ? usageName.hashCode() : 0;
         result = 31 * result + (usageType != null ? usageType.hashCode() : 0);
         result = 31 * result + (billingMode != null ? billingMode.hashCode() : 0);
+        result = 31 * result + (tierBlockPolicy != null ? tierBlockPolicy.hashCode() : 0);
         result = 31 * result + (tierPriceOverrides != null ? tierPriceOverrides.hashCode() : 0);
         return result;
     }
