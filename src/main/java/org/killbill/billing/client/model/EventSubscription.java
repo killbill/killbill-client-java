@@ -45,7 +45,7 @@ public class EventSubscription extends KillBillObject {
     @JsonCreator
     public EventSubscription(@JsonProperty("eventId") final String eventId,
                              @JsonProperty("billingPeriod") final String billingPeriod,
-                             @JsonProperty("effectiveDt") final LocalDate effectiveDate,
+                             @JsonProperty("effectiveDate") final LocalDate effectiveDate,
                              @JsonProperty("plan") final String plan,
                              @JsonProperty("product") final String product,
                              @JsonProperty("priceList") final String priceList,
