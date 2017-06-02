@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.killbill.billing.catalog.api.Currency;
+import org.killbill.billing.catalog.api.Unit;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,6 +30,7 @@ public class Catalog extends KillBillObject {
     private String name;
     private Date effectiveDate;
     private List<Currency> currencies;
+    private List<Unit> units;
     private List<Product> products;
     private List<PriceList> priceLists;
 
@@ -36,13 +38,15 @@ public class Catalog extends KillBillObject {
 
     @JsonCreator
     public Catalog(@JsonProperty("name") final String name,
-                       @JsonProperty("effectiveDate") final Date effectiveDate,
-                       @JsonProperty("currencies") final List<Currency> currencies,
-                       @JsonProperty("products") final List<Product> products,
-                       @JsonProperty("priceLists") final List<PriceList> priceLists) {
+                   @JsonProperty("effectiveDate") final Date effectiveDate,
+                   @JsonProperty("currencies") final List<Currency> currencies,
+                   @JsonProperty("units") final List<Unit> units,
+                   @JsonProperty("products") final List<Product> products,
+                   @JsonProperty("priceLists") final List<PriceList> priceLists) {
         this.name = name;
         this.effectiveDate = effectiveDate;
         this.currencies = currencies;
+        this.units = units;
         this.products = products;
         this.priceLists = priceLists;
     }
@@ -87,12 +91,21 @@ public class Catalog extends KillBillObject {
         this.priceLists = priceLists;
     }
 
+    public List<Unit> getUnits() {
+        return units;
+    }
+
+    public void setUnits(final List<Unit> units) {
+        this.units = units;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Catalog{");
         sb.append("name='").append(name).append('\'');
         sb.append(", effectiveDate='").append(effectiveDate).append('\'');
         sb.append(", currencies='").append(currencies).append('\'');
+        sb.append(", units='").append(units).append('\'');
         sb.append(", products=").append(products);
         sb.append(", priceLists=").append(priceLists);
         sb.append('}');
@@ -119,6 +132,9 @@ public class Catalog extends KillBillObject {
         if (currencies != null ? !currencies.equals(catalog.currencies) : catalog.currencies != null) {
             return false;
         }
+        if (units != null ? !units.equals(catalog.units) : catalog.units != null) {
+            return false;
+        }
         if (products != null ? !products.equals(catalog.products) : catalog.products != null) {
             return false;
         }
@@ -133,6 +149,8 @@ public class Catalog extends KillBillObject {
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (products != null ? products.hashCode() : 0);
+        result = 31 * result + (currencies != null ? currencies.hashCode() : 0);
+        result = 31 * result + (units != null ? units.hashCode() : 0);
         return result;
     }
 }
