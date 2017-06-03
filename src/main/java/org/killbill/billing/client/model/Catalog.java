@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.killbill.billing.catalog.api.Currency;
-import org.killbill.billing.catalog.api.Unit;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
