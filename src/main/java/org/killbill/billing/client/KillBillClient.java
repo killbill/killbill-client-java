@@ -3627,6 +3627,15 @@ public class KillBillClient implements Closeable {
     }
 
 
+
+    public void deleteCatalog(final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.CATALOG_PATH;
+        final RequestOptions requestOptions = inputOptions.extend().build();
+        httpClient.doDelete(uri, requestOptions);
+    }
+
+
+
     // Tenants
 
     @Deprecated
