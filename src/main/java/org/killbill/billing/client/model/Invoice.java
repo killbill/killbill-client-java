@@ -45,6 +45,8 @@ public class Invoice extends KillBillObject {
     private List<Credit> credits;
     private String status;
     private Boolean isParentInvoice;
+    private UUID parentInvoiceId;
+    private UUID parentAccountId;
 
     public Invoice() {}
 
@@ -64,6 +66,8 @@ public class Invoice extends KillBillObject {
                    @JsonProperty("credits") final List<Credit> credits,
                    @JsonProperty("items") final List<InvoiceItem> items,
                    @JsonProperty("isParentInvoice") final Boolean isParentInvoice,
+                   @JsonProperty("parentInvoiceId") final UUID parentInvoiceId,
+                   @JsonProperty("parentAccountId") final UUID parentAccountId,
                    @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.amount = amount;
@@ -81,6 +85,8 @@ public class Invoice extends KillBillObject {
         this.items = items;
         this.status = status;
         this.isParentInvoice = isParentInvoice;
+        this.parentInvoiceId = parentInvoiceId;
+        this.parentAccountId = parentAccountId;
     }
 
     public BigDecimal getAmount() {
@@ -203,6 +209,22 @@ public class Invoice extends KillBillObject {
         this.isParentInvoice = isParentInvoice;
     }
 
+    public UUID getParentInvoiceId() {
+        return parentInvoiceId;
+    }
+
+    public void setParentInvoiceId(final UUID parentInvoiceId) {
+        this.parentInvoiceId = parentInvoiceId;
+    }
+
+    public UUID getParentAccountId() {
+        return parentAccountId;
+    }
+
+    public void setParentAccountId(final UUID parentAccountId) {
+        this.parentAccountId = parentAccountId;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Invoice{");
@@ -221,6 +243,8 @@ public class Invoice extends KillBillObject {
         sb.append(", credits=").append(credits);
         sb.append(", status=").append(status);
         sb.append(", isParentInvoice=").append(isParentInvoice);
+        sb.append(", parentAccountId=").append(parentAccountId);
+        sb.append(", parentInvoiceId=").append(parentInvoiceId);
         sb.append('}');
         return sb.toString();
     }
@@ -281,6 +305,12 @@ public class Invoice extends KillBillObject {
         if (isParentInvoice != null ? !isParentInvoice.equals(invoice.isParentInvoice) : invoice.isParentInvoice != null) {
             return false;
         }
+        if (parentAccountId != null ? !parentAccountId.equals(invoice.parentAccountId) : invoice.parentAccountId != null) {
+            return false;
+        }
+        if (parentInvoiceId != null ? !parentInvoiceId.equals(invoice.parentInvoiceId) : invoice.parentInvoiceId != null) {
+            return false;
+        }
 
         return true;
     }
@@ -302,6 +332,8 @@ public class Invoice extends KillBillObject {
         result = 31 * result + (credits != null ? credits.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (isParentInvoice != null ? isParentInvoice.hashCode() : 0);
+        result = 31 * result + (parentAccountId != null ? parentAccountId.hashCode() : 0);
+        result = 31 * result + (parentInvoiceId != null ? parentInvoiceId.hashCode() : 0);
         return result;
     }
 }
