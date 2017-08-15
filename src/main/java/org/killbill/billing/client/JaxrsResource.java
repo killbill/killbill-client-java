@@ -148,6 +148,8 @@ public interface JaxrsResource {
     public static final String QUERY_PAY_INVOICE = "payInvoice";
     public static final String QUERY_PLUGIN_PROPERTY = "pluginProperty";
     public static final String QUERY_REQUESTED_DT = "requestedDate";
+    public static final String QUERY_ENTITLEMENT_REQUESTED_DT = "entitlementDate";
+    public static final String QUERY_BILLING_REQUESTED_DT = "billingDate";
     public static final String QUERY_PAYMENT_EXT_KEY = "paymentExternalKey";
     public static final String QUERY_TRANSACTION_EXT_KEY = "transactionExternalKey";
     public static final String QUERY_SEARCH_LIMIT = "limit";
