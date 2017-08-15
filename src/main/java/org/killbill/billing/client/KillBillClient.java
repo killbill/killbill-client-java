@@ -653,6 +653,7 @@ public class KillBillClient implements Closeable {
                                                               .withComment(comment).build());
     }
 
+    @Deprecated
     public Subscription createSubscription(final Subscription subscription, final RequestOptions inputOptions) throws KillBillClientException {
         return createSubscription(subscription, null, -1, null, inputOptions);
     }
@@ -665,11 +666,17 @@ public class KillBillClient implements Closeable {
                                                                                          .withComment(comment).build());
     }
 
+    @Deprecated
     public Subscription createSubscription(final Subscription subscription, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
         return createSubscription(subscription, requestedDate, timeoutSec, null, inputOptions);
     }
 
+    @Deprecated
     public Subscription createSubscription(final Subscription subscription, final LocalDate requestedDate, final int timeoutSec, final Boolean isMigrated, final RequestOptions inputOptions) throws KillBillClientException {
+        return createSubscription(subscription, requestedDate, requestedDate, timeoutSec, isMigrated, inputOptions);
+    }
+
+    public Subscription createSubscription(final Subscription subscription, final LocalDate entRequestedDate, final LocalDate billingRequestedDate, final int timeoutSec, final Boolean isMigrated, final RequestOptions inputOptions) throws KillBillClientException {
         if (subscription.getPlanName() == null) {
             Preconditions.checkNotNull(subscription.getAccountId(), "Subscription#accountId cannot be null");
             Preconditions.checkNotNull(subscription.getProductName(), "Subscription#productName cannot be null");
@@ -684,8 +691,11 @@ public class KillBillClient implements Closeable {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
         queryParams.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
-        if (requestedDate != null) {
-            queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, requestedDate.toString());
+        if (entRequestedDate != null) {
+            queryParams.put(JaxrsResource.QUERY_ENTITLEMENT_REQUESTED_DT, entRequestedDate.toString());
+        }
+        if (billingRequestedDate != null) {
+            queryParams.put(JaxrsResource.QUERY_BILLING_REQUESTED_DT, billingRequestedDate.toString());
         }
         if(isMigrated != null) {
             queryParams.put(JaxrsResource.QUERY_MIGRATED, isMigrated.toString());
