@@ -1,8 +1,10 @@
 0.41.0
     Initial release against 0.19.x branch
 
-
-    Initial release for 0.19.x branch
+0.40.10
+    Add getAllAccountCustomFields API
+    Add support to create subscription with entRequestedDate and billingRequestedDate.
+    Rename EventSubscription property (https://github.com/killbill/killbill/pull/753)
 
 0.40.9
     Add closeAccount

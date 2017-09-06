@@ -42,6 +42,7 @@ public interface JaxrsResource {
     public static final String CREDITS = "credits";
     public static final String CREDITS_PATH = PREFIX + "/" + CREDITS;
     public static final String CUSTOM_FIELDS = "customFields";
+    public static final String ALL_CUSTOM_FIELDS = "allCustomFields";
     public static final String CUSTOM_FIELDS_PATH = PREFIX + "/" + CUSTOM_FIELDS;
     public static final String EMAILS = "emails";
     public static final String EMAIL_NOTIFICATIONS = "emailNotifications";

@@ -1,7 +1,7 @@
 /*
  * Copyright 2010-2013 Ning, Inc.
- * Copyright 2014-2016 Groupon, Inc
- * Copyright 2014-2016 The Billing Project, LLC
+ * Copyright 2014-2017 Groupon, Inc
+ * Copyright 2014-2017 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -3295,6 +3295,23 @@ public class KillBillClient implements Closeable {
 
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public CustomFields getAllAccountCustomFields(final UUID accountId, final String objectType, final RequestOptions inputOptions) throws KillBillClientException {
+        return getAllAccountCustomFields(accountId, objectType, AuditLevel.NONE, inputOptions);
+    }
+
+    public CustomFields getAllAccountCustomFields(final UUID accountId, @Nullable final String objectType, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.ALL_CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        if (objectType != null) {
+            queryParams.put(JaxrsResource.QUERY_OBJECT_TYPE, objectType);
+        }
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
