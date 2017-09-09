@@ -444,7 +444,7 @@ public class KillBillClient implements Closeable {
 
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
-        final Bundles bundles =  httpClient.doGet(uri, Bundles.class, requestOptions);
+        final Bundles bundles = httpClient.doGet(uri, Bundles.class, requestOptions);
         return bundles.isEmpty() ? null : bundles.get(0);
     }
 
@@ -580,9 +580,9 @@ public class KillBillClient implements Closeable {
     @Deprecated
     public void setBlockingState(final UUID blockableId, final BlockingState blockingState, @Nullable final LocalDate requestedDate, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         setBlockingState(blockableId, blockingState, requestedDate, RequestOptions.builder()
-                                                                .withCreatedBy(createdBy)
-                                                                .withReason(reason)
-                                                                .withComment(comment).build());
+                                                                                  .withCreatedBy(createdBy)
+                                                                                  .withReason(reason)
+                                                                                  .withComment(comment).build());
     }
 
     public void setBlockingState(final UUID blockableId, final BlockingState blockingState, @Nullable final LocalDate requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
@@ -612,7 +612,6 @@ public class KillBillClient implements Closeable {
         httpClient.doPut(uri, blockingState, requestOptions);
     }
 
-
     public BlockingStates getBlockingStates(final UUID accountId, @Nullable final List<BlockingStateType> typeFilter, @Nullable final List<String> svcsFilter, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId.toString() + "/" + JaxrsResource.BLOCK;
@@ -624,7 +623,7 @@ public class KillBillClient implements Closeable {
         if (svcsFilter != null) {
             queryParams.put(JaxrsResource.QUERY_BLOCKING_STATE_SVCS, JOINER.join(svcsFilter));
         }
-        queryParams.put( JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
@@ -661,9 +660,9 @@ public class KillBillClient implements Closeable {
     @Deprecated
     public Subscription createSubscription(final Subscription subscription, final LocalDate requestedDate, final int timeoutSec, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return createSubscription(subscription, requestedDate, timeoutSec, null, RequestOptions.builder()
-                                                                                         .withCreatedBy(createdBy)
-                                                                                         .withReason(reason)
-                                                                                         .withComment(comment).build());
+                                                                                               .withCreatedBy(createdBy)
+                                                                                               .withReason(reason)
+                                                                                               .withComment(comment).build());
     }
 
     @Deprecated
@@ -697,7 +696,7 @@ public class KillBillClient implements Closeable {
         if (billingRequestedDate != null) {
             queryParams.put(JaxrsResource.QUERY_BILLING_REQUESTED_DT, billingRequestedDate.toString());
         }
-        if(isMigrated != null) {
+        if (isMigrated != null) {
             queryParams.put(JaxrsResource.QUERY_MIGRATED, isMigrated.toString());
         }
 
@@ -718,7 +717,7 @@ public class KillBillClient implements Closeable {
     }
 
     public Bundle createSubscriptionWithAddOns(final List<Subscription> subscriptions, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
-        final Bundles bundles  = createSubscriptionsWithAddOns(ImmutableList.<BulkBaseSubscriptionAndAddOns>of(new BulkBaseSubscriptionAndAddOns(subscriptions)), requestedDate, timeoutSec, inputOptions);
+        final Bundles bundles = createSubscriptionsWithAddOns(ImmutableList.<BulkBaseSubscriptionAndAddOns>of(new BulkBaseSubscriptionAndAddOns(subscriptions)), requestedDate, timeoutSec, inputOptions);
         return bundles != null && !bundles.isEmpty() ? bundles.get(0) : null;
     }
 
@@ -822,7 +821,6 @@ public class KillBillClient implements Closeable {
         Preconditions.checkNotNull(subscription.getBillCycleDayLocal(), "Subscription#billCycleDayLocal cannot be null");
 
         final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscription.getSubscriptionId() + "/" + JaxrsResource.BCD;
-
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
 
@@ -934,8 +932,6 @@ public class KillBillClient implements Closeable {
 
         httpClient.doPut(uri, null, inputOptions);
     }
-
-
 
     public CustomFields getSubscriptionCustomFields(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
         return getSubscriptionCustomFields(subscriptionId, AuditLevel.NONE, inputOptions);
@@ -1365,7 +1361,6 @@ public class KillBillClient implements Closeable {
         return httpClient.doPost(uri, invoiceItem, Invoice.class, requestOptions);
     }
 
-
     @Deprecated
     public InvoiceItem createExternalCharge(final InvoiceItem externalCharge, @Nullable final LocalDate requestedDate, final Boolean autoPay, final Boolean autoCommit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         final List<InvoiceItem> externalCharges = createExternalCharges(ImmutableList.<InvoiceItem>of(externalCharge), requestedDate, autoPay, autoCommit, createdBy, reason, comment);
@@ -1431,7 +1426,6 @@ public class KillBillClient implements Closeable {
     public Invoice createMigrationInvoice(final UUID accountId, final LocalDate targetDate, final Iterable<InvoiceItem> items, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.INVOICES_PATH + "/" + JaxrsResource.MIGRATION + "/" + accountId;
 
-
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         if (targetDate != null) {
             queryParams.put(JaxrsResource.QUERY_REQUESTED_DT, targetDate.toString());
@@ -1448,7 +1442,6 @@ public class KillBillClient implements Closeable {
                                                           .build();
         return httpClient.doPost(uri, items, Invoice.class, requestOptions);
     }
-
 
     @Deprecated
     public void triggerInvoiceNotification(final UUID invoiceId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
@@ -1536,6 +1529,51 @@ public class KillBillClient implements Closeable {
         return getResourceFile(uri, "text/plain", inputOptions);
     }
 
+    public CustomFields getInvoiceCustomFields(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoiceCustomFields(invoiceId, AuditLevel.NONE, inputOptions);
+    }
+
+    public CustomFields getInvoiceCustomFields(final UUID invoiceId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public CustomFields createInvoiceCustomField(final UUID invoiceId, final CustomField customField, final RequestOptions inputOptions) throws KillBillClientException {
+        return createInvoiceCustomFields(invoiceId, ImmutableList.of(customField), inputOptions);
+    }
+
+    public CustomFields createInvoiceCustomFields(final UUID invoiceId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
+    }
+
+    public void deleteInvoiceCustomFields(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteInvoiceCustomFields(invoiceId, null, inputOptions);
+    }
+
+    public void deleteInvoiceCustomFields(final UUID invoiceId, @Nullable final Iterable<UUID> customFieldIds, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (customFieldIds != null) {
+            queryParams.put(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+        }
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        httpClient.doDelete(uri, requestOptions);
+    }
+
     @Deprecated
     public void uploadCatalogTranslation(final String catalogTranslationFilePath, final String locale, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         uploadCatalogTranslation(catalogTranslationFilePath, locale, RequestOptions.builder()
@@ -1575,11 +1613,10 @@ public class KillBillClient implements Closeable {
     @Deprecated
     public void commitInvoice(final UUID invoiceId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         commitInvoice(invoiceId, RequestOptions.builder()
-                      .withCreatedBy(createdBy)
-                      .withReason(reason)
-                      .withComment(comment).build());
+                                               .withCreatedBy(createdBy)
+                                               .withReason(reason)
+                                               .withComment(comment).build());
     }
-
 
     public void commitInvoice(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
 
@@ -1619,9 +1656,9 @@ public class KillBillClient implements Closeable {
     @Deprecated
     public Credit createCredit(final Credit credit, final Boolean autoCommit, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return createCredit(credit, autoCommit, RequestOptions.builder()
-                                                  .withCreatedBy(createdBy)
-                                                  .withReason(reason)
-                                                  .withComment(comment).build());
+                                                              .withCreatedBy(createdBy)
+                                                              .withReason(reason)
+                                                              .withComment(comment).build());
     }
 
     public Credit createCredit(final Credit credit, final Boolean autoCommit, final RequestOptions inputOptions) throws KillBillClientException {
@@ -2262,7 +2299,6 @@ public class KillBillClient implements Closeable {
         return httpClient.doDelete(uri, paymentTransaction, Payment.class, requestOptions);
     }
 
-
     public void cancelScheduledPaymentTransaction(final UUID paymentTransactionId, final String paymentTransactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
 
         Preconditions.checkState(paymentTransactionId != null || paymentTransactionExternalKey != null, "PaymentTransaction#paymentTransactionId or PaymentTransaction#paymentTransactionExternalKey cannot be null");
@@ -2279,7 +2315,6 @@ public class KillBillClient implements Closeable {
                                                           .withQueryParams(params).build();
         httpClient.doDelete(uri, requestOptions);
     }
-
 
     // Hosted payment pages
     @Deprecated
@@ -2330,10 +2365,10 @@ public class KillBillClient implements Closeable {
     @Deprecated
     public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return buildFormDescriptor(comboHostedPaymentPage, controlPluginNames, pluginProperties, RequestOptions.builder()
-                                                                                                 .withCreatedBy(createdBy)
-                                                                                                 .withReason(reason)
-                                                                                                 .withComment(comment)
-                                                                                                 .build());
+                                                                                                               .withCreatedBy(createdBy)
+                                                                                                               .withReason(reason)
+                                                                                                               .withComment(comment)
+                                                                                                               .build());
     }
 
     public HostedPaymentPageFormDescriptor buildFormDescriptor(final ComboHostedPaymentPage comboHostedPaymentPage, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
@@ -2702,10 +2737,10 @@ public class KillBillClient implements Closeable {
     @Deprecated
     public void deletePaymentMethod(final UUID paymentMethodId, final Boolean deleteDefault, final Boolean forceDeleteDefault, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         deletePaymentMethod(paymentMethodId, deleteDefault, forceDeleteDefault, RequestOptions.builder()
-                                                                          .withCreatedBy(createdBy)
-                                                                          .withReason(reason)
-                                                                          .withComment(comment)
-                                                                          .build());
+                                                                                              .withCreatedBy(createdBy)
+                                                                                              .withReason(reason)
+                                                                                              .withComment(comment)
+                                                                                              .build());
     }
 
     public void deletePaymentMethod(final UUID paymentMethodId, final Boolean deleteDefault, final Boolean forceDeleteDefault, final RequestOptions inputOptions) throws KillBillClientException {
@@ -3646,14 +3681,11 @@ public class KillBillClient implements Closeable {
         return getResourceFile(uri, ACCEPT_XML, inputOptions);
     }
 
-
     public void addSimplePan(final SimplePlan simplePlan, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH + "/" + JaxrsResource.SIMPLE_PLAN;
         final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(false).build();
         httpClient.doPost(uri, simplePlan, requestOptions);
     }
-
-
 
     public void deleteCatalog(final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH;
@@ -3661,17 +3693,15 @@ public class KillBillClient implements Closeable {
         httpClient.doDelete(uri, requestOptions);
     }
 
-
-
     // Tenants
 
     @Deprecated
     public Tenant createTenant(final Tenant tenant, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         return createTenant(tenant, true, RequestOptions.builder()
-                                                  .withCreatedBy(createdBy)
-                                                  .withReason(reason)
-                                                  .withComment(comment)
-                                                  .build());
+                                                        .withCreatedBy(createdBy)
+                                                        .withReason(reason)
+                                                        .withComment(comment)
+                                                        .build());
     }
 
     public Tenant createTenant(final Tenant tenant, final boolean useGlobalDefault, final RequestOptions inputOptions) throws KillBillClientException {
