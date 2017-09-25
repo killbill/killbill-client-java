@@ -2705,12 +2705,20 @@ public class KillBillClient implements Closeable {
     }
 
     public PaymentMethod createPaymentMethod(final PaymentMethod paymentMethod, final RequestOptions inputOptions) throws KillBillClientException {
+        return createPaymentMethod(paymentMethod, null, inputOptions);
+    }
+
+    public PaymentMethod createPaymentMethod(final PaymentMethod paymentMethod, @Nullable final List<String> controlPluginNames, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentMethod.getAccountId(), "PaymentMethod#accountId cannot be null");
         Preconditions.checkNotNull(paymentMethod.getPluginName(), "PaymentMethod#pluginName cannot be null");
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + paymentMethod.getAccountId() + "/" + JaxrsResource.PAYMENT_METHODS;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (controlPluginNames != null) {
+            queryParams.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
+        }
+
         queryParams.put(JaxrsResource.QUERY_PAYMENT_METHOD_IS_DEFAULT, Boolean.TRUE.equals(paymentMethod.getIsDefault()) ? "true" : "false");
 
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
