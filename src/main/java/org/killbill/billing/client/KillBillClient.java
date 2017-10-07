@@ -2446,6 +2446,26 @@ public class KillBillClient implements Closeable {
         return httpClient.doPost(uri, refundTransaction, InvoicePayment.class, requestOptions);
     }
 
+    public Payment completeInvoicePayment(final PaymentTransaction paymentTransaction, @Nullable final List<String> controlPluginNames, final Map<String, String> pluginProperties, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkState(paymentTransaction.getPaymentId() != null, "PaymentTransaction#paymentId cannot be null");
+
+        final String uri = JaxrsResource.INVOICE_PAYMENTS_PATH + "/" + paymentTransaction.getPaymentId();
+
+        final Multimap<String, String> params = HashMultimap.create(inputOptions.getQueryParams());
+        if (controlPluginNames != null) {
+            params.putAll(KillBillHttpClient.CONTROL_PLUGIN_NAME, controlPluginNames);
+        }
+        storePluginPropertiesAsParams(pluginProperties, params);
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend()
+                                                          .withQueryParams(params)
+                                                          .withFollowLocation(followLocation).build();
+
+        return httpClient.doPut(uri, paymentTransaction, Payment.class, requestOptions);
+    }
+
+
+
     // Chargebacks
 
     @Deprecated
