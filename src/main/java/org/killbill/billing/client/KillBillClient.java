@@ -933,6 +933,12 @@ public class KillBillClient implements Closeable {
         httpClient.doPut(uri, null, inputOptions);
     }
 
+
+    public void undoChangePlan(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId + "/undoChangePlan";
+        httpClient.doPut(uri, null, inputOptions);
+    }
+
     public CustomFields getSubscriptionCustomFields(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
         return getSubscriptionCustomFields(subscriptionId, AuditLevel.NONE, inputOptions);
     }
