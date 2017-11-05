@@ -967,6 +967,12 @@ public class KillBillClient implements Closeable {
         return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
     }
 
+
+    public void modifySubscriptionCustomFields(final UUID subscriptionId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.SUBSCRIPTIONS_PATH + "/" + subscriptionId + "/" + JaxrsResource.CUSTOM_FIELDS;
+        httpClient.doPut(uri, customFields, inputOptions);
+    }
+
     public void deleteSubscriptionCustomFields(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
         deleteSubscriptionCustomFields(subscriptionId, null, inputOptions);
     }
@@ -1561,6 +1567,11 @@ public class KillBillClient implements Closeable {
         final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
 
         return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
+    }
+
+    public void modifyInvoiceCustomFields(final UUID invoiceId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId + "/" + JaxrsResource.CUSTOM_FIELDS;
+        httpClient.doPut(uri, customFields, inputOptions);
     }
 
     public void deleteInvoiceCustomFields(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
@@ -3440,6 +3451,12 @@ public class KillBillClient implements Closeable {
         return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
     }
 
+
+    public void modifyAccountCustomFields(final UUID accountId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.CUSTOM_FIELDS;
+        httpClient.doPut(uri, customFields, inputOptions);
+    }
+
     @Deprecated
     public void deleteAccountCustomField(final UUID accountId, final UUID customFieldId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         deleteAccountCustomField(accountId, customFieldId, RequestOptions.builder()
@@ -3542,6 +3559,11 @@ public class KillBillClient implements Closeable {
         return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
     }
 
+    public void modifyPaymentMethodCustomFields(final UUID paymentMethodId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.CUSTOM_FIELDS;
+        httpClient.doPut(uri, customFields, inputOptions);
+    }
+
     @Deprecated
     public void deletePaymentMethodCustomFields(final UUID paymentMethodId, final String createdBy, final String reason, final String comment) throws KillBillClientException {
         deletePaymentMethodCustomFields(paymentMethodId, RequestOptions.builder()
@@ -3604,6 +3626,13 @@ public class KillBillClient implements Closeable {
 
         return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
     }
+
+
+    public void modifyPaymentCustomFields(final UUID paymentId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId + "/" + JaxrsResource.CUSTOM_FIELDS;
+        httpClient.doPut(uri, customFields, inputOptions);
+    }
+
 
     public void deletePaymentCustomFields(final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
         deletePaymentCustomFields(paymentId, null, inputOptions);
