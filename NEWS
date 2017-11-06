@@ -1,3 +1,7 @@
+0.41.3
+    Add api undoChangePlan
+    Add support for modifying custom fields
+
 0.41.2
     Add api to complete a payment associated with an invoice
 
