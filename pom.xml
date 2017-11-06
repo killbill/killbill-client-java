@@ -24,7 +24,7 @@
         <version>0.141.6</version>
     </parent>
     <artifactId>killbill-client-java</artifactId>
-    <version>0.41.3</version>
+    <version>0.41.4-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Kill Bill Client Java</name>
     <description>Kill Bill Java client library</description>
