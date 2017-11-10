@@ -19,6 +19,8 @@ package org.killbill.billing.client.model;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import org.joda.time.DateTime;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -36,6 +38,7 @@ public class Account extends KillBillObject {
     private UUID parentAccountId;
     private Boolean isPaymentDelegatedToParent;
     private UUID paymentMethodId;
+    private DateTime referenceTime;
     private String timeZone;
     private String address1;
     private String address2;
@@ -63,6 +66,7 @@ public class Account extends KillBillObject {
                    @JsonProperty("parentAccountId") final UUID parentAccountId,
                    @JsonProperty("isPaymentDelegatedToParent") final Boolean isPaymentDelegatedToParent,
                    @JsonProperty("paymentMethodId") final UUID paymentMethodId,
+                   @JsonProperty("referenceTime") final DateTime referenceTime,
                    @JsonProperty("timeZone") final String timeZone,
                    @JsonProperty("address1") final String address1,
                    @JsonProperty("address2") final String address2,
@@ -90,6 +94,7 @@ public class Account extends KillBillObject {
         this.parentAccountId = parentAccountId;
         this.isPaymentDelegatedToParent = isPaymentDelegatedToParent;
         this.paymentMethodId = paymentMethodId;
+        this.referenceTime = referenceTime;
         this.timeZone = timeZone;
         this.address1 = address1;
         this.address2 = address2;
@@ -200,6 +205,14 @@ public class Account extends KillBillObject {
 
     public void setPaymentMethodId(final UUID paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
+    }
+
+    public DateTime getReferenceTime() {
+        return referenceTime;
+    }
+
+    public void setReferenceTime(final DateTime referenceTime) {
+        this.referenceTime = referenceTime;
     }
 
     public String getTimeZone() {
@@ -321,6 +334,7 @@ public class Account extends KillBillObject {
         sb.append(", parentAccountId='").append(parentAccountId).append('\'');
         sb.append(", isPaymentDelegatedToParent='").append(isPaymentDelegatedToParent).append('\'');
         sb.append(", paymentMethodId='").append(paymentMethodId).append('\'');
+        sb.append(", referenceTime='").append(referenceTime).append('\'');
         sb.append(", timeZone='").append(timeZone).append('\'');
         sb.append(", address1='").append(address1).append('\'');
         sb.append(", address2='").append(address2).append('\'');
@@ -421,6 +435,9 @@ public class Account extends KillBillObject {
         if (state != null ? !state.equals(account.state) : account.state != null) {
             return false;
         }
+        if (referenceTime != null ? referenceTime.compareTo(account.referenceTime) != 0 : account.referenceTime != null) {
+            return false;
+        }
         if (timeZone != null ? !timeZone.equals(account.timeZone) : account.timeZone != null) {
             return false;
         }
@@ -442,6 +459,7 @@ public class Account extends KillBillObject {
         result = 31 * result + (parentAccountId != null ? parentAccountId.hashCode() : 0);
         result = 31 * result + (isPaymentDelegatedToParent != null ? isPaymentDelegatedToParent.hashCode() : 0);
         result = 31 * result + (paymentMethodId != null ? paymentMethodId.hashCode() : 0);
+        result = 31 * result + (referenceTime != null ? referenceTime.hashCode() : 0);
         result = 31 * result + (timeZone != null ? timeZone.hashCode() : 0);
         result = 31 * result + (address1 != null ? address1.hashCode() : 0);
         result = 31 * result + (address2 != null ? address2.hashCode() : 0);
