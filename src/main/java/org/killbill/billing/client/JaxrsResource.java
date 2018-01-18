@@ -51,6 +51,8 @@ public interface JaxrsResource {
     public static final String INVOICE_HTML = "html";
     public static final String INVOICES = "invoices";
     public static final String INVOICES_PATH = PREFIX + "/" + INVOICES;
+    public static final String INVOICE_ITEMS = "invoiceItems";
+    public static final String INVOICE_ITEMS_PATH = PREFIX + "/" + INVOICE_ITEMS;
     public static final String DRY_RUN = "dryRun";
     public static final String INVOICE_PAYMENTS = "invoicePayments";
     public static final String INVOICE_PAYMENTS_PATH = PREFIX + "/" + INVOICE_PAYMENTS;

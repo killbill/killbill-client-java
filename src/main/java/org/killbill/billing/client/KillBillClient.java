@@ -3217,6 +3217,22 @@ public class KillBillClient implements Closeable {
         deleteObjectTag(invoiceId, JaxrsResource.INVOICES_PATH, tagDefinitionId, inputOptions);
     }
 
+    public Tags getInvoiceItemTags(final UUID invoiceItemId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoiceItemTags(invoiceItemId, AuditLevel.NONE, inputOptions);
+    }
+
+    public Tags getInvoiceItemTags(final UUID invoiceItemId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        return getObjectTags(invoiceItemId, JaxrsResource.INVOICE_ITEMS_PATH, auditLevel, inputOptions);
+    }
+
+    public Tags createInvoiceItemTag(final UUID invoiceItemId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return createObjectTag(invoiceItemId, JaxrsResource.INVOICE_ITEMS_PATH, tagDefinitionId, inputOptions);
+    }
+
+    public void deleteInvoiceItemTag(final UUID invoiceItemId, final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteObjectTag(invoiceItemId, JaxrsResource.INVOICE_ITEMS_PATH, tagDefinitionId, inputOptions);
+    }
+
     @Deprecated
     public Tags getPaymentTags(final UUID paymentId) throws KillBillClientException {
         return getPaymentTags(paymentId, RequestOptions.empty());
@@ -3640,6 +3656,58 @@ public class KillBillClient implements Closeable {
 
     public void deletePaymentCustomFields(final UUID paymentId, @Nullable final Iterable<UUID> customFieldIds, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (customFieldIds != null) {
+            queryParams.put(JaxrsResource.QUERY_CUSTOM_FIELDS, Joiner.on(",").join(customFieldIds));
+        }
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        httpClient.doDelete(uri, requestOptions);
+    }
+
+    public CustomFields getInvoiceItemCustomFields(final UUID invoiceItemId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoiceItemCustomFields(invoiceItemId, AuditLevel.NONE, inputOptions);
+    }
+
+    public CustomFields getInvoiceItemCustomFields(final UUID invoiceItemId, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICE_ITEMS_PATH + "/" + invoiceItemId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public CustomFields createInvoiceItemCustomField(final UUID invoiceItemId, final CustomField customField, final RequestOptions inputOptions) throws KillBillClientException {
+        return createInvoiceItemCustomField(invoiceItemId, ImmutableList.of(customField), inputOptions);
+    }
+
+    public CustomFields createInvoiceItemCustomField(final UUID invoiceItemId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICE_ITEMS_PATH + "/" + invoiceItemId + "/" + JaxrsResource.CUSTOM_FIELDS;
+
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final RequestOptions requestOptions = inputOptions.extend().withFollowLocation(followLocation).build();
+
+        return httpClient.doPost(uri, customFields, CustomFields.class, requestOptions);
+    }
+
+
+    public void modifyInvoiceItemCustomFields(final UUID invoiceItemId, final Iterable<CustomField> customFields, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICE_ITEMS_PATH + "/" + invoiceItemId + "/" + JaxrsResource.CUSTOM_FIELDS;
+        httpClient.doPut(uri, customFields, inputOptions);
+    }
+
+
+    public void deleteInvoiceItemCustomFields(final UUID invoiceItemId, final RequestOptions inputOptions) throws KillBillClientException {
+        deleteInvoiceItemCustomFields(invoiceItemId, null, inputOptions);
+    }
+
+    public void deleteInvoiceItemCustomFields(final UUID invoiceItemId, @Nullable final Iterable<UUID> customFieldIds, final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.INVOICE_ITEMS_PATH + "/" + invoiceItemId + "/" + JaxrsResource.CUSTOM_FIELDS;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         if (customFieldIds != null) {
