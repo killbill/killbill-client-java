@@ -52,6 +52,10 @@ public class InvoiceItem extends KillBillObject {
     private String currency;
     private List<InvoiceItem> childItems;
 
+    private BigDecimal rate;
+    private Integer quantity;
+    private String itemDetails;
+
     public InvoiceItem() {}
 
     @JsonCreator
@@ -75,6 +79,9 @@ public class InvoiceItem extends KillBillObject {
                        @JsonProperty("amount") final BigDecimal amount,
                        @JsonProperty("currency") final String currency,
                        @JsonProperty("childItems") final List<InvoiceItem> childItems,
+                       @JsonProperty("rate") final BigDecimal rate,
+                       @JsonProperty("quantity") final Integer quantity,
+                       @JsonProperty("itemDetails") String itemDetails,
                        @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.invoiceItemId = invoiceItemId;
@@ -97,6 +104,9 @@ public class InvoiceItem extends KillBillObject {
         this.amount = amount;
         this.currency = currency;
         this.childItems = childItems;
+        this.rate = rate;
+        this.quantity = quantity;
+        this.itemDetails = itemDetails;
     }
 
     public UUID getInvoiceItemId() {
@@ -251,6 +261,30 @@ public class InvoiceItem extends KillBillObject {
         this.currency = currency;
     }
 
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(final BigDecimal rate) {
+        this.rate = rate;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(final Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getItemDetails() {
+        return itemDetails;
+    }
+
+    public void setItemDetails(final String itemDetails) {
+        this.itemDetails = itemDetails;
+    }
+
     public List<InvoiceItem> getChildItems() {
         return childItems;
     }
@@ -318,6 +352,15 @@ public class InvoiceItem extends KillBillObject {
         if (subscriptionId != null ? !subscriptionId.equals(that.subscriptionId) : that.subscriptionId != null) {
             return false;
         }
+        if (rate != null ? rate.compareTo(that.rate) != 0 : that.rate != null) {
+            return false;
+        }
+        if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) {
+            return false;
+        }
+        if (itemDetails != null ? !itemDetails.equals(that.itemDetails) : that.itemDetails != null) {
+            return false;
+        }
         if (childItems != null ? !childItems.equals(that.childItems) : that.childItems != null) {
             return false;
         }
@@ -343,6 +386,9 @@ public class InvoiceItem extends KillBillObject {
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
+        result = 31 * result + (rate != null ? rate.hashCode() : 0);
+        result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
+        result = 31 * result + (itemDetails != null ? itemDetails.hashCode() : 0);
         result = 31 * result + (childItems != null ? childItems.hashCode() : 0);
         return result;
     }
