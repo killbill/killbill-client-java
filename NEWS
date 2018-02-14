@@ -1,3 +1,9 @@
+0.41.6
+    Add rate, quantity and itemDetails to InvoiceItem model
+
+0.41.5
+    CRUD for invoice items tags and custom fields
+
 0.41.4
     Add Account#referenceTime
 
