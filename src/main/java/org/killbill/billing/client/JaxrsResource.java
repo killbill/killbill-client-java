@@ -165,6 +165,7 @@ public interface JaxrsResource {
     public static final String QUERY_WITH_PLUGIN_INFO = "withPluginInfo";
     public static final String QUERY_AUTO_COMMIT = "autoCommit";
     public static final String QUERY_WITH_MIGRATION_INVOICES = "withMigrationInvoices";
+    public static final String QUERY_INCLUDE_VOIDED_INVOICES = "includeVoidedInvoices";
     public static final String QUERY_BLOCKING_STATE_TYPES = "blockingStateTypes";
     public static final String QUERY_BLOCKING_STATE_SVCS = "blockingStateSvcs";
     public static final String QUERY_ENTITLEMENT_EFFECTIVE_FROM_DT = "effectiveFromDate";
