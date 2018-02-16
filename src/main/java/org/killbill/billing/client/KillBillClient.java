@@ -1219,7 +1219,7 @@ public class KillBillClient implements Closeable {
     }
 
     public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean includeMigrationInvoices, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, withItems, false, includeMigrationInvoices, AuditLevel.NONE, inputOptions);
+        return getInvoicesForAccount(accountId, withItems, false, includeMigrationInvoices, false, AuditLevel.NONE, inputOptions);
     }
 
     @Deprecated
@@ -1228,21 +1228,22 @@ public class KillBillClient implements Closeable {
     }
 
     public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly, final boolean includeMigrationInvoices, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, withItems, unpaidOnly, includeMigrationInvoices, AuditLevel.NONE, inputOptions);
+        return getInvoicesForAccount(accountId, withItems, unpaidOnly, includeMigrationInvoices, false, AuditLevel.NONE, inputOptions);
     }
 
     @Deprecated
     public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly, final boolean includeMigrationInvoices, final AuditLevel auditLevel) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, withItems, unpaidOnly, includeMigrationInvoices, auditLevel, RequestOptions.empty());
+        return getInvoicesForAccount(accountId, withItems, unpaidOnly, includeMigrationInvoices, false, auditLevel, RequestOptions.empty());
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly, final boolean includeMigrationInvoices, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices getInvoicesForAccount(final UUID accountId, final boolean withItems, final boolean unpaidOnly, final boolean includeMigrationInvoices, final boolean includeVoidedInvoices, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.INVOICES;
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_INVOICE_WITH_ITEMS, String.valueOf(withItems));
         queryParams.put(JaxrsResource.QUERY_UNPAID_INVOICES_ONLY, String.valueOf(unpaidOnly));
         queryParams.put(JaxrsResource.QUERY_WITH_MIGRATION_INVOICES, String.valueOf(includeMigrationInvoices));
+        queryParams.put(JaxrsResource.QUERY_INCLUDE_VOIDED_INVOICES, String.valueOf(includeVoidedInvoices));
         queryParams.put(JaxrsResource.QUERY_AUDIT, auditLevel.toString());
 
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
@@ -1640,6 +1641,14 @@ public class KillBillClient implements Closeable {
         Preconditions.checkNotNull(invoiceId, "invoiceId cannot be null");
 
         final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId.toString() + "/commitInvoice";
+        httpClient.doPut(uri, null, inputOptions);
+    }
+
+    public void voidInvoice(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
+
+        Preconditions.checkNotNull(invoiceId, "invoiceId cannot be null");
+
+        final String uri = JaxrsResource.INVOICES_PATH + "/" + invoiceId.toString() + "/voidInvoice";
         httpClient.doPut(uri, null, inputOptions);
     }
 
