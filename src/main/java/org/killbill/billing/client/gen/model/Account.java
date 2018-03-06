@@ -21,6 +21,7 @@ import org.joda.time.LocalDate;
 
 import org.killbill.billing.client.KillBillObject;
 
+
 public class Account extends KillBillObject {
 
     private UUID accountId = null;
@@ -417,7 +418,6 @@ public class Account extends KillBillObject {
     }
 
     
-    @JsonSerialize(using = ToStringSerializer.class)
     public BigDecimal getAccountBalance() {
         return accountBalance;
     }
@@ -432,7 +432,6 @@ public class Account extends KillBillObject {
     }
 
     
-    @JsonSerialize(using = ToStringSerializer.class)
     public BigDecimal getAccountCBA() {
         return accountCBA;
     }

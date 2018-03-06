@@ -34,21 +34,18 @@ import java.util.concurrent.TimeoutException;
 
 import javax.annotation.Nullable;
 
-import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.AsyncHttpClientConfig;
-import com.ning.http.client.ProxyServer;
-import com.ning.http.client.Response;
-import com.ning.http.client.Realm;
-import com.ning.http.client.ListenableFuture;
-import com.ning.http.client.AsyncCompletionHandler;
-
-import org.killbill.billing.client.model.BillingException;
-import org.killbill.billing.client.model.KillBillObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ning.http.client.AsyncCompletionHandler;
+import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
+import com.ning.http.client.AsyncHttpClientConfig;
+import com.ning.http.client.ListenableFuture;
+import com.ning.http.client.ProxyServer;
+import com.ning.http.client.Realm;
 import com.ning.http.client.Realm.RealmBuilder;
+import com.ning.http.client.Response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -101,17 +98,16 @@ public class KillBillHttpClient implements Closeable {
     private final int requestTimeoutSec;
 
     /**
-     * @param kbServerUrl Kill Bill url
-     * @param username Kill Bill username
-     * @param password Kill Bill password
-     * @param apiKey Kill Bill api key
-     * @param apiSecret Kill Bill api secret
-     * @param proxyHost hostname of a proxy server that the client should use
-     * @param proxyPort port number of a proxy server that the client should use
+     * @param kbServerUrl    Kill Bill url
+     * @param username       Kill Bill username
+     * @param password       Kill Bill password
+     * @param apiKey         Kill Bill api key
+     * @param apiSecret      Kill Bill api secret
+     * @param proxyHost      hostname of a proxy server that the client should use
+     * @param proxyPort      port number of a proxy server that the client should use
      * @param connectTimeOut connect timeout in milliseconds
-     * @param readTimeOut read timeout in milliseconds
+     * @param readTimeOut    read timeout in milliseconds
      * @param requestTimeout request timeout in milliseconds
-     *
      */
     public KillBillHttpClient(final String kbServerUrl,
                               final String username,
@@ -127,19 +123,18 @@ public class KillBillHttpClient implements Closeable {
     }
 
     /**
-     * @param kbServerUrl Kill Bill url
-     * @param username Kill Bill username
-     * @param password Kill Bill password
-     * @param apiKey Kill Bill api key
-     * @param apiSecret Kill Bill api secret
-     * @param proxyHost hostname of a proxy server that the client should use
-     * @param proxyPort port number of a proxy server that the client should use
+     * @param kbServerUrl    Kill Bill url
+     * @param username       Kill Bill username
+     * @param password       Kill Bill password
+     * @param apiKey         Kill Bill api key
+     * @param apiSecret      Kill Bill api secret
+     * @param proxyHost      hostname of a proxy server that the client should use
+     * @param proxyPort      port number of a proxy server that the client should use
      * @param connectTimeOut connect timeout in milliseconds
-     * @param readTimeOut read timeout in milliseconds
+     * @param readTimeOut    read timeout in milliseconds
      * @param requestTimeout request timeout in milliseconds
-     * @param strictSSL whether to bypass SSL certificates validation
-     * @param SSLProtocol SSL protocol to use
-     *
+     * @param strictSSL      whether to bypass SSL certificates validation
+     * @param SSLProtocol    SSL protocol to use
      */
     public KillBillHttpClient(final String kbServerUrl,
                               final String username,
@@ -165,11 +160,11 @@ public class KillBillHttpClient implements Closeable {
             cfg.setRequestTimeout(requestTimeout);
             int timeoutSec = (int) TimeUnit.MILLISECONDS.toSeconds(requestTimeout);
             if (TimeUnit.SECONDS.toMillis(timeoutSec) != requestTimeout) {
-                timeoutSec+=1;
+                timeoutSec += 1;
             }
             requestTimeoutSec = timeoutSec;
         } else {
-            cfg.setRequestTimeout(DEFAULT_HTTP_TIMEOUT_SEC*1000);
+            cfg.setRequestTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
             requestTimeoutSec = DEFAULT_HTTP_TIMEOUT_SEC;
         }
 
@@ -646,6 +641,8 @@ public class KillBillHttpClient implements Closeable {
         }
 
         final T result = unmarshalResponse(response, clazz);
+        // TODO Fix paginition KillBillObjects
+        /*
         if (KillBillObjects.class.isAssignableFrom(clazz)) {
             final KillBillObjects objects = ((KillBillObjects) result);
             final String paginationCurrentOffset = response.getHeader(JaxrsResource.HDR_PAGINATION_CURRENT_OFFSET);
@@ -667,6 +664,7 @@ public class KillBillHttpClient implements Closeable {
             objects.setPaginationNextPageUri(response.getHeader(JaxrsResource.HDR_PAGINATION_NEXT_PAGE_URI));
             objects.setKillBillHttpClient(this);
         }
+        */
 
         return result;
     }
