@@ -14,13 +14,12 @@
 package org.killbill.billing.client.gen.model;
 
 import java.util.Objects;
-import java.util.UUID;
+import java.util.Arrays;
 import java.math.BigDecimal;
+import java.util.UUID;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import org.killbill.billing.client.KillBillObject;
-
 
 public class Account extends KillBillObject {
 
@@ -40,7 +39,7 @@ public class Account extends KillBillObject {
 
     private UUID parentAccountId = null;
 
-    private Boolean isPaymentDelegatedToParent = false;
+    private Boolean isPaymentDelegatedToParent = null;
 
     private UUID paymentMethodId = null;
 
@@ -68,9 +67,9 @@ public class Account extends KillBillObject {
 
     private String notes = null;
 
-    private Boolean isMigrated = false;
+    private Boolean isMigrated = null;
 
-    private Boolean isNotifiedForInvoices = false;
+    private Boolean isNotifiedForInvoices = null;
 
     private BigDecimal accountBalance = null;
 

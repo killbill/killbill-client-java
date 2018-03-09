@@ -12,7 +12,7 @@ import com.google.common.base.MoreObjects;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
-
+import org.killbill.billing.util.api.AuditLevel;
 
 public class AccountApi {
 
@@ -40,7 +40,7 @@ public class AccountApi {
         return httpClient.doPost(uri, body, Account.class, requestOptions);
     }
 
-    public Account getAccountByKey(final String externalKey, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final String audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Account getAccountByKey(final String externalKey, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
 
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getAccountByKey");
 
@@ -50,7 +50,7 @@ public class AccountApi {
         queryParams.put("externalKey", String.valueOf(externalKey));
         queryParams.put("accountWithBalance", String.valueOf(accountWithBalance));
         queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
-        queryParams.put("audit", String.valueOf(audit));
+        queryParams.put("auditLevel", String.valueOf(auditLevel));
 
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
