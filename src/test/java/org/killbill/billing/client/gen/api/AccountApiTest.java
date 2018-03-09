@@ -17,7 +17,9 @@ import java.util.UUID;
 
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
-import org.killbill.billing.client.gen.model.Account;
+import org.killbill.billing.client.api.gen.AccountApi;
+import org.killbill.billing.client.model.Accounts;
+import org.killbill.billing.client.model.gen.Account;
 import org.killbill.billing.util.api.AuditLevel;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -27,8 +29,6 @@ import org.testng.annotations.Test;
  * API tests for AccountApi
  */
 public class AccountApiTest {
-
-
 
     private final static String SERVER_HOST = "127.0.0.1";
     private final static int SERVER_PORT = 8080;
@@ -59,7 +59,7 @@ public class AccountApiTest {
     }
 
     @Test
-    public void basicAccountTest() throws Exception {
+    public void basicTest() throws Exception {
         final Account account = new Account();
         final String externalKey = UUID.randomUUID().toString();
         account.setExternalKey(externalKey);
@@ -81,7 +81,6 @@ public class AccountApiTest {
         Assert.assertEquals(result3.getExternalKey(), externalKey);
         Assert.assertEquals(result3.getEmail(), "somebody@something.org");
 
-
         api.closeAccount(accountId.toString(), false, false, false, requestOptions);
 
         final Account result4 = api.getAccount(accountId.toString(), false, false, AuditLevel.FULL, requestOptions);
@@ -89,10 +88,19 @@ public class AccountApiTest {
         Assert.assertEquals(result4.getAccountId(), accountId);
         Assert.assertEquals(result4.getExternalKey(), externalKey);
         Assert.assertEquals(result4.getEmail(), "somebody@something.org");
-
-
     }
 
+    @Test
+    public void basicPaginationTest() throws Exception {
 
+        for (int i = 0; i < 5; i++) {
+            final Account account = new Account();
+            final Account result = api.createAccount(account, requestOptions);
+            Assert.assertNotNull(result);
+        }
 
+        final Accounts accounts = api.getAccounts(0L, 100L, false, false, AuditLevel.MINIMAL, requestOptions);
+        Assert.assertNotNull(accounts);
+        Assert.assertTrue(accounts.size() >= 5);
+    }
 }

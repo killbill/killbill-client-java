@@ -1,7 +1,8 @@
-package org.killbill.billing.client.gen.api;
+package org.killbill.billing.client.api.gen;
 
 
-import org.killbill.billing.client.gen.model.Account;
+import org.killbill.billing.client.model.Accounts;
+import org.killbill.billing.client.model.gen.Account;
 
 
 import com.google.common.collect.Multimap;
@@ -96,6 +97,23 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
         return httpClient.doGet(uri, Account.class, requestOptions);
+    }
+
+    public Accounts getAccounts(final Long offset, final Long limit, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel, final RequestOptions inputOptions) throws KillBillClientException {
+
+
+        final String uri = "/1.0/kb/accounts/pagination";
+
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        queryParams.put("offset", String.valueOf(offset));
+        queryParams.put("limit", String.valueOf(limit));
+        queryParams.put("accountWithBalance", String.valueOf(accountWithBalance));
+        queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
+        queryParams.put("auditLevel", String.valueOf(auditLevel));
+
+        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+
+        return httpClient.doGet(uri, Accounts.class, requestOptions);
     }
 
     public Account updateAccount(final Account body, final String accountId, final Boolean treatNullAsReset,  final RequestOptions inputOptions) throws KillBillClientException {

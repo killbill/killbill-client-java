@@ -34,6 +34,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.annotation.Nullable;
 
+import org.killbill.billing.client.model.KillBillObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -641,8 +642,6 @@ public class KillBillHttpClient implements Closeable {
         }
 
         final T result = unmarshalResponse(response, clazz);
-        // TODO Fix paginition KillBillObjects
-        /*
         if (KillBillObjects.class.isAssignableFrom(clazz)) {
             final KillBillObjects objects = ((KillBillObjects) result);
             final String paginationCurrentOffset = response.getHeader(JaxrsResource.HDR_PAGINATION_CURRENT_OFFSET);
@@ -664,7 +663,6 @@ public class KillBillHttpClient implements Closeable {
             objects.setPaginationNextPageUri(response.getHeader(JaxrsResource.HDR_PAGINATION_NEXT_PAGE_URI));
             objects.setKillBillHttpClient(this);
         }
-        */
 
         return result;
     }

@@ -14,31 +14,17 @@
  * under the License.
  */
 
-package org.killbill.billing.client;
+package org.killbill.billing.client.model;
 
-import org.killbill.billing.util.audit.AuditLog;
+import org.killbill.billing.client.KillBillClientException;
+import org.killbill.billing.client.model.gen.Account;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.annotation.Nullable;
+public class Accounts extends KillBillObjects<Account> {
 
-public abstract class KillBillObject {
-
-    protected List<AuditLog> auditLogs;
-
-    public KillBillObject() {
-        this(null);
-    }
-
-    public KillBillObject(@Nullable final List<AuditLog> auditLogs) {
-        this.auditLogs = auditLogs;
-    }
-
-    public List<AuditLog> getAuditLogs() {
-        return auditLogs;
-    }
-
-    public void setAuditLogs(final List<AuditLog> auditLogs) {
-        this.auditLogs = auditLogs;
+    @JsonIgnore
+    public Accounts getNext() throws KillBillClientException {
+        return getNext(Accounts.class);
     }
 }
