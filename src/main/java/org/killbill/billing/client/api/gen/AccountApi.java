@@ -1,6 +1,8 @@
 package org.killbill.billing.client.api.gen;
 
 
+import java.util.UUID;
+
 import org.killbill.billing.client.model.gen.Account;
 import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.client.model.Accounts;
@@ -34,7 +36,7 @@ public class AccountApi {
         this.httpClient = httpClient;
     }
 
-    public void closeAccount(final String accountId, final Boolean cancelAllSubscriptions, final Boolean writeOffUnpaidInvoices, final Boolean itemAdjustUnpaidInvoices,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void closeAccount(final UUID accountId, final Boolean cancelAllSubscriptions, final Boolean writeOffUnpaidInvoices, final Boolean itemAdjustUnpaidInvoices,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling closeAccount");
 
         final String uri = "/1.0/kb/accounts/{accountId}"
@@ -66,7 +68,7 @@ public class AccountApi {
         return httpClient.doPost(uri, body, Account.class, requestOptions);
     }
 
-    public Account getAccount(final String accountId, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Account getAccount(final UUID accountId, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
 
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccount");
 
@@ -136,7 +138,7 @@ public class AccountApi {
         return httpClient.doGet(uri, Accounts.class, requestOptions);
     }
 
-    public Account updateAccount(final Account body, final String accountId, final Boolean treatNullAsReset,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Account updateAccount(final Account body, final UUID accountId, final Boolean treatNullAsReset, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateAccount");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling updateAccount");
 

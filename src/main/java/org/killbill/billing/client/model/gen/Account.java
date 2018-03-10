@@ -19,6 +19,8 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+
 /**
  *           DO NOT EDIT !!!
  *
@@ -45,7 +47,7 @@ public class Account extends KillBillObject {
 
     private UUID parentAccountId = null;
 
-    private Boolean isPaymentDelegatedToParent = null;
+    private Boolean isPaymentDelegatedToParent = false;
 
     private UUID paymentMethodId = null;
 
@@ -73,9 +75,9 @@ public class Account extends KillBillObject {
 
     private String notes = null;
 
-    private Boolean isMigrated = null;
+    private Boolean isMigrated = false;
 
-    private Boolean isNotifiedForInvoices = null;
+    private Boolean isNotifiedForInvoices = false;
 
     private BigDecimal accountBalance = null;
 

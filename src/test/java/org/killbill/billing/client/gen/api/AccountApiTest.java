@@ -70,20 +70,20 @@ public class AccountApiTest {
         final UUID accountId = result.getAccountId();
 
         account.setEmail("somebody@something.org");
-        final Account result2 = api.updateAccount(account, accountId.toString(), false, requestOptions);
+        final Account result2 = api.updateAccount(account, accountId, false, requestOptions);
         Assert.assertNotNull(result2);
         Assert.assertEquals(result2.getExternalKey(), externalKey);
         Assert.assertEquals(result2.getEmail(), "somebody@something.org");
 
-        final Account result3 = api.getAccount(accountId.toString(), false, false, AuditLevel.FULL, requestOptions);
+        final Account result3 = api.getAccount(accountId, false, false, AuditLevel.FULL, requestOptions);
         Assert.assertNotNull(result3);
         Assert.assertEquals(result3.getAccountId(), accountId);
         Assert.assertEquals(result3.getExternalKey(), externalKey);
         Assert.assertEquals(result3.getEmail(), "somebody@something.org");
 
-        api.closeAccount(accountId.toString(), false, false, false, requestOptions);
+        api.closeAccount(accountId, false, false, false, requestOptions);
 
-        final Account result4 = api.getAccount(accountId.toString(), false, false, AuditLevel.FULL, requestOptions);
+        final Account result4 = api.getAccount(accountId, false, false, AuditLevel.FULL, requestOptions);
         Assert.assertNotNull(result4);
         Assert.assertEquals(result4.getAccountId(), accountId);
         Assert.assertEquals(result4.getExternalKey(), externalKey);
