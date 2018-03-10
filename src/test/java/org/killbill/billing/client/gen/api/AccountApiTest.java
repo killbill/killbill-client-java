@@ -103,4 +103,19 @@ public class AccountApiTest {
         Assert.assertNotNull(accounts);
         Assert.assertTrue(accounts.size() >= 5);
     }
+
+    @Test
+    public void basicSearchTest() throws Exception {
+
+        final String externalKey = "Bingo-" + UUID.randomUUID().toString();
+        final Account account = new Account();
+        account.setExternalKey(externalKey);
+        final Account result = api.createAccount(account, requestOptions);
+        Assert.assertNotNull(result);
+
+        final Accounts accounts = api.searchAccounts(externalKey, 0L, 100L, false, false, AuditLevel.MINIMAL, requestOptions);
+        Assert.assertNotNull(accounts);
+        Assert.assertEquals(accounts.size(), 1);
+    }
+
 }
