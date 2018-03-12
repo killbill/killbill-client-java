@@ -13,14 +13,13 @@
 
 package org.killbill.billing.client.model.gen;
 
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import java.util.ArrayList;
 
 /**
  *           DO NOT EDIT !!!

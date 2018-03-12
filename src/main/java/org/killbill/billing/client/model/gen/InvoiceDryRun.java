@@ -15,12 +15,11 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.PhasePriceOverride;
-
-import java.util.ArrayList;
 
 /**
  *           DO NOT EDIT !!!

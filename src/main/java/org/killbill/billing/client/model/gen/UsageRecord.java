@@ -17,8 +17,6 @@ import java.util.Objects;
 import java.util.Arrays;
 import org.joda.time.LocalDate;
 
-import java.util.ArrayList;
-
 /**
  *           DO NOT EDIT !!!
  *

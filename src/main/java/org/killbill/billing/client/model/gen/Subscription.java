@@ -15,6 +15,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.joda.time.LocalDate;
@@ -23,8 +24,8 @@ import org.killbill.billing.catalog.api.PhaseType;
 import org.killbill.billing.catalog.api.ProductCategory;
 import org.killbill.billing.client.model.gen.EventSubscription;
 import org.killbill.billing.client.model.gen.PhasePriceOverride;
-
-import java.util.ArrayList;
+import org.killbill.billing.entitlement.api.Entitlement.EntitlementSourceType;
+import org.killbill.billing.entitlement.api.Entitlement.EntitlementState;
 
 /**
  *           DO NOT EDIT !!!
@@ -33,8 +34,6 @@ import java.util.ArrayList;
  *  @See https://github.com/killbill/killbill-swagger-coden
  */
 import org.killbill.billing.client.model.KillBillObject;
-import org.killbill.billing.entitlement.api.Entitlement.EntitlementSourceType;
-import org.killbill.billing.entitlement.api.Entitlement.EntitlementState;
 
 public class Subscription extends KillBillObject {
 

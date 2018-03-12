@@ -19,8 +19,6 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
-
 /**
  *           DO NOT EDIT !!!
  *

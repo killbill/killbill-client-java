@@ -15,11 +15,10 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.killbill.billing.client.model.gen.UnitUsageRecord;
-
-import java.util.ArrayList;
 
 /**
  *           DO NOT EDIT !!!

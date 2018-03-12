@@ -15,14 +15,13 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import org.killbill.billing.catalog.api.PhaseType;
 import org.killbill.billing.client.model.gen.Duration;
 import org.killbill.billing.client.model.gen.Fixed;
 import org.killbill.billing.client.model.gen.Recurring;
 import org.killbill.billing.client.model.gen.Usage;
-
-import java.util.ArrayList;
 
 /**
  *           DO NOT EDIT !!!

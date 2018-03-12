@@ -18,8 +18,6 @@ import java.util.Arrays;
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.client.model.gen.InternationalPrice;
 
-import java.util.ArrayList;
-
 /**
  *           DO NOT EDIT !!!
  *

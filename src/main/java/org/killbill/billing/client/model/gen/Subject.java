@@ -17,8 +17,6 @@ import java.util.Objects;
 import java.util.Arrays;
 import org.killbill.billing.client.model.gen.Session;
 
-import java.util.ArrayList;
-
 /**
  *           DO NOT EDIT !!!
  *

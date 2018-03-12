@@ -16,13 +16,12 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.catalog.api.ProductCategory;
 import org.killbill.billing.catalog.api.TimeUnit;
-
-import java.util.ArrayList;
 
 /**
  *           DO NOT EDIT !!!

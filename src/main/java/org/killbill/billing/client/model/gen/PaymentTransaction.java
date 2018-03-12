@@ -16,6 +16,7 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.joda.time.DateTime;
@@ -23,8 +24,6 @@ import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.PluginProperty;
 import org.killbill.billing.payment.api.TransactionStatus;
 import org.killbill.billing.payment.api.TransactionType;
-
-import java.util.ArrayList;
 
 /**
  *           DO NOT EDIT !!!

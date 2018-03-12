@@ -127,7 +127,7 @@ public class AccountApi {
         return httpClient.doPost(uri, body, Account.class, requestOptions);
     }
 
-    public CustomFields createCustomFields(final UUID accountId, final List<CustomField> body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields createCustomFields(final UUID accountId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCustomFields");
 
@@ -509,7 +509,7 @@ public class AccountApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public CustomFields modifyCustomFields(final UUID accountId, final List<CustomField> body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields modifyCustomFields(final UUID accountId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling modifyCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
 

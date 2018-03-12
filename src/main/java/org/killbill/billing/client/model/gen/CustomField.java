@@ -18,8 +18,6 @@ import java.util.Arrays;
 import java.util.UUID;
 import org.killbill.billing.ObjectType;
 
-import java.util.ArrayList;
-
 /**
  *           DO NOT EDIT !!!
  *

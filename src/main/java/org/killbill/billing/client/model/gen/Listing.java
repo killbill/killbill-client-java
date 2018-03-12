@@ -18,8 +18,6 @@ import java.util.Arrays;
 import org.killbill.billing.client.model.gen.Plan;
 import org.killbill.billing.client.model.gen.PriceList;
 
-import java.util.ArrayList;
-
 /**
  *           DO NOT EDIT !!!
  *

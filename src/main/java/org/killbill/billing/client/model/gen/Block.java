@@ -19,8 +19,6 @@ import org.killbill.billing.catalog.api.BlockType;
 import org.killbill.billing.client.model.gen.InternationalPrice;
 import org.killbill.billing.client.model.gen.Unit;
 
-import java.util.ArrayList;
-
 /**
  *           DO NOT EDIT !!!
  *

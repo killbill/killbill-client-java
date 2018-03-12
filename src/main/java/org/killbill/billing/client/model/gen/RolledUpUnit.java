@@ -16,8 +16,6 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 
-import java.util.ArrayList;
-
 /**
  *           DO NOT EDIT !!!
  *

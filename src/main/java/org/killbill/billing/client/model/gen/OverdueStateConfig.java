@@ -18,8 +18,6 @@ import java.util.Arrays;
 import org.killbill.billing.client.model.gen.OverdueCondition;
 import org.killbill.billing.overdue.api.OverdueCancellationPolicy;
 
-import java.util.ArrayList;
-
 /**
  *           DO NOT EDIT !!!
  *

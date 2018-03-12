@@ -16,12 +16,11 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.killbill.billing.client.model.gen.PaymentAttempt;
 import org.killbill.billing.client.model.gen.PaymentTransaction;
-
-import java.util.ArrayList;
 
 /**
  *           DO NOT EDIT !!!

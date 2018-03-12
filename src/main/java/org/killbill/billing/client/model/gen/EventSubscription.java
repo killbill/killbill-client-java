@@ -19,8 +19,6 @@ import java.util.UUID;
 import org.joda.time.LocalDate;
 import org.killbill.billing.entitlement.api.SubscriptionEventType;
 
-import java.util.ArrayList;
-
 /**
  *           DO NOT EDIT !!!
  *
