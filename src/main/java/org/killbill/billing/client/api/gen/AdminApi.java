@@ -34,28 +34,6 @@ public class AdminApi {
         this.httpClient = httpClient;
     }
 
-    /*
-    public getQueueEntries(final UUID accountId, final String queueName, final String serviceName, final Boolean withHistory, final String minDate, final String maxDate, final Boolean withInProcessing, final Boolean withBusEvents, final Boolean withNotifications,  final RequestOptions inputOptions) throws KillBillClientException {
-
-
-        final String uri = "/1.0/kb/admin/queues";
-
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("accountId", String.valueOf(accountId));
-        queryParams.put("queueName", String.valueOf(queueName));
-        queryParams.put("serviceName", String.valueOf(serviceName));
-        queryParams.put("withHistory", String.valueOf(withHistory));
-        queryParams.put("minDate", String.valueOf(minDate));
-        queryParams.put("maxDate", String.valueOf(maxDate));
-        queryParams.put("withInProcessing", String.valueOf(withInProcessing));
-        queryParams.put("withBusEvents", String.valueOf(withBusEvents));
-        queryParams.put("withNotifications", String.valueOf(withNotifications));
-
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
-
-    }
-    */
-
     public void invalidatesCache(final String cacheName,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/admin/cache";
@@ -106,6 +84,7 @@ public class AdminApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         httpClient.doPost(uri, null, requestOptions);
     }
 
@@ -132,6 +111,7 @@ public class AdminApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         httpClient.doPost(uri, null, requestOptions);
     }

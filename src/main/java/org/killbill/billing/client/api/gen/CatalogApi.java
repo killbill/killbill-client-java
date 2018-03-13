@@ -53,6 +53,7 @@ public class CatalogApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, SimplePlan.class, requestOptions);
     }
 
@@ -170,6 +171,7 @@ public class CatalogApi {
         final RequestOptions requestOptions = inputOptions.extend()
             .withFollowLocation(followLocation)
             .build();
+
 
         return httpClient.doPost(uri, body, String.class, requestOptions);
     }

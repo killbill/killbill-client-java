@@ -6,10 +6,10 @@ import org.killbill.billing.client.model.gen.Bundle;
 import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
-import org.killbill.billing.util.api.AuditLevel;
-import org.killbill.billing.client.model.Bundles;
 import java.util.List;
 import org.killbill.billing.client.model.CustomFields;
+import org.killbill.billing.util.api.AuditLevel;
+import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Tags;
 
 
@@ -73,6 +73,7 @@ public class BundleApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
@@ -90,6 +91,7 @@ public class BundleApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         httpClient.doPost(uri, null, requestOptions);
     }

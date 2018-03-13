@@ -7,8 +7,8 @@ import org.killbill.billing.client.model.gen.InvoicePaymentTransaction;
 import org.killbill.billing.client.model.gen.PaymentTransaction;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
-import org.killbill.billing.client.model.CustomFields;
 import java.util.List;
+import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Tags;
 
@@ -73,6 +73,7 @@ public class InvoicePaymentApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, InvoicePaymentTransaction.class, requestOptions);
     }
 
@@ -89,6 +90,7 @@ public class InvoicePaymentApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, InvoicePaymentTransaction.class, requestOptions);
     }
 
@@ -104,6 +106,7 @@ public class InvoicePaymentApi {
         final RequestOptions requestOptions = inputOptions.extend()
             .withFollowLocation(followLocation)
             .build();
+
 
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
@@ -126,6 +129,7 @@ public class InvoicePaymentApi {
             .withQueryParams(queryParams)
             .build();
 
+
         return httpClient.doPost(uri, body, InvoicePaymentTransaction.class, requestOptions);
     }
 
@@ -143,6 +147,7 @@ public class InvoicePaymentApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         httpClient.doPost(uri, null, requestOptions);
     }

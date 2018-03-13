@@ -1,7 +1,8 @@
 /*
- * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014-2018 Groupon, Inc
+ * Copyright 2014-2018 The Billing Project, LLC
  *
- * Ning licenses this file to you under the Apache License, version 2.0
+ * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
  * License.  You may obtain a copy of the License at:
  *
@@ -16,7 +17,15 @@
 
 package org.killbill.billing.client.model;
 
-import java.util.ArrayList;
+import org.killbill.billing.client.KillBillClientException;
+import org.killbill.billing.client.model.gen.Subscription;
 
-public class Permissions extends ArrayList<String> {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+public class Subscriptions extends KillBillObjects<Subscription> {
+
+    @JsonIgnore
+    public Subscriptions getNext() throws KillBillClientException {
+        return getNext(Subscriptions.class);
+    }
 }

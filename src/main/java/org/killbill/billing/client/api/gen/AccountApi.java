@@ -17,11 +17,11 @@ import org.killbill.billing.client.model.gen.PaymentMethod;
 import org.killbill.billing.client.model.gen.PaymentTransaction;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
+import java.util.List;
+import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Bundles;
-import java.util.List;
 import org.killbill.billing.client.model.Accounts;
-import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.ObjectType;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.client.model.BlockingStates;
@@ -92,6 +92,7 @@ public class AccountApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, AccountEmail.class, requestOptions);
     }
 
@@ -124,6 +125,7 @@ public class AccountApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, Account.class, requestOptions);
     }
 
@@ -139,6 +141,7 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptions.extend()
             .withFollowLocation(followLocation)
             .build();
+
 
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
@@ -162,6 +165,7 @@ public class AccountApi {
             .withQueryParams(queryParams)
             .build();
 
+
         return httpClient.doPost(uri, body, PaymentMethod.class, requestOptions);
     }
 
@@ -179,6 +183,7 @@ public class AccountApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         httpClient.doPost(uri, null, requestOptions);
     }
@@ -539,6 +544,7 @@ public class AccountApi {
             .withQueryParams(queryParams)
             .build();
 
+
         httpClient.doPost(uri, null, requestOptions);
     }
 
@@ -559,6 +565,7 @@ public class AccountApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
     }
@@ -581,6 +588,7 @@ public class AccountApi {
             .withQueryParams(queryParams)
             .build();
 
+
         return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
     }
 
@@ -595,6 +603,7 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptions.extend()
             .withFollowLocation(followLocation)
             .build();
+
 
         httpClient.doPost(uri, null, requestOptions);
     }
@@ -614,6 +623,7 @@ public class AccountApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         httpClient.doPost(uri, null, requestOptions);
     }
@@ -694,6 +704,7 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptions.extend()
             .withFollowLocation(followLocation)
             .build();
+
 
         httpClient.doPost(uri, null, requestOptions);
     }

@@ -8,9 +8,9 @@ import org.killbill.billing.client.model.gen.InvoiceItem;
 import org.killbill.billing.client.model.gen.InvoicePayment;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
-import org.killbill.billing.client.model.InvoiceItems;
-import java.util.List;
 import org.killbill.billing.client.model.CustomFields;
+import java.util.List;
+import org.killbill.billing.client.model.InvoiceItems;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Invoices;
 import org.killbill.billing.client.model.InvoicePayments;
@@ -62,6 +62,7 @@ public class InvoiceApi {
             .withQueryParams(queryParams)
             .build();
 
+
         return httpClient.doPost(uri, body, InvoiceItem.class, requestOptions);
     }
 
@@ -90,6 +91,7 @@ public class InvoiceApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
@@ -114,10 +116,11 @@ public class InvoiceApi {
             .withQueryParams(queryParams)
             .build();
 
+
         return httpClient.doPost(uri, body, InvoiceItems.class, requestOptions);
     }
 
-    public void createFutureInvoice(final UUID accountId, final String targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice createFutureInvoice(final UUID accountId, final String targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createFutureInvoice");
 
         final String uri = "/1.0/kb/invoices";
@@ -132,7 +135,8 @@ public class InvoiceApi {
             .withQueryParams(queryParams)
             .build();
 
-        httpClient.doPost(uri, null, requestOptions);
+
+        return httpClient.doPost(uri, null, Invoice.class, requestOptions);
     }
 
     public InvoicePayment createInstantPayment(final InvoicePayment body, final UUID invoiceId, final Boolean externalPayment, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -152,10 +156,11 @@ public class InvoiceApi {
             .withQueryParams(queryParams)
             .build();
 
+
         return httpClient.doPost(uri, body, InvoicePayment.class, requestOptions);
     }
 
-    public InvoiceItems createMigrationInvoice(final InvoiceItems body, final UUID accountId, final String targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice createMigrationInvoice(final InvoiceItems body, final UUID accountId, final String targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createMigrationInvoice");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createMigrationInvoice");
 
@@ -171,7 +176,8 @@ public class InvoiceApi {
             .withQueryParams(queryParams)
             .build();
 
-        return httpClient.doPost(uri, body, InvoiceItems.class, requestOptions);
+
+        return httpClient.doPost(uri, body, Invoice.class, requestOptions);
     }
 
     public void createTags(final UUID invoiceId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -188,6 +194,7 @@ public class InvoiceApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         httpClient.doPost(uri, null, requestOptions);
     }
@@ -243,7 +250,7 @@ public class InvoiceApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public InvoiceDryRun generateDryRunInvoice(final InvoiceDryRun body, final UUID accountId, final String targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice generateDryRunInvoice(final InvoiceDryRun body, final UUID accountId, final String targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling generateDryRunInvoice");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling generateDryRunInvoice");
 
@@ -259,7 +266,8 @@ public class InvoiceApi {
             .withQueryParams(queryParams)
             .build();
 
-        return httpClient.doPost(uri, body, InvoiceDryRun.class, requestOptions);
+
+        return httpClient.doPost(uri, body, Invoice.class, requestOptions);
     }
 
     public CustomFields getCustomFields(final UUID invoiceId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -420,6 +428,7 @@ public class InvoiceApi {
             .withQueryParams(queryParams)
             .build();
 
+
         return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
@@ -437,6 +446,7 @@ public class InvoiceApi {
             .withQueryParams(queryParams)
             .build();
 
+
         return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
@@ -453,6 +463,7 @@ public class InvoiceApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         return httpClient.doPost(uri, body, String.class, requestOptions);
     }
@@ -472,6 +483,7 @@ public class InvoiceApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         return httpClient.doPost(uri, body, String.class, requestOptions);
     }

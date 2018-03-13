@@ -27,16 +27,16 @@ import org.killbill.billing.client.model.gen.Subscription;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class BulkBaseSubscriptionAndAddOns extends KillBillObject {
+public class BulkSubscriptionsBundle extends KillBillObject {
 
     private List<Subscription> baseEntitlementAndAddOns = new ArrayList<Subscription>();
 
-    public BulkBaseSubscriptionAndAddOns baseEntitlementAndAddOns(List<Subscription> baseEntitlementAndAddOns) {
+    public BulkSubscriptionsBundle baseEntitlementAndAddOns(List<Subscription> baseEntitlementAndAddOns) {
         this.baseEntitlementAndAddOns = baseEntitlementAndAddOns;
         return this;
     }
 
-    public BulkBaseSubscriptionAndAddOns addBaseEntitlementAndAddOnsItem(Subscription baseEntitlementAndAddOnsItem) {
+    public BulkSubscriptionsBundle addBaseEntitlementAndAddOnsItem(Subscription baseEntitlementAndAddOnsItem) {
         this.baseEntitlementAndAddOns.add(baseEntitlementAndAddOnsItem);
         return this;
     }
@@ -59,8 +59,8 @@ public class BulkBaseSubscriptionAndAddOns extends KillBillObject {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        BulkBaseSubscriptionAndAddOns bulkBaseSubscriptionAndAddOns = (BulkBaseSubscriptionAndAddOns) o;
-        return Objects.equals(this.baseEntitlementAndAddOns, bulkBaseSubscriptionAndAddOns.baseEntitlementAndAddOns);
+        BulkSubscriptionsBundle bulkSubscriptionsBundle = (BulkSubscriptionsBundle) o;
+        return Objects.equals(this.baseEntitlementAndAddOns, bulkSubscriptionsBundle.baseEntitlementAndAddOns);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class BulkBaseSubscriptionAndAddOns extends KillBillObject {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class BulkBaseSubscriptionAndAddOns {\n");
+        sb.append("class BulkSubscriptionsBundle {\n");
         
         sb.append("    baseEntitlementAndAddOns: ").append(toIndentedString(baseEntitlementAndAddOns)).append("\n");
         sb.append("}");

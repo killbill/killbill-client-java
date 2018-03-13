@@ -1,10 +1,10 @@
 package org.killbill.billing.client.api.gen;
 
 
-import org.killbill.billing.client.model.Permissions;
 import org.killbill.billing.client.model.gen.RoleDefinition;
 import org.killbill.billing.client.model.gen.Subject;
 import org.killbill.billing.client.model.gen.UserRoles;
+import org.killbill.billing.client.model.Strings;
 import java.util.List;
 
 
@@ -48,6 +48,7 @@ public class SecurityApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, RoleDefinition.class, requestOptions);
     }
 
@@ -62,10 +63,11 @@ public class SecurityApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, UserRoles.class, requestOptions);
     }
 
-    public Permissions getCurrentUserPermissions(final RequestOptions inputOptions) throws KillBillClientException {
+    public Strings getCurrentUserPermissions( final RequestOptions inputOptions) throws KillBillClientException {
 
 
         final String uri = "/1.0/kb/security/permissions";
@@ -73,7 +75,7 @@ public class SecurityApi {
 
         final RequestOptions requestOptions = inputOptions.extend().build();
 
-        return httpClient.doGet(uri, Permissions.class, requestOptions);
+        return httpClient.doGet(uri, Strings.class, requestOptions);
     }
 
     public Subject getCurrentUserSubject( final RequestOptions inputOptions) throws KillBillClientException {
@@ -98,7 +100,6 @@ public class SecurityApi {
         final RequestOptions requestOptions = inputOptions.extend().build();
 
         return httpClient.doGet(uri, UserRoles.class, requestOptions);
-
     }
 
     public void invalidateUser(final String username,  final RequestOptions inputOptions) throws KillBillClientException {

@@ -52,6 +52,7 @@ public class InvoiceItemApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
@@ -69,6 +70,7 @@ public class InvoiceItemApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         httpClient.doPost(uri, null, requestOptions);
     }

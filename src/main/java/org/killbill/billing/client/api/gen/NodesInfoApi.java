@@ -3,6 +3,7 @@ package org.killbill.billing.client.api.gen;
 
 import org.killbill.billing.client.model.gen.NodeCommand;
 import org.killbill.billing.client.model.gen.PluginInfo;
+import org.killbill.billing.client.model.PluginInfos;
 import java.util.List;
 
 
@@ -35,7 +36,6 @@ public class NodesInfoApi {
         this.httpClient = httpClient;
     }
 
-    /*
     public PluginInfos getNodesInfo( final RequestOptions inputOptions) throws KillBillClientException {
 
 
@@ -46,7 +46,6 @@ public class NodesInfoApi {
 
         return httpClient.doGet(uri, PluginInfos.class, requestOptions);
     }
-    */
 
     public NodeCommand triggerNodeCommand(final NodeCommand body, final Boolean localNodeOnly,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling triggerNodeCommand");
@@ -61,6 +60,7 @@ public class NodesInfoApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         return httpClient.doPost(uri, body, NodeCommand.class, requestOptions);
     }

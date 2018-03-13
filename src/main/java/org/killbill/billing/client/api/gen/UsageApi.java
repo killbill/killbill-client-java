@@ -80,6 +80,7 @@ public class UsageApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, SubscriptionUsageRecord.class, requestOptions);
     }
 

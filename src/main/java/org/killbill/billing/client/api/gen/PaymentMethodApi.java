@@ -52,6 +52,7 @@ public class PaymentMethodApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 

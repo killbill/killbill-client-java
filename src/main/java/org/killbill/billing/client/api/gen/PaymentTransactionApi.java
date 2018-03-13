@@ -54,6 +54,7 @@ public class PaymentTransactionApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
@@ -71,6 +72,7 @@ public class PaymentTransactionApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         httpClient.doPost(uri, null, requestOptions);
     }
@@ -184,6 +186,7 @@ public class PaymentTransactionApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
     }

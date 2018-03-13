@@ -48,6 +48,7 @@ public class TenantApi {
             .withQueryParams(queryParams)
             .build();
 
+
         return httpClient.doPost(uri, body, Tenant.class, requestOptions);
     }
 
@@ -220,6 +221,7 @@ public class TenantApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
@@ -236,6 +238,7 @@ public class TenantApi {
             .withQueryParams(queryParams)
             .build();
 
+
         httpClient.doPost(uri, null, requestOptions);
     }
 
@@ -249,6 +252,7 @@ public class TenantApi {
         final RequestOptions requestOptions = inputOptions.extend()
             .withFollowLocation(followLocation)
             .build();
+
 
         return httpClient.doPost(uri, body, String.class, requestOptions);
     }
@@ -266,6 +270,7 @@ public class TenantApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
@@ -281,6 +286,7 @@ public class TenantApi {
         final RequestOptions requestOptions = inputOptions.extend()
             .withFollowLocation(followLocation)
             .build();
+
 
         return httpClient.doPost(uri, body, String.class, requestOptions);
     }

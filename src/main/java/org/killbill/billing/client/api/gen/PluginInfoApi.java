@@ -2,6 +2,7 @@ package org.killbill.billing.client.api.gen;
 
 
 import org.killbill.billing.client.model.gen.PluginInfo;
+import org.killbill.billing.client.model.PluginInfos;
 import java.util.List;
 
 
@@ -34,7 +35,6 @@ public class PluginInfoApi {
         this.httpClient = httpClient;
     }
 
-    /*
     public PluginInfos getPluginsInfo( final RequestOptions inputOptions) throws KillBillClientException {
 
 
@@ -45,6 +45,5 @@ public class PluginInfoApi {
 
         return httpClient.doGet(uri, PluginInfos.class, requestOptions);
     }
-    */
 
 }

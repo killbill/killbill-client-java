@@ -48,6 +48,7 @@ public class CreditApi {
             .withQueryParams(queryParams)
             .build();
 
+
         return httpClient.doPost(uri, body, Credit.class, requestOptions);
     }
 

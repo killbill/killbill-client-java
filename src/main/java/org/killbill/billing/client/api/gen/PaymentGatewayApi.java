@@ -4,9 +4,8 @@ package org.killbill.billing.client.api.gen;
 import org.killbill.billing.client.model.gen.ComboHostedPaymentPage;
 import org.killbill.billing.client.model.gen.HostedPaymentPageFields;
 import org.killbill.billing.client.model.gen.HostedPaymentPageFormDescriptor;
-
-import java.util.List;
 import java.util.UUID;
+import java.util.List;
 
 
 import com.google.common.collect.Multimap;
@@ -38,7 +37,7 @@ public class PaymentGatewayApi {
         this.httpClient = httpClient;
     }
 
-    public ComboHostedPaymentPage buildComboFormDescriptor(final ComboHostedPaymentPage body, final List<String> controlPluginName, final List<String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public HostedPaymentPageFormDescriptor buildComboFormDescriptor(final ComboHostedPaymentPage body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling buildComboFormDescriptor");
 
         final String uri = "/1.0/kb/paymentGateways/hosted/form";
@@ -53,10 +52,11 @@ public class PaymentGatewayApi {
             .withQueryParams(queryParams)
             .build();
 
-        return httpClient.doPost(uri, body, ComboHostedPaymentPage.class, requestOptions);
+
+        return httpClient.doPost(uri, body, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
 
-    public HostedPaymentPageFields buildFormDescriptor(final HostedPaymentPageFields body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling buildFormDescriptor");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling buildFormDescriptor");
 
@@ -74,7 +74,8 @@ public class PaymentGatewayApi {
             .withQueryParams(queryParams)
             .build();
 
-        return httpClient.doPost(uri, body, HostedPaymentPageFields.class, requestOptions);
+
+        return httpClient.doPost(uri, body, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
 
     public String processNotification(final String body, final String pluginName, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -93,6 +94,7 @@ public class PaymentGatewayApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         return httpClient.doPost(uri, body, String.class, requestOptions);
     }

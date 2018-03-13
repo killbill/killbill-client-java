@@ -2,13 +2,17 @@ package org.killbill.billing.client.api.gen;
 
 
 import org.killbill.billing.client.model.gen.BlockingState;
-import org.killbill.billing.client.model.gen.BulkBaseSubscriptionAndAddOns;
+import org.killbill.billing.client.model.gen.BulkSubscriptionsBundle;
+import org.killbill.billing.client.model.gen.Bundle;
 import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.Subscription;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
-import org.killbill.billing.client.model.CustomFields;
 import java.util.List;
+import org.killbill.billing.client.model.CustomFields;
+import org.killbill.billing.client.model.Subscriptions;
+import org.killbill.billing.client.model.Bundles;
+import org.killbill.billing.client.model.BulkSubscriptionsBundles;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Tags;
 
@@ -116,6 +120,7 @@ public class SubscriptionApi {
             .withFollowLocation(followLocation)
             .build();
 
+
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
@@ -141,10 +146,11 @@ public class SubscriptionApi {
             .withQueryParams(queryParams)
             .build();
 
+
         return httpClient.doPost(uri, body, Subscription.class, requestOptions);
     }
 
-    public void createEntitlementWithAddOns(final Subscription body, final String requestedDate, final String entitlementDate, final String billingDate, final Boolean migrated, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle createEntitlementWithAddOns(final Subscriptions body, final String requestedDate, final String entitlementDate, final String billingDate, final Boolean migrated, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createEntitlementWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createEntitlementWithAddOns";
@@ -165,10 +171,11 @@ public class SubscriptionApi {
             .withQueryParams(queryParams)
             .build();
 
-        httpClient.doPost(uri, null, requestOptions);
+
+        return httpClient.doPost(uri, body, Bundle.class, requestOptions);
     }
 
-    public BulkBaseSubscriptionAndAddOns createEntitlementsWithAddOns(final BulkBaseSubscriptionAndAddOns body, final String requestedDate, final String entitlementDate, final String billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundles createEntitlementsWithAddOns(final BulkSubscriptionsBundles body, final String requestedDate, final String entitlementDate, final String billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createEntitlementsWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createEntitlementsWithAddOns";
@@ -189,7 +196,8 @@ public class SubscriptionApi {
             .withQueryParams(queryParams)
             .build();
 
-        return httpClient.doPost(uri, body, BulkBaseSubscriptionAndAddOns.class, requestOptions);
+
+        return httpClient.doPost(uri, body, Bundles.class, requestOptions);
     }
 
     public void createTags(final UUID subscriptionId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -206,6 +214,7 @@ public class SubscriptionApi {
             .withFollowLocation(followLocation)
             .withQueryParams(queryParams)
             .build();
+
 
         httpClient.doPost(uri, null, requestOptions);
     }
