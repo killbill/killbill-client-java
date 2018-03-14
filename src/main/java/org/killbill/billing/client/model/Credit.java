@@ -1,7 +1,9 @@
 /*
  * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014-2018 Groupon, Inc
+ * Copyright 2014-2018 The Billing Project, LLC
  *
- * Ning licenses this file to you under the Apache License, version 2.0
+ * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
  * License.  You may obtain a copy of the License at:
  *
@@ -35,8 +37,8 @@ public class Credit extends KillBillObject {
     private LocalDate effectiveDate;
     private UUID accountId;
     private String description;
+    private String itemDetails;
     private String currency;
-
 
     public Credit() {}
 
@@ -48,6 +50,7 @@ public class Credit extends KillBillObject {
                   @JsonProperty("effectiveDate") final LocalDate effectiveDate,
                   @JsonProperty("accountId") final UUID accountId,
                   @JsonProperty("description") final String description,
+                  @JsonProperty("itemDetails") final String itemDetails,
                   @JsonProperty("auditLogs") @Nullable final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.creditAmount = creditAmount;
@@ -56,6 +59,7 @@ public class Credit extends KillBillObject {
         this.invoiceNumber = invoiceNumber;
         this.effectiveDate = effectiveDate;
         this.description = description;
+        this.itemDetails = itemDetails;
         this.accountId = accountId;
     }
 
@@ -115,6 +119,14 @@ public class Credit extends KillBillObject {
         this.description = description;
     }
 
+    public String getItemDetails() {
+        return itemDetails;
+    }
+
+    public void setItemDetails(final String itemDetails) {
+        this.itemDetails = itemDetails;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Credit{");
@@ -124,6 +136,7 @@ public class Credit extends KillBillObject {
         sb.append(", invoiceNumber='").append(invoiceNumber).append('\'');
         sb.append(", effectiveDate=").append(effectiveDate);
         sb.append(", description=").append(description);
+        sb.append(", itemDetails=").append(itemDetails);
         sb.append(", accountId='").append(accountId).append('\'');
         sb.append('}');
         return sb.toString();
@@ -161,6 +174,9 @@ public class Credit extends KillBillObject {
         if (description != null ? !description.equals(credit.description) : credit.description != null) {
             return false;
         }
+        if (itemDetails != null ? !itemDetails.equals(credit.itemDetails) : credit.itemDetails != null) {
+            return false;
+        }
 
         return true;
     }
@@ -172,6 +188,7 @@ public class Credit extends KillBillObject {
         result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
         result = 31 * result + (invoiceNumber != null ? invoiceNumber.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (itemDetails != null ? itemDetails.hashCode() : 0);
         result = 31 * result + (effectiveDate != null ? effectiveDate.hashCode() : 0);
         result = 31 * result + (accountId != null ? accountId.hashCode() : 0);
         return result;
