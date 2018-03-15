@@ -98,6 +98,7 @@ public class PaymentTransactionApi {
         return httpClient.doPost(uri, null, Tags.class, requestOptions);
     }
 
+
     public void deleteCustomFields(final UUID transactionId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling deleteCustomFields");
 
@@ -116,6 +117,7 @@ public class PaymentTransactionApi {
 
         httpClient.doDelete(uri, requestOptions);
     }
+
 
     public void deleteTags(final UUID transactionId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling deleteTags");
@@ -136,6 +138,10 @@ public class PaymentTransactionApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
+    public CustomFields getCustomFields(final UUID transactionId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getCustomFields(transactionId, AuditLevel.NONE, inputOptions);
+    }
+
     public CustomFields getCustomFields(final UUID transactionId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getCustomFields");
 
@@ -153,6 +159,10 @@ public class PaymentTransactionApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public Payment getPaymentByTransactionId(final UUID transactionId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentByTransactionId(transactionId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
     public Payment getPaymentByTransactionId(final UUID transactionId, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -181,6 +191,10 @@ public class PaymentTransactionApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Payment.class, requestOptions);
+    }
+
+    public Tags getTags(final UUID transactionId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getTags(transactionId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
     public Tags getTags(final UUID transactionId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {

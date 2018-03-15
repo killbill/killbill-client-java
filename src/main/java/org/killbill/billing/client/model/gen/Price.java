@@ -21,7 +21,6 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.math.BigDecimal;
-import org.killbill.billing.catalog.api.Currency;
 
 /**
  *           DO NOT EDIT !!!
@@ -33,36 +32,36 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Price extends KillBillObject {
 
+    private String currency = null;
+
     private BigDecimal value = null;
 
-    private Currency currency = null;
 
-    public Price value(BigDecimal value) {
-        this.value = value;
-        return this;
+    public Price() {
     }
 
-    
-    public BigDecimal getValue() {
-        return value;
-    }
-
-    public void setValue(BigDecimal value) {
+    public Price(final String currency,
+                     final BigDecimal value) {
+        this.currency = currency;
         this.value = value;
     }
 
-    public Price currency(Currency currency) {
+    public Price setCurrency(final String currency) {
         this.currency = currency;
         return this;
     }
 
-    
-    public Currency getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+    public Price setValue(final BigDecimal value) {
+        this.value = value;
+        return this;
+    }
+
+    public BigDecimal getValue() {
+        return value;
     }
 
 
@@ -75,13 +74,14 @@ public class Price extends KillBillObject {
             return false;
         }
         Price price = (Price) o;
-        return Objects.equals(this.value, price.value) &&
-        Objects.equals(this.currency, price.currency);
+        return Objects.equals(this.currency, price.currency) &&
+        Objects.equals(this.value, price.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value, currency);
+        return Objects.hash(currency,
+                            value);
     }
 
 
@@ -90,8 +90,8 @@ public class Price extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class Price {\n");
         
-        sb.append("    value: ").append(toIndentedString(value)).append("\n");
         sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
+        sb.append("    value: ").append(toIndentedString(value)).append("\n");
         sb.append("}");
         return sb.toString();
     }

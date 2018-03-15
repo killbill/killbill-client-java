@@ -41,51 +41,48 @@ public class SubscriptionUsageRecord extends KillBillObject {
 
     private List<UnitUsageRecord> unitUsageRecords = new ArrayList<UnitUsageRecord>();
 
-    public SubscriptionUsageRecord subscriptionId(UUID subscriptionId) {
+
+    public SubscriptionUsageRecord() {
+    }
+
+    public SubscriptionUsageRecord(final UUID subscriptionId,
+                     final String trackingId,
+                     final List<UnitUsageRecord> unitUsageRecords) {
+        this.subscriptionId = subscriptionId;
+        this.trackingId = trackingId;
+        this.unitUsageRecords = unitUsageRecords;
+    }
+
+    public SubscriptionUsageRecord setSubscriptionId(final UUID subscriptionId) {
         this.subscriptionId = subscriptionId;
         return this;
     }
 
-    
     public UUID getSubscriptionId() {
         return subscriptionId;
     }
 
-    public void setSubscriptionId(UUID subscriptionId) {
-        this.subscriptionId = subscriptionId;
-    }
-
-    public SubscriptionUsageRecord trackingId(String trackingId) {
+    public SubscriptionUsageRecord setTrackingId(final String trackingId) {
         this.trackingId = trackingId;
         return this;
     }
 
-    
     public String getTrackingId() {
         return trackingId;
     }
 
-    public void setTrackingId(String trackingId) {
-        this.trackingId = trackingId;
-    }
-
-    public SubscriptionUsageRecord unitUsageRecords(List<UnitUsageRecord> unitUsageRecords) {
+    public SubscriptionUsageRecord setUnitUsageRecords(final List<UnitUsageRecord> unitUsageRecords) {
         this.unitUsageRecords = unitUsageRecords;
         return this;
     }
 
-    public SubscriptionUsageRecord addUnitUsageRecordsItem(UnitUsageRecord unitUsageRecordsItem) {
+    public SubscriptionUsageRecord addUnitUsageRecordsItem(final UnitUsageRecord unitUsageRecordsItem) {
         this.unitUsageRecords.add(unitUsageRecordsItem);
         return this;
     }
 
-    
     public List<UnitUsageRecord> getUnitUsageRecords() {
         return unitUsageRecords;
-    }
-
-    public void setUnitUsageRecords(List<UnitUsageRecord> unitUsageRecords) {
-        this.unitUsageRecords = unitUsageRecords;
     }
 
 
@@ -105,7 +102,9 @@ public class SubscriptionUsageRecord extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(subscriptionId, trackingId, unitUsageRecords);
+        return Objects.hash(subscriptionId,
+                            trackingId,
+                            unitUsageRecords);
     }
 
 

@@ -36,32 +36,32 @@ public class AccountEmail extends KillBillObject {
 
     private String email = null;
 
-    public AccountEmail accountId(UUID accountId) {
+
+    public AccountEmail() {
+    }
+
+    public AccountEmail(final UUID accountId,
+                     final String email) {
+        this.accountId = accountId;
+        this.email = email;
+    }
+
+    public AccountEmail setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public AccountEmail email(String email) {
+    public AccountEmail setEmail(final String email) {
         this.email = email;
         return this;
     }
 
-    
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
 
@@ -80,7 +80,8 @@ public class AccountEmail extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, email);
+        return Objects.hash(accountId,
+                            email);
     }
 
 

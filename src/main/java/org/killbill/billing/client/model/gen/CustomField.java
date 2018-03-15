@@ -43,74 +43,65 @@ public class CustomField extends KillBillObject {
 
     private String value = null;
 
-    public CustomField customFieldId(UUID customFieldId) {
+
+    public CustomField() {
+    }
+
+    public CustomField(final UUID customFieldId,
+                     final UUID objectId,
+                     final ObjectType objectType,
+                     final String name,
+                     final String value) {
+        this.customFieldId = customFieldId;
+        this.objectId = objectId;
+        this.objectType = objectType;
+        this.name = name;
+        this.value = value;
+    }
+
+    public CustomField setCustomFieldId(final UUID customFieldId) {
         this.customFieldId = customFieldId;
         return this;
     }
 
-    
     public UUID getCustomFieldId() {
         return customFieldId;
     }
 
-    public void setCustomFieldId(UUID customFieldId) {
-        this.customFieldId = customFieldId;
-    }
-
-    public CustomField objectId(UUID objectId) {
+    public CustomField setObjectId(final UUID objectId) {
         this.objectId = objectId;
         return this;
     }
 
-    
     public UUID getObjectId() {
         return objectId;
     }
 
-    public void setObjectId(UUID objectId) {
-        this.objectId = objectId;
-    }
-
-    public CustomField objectType(ObjectType objectType) {
+    public CustomField setObjectType(final ObjectType objectType) {
         this.objectType = objectType;
         return this;
     }
 
-    
     public ObjectType getObjectType() {
         return objectType;
     }
 
-    public void setObjectType(ObjectType objectType) {
-        this.objectType = objectType;
-    }
-
-    public CustomField name(String name) {
+    public CustomField setName(final String name) {
         this.name = name;
         return this;
     }
 
-    
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public CustomField value(String value) {
+    public CustomField setValue(final String value) {
         this.value = value;
         return this;
     }
 
-    
     public String getValue() {
         return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 
 
@@ -132,7 +123,11 @@ public class CustomField extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(customFieldId, objectId, objectType, name, value);
+        return Objects.hash(customFieldId,
+                            objectId,
+                            objectType,
+                            name,
+                            value);
     }
 
 

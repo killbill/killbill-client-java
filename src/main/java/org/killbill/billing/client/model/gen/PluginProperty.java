@@ -37,46 +37,43 @@ public class PluginProperty extends KillBillObject {
 
     private Boolean isUpdatable = false;
 
-    public PluginProperty key(String key) {
+
+    public PluginProperty() {
+    }
+
+    public PluginProperty(final String key,
+                     final String value,
+                     final Boolean isUpdatable) {
+        this.key = key;
+        this.value = value;
+        this.isUpdatable = isUpdatable;
+    }
+
+    public PluginProperty setKey(final String key) {
         this.key = key;
         return this;
     }
 
-    
     public String getKey() {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public PluginProperty value(String value) {
+    public PluginProperty setValue(final String value) {
         this.value = value;
         return this;
     }
 
-    
     public String getValue() {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public PluginProperty isUpdatable(Boolean isUpdatable) {
+    public PluginProperty setIsUpdatable(final Boolean isUpdatable) {
         this.isUpdatable = isUpdatable;
         return this;
     }
 
-    
     public Boolean isIsUpdatable() {
         return isUpdatable;
-    }
-
-    public void setIsUpdatable(Boolean isUpdatable) {
-        this.isUpdatable = isUpdatable;
     }
 
 
@@ -96,7 +93,9 @@ public class PluginProperty extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(key, value, isUpdatable);
+        return Objects.hash(key,
+                            value,
+                            isUpdatable);
     }
 
 

@@ -63,166 +63,141 @@ public class PaymentAttempt extends KillBillObject {
 
     private List<PluginProperty> pluginProperties = null;
 
-    public PaymentAttempt accountId(UUID accountId) {
+
+    public PaymentAttempt() {
+    }
+
+    public PaymentAttempt(final UUID accountId,
+                     final UUID paymentMethodId,
+                     final String paymentExternalKey,
+                     final UUID transactionId,
+                     final String transactionExternalKey,
+                     final TransactionType transactionType,
+                     final DateTime effectiveDate,
+                     final String stateName,
+                     final BigDecimal amount,
+                     final Currency currency,
+                     final String pluginName,
+                     final List<PluginProperty> pluginProperties) {
+        this.accountId = accountId;
+        this.paymentMethodId = paymentMethodId;
+        this.paymentExternalKey = paymentExternalKey;
+        this.transactionId = transactionId;
+        this.transactionExternalKey = transactionExternalKey;
+        this.transactionType = transactionType;
+        this.effectiveDate = effectiveDate;
+        this.stateName = stateName;
+        this.amount = amount;
+        this.currency = currency;
+        this.pluginName = pluginName;
+        this.pluginProperties = pluginProperties;
+    }
+
+    public PaymentAttempt setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public PaymentAttempt paymentMethodId(UUID paymentMethodId) {
+    public PaymentAttempt setPaymentMethodId(final UUID paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
         return this;
     }
 
-    
     public UUID getPaymentMethodId() {
         return paymentMethodId;
     }
 
-    public void setPaymentMethodId(UUID paymentMethodId) {
-        this.paymentMethodId = paymentMethodId;
-    }
-
-    public PaymentAttempt paymentExternalKey(String paymentExternalKey) {
+    public PaymentAttempt setPaymentExternalKey(final String paymentExternalKey) {
         this.paymentExternalKey = paymentExternalKey;
         return this;
     }
 
-    
     public String getPaymentExternalKey() {
         return paymentExternalKey;
     }
 
-    public void setPaymentExternalKey(String paymentExternalKey) {
-        this.paymentExternalKey = paymentExternalKey;
-    }
-
-    public PaymentAttempt transactionId(UUID transactionId) {
+    public PaymentAttempt setTransactionId(final UUID transactionId) {
         this.transactionId = transactionId;
         return this;
     }
 
-    
     public UUID getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(UUID transactionId) {
-        this.transactionId = transactionId;
-    }
-
-    public PaymentAttempt transactionExternalKey(String transactionExternalKey) {
+    public PaymentAttempt setTransactionExternalKey(final String transactionExternalKey) {
         this.transactionExternalKey = transactionExternalKey;
         return this;
     }
 
-    
     public String getTransactionExternalKey() {
         return transactionExternalKey;
     }
 
-    public void setTransactionExternalKey(String transactionExternalKey) {
-        this.transactionExternalKey = transactionExternalKey;
-    }
-
-    public PaymentAttempt transactionType(TransactionType transactionType) {
+    public PaymentAttempt setTransactionType(final TransactionType transactionType) {
         this.transactionType = transactionType;
         return this;
     }
 
-    
     public TransactionType getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(TransactionType transactionType) {
-        this.transactionType = transactionType;
-    }
-
-    public PaymentAttempt effectiveDate(DateTime effectiveDate) {
+    public PaymentAttempt setEffectiveDate(final DateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    
     public DateTime getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(DateTime effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public PaymentAttempt stateName(String stateName) {
+    public PaymentAttempt setStateName(final String stateName) {
         this.stateName = stateName;
         return this;
     }
 
-    
     public String getStateName() {
         return stateName;
     }
 
-    public void setStateName(String stateName) {
-        this.stateName = stateName;
-    }
-
-    public PaymentAttempt amount(BigDecimal amount) {
+    public PaymentAttempt setAmount(final BigDecimal amount) {
         this.amount = amount;
         return this;
     }
 
-    
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public PaymentAttempt currency(Currency currency) {
+    public PaymentAttempt setCurrency(final Currency currency) {
         this.currency = currency;
         return this;
     }
 
-    
     public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-    public PaymentAttempt pluginName(String pluginName) {
+    public PaymentAttempt setPluginName(final String pluginName) {
         this.pluginName = pluginName;
         return this;
     }
 
-    
     public String getPluginName() {
         return pluginName;
     }
 
-    public void setPluginName(String pluginName) {
-        this.pluginName = pluginName;
-    }
-
-    public PaymentAttempt pluginProperties(List<PluginProperty> pluginProperties) {
+    public PaymentAttempt setPluginProperties(final List<PluginProperty> pluginProperties) {
         this.pluginProperties = pluginProperties;
         return this;
     }
 
-    public PaymentAttempt addPluginPropertiesItem(PluginProperty pluginPropertiesItem) {
+    public PaymentAttempt addPluginPropertiesItem(final PluginProperty pluginPropertiesItem) {
         if (this.pluginProperties == null) {
             this.pluginProperties = new ArrayList<PluginProperty>();
         }
@@ -230,13 +205,8 @@ public class PaymentAttempt extends KillBillObject {
         return this;
     }
 
-    
     public List<PluginProperty> getPluginProperties() {
         return pluginProperties;
-    }
-
-    public void setPluginProperties(List<PluginProperty> pluginProperties) {
-        this.pluginProperties = pluginProperties;
     }
 
 
@@ -265,7 +235,18 @@ public class PaymentAttempt extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, paymentMethodId, paymentExternalKey, transactionId, transactionExternalKey, transactionType, effectiveDate, stateName, amount, currency, pluginName, pluginProperties);
+        return Objects.hash(accountId,
+                            paymentMethodId,
+                            paymentExternalKey,
+                            transactionId,
+                            transactionExternalKey,
+                            transactionType,
+                            effectiveDate,
+                            stateName,
+                            amount,
+                            currency,
+                            pluginName,
+                            pluginProperties);
     }
 
 

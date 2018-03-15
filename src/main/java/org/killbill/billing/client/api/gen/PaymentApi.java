@@ -60,6 +60,7 @@ public class PaymentApi {
         this.httpClient = httpClient;
     }
 
+
     public void cancelScheduledPaymentTransactionByExternalKey(final String transactionExternalKey,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionExternalKey, "Missing the required parameter 'transactionExternalKey' when calling cancelScheduledPaymentTransactionByExternalKey");
 
@@ -77,6 +78,7 @@ public class PaymentApi {
 
         httpClient.doDelete(uri, requestOptions);
     }
+
 
     public void cancelScheduledPaymentTransactionById(final UUID paymentTransactionId,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentTransactionId, "Missing the required parameter 'paymentTransactionId' when calling cancelScheduledPaymentTransactionById");
@@ -349,6 +351,7 @@ public class PaymentApi {
         return httpClient.doPost(uri, null, Tags.class, requestOptions);
     }
 
+
     public void deleteCustomFields(final UUID paymentId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling deleteCustomFields");
 
@@ -367,6 +370,7 @@ public class PaymentApi {
 
         httpClient.doDelete(uri, requestOptions);
     }
+
 
     public void deleteTags(final UUID paymentId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling deleteTags");
@@ -387,6 +391,10 @@ public class PaymentApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
+    public CustomFields getCustomFields(final UUID paymentId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getCustomFields(paymentId, AuditLevel.NONE, inputOptions);
+    }
+
     public CustomFields getCustomFields(final UUID paymentId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getCustomFields");
 
@@ -404,6 +412,10 @@ public class PaymentApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public Payment getPayment(final UUID paymentId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getPayment(paymentId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
     public Payment getPayment(final UUID paymentId, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -434,6 +446,10 @@ public class PaymentApi {
         return httpClient.doGet(uri, Payment.class, requestOptions);
     }
 
+    public Payment getPaymentByExternalKey(final String externalKey, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentByExternalKey(externalKey, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
+    }
+
     public Payment getPaymentByExternalKey(final String externalKey, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getPaymentByExternalKey");
 
@@ -462,6 +478,10 @@ public class PaymentApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Payment.class, requestOptions);
+    }
+
+    public Payments getPayments(final String pluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getPayments(Long.valueOf(0), Long.valueOf(100), pluginName, pluginProperty, AuditLevel.NONE, Boolean.valueOf(false), Boolean.valueOf(false), inputOptions);
     }
 
     public Payments getPayments(final Long offset, final Long limit, final String pluginName, final List<String> pluginProperty, final AuditLevel auditLevel, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -497,6 +517,10 @@ public class PaymentApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Payments.class, requestOptions);
+    }
+
+    public Tags getTags(final UUID paymentId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getTags(paymentId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
     public Tags getTags(final UUID paymentId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -587,6 +611,10 @@ public class PaymentApi {
         return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
+    public Payments searchPayments(final String searchKey, final String pluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return searchPayments(searchKey, Long.valueOf(0), Long.valueOf(100), pluginName, pluginProperty, AuditLevel.NONE, Boolean.valueOf(false), Boolean.valueOf(false), inputOptions);
+    }
+
     public Payments searchPayments(final String searchKey, final Long offset, final Long limit, final String pluginName, final List<String> pluginProperty, final AuditLevel auditLevel, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchPayments");
 
@@ -624,6 +652,7 @@ public class PaymentApi {
         return httpClient.doGet(uri, Payments.class, requestOptions);
     }
 
+
     public void voidPayment(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling voidPayment");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling voidPayment");
@@ -646,6 +675,7 @@ public class PaymentApi {
 
         httpClient.doDelete(uri, requestOptions);
     }
+
 
     public void voidPaymentByExternalKey(final PaymentTransaction body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling voidPaymentByExternalKey");

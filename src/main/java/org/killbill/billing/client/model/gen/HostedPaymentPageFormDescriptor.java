@@ -46,54 +46,55 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
 
     private Map<String, Object> properties = null;
 
-    public HostedPaymentPageFormDescriptor kbAccountId(UUID kbAccountId) {
+
+    public HostedPaymentPageFormDescriptor() {
+    }
+
+    public HostedPaymentPageFormDescriptor(final UUID kbAccountId,
+                     final String formMethod,
+                     final String formUrl,
+                     final Map<String, Object> formFields,
+                     final Map<String, Object> properties) {
+        this.kbAccountId = kbAccountId;
+        this.formMethod = formMethod;
+        this.formUrl = formUrl;
+        this.formFields = formFields;
+        this.properties = properties;
+    }
+
+    public HostedPaymentPageFormDescriptor setKbAccountId(final UUID kbAccountId) {
         this.kbAccountId = kbAccountId;
         return this;
     }
 
-    
     public UUID getKbAccountId() {
         return kbAccountId;
     }
 
-    public void setKbAccountId(UUID kbAccountId) {
-        this.kbAccountId = kbAccountId;
-    }
-
-    public HostedPaymentPageFormDescriptor formMethod(String formMethod) {
+    public HostedPaymentPageFormDescriptor setFormMethod(final String formMethod) {
         this.formMethod = formMethod;
         return this;
     }
 
-    
     public String getFormMethod() {
         return formMethod;
     }
 
-    public void setFormMethod(String formMethod) {
-        this.formMethod = formMethod;
-    }
-
-    public HostedPaymentPageFormDescriptor formUrl(String formUrl) {
+    public HostedPaymentPageFormDescriptor setFormUrl(final String formUrl) {
         this.formUrl = formUrl;
         return this;
     }
 
-    
     public String getFormUrl() {
         return formUrl;
     }
 
-    public void setFormUrl(String formUrl) {
-        this.formUrl = formUrl;
-    }
-
-    public HostedPaymentPageFormDescriptor formFields(Map<String, Object> formFields) {
+    public HostedPaymentPageFormDescriptor setFormFields(final Map<String, Object> formFields) {
         this.formFields = formFields;
         return this;
     }
 
-    public HostedPaymentPageFormDescriptor putFormFieldsItem(String key, Object formFieldsItem) {
+    public HostedPaymentPageFormDescriptor putFormFieldsItem(final String key, final Object formFieldsItem) {
         if (this.formFields == null) {
             this.formFields = new HashMap<String, Object>();
         }
@@ -101,21 +102,16 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
         return this;
     }
 
-    
     public Map<String, Object> getFormFields() {
         return formFields;
     }
 
-    public void setFormFields(Map<String, Object> formFields) {
-        this.formFields = formFields;
-    }
-
-    public HostedPaymentPageFormDescriptor properties(Map<String, Object> properties) {
+    public HostedPaymentPageFormDescriptor setProperties(final Map<String, Object> properties) {
         this.properties = properties;
         return this;
     }
 
-    public HostedPaymentPageFormDescriptor putPropertiesItem(String key, Object propertiesItem) {
+    public HostedPaymentPageFormDescriptor putPropertiesItem(final String key, final Object propertiesItem) {
         if (this.properties == null) {
             this.properties = new HashMap<String, Object>();
         }
@@ -123,13 +119,8 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
         return this;
     }
 
-    
     public Map<String, Object> getProperties() {
         return properties;
-    }
-
-    public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
     }
 
 
@@ -151,7 +142,11 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(kbAccountId, formMethod, formUrl, formFields, properties);
+        return Objects.hash(kbAccountId,
+                            formMethod,
+                            formUrl,
+                            formFields,
+                            properties);
     }
 
 

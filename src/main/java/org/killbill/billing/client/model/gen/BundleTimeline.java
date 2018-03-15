@@ -43,54 +43,53 @@ public class BundleTimeline extends KillBillObject {
 
     private List<EventSubscription> events = null;
 
-    public BundleTimeline accountId(UUID accountId) {
+
+    public BundleTimeline() {
+    }
+
+    public BundleTimeline(final UUID accountId,
+                     final UUID bundleId,
+                     final String externalKey,
+                     final List<EventSubscription> events) {
+        this.accountId = accountId;
+        this.bundleId = bundleId;
+        this.externalKey = externalKey;
+        this.events = events;
+    }
+
+    public BundleTimeline setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public BundleTimeline bundleId(UUID bundleId) {
+    public BundleTimeline setBundleId(final UUID bundleId) {
         this.bundleId = bundleId;
         return this;
     }
 
-    
     public UUID getBundleId() {
         return bundleId;
     }
 
-    public void setBundleId(UUID bundleId) {
-        this.bundleId = bundleId;
-    }
-
-    public BundleTimeline externalKey(String externalKey) {
+    public BundleTimeline setExternalKey(final String externalKey) {
         this.externalKey = externalKey;
         return this;
     }
 
-    
     public String getExternalKey() {
         return externalKey;
     }
 
-    public void setExternalKey(String externalKey) {
-        this.externalKey = externalKey;
-    }
-
-    public BundleTimeline events(List<EventSubscription> events) {
+    public BundleTimeline setEvents(final List<EventSubscription> events) {
         this.events = events;
         return this;
     }
 
-    public BundleTimeline addEventsItem(EventSubscription eventsItem) {
+    public BundleTimeline addEventsItem(final EventSubscription eventsItem) {
         if (this.events == null) {
             this.events = new ArrayList<EventSubscription>();
         }
@@ -98,13 +97,8 @@ public class BundleTimeline extends KillBillObject {
         return this;
     }
 
-    
     public List<EventSubscription> getEvents() {
         return events;
-    }
-
-    public void setEvents(List<EventSubscription> events) {
-        this.events = events;
     }
 
 
@@ -125,7 +119,10 @@ public class BundleTimeline extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, bundleId, externalKey, events);
+        return Objects.hash(accountId,
+                            bundleId,
+                            externalKey,
+                            events);
     }
 
 

@@ -45,26 +45,35 @@ public class AccountTimeline extends KillBillObject {
 
     private List<InvoicePayment> payments = null;
 
-    public AccountTimeline account(Account account) {
+
+    public AccountTimeline() {
+    }
+
+    public AccountTimeline(final Account account,
+                     final List<Bundle> bundles,
+                     final List<Invoice> invoices,
+                     final List<InvoicePayment> payments) {
+        this.account = account;
+        this.bundles = bundles;
+        this.invoices = invoices;
+        this.payments = payments;
+    }
+
+    public AccountTimeline setAccount(final Account account) {
         this.account = account;
         return this;
     }
 
-    
     public Account getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public AccountTimeline bundles(List<Bundle> bundles) {
+    public AccountTimeline setBundles(final List<Bundle> bundles) {
         this.bundles = bundles;
         return this;
     }
 
-    public AccountTimeline addBundlesItem(Bundle bundlesItem) {
+    public AccountTimeline addBundlesItem(final Bundle bundlesItem) {
         if (this.bundles == null) {
             this.bundles = new ArrayList<Bundle>();
         }
@@ -72,21 +81,16 @@ public class AccountTimeline extends KillBillObject {
         return this;
     }
 
-    
     public List<Bundle> getBundles() {
         return bundles;
     }
 
-    public void setBundles(List<Bundle> bundles) {
-        this.bundles = bundles;
-    }
-
-    public AccountTimeline invoices(List<Invoice> invoices) {
+    public AccountTimeline setInvoices(final List<Invoice> invoices) {
         this.invoices = invoices;
         return this;
     }
 
-    public AccountTimeline addInvoicesItem(Invoice invoicesItem) {
+    public AccountTimeline addInvoicesItem(final Invoice invoicesItem) {
         if (this.invoices == null) {
             this.invoices = new ArrayList<Invoice>();
         }
@@ -94,21 +98,16 @@ public class AccountTimeline extends KillBillObject {
         return this;
     }
 
-    
     public List<Invoice> getInvoices() {
         return invoices;
     }
 
-    public void setInvoices(List<Invoice> invoices) {
-        this.invoices = invoices;
-    }
-
-    public AccountTimeline payments(List<InvoicePayment> payments) {
+    public AccountTimeline setPayments(final List<InvoicePayment> payments) {
         this.payments = payments;
         return this;
     }
 
-    public AccountTimeline addPaymentsItem(InvoicePayment paymentsItem) {
+    public AccountTimeline addPaymentsItem(final InvoicePayment paymentsItem) {
         if (this.payments == null) {
             this.payments = new ArrayList<InvoicePayment>();
         }
@@ -116,13 +115,8 @@ public class AccountTimeline extends KillBillObject {
         return this;
     }
 
-    
     public List<InvoicePayment> getPayments() {
         return payments;
-    }
-
-    public void setPayments(List<InvoicePayment> payments) {
-        this.payments = payments;
     }
 
 
@@ -143,7 +137,10 @@ public class AccountTimeline extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(account, bundles, invoices, payments);
+        return Objects.hash(account,
+                            bundles,
+                            invoices,
+                            payments);
     }
 
 

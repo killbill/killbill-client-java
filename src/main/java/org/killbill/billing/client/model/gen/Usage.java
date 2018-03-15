@@ -22,13 +22,6 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-import org.killbill.billing.catalog.api.BillingMode;
-import org.killbill.billing.catalog.api.BillingPeriod;
-import org.killbill.billing.catalog.api.TierBlockPolicy;
-import org.killbill.billing.catalog.api.UsageType;
-import org.killbill.billing.client.model.gen.Block;
-import org.killbill.billing.client.model.gen.InternationalPrice;
-import org.killbill.billing.client.model.gen.Limit;
 import org.killbill.billing.client.model.gen.Tier;
 
 /**
@@ -41,48 +34,35 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Usage extends KillBillObject {
 
-    private BillingPeriod billingPeriod = null;
+    private String billingPeriod = null;
 
     private List<Tier> tiers = null;
 
-    private BillingMode billingMode = null;
 
-    private UsageType usageType = null;
+    public Usage() {
+    }
 
-    private TierBlockPolicy tierBlockPolicy = null;
+    public Usage(final String billingPeriod,
+                     final List<Tier> tiers) {
+        this.billingPeriod = billingPeriod;
+        this.tiers = tiers;
+    }
 
-    private List<Limit> limits = null;
-
-    private List<Block> blocks = null;
-
-    private InternationalPrice fixedPrice = null;
-
-    private InternationalPrice recurringPrice = null;
-
-    private String name = null;
-
-    private String prettyName = null;
-
-    public Usage billingPeriod(BillingPeriod billingPeriod) {
+    public Usage setBillingPeriod(final String billingPeriod) {
         this.billingPeriod = billingPeriod;
         return this;
     }
 
-    
-    public BillingPeriod getBillingPeriod() {
+    public String getBillingPeriod() {
         return billingPeriod;
     }
 
-    public void setBillingPeriod(BillingPeriod billingPeriod) {
-        this.billingPeriod = billingPeriod;
-    }
-
-    public Usage tiers(List<Tier> tiers) {
+    public Usage setTiers(final List<Tier> tiers) {
         this.tiers = tiers;
         return this;
     }
 
-    public Usage addTiersItem(Tier tiersItem) {
+    public Usage addTiersItem(final Tier tiersItem) {
         if (this.tiers == null) {
             this.tiers = new ArrayList<Tier>();
         }
@@ -90,155 +70,8 @@ public class Usage extends KillBillObject {
         return this;
     }
 
-    
     public List<Tier> getTiers() {
         return tiers;
-    }
-
-    public void setTiers(List<Tier> tiers) {
-        this.tiers = tiers;
-    }
-
-    public Usage billingMode(BillingMode billingMode) {
-        this.billingMode = billingMode;
-        return this;
-    }
-
-    
-    public BillingMode getBillingMode() {
-        return billingMode;
-    }
-
-    public void setBillingMode(BillingMode billingMode) {
-        this.billingMode = billingMode;
-    }
-
-    public Usage usageType(UsageType usageType) {
-        this.usageType = usageType;
-        return this;
-    }
-
-    
-    public UsageType getUsageType() {
-        return usageType;
-    }
-
-    public void setUsageType(UsageType usageType) {
-        this.usageType = usageType;
-    }
-
-    public Usage tierBlockPolicy(TierBlockPolicy tierBlockPolicy) {
-        this.tierBlockPolicy = tierBlockPolicy;
-        return this;
-    }
-
-    
-    public TierBlockPolicy getTierBlockPolicy() {
-        return tierBlockPolicy;
-    }
-
-    public void setTierBlockPolicy(TierBlockPolicy tierBlockPolicy) {
-        this.tierBlockPolicy = tierBlockPolicy;
-    }
-
-    public Usage limits(List<Limit> limits) {
-        this.limits = limits;
-        return this;
-    }
-
-    public Usage addLimitsItem(Limit limitsItem) {
-        if (this.limits == null) {
-            this.limits = new ArrayList<Limit>();
-        }
-        this.limits.add(limitsItem);
-        return this;
-    }
-
-    
-    public List<Limit> getLimits() {
-        return limits;
-    }
-
-    public void setLimits(List<Limit> limits) {
-        this.limits = limits;
-    }
-
-    public Usage blocks(List<Block> blocks) {
-        this.blocks = blocks;
-        return this;
-    }
-
-    public Usage addBlocksItem(Block blocksItem) {
-        if (this.blocks == null) {
-            this.blocks = new ArrayList<Block>();
-        }
-        this.blocks.add(blocksItem);
-        return this;
-    }
-
-    
-    public List<Block> getBlocks() {
-        return blocks;
-    }
-
-    public void setBlocks(List<Block> blocks) {
-        this.blocks = blocks;
-    }
-
-    public Usage fixedPrice(InternationalPrice fixedPrice) {
-        this.fixedPrice = fixedPrice;
-        return this;
-    }
-
-    
-    public InternationalPrice getFixedPrice() {
-        return fixedPrice;
-    }
-
-    public void setFixedPrice(InternationalPrice fixedPrice) {
-        this.fixedPrice = fixedPrice;
-    }
-
-    public Usage recurringPrice(InternationalPrice recurringPrice) {
-        this.recurringPrice = recurringPrice;
-        return this;
-    }
-
-    
-    public InternationalPrice getRecurringPrice() {
-        return recurringPrice;
-    }
-
-    public void setRecurringPrice(InternationalPrice recurringPrice) {
-        this.recurringPrice = recurringPrice;
-    }
-
-    public Usage name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Usage prettyName(String prettyName) {
-        this.prettyName = prettyName;
-        return this;
-    }
-
-    
-    public String getPrettyName() {
-        return prettyName;
-    }
-
-    public void setPrettyName(String prettyName) {
-        this.prettyName = prettyName;
     }
 
 
@@ -252,21 +85,13 @@ public class Usage extends KillBillObject {
         }
         Usage usage = (Usage) o;
         return Objects.equals(this.billingPeriod, usage.billingPeriod) &&
-        Objects.equals(this.tiers, usage.tiers) &&
-        Objects.equals(this.billingMode, usage.billingMode) &&
-        Objects.equals(this.usageType, usage.usageType) &&
-        Objects.equals(this.tierBlockPolicy, usage.tierBlockPolicy) &&
-        Objects.equals(this.limits, usage.limits) &&
-        Objects.equals(this.blocks, usage.blocks) &&
-        Objects.equals(this.fixedPrice, usage.fixedPrice) &&
-        Objects.equals(this.recurringPrice, usage.recurringPrice) &&
-        Objects.equals(this.name, usage.name) &&
-        Objects.equals(this.prettyName, usage.prettyName);
+        Objects.equals(this.tiers, usage.tiers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(billingPeriod, tiers, billingMode, usageType, tierBlockPolicy, limits, blocks, fixedPrice, recurringPrice, name, prettyName);
+        return Objects.hash(billingPeriod,
+                            tiers);
     }
 
 
@@ -277,15 +102,6 @@ public class Usage extends KillBillObject {
         
         sb.append("    billingPeriod: ").append(toIndentedString(billingPeriod)).append("\n");
         sb.append("    tiers: ").append(toIndentedString(tiers)).append("\n");
-        sb.append("    billingMode: ").append(toIndentedString(billingMode)).append("\n");
-        sb.append("    usageType: ").append(toIndentedString(usageType)).append("\n");
-        sb.append("    tierBlockPolicy: ").append(toIndentedString(tierBlockPolicy)).append("\n");
-        sb.append("    limits: ").append(toIndentedString(limits)).append("\n");
-        sb.append("    blocks: ").append(toIndentedString(blocks)).append("\n");
-        sb.append("    fixedPrice: ").append(toIndentedString(fixedPrice)).append("\n");
-        sb.append("    recurringPrice: ").append(toIndentedString(recurringPrice)).append("\n");
-        sb.append("    name: ").append(toIndentedString(name)).append("\n");
-        sb.append("    prettyName: ").append(toIndentedString(prettyName)).append("\n");
         sb.append("}");
         return sb.toString();
     }

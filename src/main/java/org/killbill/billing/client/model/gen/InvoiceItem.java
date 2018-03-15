@@ -83,320 +83,262 @@ public class InvoiceItem extends KillBillObject {
 
     private List<InvoiceItem> childItems = null;
 
-    public InvoiceItem invoiceItemId(UUID invoiceItemId) {
+
+    public InvoiceItem() {
+    }
+
+    public InvoiceItem(final UUID invoiceItemId,
+                     final UUID invoiceId,
+                     final UUID linkedInvoiceItemId,
+                     final UUID accountId,
+                     final UUID childAccountId,
+                     final UUID bundleId,
+                     final UUID subscriptionId,
+                     final String planName,
+                     final String phaseName,
+                     final String usageName,
+                     final String prettyPlanName,
+                     final String prettyPhaseName,
+                     final String prettyUsageName,
+                     final String itemType,
+                     final String description,
+                     final LocalDate startDate,
+                     final LocalDate endDate,
+                     final BigDecimal amount,
+                     final BigDecimal rate,
+                     final String currency,
+                     final Integer quantity,
+                     final String itemDetails,
+                     final List<InvoiceItem> childItems) {
+        this.invoiceItemId = invoiceItemId;
+        this.invoiceId = invoiceId;
+        this.linkedInvoiceItemId = linkedInvoiceItemId;
+        this.accountId = accountId;
+        this.childAccountId = childAccountId;
+        this.bundleId = bundleId;
+        this.subscriptionId = subscriptionId;
+        this.planName = planName;
+        this.phaseName = phaseName;
+        this.usageName = usageName;
+        this.prettyPlanName = prettyPlanName;
+        this.prettyPhaseName = prettyPhaseName;
+        this.prettyUsageName = prettyUsageName;
+        this.itemType = itemType;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.amount = amount;
+        this.rate = rate;
+        this.currency = currency;
+        this.quantity = quantity;
+        this.itemDetails = itemDetails;
+        this.childItems = childItems;
+    }
+
+    public InvoiceItem setInvoiceItemId(final UUID invoiceItemId) {
         this.invoiceItemId = invoiceItemId;
         return this;
     }
 
-    
     public UUID getInvoiceItemId() {
         return invoiceItemId;
     }
 
-    public void setInvoiceItemId(UUID invoiceItemId) {
-        this.invoiceItemId = invoiceItemId;
-    }
-
-    public InvoiceItem invoiceId(UUID invoiceId) {
+    public InvoiceItem setInvoiceId(final UUID invoiceId) {
         this.invoiceId = invoiceId;
         return this;
     }
 
-    
     public UUID getInvoiceId() {
         return invoiceId;
     }
 
-    public void setInvoiceId(UUID invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
-    public InvoiceItem linkedInvoiceItemId(UUID linkedInvoiceItemId) {
+    public InvoiceItem setLinkedInvoiceItemId(final UUID linkedInvoiceItemId) {
         this.linkedInvoiceItemId = linkedInvoiceItemId;
         return this;
     }
 
-    
     public UUID getLinkedInvoiceItemId() {
         return linkedInvoiceItemId;
     }
 
-    public void setLinkedInvoiceItemId(UUID linkedInvoiceItemId) {
-        this.linkedInvoiceItemId = linkedInvoiceItemId;
-    }
-
-    public InvoiceItem accountId(UUID accountId) {
+    public InvoiceItem setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public InvoiceItem childAccountId(UUID childAccountId) {
+    public InvoiceItem setChildAccountId(final UUID childAccountId) {
         this.childAccountId = childAccountId;
         return this;
     }
 
-    
     public UUID getChildAccountId() {
         return childAccountId;
     }
 
-    public void setChildAccountId(UUID childAccountId) {
-        this.childAccountId = childAccountId;
-    }
-
-    public InvoiceItem bundleId(UUID bundleId) {
+    public InvoiceItem setBundleId(final UUID bundleId) {
         this.bundleId = bundleId;
         return this;
     }
 
-    
     public UUID getBundleId() {
         return bundleId;
     }
 
-    public void setBundleId(UUID bundleId) {
-        this.bundleId = bundleId;
-    }
-
-    public InvoiceItem subscriptionId(UUID subscriptionId) {
+    public InvoiceItem setSubscriptionId(final UUID subscriptionId) {
         this.subscriptionId = subscriptionId;
         return this;
     }
 
-    
     public UUID getSubscriptionId() {
         return subscriptionId;
     }
 
-    public void setSubscriptionId(UUID subscriptionId) {
-        this.subscriptionId = subscriptionId;
-    }
-
-    public InvoiceItem planName(String planName) {
+    public InvoiceItem setPlanName(final String planName) {
         this.planName = planName;
         return this;
     }
 
-    
     public String getPlanName() {
         return planName;
     }
 
-    public void setPlanName(String planName) {
-        this.planName = planName;
-    }
-
-    public InvoiceItem phaseName(String phaseName) {
+    public InvoiceItem setPhaseName(final String phaseName) {
         this.phaseName = phaseName;
         return this;
     }
 
-    
     public String getPhaseName() {
         return phaseName;
     }
 
-    public void setPhaseName(String phaseName) {
-        this.phaseName = phaseName;
-    }
-
-    public InvoiceItem usageName(String usageName) {
+    public InvoiceItem setUsageName(final String usageName) {
         this.usageName = usageName;
         return this;
     }
 
-    
     public String getUsageName() {
         return usageName;
     }
 
-    public void setUsageName(String usageName) {
-        this.usageName = usageName;
-    }
-
-    public InvoiceItem prettyPlanName(String prettyPlanName) {
+    public InvoiceItem setPrettyPlanName(final String prettyPlanName) {
         this.prettyPlanName = prettyPlanName;
         return this;
     }
 
-    
     public String getPrettyPlanName() {
         return prettyPlanName;
     }
 
-    public void setPrettyPlanName(String prettyPlanName) {
-        this.prettyPlanName = prettyPlanName;
-    }
-
-    public InvoiceItem prettyPhaseName(String prettyPhaseName) {
+    public InvoiceItem setPrettyPhaseName(final String prettyPhaseName) {
         this.prettyPhaseName = prettyPhaseName;
         return this;
     }
 
-    
     public String getPrettyPhaseName() {
         return prettyPhaseName;
     }
 
-    public void setPrettyPhaseName(String prettyPhaseName) {
-        this.prettyPhaseName = prettyPhaseName;
-    }
-
-    public InvoiceItem prettyUsageName(String prettyUsageName) {
+    public InvoiceItem setPrettyUsageName(final String prettyUsageName) {
         this.prettyUsageName = prettyUsageName;
         return this;
     }
 
-    
     public String getPrettyUsageName() {
         return prettyUsageName;
     }
 
-    public void setPrettyUsageName(String prettyUsageName) {
-        this.prettyUsageName = prettyUsageName;
-    }
-
-    public InvoiceItem itemType(String itemType) {
+    public InvoiceItem setItemType(final String itemType) {
         this.itemType = itemType;
         return this;
     }
 
-    
     public String getItemType() {
         return itemType;
     }
 
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
-    }
-
-    public InvoiceItem description(String description) {
+    public InvoiceItem setDescription(final String description) {
         this.description = description;
         return this;
     }
 
-    
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public InvoiceItem startDate(LocalDate startDate) {
+    public InvoiceItem setStartDate(final LocalDate startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    
     public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public InvoiceItem endDate(LocalDate endDate) {
+    public InvoiceItem setEndDate(final LocalDate endDate) {
         this.endDate = endDate;
         return this;
     }
 
-    
     public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public InvoiceItem amount(BigDecimal amount) {
+    public InvoiceItem setAmount(final BigDecimal amount) {
         this.amount = amount;
         return this;
     }
 
-    
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public InvoiceItem rate(BigDecimal rate) {
+    public InvoiceItem setRate(final BigDecimal rate) {
         this.rate = rate;
         return this;
     }
 
-    
     public BigDecimal getRate() {
         return rate;
     }
 
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
-    }
-
-    public InvoiceItem currency(String currency) {
+    public InvoiceItem setCurrency(final String currency) {
         this.currency = currency;
         return this;
     }
 
-    
     public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public InvoiceItem quantity(Integer quantity) {
+    public InvoiceItem setQuantity(final Integer quantity) {
         this.quantity = quantity;
         return this;
     }
 
-    
     public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public InvoiceItem itemDetails(String itemDetails) {
+    public InvoiceItem setItemDetails(final String itemDetails) {
         this.itemDetails = itemDetails;
         return this;
     }
 
-    
     public String getItemDetails() {
         return itemDetails;
     }
 
-    public void setItemDetails(String itemDetails) {
-        this.itemDetails = itemDetails;
-    }
-
-    public InvoiceItem childItems(List<InvoiceItem> childItems) {
+    public InvoiceItem setChildItems(final List<InvoiceItem> childItems) {
         this.childItems = childItems;
         return this;
     }
 
-    public InvoiceItem addChildItemsItem(InvoiceItem childItemsItem) {
+    public InvoiceItem addChildItemsItem(final InvoiceItem childItemsItem) {
         if (this.childItems == null) {
             this.childItems = new ArrayList<InvoiceItem>();
         }
@@ -404,13 +346,8 @@ public class InvoiceItem extends KillBillObject {
         return this;
     }
 
-    
     public List<InvoiceItem> getChildItems() {
         return childItems;
-    }
-
-    public void setChildItems(List<InvoiceItem> childItems) {
-        this.childItems = childItems;
     }
 
 
@@ -450,7 +387,29 @@ public class InvoiceItem extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(invoiceItemId, invoiceId, linkedInvoiceItemId, accountId, childAccountId, bundleId, subscriptionId, planName, phaseName, usageName, prettyPlanName, prettyPhaseName, prettyUsageName, itemType, description, startDate, endDate, amount, rate, currency, quantity, itemDetails, childItems);
+        return Objects.hash(invoiceItemId,
+                            invoiceId,
+                            linkedInvoiceItemId,
+                            accountId,
+                            childAccountId,
+                            bundleId,
+                            subscriptionId,
+                            planName,
+                            phaseName,
+                            usageName,
+                            prettyPlanName,
+                            prettyPhaseName,
+                            prettyUsageName,
+                            itemType,
+                            description,
+                            startDate,
+                            endDate,
+                            amount,
+                            rate,
+                            currency,
+                            quantity,
+                            itemDetails,
+                            childItems);
     }
 
 

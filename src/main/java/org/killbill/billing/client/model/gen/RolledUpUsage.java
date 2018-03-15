@@ -44,54 +44,53 @@ public class RolledUpUsage extends KillBillObject {
 
     private List<RolledUpUnit> rolledUpUnits = null;
 
-    public RolledUpUsage subscriptionId(UUID subscriptionId) {
+
+    public RolledUpUsage() {
+    }
+
+    public RolledUpUsage(final UUID subscriptionId,
+                     final LocalDate startDate,
+                     final LocalDate endDate,
+                     final List<RolledUpUnit> rolledUpUnits) {
+        this.subscriptionId = subscriptionId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.rolledUpUnits = rolledUpUnits;
+    }
+
+    public RolledUpUsage setSubscriptionId(final UUID subscriptionId) {
         this.subscriptionId = subscriptionId;
         return this;
     }
 
-    
     public UUID getSubscriptionId() {
         return subscriptionId;
     }
 
-    public void setSubscriptionId(UUID subscriptionId) {
-        this.subscriptionId = subscriptionId;
-    }
-
-    public RolledUpUsage startDate(LocalDate startDate) {
+    public RolledUpUsage setStartDate(final LocalDate startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    
     public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public RolledUpUsage endDate(LocalDate endDate) {
+    public RolledUpUsage setEndDate(final LocalDate endDate) {
         this.endDate = endDate;
         return this;
     }
 
-    
     public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public RolledUpUsage rolledUpUnits(List<RolledUpUnit> rolledUpUnits) {
+    public RolledUpUsage setRolledUpUnits(final List<RolledUpUnit> rolledUpUnits) {
         this.rolledUpUnits = rolledUpUnits;
         return this;
     }
 
-    public RolledUpUsage addRolledUpUnitsItem(RolledUpUnit rolledUpUnitsItem) {
+    public RolledUpUsage addRolledUpUnitsItem(final RolledUpUnit rolledUpUnitsItem) {
         if (this.rolledUpUnits == null) {
             this.rolledUpUnits = new ArrayList<RolledUpUnit>();
         }
@@ -99,13 +98,8 @@ public class RolledUpUsage extends KillBillObject {
         return this;
     }
 
-    
     public List<RolledUpUnit> getRolledUpUnits() {
         return rolledUpUnits;
-    }
-
-    public void setRolledUpUnits(List<RolledUpUnit> rolledUpUnits) {
-        this.rolledUpUnits = rolledUpUnits;
     }
 
 
@@ -126,7 +120,10 @@ public class RolledUpUsage extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(subscriptionId, startDate, endDate, rolledUpUnits);
+        return Objects.hash(subscriptionId,
+                            startDate,
+                            endDate,
+                            rolledUpUnits);
     }
 
 

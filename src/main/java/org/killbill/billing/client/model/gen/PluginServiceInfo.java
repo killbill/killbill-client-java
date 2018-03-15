@@ -35,32 +35,32 @@ public class PluginServiceInfo extends KillBillObject {
 
     private String registrationName = null;
 
-    public PluginServiceInfo serviceTypeName(String serviceTypeName) {
+
+    public PluginServiceInfo() {
+    }
+
+    public PluginServiceInfo(final String serviceTypeName,
+                     final String registrationName) {
+        this.serviceTypeName = serviceTypeName;
+        this.registrationName = registrationName;
+    }
+
+    public PluginServiceInfo setServiceTypeName(final String serviceTypeName) {
         this.serviceTypeName = serviceTypeName;
         return this;
     }
 
-    
     public String getServiceTypeName() {
         return serviceTypeName;
     }
 
-    public void setServiceTypeName(String serviceTypeName) {
-        this.serviceTypeName = serviceTypeName;
-    }
-
-    public PluginServiceInfo registrationName(String registrationName) {
+    public PluginServiceInfo setRegistrationName(final String registrationName) {
         this.registrationName = registrationName;
         return this;
     }
 
-    
     public String getRegistrationName() {
         return registrationName;
-    }
-
-    public void setRegistrationName(String registrationName) {
-        this.registrationName = registrationName;
     }
 
 
@@ -79,7 +79,8 @@ public class PluginServiceInfo extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(serviceTypeName, registrationName);
+        return Objects.hash(serviceTypeName,
+                            registrationName);
     }
 
 

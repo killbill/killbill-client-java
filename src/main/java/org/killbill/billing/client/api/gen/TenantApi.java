@@ -51,6 +51,10 @@ public class TenantApi {
         this.httpClient = httpClient;
     }
 
+    public Tenant createTenant(final Tenant body,  final RequestOptions inputOptions) throws KillBillClientException {
+        return createTenant(body, Boolean.valueOf(false), inputOptions);
+    }
+
     public Tenant createTenant(final Tenant body, final Boolean useGlobalDefault,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createTenant");
 
@@ -72,6 +76,7 @@ public class TenantApi {
         return httpClient.doPost(uri, body, Tenant.class, requestOptions);
     }
 
+
     public void deletePerTenantConfiguration( final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/tenants/uploadPerTenantConfig";
@@ -82,6 +87,7 @@ public class TenantApi {
 
         httpClient.doDelete(uri, requestOptions);
     }
+
 
     public void deletePluginConfiguration(final String pluginName,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling deletePluginConfiguration");
@@ -96,6 +102,7 @@ public class TenantApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
+
     public void deletePluginPaymentStateMachineConfig(final String pluginName,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling deletePluginPaymentStateMachineConfig");
 
@@ -109,6 +116,7 @@ public class TenantApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
+
     public void deletePushNotificationCallbacks( final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/tenants/registerNotificationCallback";
@@ -119,6 +127,7 @@ public class TenantApi {
 
         httpClient.doDelete(uri, requestOptions);
     }
+
 
     public void deleteUserKeyValue(final String keyName,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(keyName, "Missing the required parameter 'keyName' when calling deleteUserKeyValue");

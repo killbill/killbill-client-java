@@ -58,172 +58,142 @@ public class EventSubscription extends KillBillObject {
 
     private String phase = null;
 
-    public EventSubscription eventId(UUID eventId) {
+
+    public EventSubscription() {
+    }
+
+    public EventSubscription(final UUID eventId,
+                     final String billingPeriod,
+                     final LocalDate effectiveDate,
+                     final String plan,
+                     final String product,
+                     final String priceList,
+                     final SubscriptionEventType eventType,
+                     final Boolean isBlockedBilling,
+                     final Boolean isBlockedEntitlement,
+                     final String serviceName,
+                     final String serviceStateName,
+                     final String phase) {
+        this.eventId = eventId;
+        this.billingPeriod = billingPeriod;
+        this.effectiveDate = effectiveDate;
+        this.plan = plan;
+        this.product = product;
+        this.priceList = priceList;
+        this.eventType = eventType;
+        this.isBlockedBilling = isBlockedBilling;
+        this.isBlockedEntitlement = isBlockedEntitlement;
+        this.serviceName = serviceName;
+        this.serviceStateName = serviceStateName;
+        this.phase = phase;
+    }
+
+    public EventSubscription setEventId(final UUID eventId) {
         this.eventId = eventId;
         return this;
     }
 
-    
     public UUID getEventId() {
         return eventId;
     }
 
-    public void setEventId(UUID eventId) {
-        this.eventId = eventId;
-    }
-
-    public EventSubscription billingPeriod(String billingPeriod) {
+    public EventSubscription setBillingPeriod(final String billingPeriod) {
         this.billingPeriod = billingPeriod;
         return this;
     }
 
-    
     public String getBillingPeriod() {
         return billingPeriod;
     }
 
-    public void setBillingPeriod(String billingPeriod) {
-        this.billingPeriod = billingPeriod;
-    }
-
-    public EventSubscription effectiveDate(LocalDate effectiveDate) {
+    public EventSubscription setEffectiveDate(final LocalDate effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    
     public LocalDate getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(LocalDate effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public EventSubscription plan(String plan) {
+    public EventSubscription setPlan(final String plan) {
         this.plan = plan;
         return this;
     }
 
-    
     public String getPlan() {
         return plan;
     }
 
-    public void setPlan(String plan) {
-        this.plan = plan;
-    }
-
-    public EventSubscription product(String product) {
+    public EventSubscription setProduct(final String product) {
         this.product = product;
         return this;
     }
 
-    
     public String getProduct() {
         return product;
     }
 
-    public void setProduct(String product) {
-        this.product = product;
-    }
-
-    public EventSubscription priceList(String priceList) {
+    public EventSubscription setPriceList(final String priceList) {
         this.priceList = priceList;
         return this;
     }
 
-    
     public String getPriceList() {
         return priceList;
     }
 
-    public void setPriceList(String priceList) {
-        this.priceList = priceList;
-    }
-
-    public EventSubscription eventType(SubscriptionEventType eventType) {
+    public EventSubscription setEventType(final SubscriptionEventType eventType) {
         this.eventType = eventType;
         return this;
     }
 
-    
     public SubscriptionEventType getEventType() {
         return eventType;
     }
 
-    public void setEventType(SubscriptionEventType eventType) {
-        this.eventType = eventType;
-    }
-
-    public EventSubscription isBlockedBilling(Boolean isBlockedBilling) {
+    public EventSubscription setIsBlockedBilling(final Boolean isBlockedBilling) {
         this.isBlockedBilling = isBlockedBilling;
         return this;
     }
 
-    
     public Boolean isIsBlockedBilling() {
         return isBlockedBilling;
     }
 
-    public void setIsBlockedBilling(Boolean isBlockedBilling) {
-        this.isBlockedBilling = isBlockedBilling;
-    }
-
-    public EventSubscription isBlockedEntitlement(Boolean isBlockedEntitlement) {
+    public EventSubscription setIsBlockedEntitlement(final Boolean isBlockedEntitlement) {
         this.isBlockedEntitlement = isBlockedEntitlement;
         return this;
     }
 
-    
     public Boolean isIsBlockedEntitlement() {
         return isBlockedEntitlement;
     }
 
-    public void setIsBlockedEntitlement(Boolean isBlockedEntitlement) {
-        this.isBlockedEntitlement = isBlockedEntitlement;
-    }
-
-    public EventSubscription serviceName(String serviceName) {
+    public EventSubscription setServiceName(final String serviceName) {
         this.serviceName = serviceName;
         return this;
     }
 
-    
     public String getServiceName() {
         return serviceName;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
-
-    public EventSubscription serviceStateName(String serviceStateName) {
+    public EventSubscription setServiceStateName(final String serviceStateName) {
         this.serviceStateName = serviceStateName;
         return this;
     }
 
-    
     public String getServiceStateName() {
         return serviceStateName;
     }
 
-    public void setServiceStateName(String serviceStateName) {
-        this.serviceStateName = serviceStateName;
-    }
-
-    public EventSubscription phase(String phase) {
+    public EventSubscription setPhase(final String phase) {
         this.phase = phase;
         return this;
     }
 
-    
     public String getPhase() {
         return phase;
-    }
-
-    public void setPhase(String phase) {
-        this.phase = phase;
     }
 
 
@@ -252,7 +222,18 @@ public class EventSubscription extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventId, billingPeriod, effectiveDate, plan, product, priceList, eventType, isBlockedBilling, isBlockedEntitlement, serviceName, serviceStateName, phase);
+        return Objects.hash(eventId,
+                            billingPeriod,
+                            effectiveDate,
+                            plan,
+                            product,
+                            priceList,
+                            eventType,
+                            isBlockedBilling,
+                            isBlockedEntitlement,
+                            serviceName,
+                            serviceStateName,
+                            phase);
     }
 
 

@@ -40,60 +40,54 @@ public class BlockPriceOverride extends KillBillObject {
 
     private Double max = null;
 
-    public BlockPriceOverride unitName(String unitName) {
+
+    public BlockPriceOverride() {
+    }
+
+    public BlockPriceOverride(final String unitName,
+                     final Double size,
+                     final BigDecimal price,
+                     final Double max) {
+        this.unitName = unitName;
+        this.size = size;
+        this.price = price;
+        this.max = max;
+    }
+
+    public BlockPriceOverride setUnitName(final String unitName) {
         this.unitName = unitName;
         return this;
     }
 
-    
     public String getUnitName() {
         return unitName;
     }
 
-    public void setUnitName(String unitName) {
-        this.unitName = unitName;
-    }
-
-    public BlockPriceOverride size(Double size) {
+    public BlockPriceOverride setSize(final Double size) {
         this.size = size;
         return this;
     }
 
-    
     public Double getSize() {
         return size;
     }
 
-    public void setSize(Double size) {
-        this.size = size;
-    }
-
-    public BlockPriceOverride price(BigDecimal price) {
+    public BlockPriceOverride setPrice(final BigDecimal price) {
         this.price = price;
         return this;
     }
 
-    
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public BlockPriceOverride max(Double max) {
+    public BlockPriceOverride setMax(final Double max) {
         this.max = max;
         return this;
     }
 
-    
     public Double getMax() {
         return max;
-    }
-
-    public void setMax(Double max) {
-        this.max = max;
     }
 
 
@@ -114,7 +108,10 @@ public class BlockPriceOverride extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(unitName, size, price, max);
+        return Objects.hash(unitName,
+                            size,
+                            price,
+                            max);
     }
 
 

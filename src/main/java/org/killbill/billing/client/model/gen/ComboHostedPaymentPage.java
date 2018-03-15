@@ -45,40 +45,44 @@ public class ComboHostedPaymentPage extends KillBillObject {
 
     private HostedPaymentPageFields hostedPaymentPageFieldsJson = null;
 
-    public ComboHostedPaymentPage account(Account account) {
+
+    public ComboHostedPaymentPage() {
+    }
+
+    public ComboHostedPaymentPage(final Account account,
+                     final PaymentMethod paymentMethod,
+                     final List<PluginProperty> paymentMethodPluginProperties,
+                     final HostedPaymentPageFields hostedPaymentPageFieldsJson) {
+        this.account = account;
+        this.paymentMethod = paymentMethod;
+        this.paymentMethodPluginProperties = paymentMethodPluginProperties;
+        this.hostedPaymentPageFieldsJson = hostedPaymentPageFieldsJson;
+    }
+
+    public ComboHostedPaymentPage setAccount(final Account account) {
         this.account = account;
         return this;
     }
 
-    
     public Account getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public ComboHostedPaymentPage paymentMethod(PaymentMethod paymentMethod) {
+    public ComboHostedPaymentPage setPaymentMethod(final PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
         return this;
     }
 
-    
     public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public ComboHostedPaymentPage paymentMethodPluginProperties(List<PluginProperty> paymentMethodPluginProperties) {
+    public ComboHostedPaymentPage setPaymentMethodPluginProperties(final List<PluginProperty> paymentMethodPluginProperties) {
         this.paymentMethodPluginProperties = paymentMethodPluginProperties;
         return this;
     }
 
-    public ComboHostedPaymentPage addPaymentMethodPluginPropertiesItem(PluginProperty paymentMethodPluginPropertiesItem) {
+    public ComboHostedPaymentPage addPaymentMethodPluginPropertiesItem(final PluginProperty paymentMethodPluginPropertiesItem) {
         if (this.paymentMethodPluginProperties == null) {
             this.paymentMethodPluginProperties = new ArrayList<PluginProperty>();
         }
@@ -86,27 +90,17 @@ public class ComboHostedPaymentPage extends KillBillObject {
         return this;
     }
 
-    
     public List<PluginProperty> getPaymentMethodPluginProperties() {
         return paymentMethodPluginProperties;
     }
 
-    public void setPaymentMethodPluginProperties(List<PluginProperty> paymentMethodPluginProperties) {
-        this.paymentMethodPluginProperties = paymentMethodPluginProperties;
-    }
-
-    public ComboHostedPaymentPage hostedPaymentPageFieldsJson(HostedPaymentPageFields hostedPaymentPageFieldsJson) {
+    public ComboHostedPaymentPage setHostedPaymentPageFieldsJson(final HostedPaymentPageFields hostedPaymentPageFieldsJson) {
         this.hostedPaymentPageFieldsJson = hostedPaymentPageFieldsJson;
         return this;
     }
 
-    
     public HostedPaymentPageFields getHostedPaymentPageFieldsJson() {
         return hostedPaymentPageFieldsJson;
-    }
-
-    public void setHostedPaymentPageFieldsJson(HostedPaymentPageFields hostedPaymentPageFieldsJson) {
-        this.hostedPaymentPageFieldsJson = hostedPaymentPageFieldsJson;
     }
 
 
@@ -127,7 +121,10 @@ public class ComboHostedPaymentPage extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(account, paymentMethod, paymentMethodPluginProperties, hostedPaymentPageFieldsJson);
+        return Objects.hash(account,
+                            paymentMethod,
+                            paymentMethodPluginProperties,
+                            hostedPaymentPageFieldsJson);
     }
 
 

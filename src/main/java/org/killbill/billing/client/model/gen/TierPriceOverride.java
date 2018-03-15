@@ -36,12 +36,20 @@ public class TierPriceOverride extends KillBillObject {
 
     private List<BlockPriceOverride> blockPriceOverrides = null;
 
-    public TierPriceOverride blockPriceOverrides(List<BlockPriceOverride> blockPriceOverrides) {
+
+    public TierPriceOverride() {
+    }
+
+    public TierPriceOverride(final List<BlockPriceOverride> blockPriceOverrides) {
+        this.blockPriceOverrides = blockPriceOverrides;
+    }
+
+    public TierPriceOverride setBlockPriceOverrides(final List<BlockPriceOverride> blockPriceOverrides) {
         this.blockPriceOverrides = blockPriceOverrides;
         return this;
     }
 
-    public TierPriceOverride addBlockPriceOverridesItem(BlockPriceOverride blockPriceOverridesItem) {
+    public TierPriceOverride addBlockPriceOverridesItem(final BlockPriceOverride blockPriceOverridesItem) {
         if (this.blockPriceOverrides == null) {
             this.blockPriceOverrides = new ArrayList<BlockPriceOverride>();
         }
@@ -49,13 +57,8 @@ public class TierPriceOverride extends KillBillObject {
         return this;
     }
 
-    
     public List<BlockPriceOverride> getBlockPriceOverrides() {
         return blockPriceOverrides;
-    }
-
-    public void setBlockPriceOverrides(List<BlockPriceOverride> blockPriceOverrides) {
-        this.blockPriceOverrides = blockPriceOverrides;
     }
 
 

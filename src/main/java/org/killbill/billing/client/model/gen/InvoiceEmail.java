@@ -36,32 +36,32 @@ public class InvoiceEmail extends KillBillObject {
 
     private Boolean isNotifiedForInvoices = false;
 
-    public InvoiceEmail accountId(UUID accountId) {
+
+    public InvoiceEmail() {
+    }
+
+    public InvoiceEmail(final UUID accountId,
+                     final Boolean isNotifiedForInvoices) {
+        this.accountId = accountId;
+        this.isNotifiedForInvoices = isNotifiedForInvoices;
+    }
+
+    public InvoiceEmail setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public InvoiceEmail isNotifiedForInvoices(Boolean isNotifiedForInvoices) {
+    public InvoiceEmail setIsNotifiedForInvoices(final Boolean isNotifiedForInvoices) {
         this.isNotifiedForInvoices = isNotifiedForInvoices;
         return this;
     }
 
-    
     public Boolean isIsNotifiedForInvoices() {
         return isNotifiedForInvoices;
-    }
-
-    public void setIsNotifiedForInvoices(Boolean isNotifiedForInvoices) {
-        this.isNotifiedForInvoices = isNotifiedForInvoices;
     }
 
 
@@ -80,7 +80,8 @@ public class InvoiceEmail extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, isNotifiedForInvoices);
+        return Objects.hash(accountId,
+                            isNotifiedForInvoices);
     }
 
 

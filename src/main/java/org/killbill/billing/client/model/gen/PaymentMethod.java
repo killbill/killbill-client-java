@@ -45,88 +45,76 @@ public class PaymentMethod extends KillBillObject {
 
     private PaymentMethodPluginDetail pluginInfo = null;
 
-    public PaymentMethod paymentMethodId(UUID paymentMethodId) {
+
+    public PaymentMethod() {
+    }
+
+    public PaymentMethod(final UUID paymentMethodId,
+                     final String externalKey,
+                     final UUID accountId,
+                     final Boolean isDefault,
+                     final String pluginName,
+                     final PaymentMethodPluginDetail pluginInfo) {
+        this.paymentMethodId = paymentMethodId;
+        this.externalKey = externalKey;
+        this.accountId = accountId;
+        this.isDefault = isDefault;
+        this.pluginName = pluginName;
+        this.pluginInfo = pluginInfo;
+    }
+
+    public PaymentMethod setPaymentMethodId(final UUID paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
         return this;
     }
 
-    
     public UUID getPaymentMethodId() {
         return paymentMethodId;
     }
 
-    public void setPaymentMethodId(UUID paymentMethodId) {
-        this.paymentMethodId = paymentMethodId;
-    }
-
-    public PaymentMethod externalKey(String externalKey) {
+    public PaymentMethod setExternalKey(final String externalKey) {
         this.externalKey = externalKey;
         return this;
     }
 
-    
     public String getExternalKey() {
         return externalKey;
     }
 
-    public void setExternalKey(String externalKey) {
-        this.externalKey = externalKey;
-    }
-
-    public PaymentMethod accountId(UUID accountId) {
+    public PaymentMethod setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public PaymentMethod isDefault(Boolean isDefault) {
+    public PaymentMethod setIsDefault(final Boolean isDefault) {
         this.isDefault = isDefault;
         return this;
     }
 
-    
     public Boolean isIsDefault() {
         return isDefault;
     }
 
-    public void setIsDefault(Boolean isDefault) {
-        this.isDefault = isDefault;
-    }
-
-    public PaymentMethod pluginName(String pluginName) {
+    public PaymentMethod setPluginName(final String pluginName) {
         this.pluginName = pluginName;
         return this;
     }
 
-    
     public String getPluginName() {
         return pluginName;
     }
 
-    public void setPluginName(String pluginName) {
-        this.pluginName = pluginName;
-    }
-
-    public PaymentMethod pluginInfo(PaymentMethodPluginDetail pluginInfo) {
+    public PaymentMethod setPluginInfo(final PaymentMethodPluginDetail pluginInfo) {
         this.pluginInfo = pluginInfo;
         return this;
     }
 
-    
     public PaymentMethodPluginDetail getPluginInfo() {
         return pluginInfo;
-    }
-
-    public void setPluginInfo(PaymentMethodPluginDetail pluginInfo) {
-        this.pluginInfo = pluginInfo;
     }
 
 
@@ -149,7 +137,12 @@ public class PaymentMethod extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(paymentMethodId, externalKey, accountId, isDefault, pluginName, pluginInfo);
+        return Objects.hash(paymentMethodId,
+                            externalKey,
+                            accountId,
+                            isDefault,
+                            pluginName,
+                            pluginInfo);
     }
 
 

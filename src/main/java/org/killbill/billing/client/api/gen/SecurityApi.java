@@ -124,6 +124,7 @@ public class SecurityApi {
         return httpClient.doGet(uri, UserRoles.class, requestOptions);
     }
 
+
     public void invalidateUser(final String username,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(username, "Missing the required parameter 'username' when calling invalidateUser");
 

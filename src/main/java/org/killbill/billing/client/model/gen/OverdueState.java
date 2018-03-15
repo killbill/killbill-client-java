@@ -47,40 +47,50 @@ public class OverdueState extends KillBillObject {
 
     private Integer reevaluationIntervalDays = null;
 
-    public OverdueState name(String name) {
+
+    public OverdueState() {
+    }
+
+    public OverdueState(final String name,
+                     final String externalMessage,
+                     final List<Integer> daysBetweenPaymentRetries,
+                     final Boolean disableEntitlementAndChangesBlocked,
+                     final Boolean blockChanges,
+                     final Boolean clearState,
+                     final Integer reevaluationIntervalDays) {
+        this.name = name;
+        this.externalMessage = externalMessage;
+        this.daysBetweenPaymentRetries = daysBetweenPaymentRetries;
+        this.disableEntitlementAndChangesBlocked = disableEntitlementAndChangesBlocked;
+        this.blockChanges = blockChanges;
+        this.clearState = clearState;
+        this.reevaluationIntervalDays = reevaluationIntervalDays;
+    }
+
+    public OverdueState setName(final String name) {
         this.name = name;
         return this;
     }
 
-    
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public OverdueState externalMessage(String externalMessage) {
+    public OverdueState setExternalMessage(final String externalMessage) {
         this.externalMessage = externalMessage;
         return this;
     }
 
-    
     public String getExternalMessage() {
         return externalMessage;
     }
 
-    public void setExternalMessage(String externalMessage) {
-        this.externalMessage = externalMessage;
-    }
-
-    public OverdueState daysBetweenPaymentRetries(List<Integer> daysBetweenPaymentRetries) {
+    public OverdueState setDaysBetweenPaymentRetries(final List<Integer> daysBetweenPaymentRetries) {
         this.daysBetweenPaymentRetries = daysBetweenPaymentRetries;
         return this;
     }
 
-    public OverdueState addDaysBetweenPaymentRetriesItem(Integer daysBetweenPaymentRetriesItem) {
+    public OverdueState addDaysBetweenPaymentRetriesItem(final Integer daysBetweenPaymentRetriesItem) {
         if (this.daysBetweenPaymentRetries == null) {
             this.daysBetweenPaymentRetries = new ArrayList<Integer>();
         }
@@ -88,69 +98,44 @@ public class OverdueState extends KillBillObject {
         return this;
     }
 
-    
     public List<Integer> getDaysBetweenPaymentRetries() {
         return daysBetweenPaymentRetries;
     }
 
-    public void setDaysBetweenPaymentRetries(List<Integer> daysBetweenPaymentRetries) {
-        this.daysBetweenPaymentRetries = daysBetweenPaymentRetries;
-    }
-
-    public OverdueState disableEntitlementAndChangesBlocked(Boolean disableEntitlementAndChangesBlocked) {
+    public OverdueState setDisableEntitlementAndChangesBlocked(final Boolean disableEntitlementAndChangesBlocked) {
         this.disableEntitlementAndChangesBlocked = disableEntitlementAndChangesBlocked;
         return this;
     }
 
-    
     public Boolean isDisableEntitlementAndChangesBlocked() {
         return disableEntitlementAndChangesBlocked;
     }
 
-    public void setDisableEntitlementAndChangesBlocked(Boolean disableEntitlementAndChangesBlocked) {
-        this.disableEntitlementAndChangesBlocked = disableEntitlementAndChangesBlocked;
-    }
-
-    public OverdueState blockChanges(Boolean blockChanges) {
+    public OverdueState setBlockChanges(final Boolean blockChanges) {
         this.blockChanges = blockChanges;
         return this;
     }
 
-    
     public Boolean isBlockChanges() {
         return blockChanges;
     }
 
-    public void setBlockChanges(Boolean blockChanges) {
-        this.blockChanges = blockChanges;
-    }
-
-    public OverdueState clearState(Boolean clearState) {
+    public OverdueState setClearState(final Boolean clearState) {
         this.clearState = clearState;
         return this;
     }
 
-    
     public Boolean isClearState() {
         return clearState;
     }
 
-    public void setClearState(Boolean clearState) {
-        this.clearState = clearState;
-    }
-
-    public OverdueState reevaluationIntervalDays(Integer reevaluationIntervalDays) {
+    public OverdueState setReevaluationIntervalDays(final Integer reevaluationIntervalDays) {
         this.reevaluationIntervalDays = reevaluationIntervalDays;
         return this;
     }
 
-    
     public Integer getReevaluationIntervalDays() {
         return reevaluationIntervalDays;
-    }
-
-    public void setReevaluationIntervalDays(Integer reevaluationIntervalDays) {
-        this.reevaluationIntervalDays = reevaluationIntervalDays;
     }
 
 
@@ -174,7 +159,13 @@ public class OverdueState extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, externalMessage, daysBetweenPaymentRetries, disableEntitlementAndChangesBlocked, blockChanges, clearState, reevaluationIntervalDays);
+        return Objects.hash(name,
+                            externalMessage,
+                            daysBetweenPaymentRetries,
+                            disableEntitlementAndChangesBlocked,
+                            blockChanges,
+                            clearState,
+                            reevaluationIntervalDays);
     }
 
 

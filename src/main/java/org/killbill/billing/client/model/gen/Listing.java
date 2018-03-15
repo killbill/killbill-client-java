@@ -37,32 +37,32 @@ public class Listing extends KillBillObject {
 
     private Plan plan = null;
 
-    public Listing priceList(PriceList priceList) {
+
+    public Listing() {
+    }
+
+    public Listing(final PriceList priceList,
+                     final Plan plan) {
+        this.priceList = priceList;
+        this.plan = plan;
+    }
+
+    public Listing setPriceList(final PriceList priceList) {
         this.priceList = priceList;
         return this;
     }
 
-    
     public PriceList getPriceList() {
         return priceList;
     }
 
-    public void setPriceList(PriceList priceList) {
-        this.priceList = priceList;
-    }
-
-    public Listing plan(Plan plan) {
+    public Listing setPlan(final Plan plan) {
         this.plan = plan;
         return this;
     }
 
-    
     public Plan getPlan() {
         return plan;
-    }
-
-    public void setPlan(Plan plan) {
-        this.plan = plan;
     }
 
 
@@ -81,7 +81,8 @@ public class Listing extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(priceList, plan);
+        return Objects.hash(priceList,
+                            plan);
     }
 
 

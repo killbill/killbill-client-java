@@ -40,60 +40,54 @@ public class Subject extends KillBillObject {
 
     private Session session = null;
 
-    public Subject principal(String principal) {
+
+    public Subject() {
+    }
+
+    public Subject(final String principal,
+                     final Boolean isAuthenticated,
+                     final Boolean isRemembered,
+                     final Session session) {
+        this.principal = principal;
+        this.isAuthenticated = isAuthenticated;
+        this.isRemembered = isRemembered;
+        this.session = session;
+    }
+
+    public Subject setPrincipal(final String principal) {
         this.principal = principal;
         return this;
     }
 
-    
     public String getPrincipal() {
         return principal;
     }
 
-    public void setPrincipal(String principal) {
-        this.principal = principal;
-    }
-
-    public Subject isAuthenticated(Boolean isAuthenticated) {
+    public Subject setIsAuthenticated(final Boolean isAuthenticated) {
         this.isAuthenticated = isAuthenticated;
         return this;
     }
 
-    
     public Boolean isIsAuthenticated() {
         return isAuthenticated;
     }
 
-    public void setIsAuthenticated(Boolean isAuthenticated) {
-        this.isAuthenticated = isAuthenticated;
-    }
-
-    public Subject isRemembered(Boolean isRemembered) {
+    public Subject setIsRemembered(final Boolean isRemembered) {
         this.isRemembered = isRemembered;
         return this;
     }
 
-    
     public Boolean isIsRemembered() {
         return isRemembered;
     }
 
-    public void setIsRemembered(Boolean isRemembered) {
-        this.isRemembered = isRemembered;
-    }
-
-    public Subject session(Session session) {
+    public Subject setSession(final Session session) {
         this.session = session;
         return this;
     }
 
-    
     public Session getSession() {
         return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
     }
 
 
@@ -114,7 +108,10 @@ public class Subject extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(principal, isAuthenticated, isRemembered, session);
+        return Objects.hash(principal,
+                            isAuthenticated,
+                            isRemembered,
+                            session);
     }
 
 

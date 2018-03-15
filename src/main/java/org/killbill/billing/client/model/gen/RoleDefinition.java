@@ -37,37 +37,37 @@ public class RoleDefinition extends KillBillObject {
 
     private List<String> permissions = new ArrayList<String>();
 
-    public RoleDefinition role(String role) {
+
+    public RoleDefinition() {
+    }
+
+    public RoleDefinition(final String role,
+                     final List<String> permissions) {
+        this.role = role;
+        this.permissions = permissions;
+    }
+
+    public RoleDefinition setRole(final String role) {
         this.role = role;
         return this;
     }
 
-    
     public String getRole() {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public RoleDefinition permissions(List<String> permissions) {
+    public RoleDefinition setPermissions(final List<String> permissions) {
         this.permissions = permissions;
         return this;
     }
 
-    public RoleDefinition addPermissionsItem(String permissionsItem) {
+    public RoleDefinition addPermissionsItem(final String permissionsItem) {
         this.permissions.add(permissionsItem);
         return this;
     }
 
-    
     public List<String> getPermissions() {
         return permissions;
-    }
-
-    public void setPermissions(List<String> permissions) {
-        this.permissions = permissions;
     }
 
 
@@ -86,7 +86,8 @@ public class RoleDefinition extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(role, permissions);
+        return Objects.hash(role,
+                            permissions);
     }
 
 

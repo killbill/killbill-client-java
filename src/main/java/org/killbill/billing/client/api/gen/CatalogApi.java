@@ -25,6 +25,7 @@ import org.killbill.billing.client.model.gen.PlanDetail;
 import org.killbill.billing.client.model.gen.PriceList;
 import org.killbill.billing.client.model.gen.Product;
 import org.killbill.billing.client.model.gen.SimplePlan;
+import org.killbill.billing.client.model.gen.StaticCatalog;
 import java.util.UUID;
 import org.killbill.billing.client.model.PlanDetails;
 import java.util.List;
@@ -74,6 +75,7 @@ public class CatalogApi {
         httpClient.doPost(uri, body, requestOptions);
     }
 
+
     public void deleteCatalog( final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog";
@@ -117,16 +119,21 @@ public class CatalogApi {
         return httpClient.doGet(uri, PlanDetails.class, requestOptions);
     }
 
-    public String getCatalogXml( final RequestOptions inputOptions) throws KillBillClientException {
+    public StaticCatalog getCatalogJson(final String requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog";
 
+        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/xml");
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, String.class, requestOptions);
+        return httpClient.doGet(uri, StaticCatalog.class, requestOptions);
     }
 
     public Phase getPhaseForSubscriptionAndDate(final UUID subscriptionId, final String requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {

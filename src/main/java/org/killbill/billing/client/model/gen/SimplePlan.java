@@ -56,124 +56,108 @@ public class SimplePlan extends KillBillObject {
 
     private List<String> availableBaseProducts = null;
 
-    public SimplePlan planId(String planId) {
+
+    public SimplePlan() {
+    }
+
+    public SimplePlan(final String planId,
+                     final String productName,
+                     final ProductCategory productCategory,
+                     final Currency currency,
+                     final BigDecimal amount,
+                     final BillingPeriod billingPeriod,
+                     final Integer trialLength,
+                     final TimeUnit trialTimeUnit,
+                     final List<String> availableBaseProducts) {
+        this.planId = planId;
+        this.productName = productName;
+        this.productCategory = productCategory;
+        this.currency = currency;
+        this.amount = amount;
+        this.billingPeriod = billingPeriod;
+        this.trialLength = trialLength;
+        this.trialTimeUnit = trialTimeUnit;
+        this.availableBaseProducts = availableBaseProducts;
+    }
+
+    public SimplePlan setPlanId(final String planId) {
         this.planId = planId;
         return this;
     }
 
-    
     public String getPlanId() {
         return planId;
     }
 
-    public void setPlanId(String planId) {
-        this.planId = planId;
-    }
-
-    public SimplePlan productName(String productName) {
+    public SimplePlan setProductName(final String productName) {
         this.productName = productName;
         return this;
     }
 
-    
     public String getProductName() {
         return productName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public SimplePlan productCategory(ProductCategory productCategory) {
+    public SimplePlan setProductCategory(final ProductCategory productCategory) {
         this.productCategory = productCategory;
         return this;
     }
 
-    
     public ProductCategory getProductCategory() {
         return productCategory;
     }
 
-    public void setProductCategory(ProductCategory productCategory) {
-        this.productCategory = productCategory;
-    }
-
-    public SimplePlan currency(Currency currency) {
+    public SimplePlan setCurrency(final Currency currency) {
         this.currency = currency;
         return this;
     }
 
-    
     public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-    public SimplePlan amount(BigDecimal amount) {
+    public SimplePlan setAmount(final BigDecimal amount) {
         this.amount = amount;
         return this;
     }
 
-    
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public SimplePlan billingPeriod(BillingPeriod billingPeriod) {
+    public SimplePlan setBillingPeriod(final BillingPeriod billingPeriod) {
         this.billingPeriod = billingPeriod;
         return this;
     }
 
-    
     public BillingPeriod getBillingPeriod() {
         return billingPeriod;
     }
 
-    public void setBillingPeriod(BillingPeriod billingPeriod) {
-        this.billingPeriod = billingPeriod;
-    }
-
-    public SimplePlan trialLength(Integer trialLength) {
+    public SimplePlan setTrialLength(final Integer trialLength) {
         this.trialLength = trialLength;
         return this;
     }
 
-    
     public Integer getTrialLength() {
         return trialLength;
     }
 
-    public void setTrialLength(Integer trialLength) {
-        this.trialLength = trialLength;
-    }
-
-    public SimplePlan trialTimeUnit(TimeUnit trialTimeUnit) {
+    public SimplePlan setTrialTimeUnit(final TimeUnit trialTimeUnit) {
         this.trialTimeUnit = trialTimeUnit;
         return this;
     }
 
-    
     public TimeUnit getTrialTimeUnit() {
         return trialTimeUnit;
     }
 
-    public void setTrialTimeUnit(TimeUnit trialTimeUnit) {
-        this.trialTimeUnit = trialTimeUnit;
-    }
-
-    public SimplePlan availableBaseProducts(List<String> availableBaseProducts) {
+    public SimplePlan setAvailableBaseProducts(final List<String> availableBaseProducts) {
         this.availableBaseProducts = availableBaseProducts;
         return this;
     }
 
-    public SimplePlan addAvailableBaseProductsItem(String availableBaseProductsItem) {
+    public SimplePlan addAvailableBaseProductsItem(final String availableBaseProductsItem) {
         if (this.availableBaseProducts == null) {
             this.availableBaseProducts = new ArrayList<String>();
         }
@@ -181,13 +165,8 @@ public class SimplePlan extends KillBillObject {
         return this;
     }
 
-    
     public List<String> getAvailableBaseProducts() {
         return availableBaseProducts;
-    }
-
-    public void setAvailableBaseProducts(List<String> availableBaseProducts) {
-        this.availableBaseProducts = availableBaseProducts;
     }
 
 
@@ -213,7 +192,15 @@ public class SimplePlan extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(planId, productName, productCategory, currency, amount, billingPeriod, trialLength, trialTimeUnit, availableBaseProducts);
+        return Objects.hash(planId,
+                            productName,
+                            productCategory,
+                            currency,
+                            amount,
+                            billingPeriod,
+                            trialLength,
+                            trialTimeUnit,
+                            availableBaseProducts);
     }
 
 

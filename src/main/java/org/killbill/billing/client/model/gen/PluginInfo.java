@@ -48,96 +48,86 @@ public class PluginInfo extends KillBillObject {
 
     private List<PluginServiceInfo> services = null;
 
-    public PluginInfo bundleSymbolicName(String bundleSymbolicName) {
+
+    public PluginInfo() {
+    }
+
+    public PluginInfo(final String bundleSymbolicName,
+                     final String pluginKey,
+                     final String pluginName,
+                     final String version,
+                     final String state,
+                     final Boolean isSelectedForStart,
+                     final List<PluginServiceInfo> services) {
+        this.bundleSymbolicName = bundleSymbolicName;
+        this.pluginKey = pluginKey;
+        this.pluginName = pluginName;
+        this.version = version;
+        this.state = state;
+        this.isSelectedForStart = isSelectedForStart;
+        this.services = services;
+    }
+
+    public PluginInfo setBundleSymbolicName(final String bundleSymbolicName) {
         this.bundleSymbolicName = bundleSymbolicName;
         return this;
     }
 
-    
     public String getBundleSymbolicName() {
         return bundleSymbolicName;
     }
 
-    public void setBundleSymbolicName(String bundleSymbolicName) {
-        this.bundleSymbolicName = bundleSymbolicName;
-    }
-
-    public PluginInfo pluginKey(String pluginKey) {
+    public PluginInfo setPluginKey(final String pluginKey) {
         this.pluginKey = pluginKey;
         return this;
     }
 
-    
     public String getPluginKey() {
         return pluginKey;
     }
 
-    public void setPluginKey(String pluginKey) {
-        this.pluginKey = pluginKey;
-    }
-
-    public PluginInfo pluginName(String pluginName) {
+    public PluginInfo setPluginName(final String pluginName) {
         this.pluginName = pluginName;
         return this;
     }
 
-    
     public String getPluginName() {
         return pluginName;
     }
 
-    public void setPluginName(String pluginName) {
-        this.pluginName = pluginName;
-    }
-
-    public PluginInfo version(String version) {
+    public PluginInfo setVersion(final String version) {
         this.version = version;
         return this;
     }
 
-    
     public String getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public PluginInfo state(String state) {
+    public PluginInfo setState(final String state) {
         this.state = state;
         return this;
     }
 
-    
     public String getState() {
         return state;
     }
 
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public PluginInfo isSelectedForStart(Boolean isSelectedForStart) {
+    public PluginInfo setIsSelectedForStart(final Boolean isSelectedForStart) {
         this.isSelectedForStart = isSelectedForStart;
         return this;
     }
 
-    
     public Boolean isIsSelectedForStart() {
         return isSelectedForStart;
     }
 
-    public void setIsSelectedForStart(Boolean isSelectedForStart) {
-        this.isSelectedForStart = isSelectedForStart;
-    }
-
-    public PluginInfo services(List<PluginServiceInfo> services) {
+    public PluginInfo setServices(final List<PluginServiceInfo> services) {
         this.services = services;
         return this;
     }
 
-    public PluginInfo addServicesItem(PluginServiceInfo servicesItem) {
+    public PluginInfo addServicesItem(final PluginServiceInfo servicesItem) {
         if (this.services == null) {
             this.services = new ArrayList<PluginServiceInfo>();
         }
@@ -145,13 +135,8 @@ public class PluginInfo extends KillBillObject {
         return this;
     }
 
-    
     public List<PluginServiceInfo> getServices() {
         return services;
-    }
-
-    public void setServices(List<PluginServiceInfo> services) {
-        this.services = services;
     }
 
 
@@ -175,7 +160,13 @@ public class PluginInfo extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(bundleSymbolicName, pluginKey, pluginName, version, state, isSelectedForStart, services);
+        return Objects.hash(bundleSymbolicName,
+                            pluginKey,
+                            pluginName,
+                            version,
+                            state,
+                            isSelectedForStart,
+                            services);
     }
 
 

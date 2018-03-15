@@ -37,32 +37,32 @@ public class Fixed extends KillBillObject {
 
     private InternationalPrice price = null;
 
-    public Fixed type(FixedType type) {
+
+    public Fixed() {
+    }
+
+    public Fixed(final FixedType type,
+                     final InternationalPrice price) {
+        this.type = type;
+        this.price = price;
+    }
+
+    public Fixed setType(final FixedType type) {
         this.type = type;
         return this;
     }
 
-    
     public FixedType getType() {
         return type;
     }
 
-    public void setType(FixedType type) {
-        this.type = type;
-    }
-
-    public Fixed price(InternationalPrice price) {
+    public Fixed setPrice(final InternationalPrice price) {
         this.price = price;
         return this;
     }
 
-    
     public InternationalPrice getPrice() {
         return price;
-    }
-
-    public void setPrice(InternationalPrice price) {
-        this.price = price;
     }
 
 
@@ -81,7 +81,8 @@ public class Fixed extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, price);
+        return Objects.hash(type,
+                            price);
     }
 
 

@@ -46,54 +46,55 @@ public class GatewayNotification extends KillBillObject {
 
     private Map<String, Object> properties = null;
 
-    public GatewayNotification kbPaymentId(UUID kbPaymentId) {
+
+    public GatewayNotification() {
+    }
+
+    public GatewayNotification(final UUID kbPaymentId,
+                     final Integer status,
+                     final String entity,
+                     final Map<String, List<String>> headers,
+                     final Map<String, Object> properties) {
+        this.kbPaymentId = kbPaymentId;
+        this.status = status;
+        this.entity = entity;
+        this.headers = headers;
+        this.properties = properties;
+    }
+
+    public GatewayNotification setKbPaymentId(final UUID kbPaymentId) {
         this.kbPaymentId = kbPaymentId;
         return this;
     }
 
-    
     public UUID getKbPaymentId() {
         return kbPaymentId;
     }
 
-    public void setKbPaymentId(UUID kbPaymentId) {
-        this.kbPaymentId = kbPaymentId;
-    }
-
-    public GatewayNotification status(Integer status) {
+    public GatewayNotification setStatus(final Integer status) {
         this.status = status;
         return this;
     }
 
-    
     public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public GatewayNotification entity(String entity) {
+    public GatewayNotification setEntity(final String entity) {
         this.entity = entity;
         return this;
     }
 
-    
     public String getEntity() {
         return entity;
     }
 
-    public void setEntity(String entity) {
-        this.entity = entity;
-    }
-
-    public GatewayNotification headers(Map<String, List<String>> headers) {
+    public GatewayNotification setHeaders(final Map<String, List<String>> headers) {
         this.headers = headers;
         return this;
     }
 
-    public GatewayNotification putHeadersItem(String key, List<String> headersItem) {
+    public GatewayNotification putHeadersItem(final String key, final List<String> headersItem) {
         if (this.headers == null) {
             this.headers = new HashMap<String, List<String>>();
         }
@@ -101,21 +102,16 @@ public class GatewayNotification extends KillBillObject {
         return this;
     }
 
-    
     public Map<String, List<String>> getHeaders() {
         return headers;
     }
 
-    public void setHeaders(Map<String, List<String>> headers) {
-        this.headers = headers;
-    }
-
-    public GatewayNotification properties(Map<String, Object> properties) {
+    public GatewayNotification setProperties(final Map<String, Object> properties) {
         this.properties = properties;
         return this;
     }
 
-    public GatewayNotification putPropertiesItem(String key, Object propertiesItem) {
+    public GatewayNotification putPropertiesItem(final String key, final Object propertiesItem) {
         if (this.properties == null) {
             this.properties = new HashMap<String, Object>();
         }
@@ -123,13 +119,8 @@ public class GatewayNotification extends KillBillObject {
         return this;
     }
 
-    
     public Map<String, Object> getProperties() {
         return properties;
-    }
-
-    public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
     }
 
 
@@ -151,7 +142,11 @@ public class GatewayNotification extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(kbPaymentId, status, entity, headers, properties);
+        return Objects.hash(kbPaymentId,
+                            status,
+                            entity,
+                            headers,
+                            properties);
     }
 
 

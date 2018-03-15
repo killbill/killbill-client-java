@@ -49,68 +49,66 @@ public class OverdueCondition extends KillBillObject {
 
     private BigDecimal totalUnpaidInvoiceBalanceEqualsOrExceeds = null;
 
-    public OverdueCondition timeSinceEarliestUnpaidInvoiceEqualsOrExceeds(Duration timeSinceEarliestUnpaidInvoiceEqualsOrExceeds) {
+
+    public OverdueCondition() {
+    }
+
+    public OverdueCondition(final Duration timeSinceEarliestUnpaidInvoiceEqualsOrExceeds,
+                     final ControlTagType controlTagInclusion,
+                     final ControlTagType controlTagExclusion,
+                     final Integer numberOfUnpaidInvoicesEqualsOrExceeds,
+                     final List<PaymentResponse> responseForLastFailedPayment,
+                     final BigDecimal totalUnpaidInvoiceBalanceEqualsOrExceeds) {
+        this.timeSinceEarliestUnpaidInvoiceEqualsOrExceeds = timeSinceEarliestUnpaidInvoiceEqualsOrExceeds;
+        this.controlTagInclusion = controlTagInclusion;
+        this.controlTagExclusion = controlTagExclusion;
+        this.numberOfUnpaidInvoicesEqualsOrExceeds = numberOfUnpaidInvoicesEqualsOrExceeds;
+        this.responseForLastFailedPayment = responseForLastFailedPayment;
+        this.totalUnpaidInvoiceBalanceEqualsOrExceeds = totalUnpaidInvoiceBalanceEqualsOrExceeds;
+    }
+
+    public OverdueCondition setTimeSinceEarliestUnpaidInvoiceEqualsOrExceeds(final Duration timeSinceEarliestUnpaidInvoiceEqualsOrExceeds) {
         this.timeSinceEarliestUnpaidInvoiceEqualsOrExceeds = timeSinceEarliestUnpaidInvoiceEqualsOrExceeds;
         return this;
     }
 
-    
     public Duration getTimeSinceEarliestUnpaidInvoiceEqualsOrExceeds() {
         return timeSinceEarliestUnpaidInvoiceEqualsOrExceeds;
     }
 
-    public void setTimeSinceEarliestUnpaidInvoiceEqualsOrExceeds(Duration timeSinceEarliestUnpaidInvoiceEqualsOrExceeds) {
-        this.timeSinceEarliestUnpaidInvoiceEqualsOrExceeds = timeSinceEarliestUnpaidInvoiceEqualsOrExceeds;
-    }
-
-    public OverdueCondition controlTagInclusion(ControlTagType controlTagInclusion) {
+    public OverdueCondition setControlTagInclusion(final ControlTagType controlTagInclusion) {
         this.controlTagInclusion = controlTagInclusion;
         return this;
     }
 
-    
     public ControlTagType getControlTagInclusion() {
         return controlTagInclusion;
     }
 
-    public void setControlTagInclusion(ControlTagType controlTagInclusion) {
-        this.controlTagInclusion = controlTagInclusion;
-    }
-
-    public OverdueCondition controlTagExclusion(ControlTagType controlTagExclusion) {
+    public OverdueCondition setControlTagExclusion(final ControlTagType controlTagExclusion) {
         this.controlTagExclusion = controlTagExclusion;
         return this;
     }
 
-    
     public ControlTagType getControlTagExclusion() {
         return controlTagExclusion;
     }
 
-    public void setControlTagExclusion(ControlTagType controlTagExclusion) {
-        this.controlTagExclusion = controlTagExclusion;
-    }
-
-    public OverdueCondition numberOfUnpaidInvoicesEqualsOrExceeds(Integer numberOfUnpaidInvoicesEqualsOrExceeds) {
+    public OverdueCondition setNumberOfUnpaidInvoicesEqualsOrExceeds(final Integer numberOfUnpaidInvoicesEqualsOrExceeds) {
         this.numberOfUnpaidInvoicesEqualsOrExceeds = numberOfUnpaidInvoicesEqualsOrExceeds;
         return this;
     }
 
-    
     public Integer getNumberOfUnpaidInvoicesEqualsOrExceeds() {
         return numberOfUnpaidInvoicesEqualsOrExceeds;
     }
 
-    public void setNumberOfUnpaidInvoicesEqualsOrExceeds(Integer numberOfUnpaidInvoicesEqualsOrExceeds) {
-        this.numberOfUnpaidInvoicesEqualsOrExceeds = numberOfUnpaidInvoicesEqualsOrExceeds;
-    }
-
-    public OverdueCondition responseForLastFailedPayment(List<PaymentResponse> responseForLastFailedPayment) {
+    public OverdueCondition setResponseForLastFailedPayment(final List<PaymentResponse> responseForLastFailedPayment) {
         this.responseForLastFailedPayment = responseForLastFailedPayment;
         return this;
     }
 
-    public OverdueCondition addResponseForLastFailedPaymentItem(PaymentResponse responseForLastFailedPaymentItem) {
+    public OverdueCondition addResponseForLastFailedPaymentItem(final PaymentResponse responseForLastFailedPaymentItem) {
         if (this.responseForLastFailedPayment == null) {
             this.responseForLastFailedPayment = new ArrayList<PaymentResponse>();
         }
@@ -118,27 +116,17 @@ public class OverdueCondition extends KillBillObject {
         return this;
     }
 
-    
     public List<PaymentResponse> getResponseForLastFailedPayment() {
         return responseForLastFailedPayment;
     }
 
-    public void setResponseForLastFailedPayment(List<PaymentResponse> responseForLastFailedPayment) {
-        this.responseForLastFailedPayment = responseForLastFailedPayment;
-    }
-
-    public OverdueCondition totalUnpaidInvoiceBalanceEqualsOrExceeds(BigDecimal totalUnpaidInvoiceBalanceEqualsOrExceeds) {
+    public OverdueCondition setTotalUnpaidInvoiceBalanceEqualsOrExceeds(final BigDecimal totalUnpaidInvoiceBalanceEqualsOrExceeds) {
         this.totalUnpaidInvoiceBalanceEqualsOrExceeds = totalUnpaidInvoiceBalanceEqualsOrExceeds;
         return this;
     }
 
-    
     public BigDecimal getTotalUnpaidInvoiceBalanceEqualsOrExceeds() {
         return totalUnpaidInvoiceBalanceEqualsOrExceeds;
-    }
-
-    public void setTotalUnpaidInvoiceBalanceEqualsOrExceeds(BigDecimal totalUnpaidInvoiceBalanceEqualsOrExceeds) {
-        this.totalUnpaidInvoiceBalanceEqualsOrExceeds = totalUnpaidInvoiceBalanceEqualsOrExceeds;
     }
 
 
@@ -161,7 +149,12 @@ public class OverdueCondition extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(timeSinceEarliestUnpaidInvoiceEqualsOrExceeds, controlTagInclusion, controlTagExclusion, numberOfUnpaidInvoicesEqualsOrExceeds, responseForLastFailedPayment, totalUnpaidInvoiceBalanceEqualsOrExceeds);
+        return Objects.hash(timeSinceEarliestUnpaidInvoiceEqualsOrExceeds,
+                            controlTagInclusion,
+                            controlTagExclusion,
+                            numberOfUnpaidInvoicesEqualsOrExceeds,
+                            responseForLastFailedPayment,
+                            totalUnpaidInvoiceBalanceEqualsOrExceeds);
     }
 
 

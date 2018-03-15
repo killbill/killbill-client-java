@@ -37,46 +37,43 @@ public class AdminPayment extends KillBillObject {
 
     private String transactionStatus = null;
 
-    public AdminPayment lastSuccessPaymentState(String lastSuccessPaymentState) {
+
+    public AdminPayment() {
+    }
+
+    public AdminPayment(final String lastSuccessPaymentState,
+                     final String currentPaymentStateName,
+                     final String transactionStatus) {
+        this.lastSuccessPaymentState = lastSuccessPaymentState;
+        this.currentPaymentStateName = currentPaymentStateName;
+        this.transactionStatus = transactionStatus;
+    }
+
+    public AdminPayment setLastSuccessPaymentState(final String lastSuccessPaymentState) {
         this.lastSuccessPaymentState = lastSuccessPaymentState;
         return this;
     }
 
-    
     public String getLastSuccessPaymentState() {
         return lastSuccessPaymentState;
     }
 
-    public void setLastSuccessPaymentState(String lastSuccessPaymentState) {
-        this.lastSuccessPaymentState = lastSuccessPaymentState;
-    }
-
-    public AdminPayment currentPaymentStateName(String currentPaymentStateName) {
+    public AdminPayment setCurrentPaymentStateName(final String currentPaymentStateName) {
         this.currentPaymentStateName = currentPaymentStateName;
         return this;
     }
 
-    
     public String getCurrentPaymentStateName() {
         return currentPaymentStateName;
     }
 
-    public void setCurrentPaymentStateName(String currentPaymentStateName) {
-        this.currentPaymentStateName = currentPaymentStateName;
-    }
-
-    public AdminPayment transactionStatus(String transactionStatus) {
+    public AdminPayment setTransactionStatus(final String transactionStatus) {
         this.transactionStatus = transactionStatus;
         return this;
     }
 
-    
     public String getTransactionStatus() {
         return transactionStatus;
-    }
-
-    public void setTransactionStatus(String transactionStatus) {
-        this.transactionStatus = transactionStatus;
     }
 
 
@@ -96,7 +93,9 @@ public class AdminPayment extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastSuccessPaymentState, currentPaymentStateName, transactionStatus);
+        return Objects.hash(lastSuccessPaymentState,
+                            currentPaymentStateName,
+                            transactionStatus);
     }
 
 

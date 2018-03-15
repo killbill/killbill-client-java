@@ -47,68 +47,64 @@ public class UsagePriceOverride extends KillBillObject {
 
     private List<TierPriceOverride> tierPriceOverrides = null;
 
-    public UsagePriceOverride usageName(String usageName) {
+
+    public UsagePriceOverride() {
+    }
+
+    public UsagePriceOverride(final String usageName,
+                     final UsageType usageType,
+                     final BillingMode billingMode,
+                     final TierBlockPolicy tierBlockPolicy,
+                     final List<TierPriceOverride> tierPriceOverrides) {
+        this.usageName = usageName;
+        this.usageType = usageType;
+        this.billingMode = billingMode;
+        this.tierBlockPolicy = tierBlockPolicy;
+        this.tierPriceOverrides = tierPriceOverrides;
+    }
+
+    public UsagePriceOverride setUsageName(final String usageName) {
         this.usageName = usageName;
         return this;
     }
 
-    
     public String getUsageName() {
         return usageName;
     }
 
-    public void setUsageName(String usageName) {
-        this.usageName = usageName;
-    }
-
-    public UsagePriceOverride usageType(UsageType usageType) {
+    public UsagePriceOverride setUsageType(final UsageType usageType) {
         this.usageType = usageType;
         return this;
     }
 
-    
     public UsageType getUsageType() {
         return usageType;
     }
 
-    public void setUsageType(UsageType usageType) {
-        this.usageType = usageType;
-    }
-
-    public UsagePriceOverride billingMode(BillingMode billingMode) {
+    public UsagePriceOverride setBillingMode(final BillingMode billingMode) {
         this.billingMode = billingMode;
         return this;
     }
 
-    
     public BillingMode getBillingMode() {
         return billingMode;
     }
 
-    public void setBillingMode(BillingMode billingMode) {
-        this.billingMode = billingMode;
-    }
-
-    public UsagePriceOverride tierBlockPolicy(TierBlockPolicy tierBlockPolicy) {
+    public UsagePriceOverride setTierBlockPolicy(final TierBlockPolicy tierBlockPolicy) {
         this.tierBlockPolicy = tierBlockPolicy;
         return this;
     }
 
-    
     public TierBlockPolicy getTierBlockPolicy() {
         return tierBlockPolicy;
     }
 
-    public void setTierBlockPolicy(TierBlockPolicy tierBlockPolicy) {
-        this.tierBlockPolicy = tierBlockPolicy;
-    }
-
-    public UsagePriceOverride tierPriceOverrides(List<TierPriceOverride> tierPriceOverrides) {
+    public UsagePriceOverride setTierPriceOverrides(final List<TierPriceOverride> tierPriceOverrides) {
         this.tierPriceOverrides = tierPriceOverrides;
         return this;
     }
 
-    public UsagePriceOverride addTierPriceOverridesItem(TierPriceOverride tierPriceOverridesItem) {
+    public UsagePriceOverride addTierPriceOverridesItem(final TierPriceOverride tierPriceOverridesItem) {
         if (this.tierPriceOverrides == null) {
             this.tierPriceOverrides = new ArrayList<TierPriceOverride>();
         }
@@ -116,13 +112,8 @@ public class UsagePriceOverride extends KillBillObject {
         return this;
     }
 
-    
     public List<TierPriceOverride> getTierPriceOverrides() {
         return tierPriceOverrides;
-    }
-
-    public void setTierPriceOverrides(List<TierPriceOverride> tierPriceOverrides) {
-        this.tierPriceOverrides = tierPriceOverrides;
     }
 
 
@@ -144,7 +135,11 @@ public class UsagePriceOverride extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(usageName, usageType, billingMode, tierBlockPolicy, tierPriceOverrides);
+        return Objects.hash(usageName,
+                            usageType,
+                            billingMode,
+                            tierBlockPolicy,
+                            tierPriceOverrides);
     }
 
 

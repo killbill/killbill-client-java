@@ -20,9 +20,9 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
-import org.killbill.billing.catalog.api.BlockType;
-import org.killbill.billing.client.model.gen.InternationalPrice;
-import org.killbill.billing.client.model.gen.Unit;
+import java.util.ArrayList;
+import java.util.List;
+import org.killbill.billing.client.model.gen.Price;
 
 /**
  *           DO NOT EDIT !!!
@@ -34,100 +34,70 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class TieredBlock extends KillBillObject {
 
-    private Double max = null;
+    private String unit = null;
 
-    private BlockType type = null;
+    private String size = null;
 
-    private Double size = null;
+    private String max = null;
 
-    private Unit unit = null;
+    private List<Price> prices = null;
 
-    private InternationalPrice price = null;
 
-    private Double minTopUpCredit = null;
-
-    public TieredBlock max(Double max) {
-        this.max = max;
-        return this;
+    public TieredBlock() {
     }
 
-    
-    public Double getMax() {
-        return max;
-    }
-
-    public void setMax(Double max) {
-        this.max = max;
-    }
-
-    public TieredBlock type(BlockType type) {
-        this.type = type;
-        return this;
-    }
-
-    
-    public BlockType getType() {
-        return type;
-    }
-
-    public void setType(BlockType type) {
-        this.type = type;
-    }
-
-    public TieredBlock size(Double size) {
+    public TieredBlock(final String unit,
+                     final String size,
+                     final String max,
+                     final List<Price> prices) {
+        this.unit = unit;
         this.size = size;
-        return this;
+        this.max = max;
+        this.prices = prices;
     }
 
-    
-    public Double getSize() {
-        return size;
-    }
-
-    public void setSize(Double size) {
-        this.size = size;
-    }
-
-    public TieredBlock unit(Unit unit) {
+    public TieredBlock setUnit(final String unit) {
         this.unit = unit;
         return this;
     }
 
-    
-    public Unit getUnit() {
+    public String getUnit() {
         return unit;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
-
-    public TieredBlock price(InternationalPrice price) {
-        this.price = price;
+    public TieredBlock setSize(final String size) {
+        this.size = size;
         return this;
     }
 
-    
-    public InternationalPrice getPrice() {
-        return price;
+    public String getSize() {
+        return size;
     }
 
-    public void setPrice(InternationalPrice price) {
-        this.price = price;
-    }
-
-    public TieredBlock minTopUpCredit(Double minTopUpCredit) {
-        this.minTopUpCredit = minTopUpCredit;
+    public TieredBlock setMax(final String max) {
+        this.max = max;
         return this;
     }
 
-    
-    public Double getMinTopUpCredit() {
-        return minTopUpCredit;
+    public String getMax() {
+        return max;
     }
 
-    public void setMinTopUpCredit(Double minTopUpCredit) {
-        this.minTopUpCredit = minTopUpCredit;
+    public TieredBlock setPrices(final List<Price> prices) {
+        this.prices = prices;
+        return this;
+    }
+
+    public TieredBlock addPricesItem(final Price pricesItem) {
+        if (this.prices == null) {
+            this.prices = new ArrayList<Price>();
+        }
+        this.prices.add(pricesItem);
+        return this;
+    }
+
+    public List<Price> getPrices() {
+        return prices;
     }
 
 
@@ -140,17 +110,18 @@ public class TieredBlock extends KillBillObject {
             return false;
         }
         TieredBlock tieredBlock = (TieredBlock) o;
-        return Objects.equals(this.max, tieredBlock.max) &&
-        Objects.equals(this.type, tieredBlock.type) &&
+        return Objects.equals(this.unit, tieredBlock.unit) &&
         Objects.equals(this.size, tieredBlock.size) &&
-        Objects.equals(this.unit, tieredBlock.unit) &&
-        Objects.equals(this.price, tieredBlock.price) &&
-        Objects.equals(this.minTopUpCredit, tieredBlock.minTopUpCredit);
+        Objects.equals(this.max, tieredBlock.max) &&
+        Objects.equals(this.prices, tieredBlock.prices);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(max, type, size, unit, price, minTopUpCredit);
+        return Objects.hash(unit,
+                            size,
+                            max,
+                            prices);
     }
 
 
@@ -159,12 +130,10 @@ public class TieredBlock extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class TieredBlock {\n");
         
-        sb.append("    max: ").append(toIndentedString(max)).append("\n");
-        sb.append("    type: ").append(toIndentedString(type)).append("\n");
-        sb.append("    size: ").append(toIndentedString(size)).append("\n");
         sb.append("    unit: ").append(toIndentedString(unit)).append("\n");
-        sb.append("    price: ").append(toIndentedString(price)).append("\n");
-        sb.append("    minTopUpCredit: ").append(toIndentedString(minTopUpCredit)).append("\n");
+        sb.append("    size: ").append(toIndentedString(size)).append("\n");
+        sb.append("    max: ").append(toIndentedString(max)).append("\n");
+        sb.append("    prices: ").append(toIndentedString(prices)).append("\n");
         sb.append("}");
         return sb.toString();
     }

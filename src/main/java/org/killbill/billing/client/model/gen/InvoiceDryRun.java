@@ -60,166 +60,141 @@ public class InvoiceDryRun extends KillBillObject {
 
     private List<PhasePriceOverride> priceOverrides = null;
 
-    public InvoiceDryRun dryRunType(String dryRunType) {
+
+    public InvoiceDryRun() {
+    }
+
+    public InvoiceDryRun(final String dryRunType,
+                     final String dryRunAction,
+                     final String phaseType,
+                     final String productName,
+                     final String productCategory,
+                     final String billingPeriod,
+                     final String priceListName,
+                     final UUID subscriptionId,
+                     final UUID bundleId,
+                     final LocalDate effectiveDate,
+                     final String billingPolicy,
+                     final List<PhasePriceOverride> priceOverrides) {
+        this.dryRunType = dryRunType;
+        this.dryRunAction = dryRunAction;
+        this.phaseType = phaseType;
+        this.productName = productName;
+        this.productCategory = productCategory;
+        this.billingPeriod = billingPeriod;
+        this.priceListName = priceListName;
+        this.subscriptionId = subscriptionId;
+        this.bundleId = bundleId;
+        this.effectiveDate = effectiveDate;
+        this.billingPolicy = billingPolicy;
+        this.priceOverrides = priceOverrides;
+    }
+
+    public InvoiceDryRun setDryRunType(final String dryRunType) {
         this.dryRunType = dryRunType;
         return this;
     }
 
-    
     public String getDryRunType() {
         return dryRunType;
     }
 
-    public void setDryRunType(String dryRunType) {
-        this.dryRunType = dryRunType;
-    }
-
-    public InvoiceDryRun dryRunAction(String dryRunAction) {
+    public InvoiceDryRun setDryRunAction(final String dryRunAction) {
         this.dryRunAction = dryRunAction;
         return this;
     }
 
-    
     public String getDryRunAction() {
         return dryRunAction;
     }
 
-    public void setDryRunAction(String dryRunAction) {
-        this.dryRunAction = dryRunAction;
-    }
-
-    public InvoiceDryRun phaseType(String phaseType) {
+    public InvoiceDryRun setPhaseType(final String phaseType) {
         this.phaseType = phaseType;
         return this;
     }
 
-    
     public String getPhaseType() {
         return phaseType;
     }
 
-    public void setPhaseType(String phaseType) {
-        this.phaseType = phaseType;
-    }
-
-    public InvoiceDryRun productName(String productName) {
+    public InvoiceDryRun setProductName(final String productName) {
         this.productName = productName;
         return this;
     }
 
-    
     public String getProductName() {
         return productName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public InvoiceDryRun productCategory(String productCategory) {
+    public InvoiceDryRun setProductCategory(final String productCategory) {
         this.productCategory = productCategory;
         return this;
     }
 
-    
     public String getProductCategory() {
         return productCategory;
     }
 
-    public void setProductCategory(String productCategory) {
-        this.productCategory = productCategory;
-    }
-
-    public InvoiceDryRun billingPeriod(String billingPeriod) {
+    public InvoiceDryRun setBillingPeriod(final String billingPeriod) {
         this.billingPeriod = billingPeriod;
         return this;
     }
 
-    
     public String getBillingPeriod() {
         return billingPeriod;
     }
 
-    public void setBillingPeriod(String billingPeriod) {
-        this.billingPeriod = billingPeriod;
-    }
-
-    public InvoiceDryRun priceListName(String priceListName) {
+    public InvoiceDryRun setPriceListName(final String priceListName) {
         this.priceListName = priceListName;
         return this;
     }
 
-    
     public String getPriceListName() {
         return priceListName;
     }
 
-    public void setPriceListName(String priceListName) {
-        this.priceListName = priceListName;
-    }
-
-    public InvoiceDryRun subscriptionId(UUID subscriptionId) {
+    public InvoiceDryRun setSubscriptionId(final UUID subscriptionId) {
         this.subscriptionId = subscriptionId;
         return this;
     }
 
-    
     public UUID getSubscriptionId() {
         return subscriptionId;
     }
 
-    public void setSubscriptionId(UUID subscriptionId) {
-        this.subscriptionId = subscriptionId;
-    }
-
-    public InvoiceDryRun bundleId(UUID bundleId) {
+    public InvoiceDryRun setBundleId(final UUID bundleId) {
         this.bundleId = bundleId;
         return this;
     }
 
-    
     public UUID getBundleId() {
         return bundleId;
     }
 
-    public void setBundleId(UUID bundleId) {
-        this.bundleId = bundleId;
-    }
-
-    public InvoiceDryRun effectiveDate(LocalDate effectiveDate) {
+    public InvoiceDryRun setEffectiveDate(final LocalDate effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    
     public LocalDate getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(LocalDate effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public InvoiceDryRun billingPolicy(String billingPolicy) {
+    public InvoiceDryRun setBillingPolicy(final String billingPolicy) {
         this.billingPolicy = billingPolicy;
         return this;
     }
 
-    
     public String getBillingPolicy() {
         return billingPolicy;
     }
 
-    public void setBillingPolicy(String billingPolicy) {
-        this.billingPolicy = billingPolicy;
-    }
-
-    public InvoiceDryRun priceOverrides(List<PhasePriceOverride> priceOverrides) {
+    public InvoiceDryRun setPriceOverrides(final List<PhasePriceOverride> priceOverrides) {
         this.priceOverrides = priceOverrides;
         return this;
     }
 
-    public InvoiceDryRun addPriceOverridesItem(PhasePriceOverride priceOverridesItem) {
+    public InvoiceDryRun addPriceOverridesItem(final PhasePriceOverride priceOverridesItem) {
         if (this.priceOverrides == null) {
             this.priceOverrides = new ArrayList<PhasePriceOverride>();
         }
@@ -227,13 +202,8 @@ public class InvoiceDryRun extends KillBillObject {
         return this;
     }
 
-    
     public List<PhasePriceOverride> getPriceOverrides() {
         return priceOverrides;
-    }
-
-    public void setPriceOverrides(List<PhasePriceOverride> priceOverrides) {
-        this.priceOverrides = priceOverrides;
     }
 
 
@@ -262,7 +232,18 @@ public class InvoiceDryRun extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(dryRunType, dryRunAction, phaseType, productName, productCategory, billingPeriod, priceListName, subscriptionId, bundleId, effectiveDate, billingPolicy, priceOverrides);
+        return Objects.hash(dryRunType,
+                            dryRunAction,
+                            phaseType,
+                            productName,
+                            productCategory,
+                            billingPeriod,
+                            priceListName,
+                            subscriptionId,
+                            bundleId,
+                            effectiveDate,
+                            billingPolicy,
+                            priceOverrides);
     }
 
 

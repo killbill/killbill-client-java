@@ -35,32 +35,32 @@ public class NodeCommandProperty extends KillBillObject {
 
     private Object value = null;
 
-    public NodeCommandProperty key(String key) {
+
+    public NodeCommandProperty() {
+    }
+
+    public NodeCommandProperty(final String key,
+                     final Object value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public NodeCommandProperty setKey(final String key) {
         this.key = key;
         return this;
     }
 
-    
     public String getKey() {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public NodeCommandProperty value(Object value) {
+    public NodeCommandProperty setValue(final Object value) {
         this.value = value;
         return this;
     }
 
-    
     public Object getValue() {
         return value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
     }
 
 
@@ -79,7 +79,8 @@ public class NodeCommandProperty extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(key, value);
+        return Objects.hash(key,
+                            value);
     }
 
 

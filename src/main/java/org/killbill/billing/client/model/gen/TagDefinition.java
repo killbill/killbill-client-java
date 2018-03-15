@@ -44,68 +44,64 @@ public class TagDefinition extends KillBillObject {
 
     private List<String> applicableObjectTypes = null;
 
-    public TagDefinition id(UUID id) {
+
+    public TagDefinition() {
+    }
+
+    public TagDefinition(final UUID id,
+                     final Boolean isControlTag,
+                     final String name,
+                     final String description,
+                     final List<String> applicableObjectTypes) {
+        this.id = id;
+        this.isControlTag = isControlTag;
+        this.name = name;
+        this.description = description;
+        this.applicableObjectTypes = applicableObjectTypes;
+    }
+
+    public TagDefinition setId(final UUID id) {
         this.id = id;
         return this;
     }
 
-    
     public UUID getId() {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public TagDefinition isControlTag(Boolean isControlTag) {
+    public TagDefinition setIsControlTag(final Boolean isControlTag) {
         this.isControlTag = isControlTag;
         return this;
     }
 
-    
     public Boolean isIsControlTag() {
         return isControlTag;
     }
 
-    public void setIsControlTag(Boolean isControlTag) {
-        this.isControlTag = isControlTag;
-    }
-
-    public TagDefinition name(String name) {
+    public TagDefinition setName(final String name) {
         this.name = name;
         return this;
     }
 
-    
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public TagDefinition description(String description) {
+    public TagDefinition setDescription(final String description) {
         this.description = description;
         return this;
     }
 
-    
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public TagDefinition applicableObjectTypes(List<String> applicableObjectTypes) {
+    public TagDefinition setApplicableObjectTypes(final List<String> applicableObjectTypes) {
         this.applicableObjectTypes = applicableObjectTypes;
         return this;
     }
 
-    public TagDefinition addApplicableObjectTypesItem(String applicableObjectTypesItem) {
+    public TagDefinition addApplicableObjectTypesItem(final String applicableObjectTypesItem) {
         if (this.applicableObjectTypes == null) {
             this.applicableObjectTypes = new ArrayList<String>();
         }
@@ -113,13 +109,8 @@ public class TagDefinition extends KillBillObject {
         return this;
     }
 
-    
     public List<String> getApplicableObjectTypes() {
         return applicableObjectTypes;
-    }
-
-    public void setApplicableObjectTypes(List<String> applicableObjectTypes) {
-        this.applicableObjectTypes = applicableObjectTypes;
     }
 
 
@@ -141,7 +132,11 @@ public class TagDefinition extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, isControlTag, name, description, applicableObjectTypes);
+        return Objects.hash(id,
+                            isControlTag,
+                            name,
+                            description,
+                            applicableObjectTypes);
     }
 
 

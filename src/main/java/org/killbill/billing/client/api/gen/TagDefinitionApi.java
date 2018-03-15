@@ -70,6 +70,7 @@ public class TagDefinitionApi {
         return httpClient.doPost(uri, body, TagDefinition.class, requestOptions);
     }
 
+
     public void deleteTagDefinition(final UUID tagDefinitionId,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling deleteTagDefinition");
 
@@ -81,6 +82,10 @@ public class TagDefinitionApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
+    }
+
+    public TagDefinition getTagDefinition(final UUID tagDefinitionId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getTagDefinition(tagDefinitionId, AuditLevel.NONE, inputOptions);
     }
 
     public TagDefinition getTagDefinition(final UUID tagDefinitionId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -100,6 +105,10 @@ public class TagDefinitionApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, TagDefinition.class, requestOptions);
+    }
+
+    public TagDefinitions getTagDefinitions( final RequestOptions inputOptions) throws KillBillClientException {
+        return getTagDefinitions(AuditLevel.NONE, inputOptions);
     }
 
     public TagDefinitions getTagDefinitions(final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {

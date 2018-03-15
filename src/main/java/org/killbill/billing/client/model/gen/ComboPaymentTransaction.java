@@ -49,54 +49,57 @@ public class ComboPaymentTransaction extends KillBillObject {
 
     private String transactionType = null;
 
-    public ComboPaymentTransaction account(Account account) {
+
+    public ComboPaymentTransaction() {
+    }
+
+    public ComboPaymentTransaction(final Account account,
+                     final PaymentMethod paymentMethod,
+                     final PaymentTransaction transaction,
+                     final List<PluginProperty> paymentMethodPluginProperties,
+                     final List<PluginProperty> transactionPluginProperties,
+                     final String transactionType) {
+        this.account = account;
+        this.paymentMethod = paymentMethod;
+        this.transaction = transaction;
+        this.paymentMethodPluginProperties = paymentMethodPluginProperties;
+        this.transactionPluginProperties = transactionPluginProperties;
+        this.transactionType = transactionType;
+    }
+
+    public ComboPaymentTransaction setAccount(final Account account) {
         this.account = account;
         return this;
     }
 
-    
     public Account getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public ComboPaymentTransaction paymentMethod(PaymentMethod paymentMethod) {
+    public ComboPaymentTransaction setPaymentMethod(final PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
         return this;
     }
 
-    
     public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public ComboPaymentTransaction transaction(PaymentTransaction transaction) {
+    public ComboPaymentTransaction setTransaction(final PaymentTransaction transaction) {
         this.transaction = transaction;
         return this;
     }
 
-    
     public PaymentTransaction getTransaction() {
         return transaction;
     }
 
-    public void setTransaction(PaymentTransaction transaction) {
-        this.transaction = transaction;
-    }
-
-    public ComboPaymentTransaction paymentMethodPluginProperties(List<PluginProperty> paymentMethodPluginProperties) {
+    public ComboPaymentTransaction setPaymentMethodPluginProperties(final List<PluginProperty> paymentMethodPluginProperties) {
         this.paymentMethodPluginProperties = paymentMethodPluginProperties;
         return this;
     }
 
-    public ComboPaymentTransaction addPaymentMethodPluginPropertiesItem(PluginProperty paymentMethodPluginPropertiesItem) {
+    public ComboPaymentTransaction addPaymentMethodPluginPropertiesItem(final PluginProperty paymentMethodPluginPropertiesItem) {
         if (this.paymentMethodPluginProperties == null) {
             this.paymentMethodPluginProperties = new ArrayList<PluginProperty>();
         }
@@ -104,21 +107,16 @@ public class ComboPaymentTransaction extends KillBillObject {
         return this;
     }
 
-    
     public List<PluginProperty> getPaymentMethodPluginProperties() {
         return paymentMethodPluginProperties;
     }
 
-    public void setPaymentMethodPluginProperties(List<PluginProperty> paymentMethodPluginProperties) {
-        this.paymentMethodPluginProperties = paymentMethodPluginProperties;
-    }
-
-    public ComboPaymentTransaction transactionPluginProperties(List<PluginProperty> transactionPluginProperties) {
+    public ComboPaymentTransaction setTransactionPluginProperties(final List<PluginProperty> transactionPluginProperties) {
         this.transactionPluginProperties = transactionPluginProperties;
         return this;
     }
 
-    public ComboPaymentTransaction addTransactionPluginPropertiesItem(PluginProperty transactionPluginPropertiesItem) {
+    public ComboPaymentTransaction addTransactionPluginPropertiesItem(final PluginProperty transactionPluginPropertiesItem) {
         if (this.transactionPluginProperties == null) {
             this.transactionPluginProperties = new ArrayList<PluginProperty>();
         }
@@ -126,27 +124,17 @@ public class ComboPaymentTransaction extends KillBillObject {
         return this;
     }
 
-    
     public List<PluginProperty> getTransactionPluginProperties() {
         return transactionPluginProperties;
     }
 
-    public void setTransactionPluginProperties(List<PluginProperty> transactionPluginProperties) {
-        this.transactionPluginProperties = transactionPluginProperties;
-    }
-
-    public ComboPaymentTransaction transactionType(String transactionType) {
+    public ComboPaymentTransaction setTransactionType(final String transactionType) {
         this.transactionType = transactionType;
         return this;
     }
 
-    
     public String getTransactionType() {
         return transactionType;
-    }
-
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
     }
 
 
@@ -169,7 +157,12 @@ public class ComboPaymentTransaction extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(account, paymentMethod, transaction, paymentMethodPluginProperties, transactionPluginProperties, transactionType);
+        return Objects.hash(account,
+                            paymentMethod,
+                            transaction,
+                            paymentMethodPluginProperties,
+                            transactionPluginProperties,
+                            transactionType);
     }
 
 

@@ -36,12 +36,20 @@ public class HostedPaymentPageFields extends KillBillObject {
 
     private List<PluginProperty> customFields = null;
 
-    public HostedPaymentPageFields customFields(List<PluginProperty> customFields) {
+
+    public HostedPaymentPageFields() {
+    }
+
+    public HostedPaymentPageFields(final List<PluginProperty> customFields) {
+        this.customFields = customFields;
+    }
+
+    public HostedPaymentPageFields setCustomFields(final List<PluginProperty> customFields) {
         this.customFields = customFields;
         return this;
     }
 
-    public HostedPaymentPageFields addCustomFieldsItem(PluginProperty customFieldsItem) {
+    public HostedPaymentPageFields addCustomFieldsItem(final PluginProperty customFieldsItem) {
         if (this.customFields == null) {
             this.customFields = new ArrayList<PluginProperty>();
         }
@@ -49,13 +57,8 @@ public class HostedPaymentPageFields extends KillBillObject {
         return this;
     }
 
-    
     public List<PluginProperty> getCustomFields() {
         return customFields;
-    }
-
-    public void setCustomFields(List<PluginProperty> customFields) {
-        this.customFields = customFields;
     }
 
 

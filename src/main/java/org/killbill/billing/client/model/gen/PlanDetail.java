@@ -45,68 +45,64 @@ public class PlanDetail extends KillBillObject {
 
     private List<Price> finalPhaseRecurringPrice = null;
 
-    public PlanDetail product(String product) {
+
+    public PlanDetail() {
+    }
+
+    public PlanDetail(final String product,
+                     final String plan,
+                     final String priceList,
+                     final BillingPeriod finalPhaseBillingPeriod,
+                     final List<Price> finalPhaseRecurringPrice) {
+        this.product = product;
+        this.plan = plan;
+        this.priceList = priceList;
+        this.finalPhaseBillingPeriod = finalPhaseBillingPeriod;
+        this.finalPhaseRecurringPrice = finalPhaseRecurringPrice;
+    }
+
+    public PlanDetail setProduct(final String product) {
         this.product = product;
         return this;
     }
 
-    
     public String getProduct() {
         return product;
     }
 
-    public void setProduct(String product) {
-        this.product = product;
-    }
-
-    public PlanDetail plan(String plan) {
+    public PlanDetail setPlan(final String plan) {
         this.plan = plan;
         return this;
     }
 
-    
     public String getPlan() {
         return plan;
     }
 
-    public void setPlan(String plan) {
-        this.plan = plan;
-    }
-
-    public PlanDetail priceList(String priceList) {
+    public PlanDetail setPriceList(final String priceList) {
         this.priceList = priceList;
         return this;
     }
 
-    
     public String getPriceList() {
         return priceList;
     }
 
-    public void setPriceList(String priceList) {
-        this.priceList = priceList;
-    }
-
-    public PlanDetail finalPhaseBillingPeriod(BillingPeriod finalPhaseBillingPeriod) {
+    public PlanDetail setFinalPhaseBillingPeriod(final BillingPeriod finalPhaseBillingPeriod) {
         this.finalPhaseBillingPeriod = finalPhaseBillingPeriod;
         return this;
     }
 
-    
     public BillingPeriod getFinalPhaseBillingPeriod() {
         return finalPhaseBillingPeriod;
     }
 
-    public void setFinalPhaseBillingPeriod(BillingPeriod finalPhaseBillingPeriod) {
-        this.finalPhaseBillingPeriod = finalPhaseBillingPeriod;
-    }
-
-    public PlanDetail finalPhaseRecurringPrice(List<Price> finalPhaseRecurringPrice) {
+    public PlanDetail setFinalPhaseRecurringPrice(final List<Price> finalPhaseRecurringPrice) {
         this.finalPhaseRecurringPrice = finalPhaseRecurringPrice;
         return this;
     }
 
-    public PlanDetail addFinalPhaseRecurringPriceItem(Price finalPhaseRecurringPriceItem) {
+    public PlanDetail addFinalPhaseRecurringPriceItem(final Price finalPhaseRecurringPriceItem) {
         if (this.finalPhaseRecurringPrice == null) {
             this.finalPhaseRecurringPrice = new ArrayList<Price>();
         }
@@ -114,13 +110,8 @@ public class PlanDetail extends KillBillObject {
         return this;
     }
 
-    
     public List<Price> getFinalPhaseRecurringPrice() {
         return finalPhaseRecurringPrice;
-    }
-
-    public void setFinalPhaseRecurringPrice(List<Price> finalPhaseRecurringPrice) {
-        this.finalPhaseRecurringPrice = finalPhaseRecurringPrice;
     }
 
 
@@ -142,7 +133,11 @@ public class PlanDetail extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(product, plan, priceList, finalPhaseBillingPeriod, finalPhaseRecurringPrice);
+        return Objects.hash(product,
+                            plan,
+                            priceList,
+                            finalPhaseBillingPeriod,
+                            finalPhaseRecurringPrice);
     }
 
 

@@ -36,23 +36,26 @@ public class BulkSubscriptionsBundle extends KillBillObject {
 
     private List<Subscription> baseEntitlementAndAddOns = new ArrayList<Subscription>();
 
-    public BulkSubscriptionsBundle baseEntitlementAndAddOns(List<Subscription> baseEntitlementAndAddOns) {
+
+    public BulkSubscriptionsBundle() {
+    }
+
+    public BulkSubscriptionsBundle(final List<Subscription> baseEntitlementAndAddOns) {
+        this.baseEntitlementAndAddOns = baseEntitlementAndAddOns;
+    }
+
+    public BulkSubscriptionsBundle setBaseEntitlementAndAddOns(final List<Subscription> baseEntitlementAndAddOns) {
         this.baseEntitlementAndAddOns = baseEntitlementAndAddOns;
         return this;
     }
 
-    public BulkSubscriptionsBundle addBaseEntitlementAndAddOnsItem(Subscription baseEntitlementAndAddOnsItem) {
+    public BulkSubscriptionsBundle addBaseEntitlementAndAddOnsItem(final Subscription baseEntitlementAndAddOnsItem) {
         this.baseEntitlementAndAddOns.add(baseEntitlementAndAddOnsItem);
         return this;
     }
 
-    
     public List<Subscription> getBaseEntitlementAndAddOns() {
         return baseEntitlementAndAddOns;
-    }
-
-    public void setBaseEntitlementAndAddOns(List<Subscription> baseEntitlementAndAddOns) {
-        this.baseEntitlementAndAddOns = baseEntitlementAndAddOns;
     }
 
 

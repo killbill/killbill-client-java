@@ -63,166 +63,143 @@ public class Payment extends KillBillObject {
 
     private List<PaymentAttempt> paymentAttempts = null;
 
-    public Payment accountId(UUID accountId) {
+
+    public Payment() {
+    }
+
+    public Payment(final UUID accountId,
+                     final UUID paymentId,
+                     final String paymentNumber,
+                     final String paymentExternalKey,
+                     final BigDecimal authAmount,
+                     final BigDecimal capturedAmount,
+                     final BigDecimal purchasedAmount,
+                     final BigDecimal refundedAmount,
+                     final BigDecimal creditedAmount,
+                     final String currency,
+                     final UUID paymentMethodId,
+                     final List<PaymentTransaction> transactions,
+                     final List<PaymentAttempt> paymentAttempts) {
+        this.accountId = accountId;
+        this.paymentId = paymentId;
+        this.paymentNumber = paymentNumber;
+        this.paymentExternalKey = paymentExternalKey;
+        this.authAmount = authAmount;
+        this.capturedAmount = capturedAmount;
+        this.purchasedAmount = purchasedAmount;
+        this.refundedAmount = refundedAmount;
+        this.creditedAmount = creditedAmount;
+        this.currency = currency;
+        this.paymentMethodId = paymentMethodId;
+        this.transactions = transactions;
+        this.paymentAttempts = paymentAttempts;
+    }
+
+    public Payment setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public Payment paymentId(UUID paymentId) {
+    public Payment setPaymentId(final UUID paymentId) {
         this.paymentId = paymentId;
         return this;
     }
 
-    
     public UUID getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(UUID paymentId) {
-        this.paymentId = paymentId;
-    }
-
-    public Payment paymentNumber(String paymentNumber) {
+    public Payment setPaymentNumber(final String paymentNumber) {
         this.paymentNumber = paymentNumber;
         return this;
     }
 
-    
     public String getPaymentNumber() {
         return paymentNumber;
     }
 
-    public void setPaymentNumber(String paymentNumber) {
-        this.paymentNumber = paymentNumber;
-    }
-
-    public Payment paymentExternalKey(String paymentExternalKey) {
+    public Payment setPaymentExternalKey(final String paymentExternalKey) {
         this.paymentExternalKey = paymentExternalKey;
         return this;
     }
 
-    
     public String getPaymentExternalKey() {
         return paymentExternalKey;
     }
 
-    public void setPaymentExternalKey(String paymentExternalKey) {
-        this.paymentExternalKey = paymentExternalKey;
-    }
-
-    public Payment authAmount(BigDecimal authAmount) {
+    public Payment setAuthAmount(final BigDecimal authAmount) {
         this.authAmount = authAmount;
         return this;
     }
 
-    
     public BigDecimal getAuthAmount() {
         return authAmount;
     }
 
-    public void setAuthAmount(BigDecimal authAmount) {
-        this.authAmount = authAmount;
-    }
-
-    public Payment capturedAmount(BigDecimal capturedAmount) {
+    public Payment setCapturedAmount(final BigDecimal capturedAmount) {
         this.capturedAmount = capturedAmount;
         return this;
     }
 
-    
     public BigDecimal getCapturedAmount() {
         return capturedAmount;
     }
 
-    public void setCapturedAmount(BigDecimal capturedAmount) {
-        this.capturedAmount = capturedAmount;
-    }
-
-    public Payment purchasedAmount(BigDecimal purchasedAmount) {
+    public Payment setPurchasedAmount(final BigDecimal purchasedAmount) {
         this.purchasedAmount = purchasedAmount;
         return this;
     }
 
-    
     public BigDecimal getPurchasedAmount() {
         return purchasedAmount;
     }
 
-    public void setPurchasedAmount(BigDecimal purchasedAmount) {
-        this.purchasedAmount = purchasedAmount;
-    }
-
-    public Payment refundedAmount(BigDecimal refundedAmount) {
+    public Payment setRefundedAmount(final BigDecimal refundedAmount) {
         this.refundedAmount = refundedAmount;
         return this;
     }
 
-    
     public BigDecimal getRefundedAmount() {
         return refundedAmount;
     }
 
-    public void setRefundedAmount(BigDecimal refundedAmount) {
-        this.refundedAmount = refundedAmount;
-    }
-
-    public Payment creditedAmount(BigDecimal creditedAmount) {
+    public Payment setCreditedAmount(final BigDecimal creditedAmount) {
         this.creditedAmount = creditedAmount;
         return this;
     }
 
-    
     public BigDecimal getCreditedAmount() {
         return creditedAmount;
     }
 
-    public void setCreditedAmount(BigDecimal creditedAmount) {
-        this.creditedAmount = creditedAmount;
-    }
-
-    public Payment currency(String currency) {
+    public Payment setCurrency(final String currency) {
         this.currency = currency;
         return this;
     }
 
-    
     public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public Payment paymentMethodId(UUID paymentMethodId) {
+    public Payment setPaymentMethodId(final UUID paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
         return this;
     }
 
-    
     public UUID getPaymentMethodId() {
         return paymentMethodId;
     }
 
-    public void setPaymentMethodId(UUID paymentMethodId) {
-        this.paymentMethodId = paymentMethodId;
-    }
-
-    public Payment transactions(List<PaymentTransaction> transactions) {
+    public Payment setTransactions(final List<PaymentTransaction> transactions) {
         this.transactions = transactions;
         return this;
     }
 
-    public Payment addTransactionsItem(PaymentTransaction transactionsItem) {
+    public Payment addTransactionsItem(final PaymentTransaction transactionsItem) {
         if (this.transactions == null) {
             this.transactions = new ArrayList<PaymentTransaction>();
         }
@@ -230,21 +207,16 @@ public class Payment extends KillBillObject {
         return this;
     }
 
-    
     public List<PaymentTransaction> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(List<PaymentTransaction> transactions) {
-        this.transactions = transactions;
-    }
-
-    public Payment paymentAttempts(List<PaymentAttempt> paymentAttempts) {
+    public Payment setPaymentAttempts(final List<PaymentAttempt> paymentAttempts) {
         this.paymentAttempts = paymentAttempts;
         return this;
     }
 
-    public Payment addPaymentAttemptsItem(PaymentAttempt paymentAttemptsItem) {
+    public Payment addPaymentAttemptsItem(final PaymentAttempt paymentAttemptsItem) {
         if (this.paymentAttempts == null) {
             this.paymentAttempts = new ArrayList<PaymentAttempt>();
         }
@@ -252,13 +224,8 @@ public class Payment extends KillBillObject {
         return this;
     }
 
-    
     public List<PaymentAttempt> getPaymentAttempts() {
         return paymentAttempts;
-    }
-
-    public void setPaymentAttempts(List<PaymentAttempt> paymentAttempts) {
-        this.paymentAttempts = paymentAttempts;
     }
 
 
@@ -288,7 +255,19 @@ public class Payment extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, paymentId, paymentNumber, paymentExternalKey, authAmount, capturedAmount, purchasedAmount, refundedAmount, creditedAmount, currency, paymentMethodId, transactions, paymentAttempts);
+        return Objects.hash(accountId,
+                            paymentId,
+                            paymentNumber,
+                            paymentExternalKey,
+                            authAmount,
+                            capturedAmount,
+                            purchasedAmount,
+                            refundedAmount,
+                            creditedAmount,
+                            currency,
+                            paymentMethodId,
+                            transactions,
+                            paymentAttempts);
     }
 
 

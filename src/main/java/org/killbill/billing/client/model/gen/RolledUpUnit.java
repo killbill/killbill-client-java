@@ -35,32 +35,32 @@ public class RolledUpUnit extends KillBillObject {
 
     private Long amount = null;
 
-    public RolledUpUnit unitType(String unitType) {
+
+    public RolledUpUnit() {
+    }
+
+    public RolledUpUnit(final String unitType,
+                     final Long amount) {
+        this.unitType = unitType;
+        this.amount = amount;
+    }
+
+    public RolledUpUnit setUnitType(final String unitType) {
         this.unitType = unitType;
         return this;
     }
 
-    
     public String getUnitType() {
         return unitType;
     }
 
-    public void setUnitType(String unitType) {
-        this.unitType = unitType;
-    }
-
-    public RolledUpUnit amount(Long amount) {
+    public RolledUpUnit setAmount(final Long amount) {
         this.amount = amount;
         return this;
     }
 
-    
     public Long getAmount() {
         return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
     }
 
 
@@ -79,7 +79,8 @@ public class RolledUpUnit extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(unitType, amount);
+        return Objects.hash(unitType,
+                            amount);
     }
 
 

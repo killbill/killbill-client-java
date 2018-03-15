@@ -38,26 +38,31 @@ public class Overdue extends KillBillObject {
 
     private List<OverdueStateConfig> overdueStates = null;
 
-    public Overdue initialReevaluationInterval(Integer initialReevaluationInterval) {
+
+    public Overdue() {
+    }
+
+    public Overdue(final Integer initialReevaluationInterval,
+                     final List<OverdueStateConfig> overdueStates) {
+        this.initialReevaluationInterval = initialReevaluationInterval;
+        this.overdueStates = overdueStates;
+    }
+
+    public Overdue setInitialReevaluationInterval(final Integer initialReevaluationInterval) {
         this.initialReevaluationInterval = initialReevaluationInterval;
         return this;
     }
 
-    
     public Integer getInitialReevaluationInterval() {
         return initialReevaluationInterval;
     }
 
-    public void setInitialReevaluationInterval(Integer initialReevaluationInterval) {
-        this.initialReevaluationInterval = initialReevaluationInterval;
-    }
-
-    public Overdue overdueStates(List<OverdueStateConfig> overdueStates) {
+    public Overdue setOverdueStates(final List<OverdueStateConfig> overdueStates) {
         this.overdueStates = overdueStates;
         return this;
     }
 
-    public Overdue addOverdueStatesItem(OverdueStateConfig overdueStatesItem) {
+    public Overdue addOverdueStatesItem(final OverdueStateConfig overdueStatesItem) {
         if (this.overdueStates == null) {
             this.overdueStates = new ArrayList<OverdueStateConfig>();
         }
@@ -65,13 +70,8 @@ public class Overdue extends KillBillObject {
         return this;
     }
 
-    
     public List<OverdueStateConfig> getOverdueStates() {
         return overdueStates;
-    }
-
-    public void setOverdueStates(List<OverdueStateConfig> overdueStates) {
-        this.overdueStates = overdueStates;
     }
 
 
@@ -90,7 +90,8 @@ public class Overdue extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(initialReevaluationInterval, overdueStates);
+        return Objects.hash(initialReevaluationInterval,
+                            overdueStates);
     }
 
 

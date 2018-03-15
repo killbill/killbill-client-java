@@ -96,6 +96,7 @@ public class InvoiceItemApi {
         return httpClient.doPost(uri, null, Tags.class, requestOptions);
     }
 
+
     public void deleteCustomFields(final UUID invoiceItemId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling deleteCustomFields");
 
@@ -114,6 +115,7 @@ public class InvoiceItemApi {
 
         httpClient.doDelete(uri, requestOptions);
     }
+
 
     public void deleteTags(final UUID invoiceItemId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling deleteTags");
@@ -134,6 +136,10 @@ public class InvoiceItemApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
+    public CustomFields getCustomFields(final UUID invoiceItemId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getCustomFields(invoiceItemId, AuditLevel.NONE, inputOptions);
+    }
+
     public CustomFields getCustomFields(final UUID invoiceItemId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling getCustomFields");
 
@@ -151,6 +157,10 @@ public class InvoiceItemApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public Tags getTags(final UUID invoiceItemId, final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getTags(invoiceItemId, accountId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
     public Tags getTags(final UUID invoiceItemId, final UUID accountId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {

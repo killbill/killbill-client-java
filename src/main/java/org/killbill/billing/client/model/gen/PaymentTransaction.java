@@ -72,222 +72,185 @@ public class PaymentTransaction extends KillBillObject {
 
     private List<PluginProperty> properties = null;
 
-    public PaymentTransaction transactionId(UUID transactionId) {
+
+    public PaymentTransaction() {
+    }
+
+    public PaymentTransaction(final UUID transactionId,
+                     final String transactionExternalKey,
+                     final UUID paymentId,
+                     final String paymentExternalKey,
+                     final TransactionType transactionType,
+                     final BigDecimal amount,
+                     final Currency currency,
+                     final DateTime effectiveDate,
+                     final BigDecimal processedAmount,
+                     final String processedCurrency,
+                     final TransactionStatus status,
+                     final String gatewayErrorCode,
+                     final String gatewayErrorMsg,
+                     final String firstPaymentReferenceId,
+                     final String secondPaymentReferenceId,
+                     final List<PluginProperty> properties) {
+        this.transactionId = transactionId;
+        this.transactionExternalKey = transactionExternalKey;
+        this.paymentId = paymentId;
+        this.paymentExternalKey = paymentExternalKey;
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.currency = currency;
+        this.effectiveDate = effectiveDate;
+        this.processedAmount = processedAmount;
+        this.processedCurrency = processedCurrency;
+        this.status = status;
+        this.gatewayErrorCode = gatewayErrorCode;
+        this.gatewayErrorMsg = gatewayErrorMsg;
+        this.firstPaymentReferenceId = firstPaymentReferenceId;
+        this.secondPaymentReferenceId = secondPaymentReferenceId;
+        this.properties = properties;
+    }
+
+    public PaymentTransaction setTransactionId(final UUID transactionId) {
         this.transactionId = transactionId;
         return this;
     }
 
-    
     public UUID getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(UUID transactionId) {
-        this.transactionId = transactionId;
-    }
-
-    public PaymentTransaction transactionExternalKey(String transactionExternalKey) {
+    public PaymentTransaction setTransactionExternalKey(final String transactionExternalKey) {
         this.transactionExternalKey = transactionExternalKey;
         return this;
     }
 
-    
     public String getTransactionExternalKey() {
         return transactionExternalKey;
     }
 
-    public void setTransactionExternalKey(String transactionExternalKey) {
-        this.transactionExternalKey = transactionExternalKey;
-    }
-
-    public PaymentTransaction paymentId(UUID paymentId) {
+    public PaymentTransaction setPaymentId(final UUID paymentId) {
         this.paymentId = paymentId;
         return this;
     }
 
-    
     public UUID getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(UUID paymentId) {
-        this.paymentId = paymentId;
-    }
-
-    public PaymentTransaction paymentExternalKey(String paymentExternalKey) {
+    public PaymentTransaction setPaymentExternalKey(final String paymentExternalKey) {
         this.paymentExternalKey = paymentExternalKey;
         return this;
     }
 
-    
     public String getPaymentExternalKey() {
         return paymentExternalKey;
     }
 
-    public void setPaymentExternalKey(String paymentExternalKey) {
-        this.paymentExternalKey = paymentExternalKey;
-    }
-
-    public PaymentTransaction transactionType(TransactionType transactionType) {
+    public PaymentTransaction setTransactionType(final TransactionType transactionType) {
         this.transactionType = transactionType;
         return this;
     }
 
-    
     public TransactionType getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(TransactionType transactionType) {
-        this.transactionType = transactionType;
-    }
-
-    public PaymentTransaction amount(BigDecimal amount) {
+    public PaymentTransaction setAmount(final BigDecimal amount) {
         this.amount = amount;
         return this;
     }
 
-    
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public PaymentTransaction currency(Currency currency) {
+    public PaymentTransaction setCurrency(final Currency currency) {
         this.currency = currency;
         return this;
     }
 
-    
     public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-    public PaymentTransaction effectiveDate(DateTime effectiveDate) {
+    public PaymentTransaction setEffectiveDate(final DateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    
     public DateTime getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(DateTime effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public PaymentTransaction processedAmount(BigDecimal processedAmount) {
+    public PaymentTransaction setProcessedAmount(final BigDecimal processedAmount) {
         this.processedAmount = processedAmount;
         return this;
     }
 
-    
     public BigDecimal getProcessedAmount() {
         return processedAmount;
     }
 
-    public void setProcessedAmount(BigDecimal processedAmount) {
-        this.processedAmount = processedAmount;
-    }
-
-    public PaymentTransaction processedCurrency(String processedCurrency) {
+    public PaymentTransaction setProcessedCurrency(final String processedCurrency) {
         this.processedCurrency = processedCurrency;
         return this;
     }
 
-    
     public String getProcessedCurrency() {
         return processedCurrency;
     }
 
-    public void setProcessedCurrency(String processedCurrency) {
-        this.processedCurrency = processedCurrency;
-    }
-
-    public PaymentTransaction status(TransactionStatus status) {
+    public PaymentTransaction setStatus(final TransactionStatus status) {
         this.status = status;
         return this;
     }
 
-    
     public TransactionStatus getStatus() {
         return status;
     }
 
-    public void setStatus(TransactionStatus status) {
-        this.status = status;
-    }
-
-    public PaymentTransaction gatewayErrorCode(String gatewayErrorCode) {
+    public PaymentTransaction setGatewayErrorCode(final String gatewayErrorCode) {
         this.gatewayErrorCode = gatewayErrorCode;
         return this;
     }
 
-    
     public String getGatewayErrorCode() {
         return gatewayErrorCode;
     }
 
-    public void setGatewayErrorCode(String gatewayErrorCode) {
-        this.gatewayErrorCode = gatewayErrorCode;
-    }
-
-    public PaymentTransaction gatewayErrorMsg(String gatewayErrorMsg) {
+    public PaymentTransaction setGatewayErrorMsg(final String gatewayErrorMsg) {
         this.gatewayErrorMsg = gatewayErrorMsg;
         return this;
     }
 
-    
     public String getGatewayErrorMsg() {
         return gatewayErrorMsg;
     }
 
-    public void setGatewayErrorMsg(String gatewayErrorMsg) {
-        this.gatewayErrorMsg = gatewayErrorMsg;
-    }
-
-    public PaymentTransaction firstPaymentReferenceId(String firstPaymentReferenceId) {
+    public PaymentTransaction setFirstPaymentReferenceId(final String firstPaymentReferenceId) {
         this.firstPaymentReferenceId = firstPaymentReferenceId;
         return this;
     }
 
-    
     public String getFirstPaymentReferenceId() {
         return firstPaymentReferenceId;
     }
 
-    public void setFirstPaymentReferenceId(String firstPaymentReferenceId) {
-        this.firstPaymentReferenceId = firstPaymentReferenceId;
-    }
-
-    public PaymentTransaction secondPaymentReferenceId(String secondPaymentReferenceId) {
+    public PaymentTransaction setSecondPaymentReferenceId(final String secondPaymentReferenceId) {
         this.secondPaymentReferenceId = secondPaymentReferenceId;
         return this;
     }
 
-    
     public String getSecondPaymentReferenceId() {
         return secondPaymentReferenceId;
     }
 
-    public void setSecondPaymentReferenceId(String secondPaymentReferenceId) {
-        this.secondPaymentReferenceId = secondPaymentReferenceId;
-    }
-
-    public PaymentTransaction properties(List<PluginProperty> properties) {
+    public PaymentTransaction setProperties(final List<PluginProperty> properties) {
         this.properties = properties;
         return this;
     }
 
-    public PaymentTransaction addPropertiesItem(PluginProperty propertiesItem) {
+    public PaymentTransaction addPropertiesItem(final PluginProperty propertiesItem) {
         if (this.properties == null) {
             this.properties = new ArrayList<PluginProperty>();
         }
@@ -295,13 +258,8 @@ public class PaymentTransaction extends KillBillObject {
         return this;
     }
 
-    
     public List<PluginProperty> getProperties() {
         return properties;
-    }
-
-    public void setProperties(List<PluginProperty> properties) {
-        this.properties = properties;
     }
 
 
@@ -334,7 +292,22 @@ public class PaymentTransaction extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(transactionId, transactionExternalKey, paymentId, paymentExternalKey, transactionType, amount, currency, effectiveDate, processedAmount, processedCurrency, status, gatewayErrorCode, gatewayErrorMsg, firstPaymentReferenceId, secondPaymentReferenceId, properties);
+        return Objects.hash(transactionId,
+                            transactionExternalKey,
+                            paymentId,
+                            paymentExternalKey,
+                            transactionType,
+                            amount,
+                            currency,
+                            effectiveDate,
+                            processedAmount,
+                            processedCurrency,
+                            status,
+                            gatewayErrorCode,
+                            gatewayErrorMsg,
+                            firstPaymentReferenceId,
+                            secondPaymentReferenceId,
+                            properties);
     }
 
 

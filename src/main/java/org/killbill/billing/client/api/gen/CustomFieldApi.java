@@ -53,6 +53,10 @@ public class CustomFieldApi {
         this.httpClient = httpClient;
     }
 
+    public CustomFields getCustomFields( final RequestOptions inputOptions) throws KillBillClientException {
+        return getCustomFields(Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
+    }
+
     public CustomFields getCustomFields(final Long offset, final Long limit, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/customFields/pagination";
@@ -74,6 +78,10 @@ public class CustomFieldApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public CustomFields searchCustomFields(final String searchKey,  final RequestOptions inputOptions) throws KillBillClientException {
+        return searchCustomFields(searchKey, Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
     public CustomFields searchCustomFields(final String searchKey, final Long offset, final Long limit, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {

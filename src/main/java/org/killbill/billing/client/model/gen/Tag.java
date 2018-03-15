@@ -43,74 +43,65 @@ public class Tag extends KillBillObject {
 
     private String tagDefinitionName = null;
 
-    public Tag tagId(UUID tagId) {
+
+    public Tag() {
+    }
+
+    public Tag(final UUID tagId,
+                     final ObjectType objectType,
+                     final UUID objectId,
+                     final UUID tagDefinitionId,
+                     final String tagDefinitionName) {
+        this.tagId = tagId;
+        this.objectType = objectType;
+        this.objectId = objectId;
+        this.tagDefinitionId = tagDefinitionId;
+        this.tagDefinitionName = tagDefinitionName;
+    }
+
+    public Tag setTagId(final UUID tagId) {
         this.tagId = tagId;
         return this;
     }
 
-    
     public UUID getTagId() {
         return tagId;
     }
 
-    public void setTagId(UUID tagId) {
-        this.tagId = tagId;
-    }
-
-    public Tag objectType(ObjectType objectType) {
+    public Tag setObjectType(final ObjectType objectType) {
         this.objectType = objectType;
         return this;
     }
 
-    
     public ObjectType getObjectType() {
         return objectType;
     }
 
-    public void setObjectType(ObjectType objectType) {
-        this.objectType = objectType;
-    }
-
-    public Tag objectId(UUID objectId) {
+    public Tag setObjectId(final UUID objectId) {
         this.objectId = objectId;
         return this;
     }
 
-    
     public UUID getObjectId() {
         return objectId;
     }
 
-    public void setObjectId(UUID objectId) {
-        this.objectId = objectId;
-    }
-
-    public Tag tagDefinitionId(UUID tagDefinitionId) {
+    public Tag setTagDefinitionId(final UUID tagDefinitionId) {
         this.tagDefinitionId = tagDefinitionId;
         return this;
     }
 
-    
     public UUID getTagDefinitionId() {
         return tagDefinitionId;
     }
 
-    public void setTagDefinitionId(UUID tagDefinitionId) {
-        this.tagDefinitionId = tagDefinitionId;
-    }
-
-    public Tag tagDefinitionName(String tagDefinitionName) {
+    public Tag setTagDefinitionName(final String tagDefinitionName) {
         this.tagDefinitionName = tagDefinitionName;
         return this;
     }
 
-    
     public String getTagDefinitionName() {
         return tagDefinitionName;
-    }
-
-    public void setTagDefinitionName(String tagDefinitionName) {
-        this.tagDefinitionName = tagDefinitionName;
     }
 
 
@@ -132,7 +123,11 @@ public class Tag extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(tagId, objectType, objectId, tagDefinitionId, tagDefinitionName);
+        return Objects.hash(tagId,
+                            objectType,
+                            objectId,
+                            tagDefinitionId,
+                            tagDefinitionName);
     }
 
 

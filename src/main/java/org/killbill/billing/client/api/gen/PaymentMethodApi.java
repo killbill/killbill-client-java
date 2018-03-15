@@ -74,6 +74,7 @@ public class PaymentMethodApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
+
     public void deleteCustomFields(final UUID paymentMethodId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling deleteCustomFields");
 
@@ -92,6 +93,11 @@ public class PaymentMethodApi {
 
         httpClient.doDelete(uri, requestOptions);
     }
+
+    public void deletePaymentMethod(final UUID paymentMethodId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        deletePaymentMethod(paymentMethodId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, inputOptions);
+    }
+
 
     public void deletePaymentMethod(final UUID paymentMethodId, final Boolean deleteDefaultPmWithAutoPayOff, final Boolean forceDefaultPmDeletion, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling deletePaymentMethod");
@@ -117,6 +123,10 @@ public class PaymentMethodApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
+    public CustomFields getCustomFields(final UUID paymentMethodId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getCustomFields(paymentMethodId, AuditLevel.NONE, inputOptions);
+    }
+
     public CustomFields getCustomFields(final UUID paymentMethodId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling getCustomFields");
 
@@ -134,6 +144,10 @@ public class PaymentMethodApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethod(paymentMethodId, pluginProperty, Boolean.valueOf(false), AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
     public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final List<String> pluginProperty, final Boolean includedDeleted, final AuditLevel auditLevel, final Boolean withPluginInfo,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -164,6 +178,10 @@ public class PaymentMethodApi {
         return httpClient.doGet(uri, PaymentMethod.class, requestOptions);
     }
 
+    public PaymentMethod getPaymentMethodByKey(final String externalKey, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethodByKey(externalKey, pluginProperty, Boolean.valueOf(false), AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
+    }
+
     public PaymentMethod getPaymentMethodByKey(final String externalKey, final List<String> pluginProperty, final Boolean includedDeleted, final AuditLevel auditLevel, final Boolean withPluginInfo,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getPaymentMethodByKey");
 
@@ -192,6 +210,10 @@ public class PaymentMethodApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, PaymentMethod.class, requestOptions);
+    }
+
+    public PaymentMethods getPaymentMethods(final String pluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethods(Long.valueOf(0), Long.valueOf(100), pluginName, pluginProperty, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
     public PaymentMethods getPaymentMethods(final Long offset, final Long limit, final String pluginName, final List<String> pluginProperty, final AuditLevel auditLevel, final Boolean withPluginInfo,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -240,6 +262,10 @@ public class PaymentMethodApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doPut(uri, body, requestOptions);
+    }
+
+    public PaymentMethods searchPaymentMethods(final String searchKey, final String pluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return searchPaymentMethods(searchKey, Long.valueOf(0), Long.valueOf(100), pluginName, pluginProperty, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
     public PaymentMethods searchPaymentMethods(final String searchKey, final Long offset, final Long limit, final String pluginName, final List<String> pluginProperty, final AuditLevel auditLevel, final Boolean withPluginInfo,  final RequestOptions inputOptions) throws KillBillClientException {

@@ -38,26 +38,31 @@ public class UnitUsageRecord extends KillBillObject {
 
     private List<UsageRecord> usageRecords = null;
 
-    public UnitUsageRecord unitType(String unitType) {
+
+    public UnitUsageRecord() {
+    }
+
+    public UnitUsageRecord(final String unitType,
+                     final List<UsageRecord> usageRecords) {
+        this.unitType = unitType;
+        this.usageRecords = usageRecords;
+    }
+
+    public UnitUsageRecord setUnitType(final String unitType) {
         this.unitType = unitType;
         return this;
     }
 
-    
     public String getUnitType() {
         return unitType;
     }
 
-    public void setUnitType(String unitType) {
-        this.unitType = unitType;
-    }
-
-    public UnitUsageRecord usageRecords(List<UsageRecord> usageRecords) {
+    public UnitUsageRecord setUsageRecords(final List<UsageRecord> usageRecords) {
         this.usageRecords = usageRecords;
         return this;
     }
 
-    public UnitUsageRecord addUsageRecordsItem(UsageRecord usageRecordsItem) {
+    public UnitUsageRecord addUsageRecordsItem(final UsageRecord usageRecordsItem) {
         if (this.usageRecords == null) {
             this.usageRecords = new ArrayList<UsageRecord>();
         }
@@ -65,13 +70,8 @@ public class UnitUsageRecord extends KillBillObject {
         return this;
     }
 
-    
     public List<UsageRecord> getUsageRecords() {
         return usageRecords;
-    }
-
-    public void setUsageRecords(List<UsageRecord> usageRecords) {
-        this.usageRecords = usageRecords;
     }
 
 
@@ -90,7 +90,8 @@ public class UnitUsageRecord extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(unitType, usageRecords);
+        return Objects.hash(unitType,
+                            usageRecords);
     }
 
 

@@ -22,9 +22,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-import org.killbill.billing.catalog.api.ProductCategory;
-import org.killbill.billing.client.model.gen.Limit;
-import org.killbill.billing.client.model.gen.Product;
+import org.killbill.billing.client.model.gen.Plan;
 
 /**
  *           DO NOT EDIT !!!
@@ -36,140 +34,112 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Product extends KillBillObject {
 
-    private List<Product> available = null;
-
-    private List<Product> included = null;
-
-    private ProductCategory category = null;
-
-    private String catalogName = null;
-
-    private List<Limit> limits = null;
+    private String type = null;
 
     private String name = null;
 
     private String prettyName = null;
 
-    public Product available(List<Product> available) {
+    private List<Plan> plans = null;
+
+    private List<String> included = null;
+
+    private List<String> available = null;
+
+
+    public Product() {
+    }
+
+    public Product(final String type,
+                     final String name,
+                     final String prettyName,
+                     final List<Plan> plans,
+                     final List<String> included,
+                     final List<String> available) {
+        this.type = type;
+        this.name = name;
+        this.prettyName = prettyName;
+        this.plans = plans;
+        this.included = included;
         this.available = available;
+    }
+
+    public Product setType(final String type) {
+        this.type = type;
         return this;
     }
 
-    public Product addAvailableItem(Product availableItem) {
-        if (this.available == null) {
-            this.available = new ArrayList<Product>();
+    public String getType() {
+        return type;
+    }
+
+    public Product setName(final String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Product setPrettyName(final String prettyName) {
+        this.prettyName = prettyName;
+        return this;
+    }
+
+    public String getPrettyName() {
+        return prettyName;
+    }
+
+    public Product setPlans(final List<Plan> plans) {
+        this.plans = plans;
+        return this;
+    }
+
+    public Product addPlansItem(final Plan plansItem) {
+        if (this.plans == null) {
+            this.plans = new ArrayList<Plan>();
         }
-        this.available.add(availableItem);
+        this.plans.add(plansItem);
         return this;
     }
 
-    
-    public List<Product> getAvailable() {
-        return available;
+    public List<Plan> getPlans() {
+        return plans;
     }
 
-    public void setAvailable(List<Product> available) {
-        this.available = available;
-    }
-
-    public Product included(List<Product> included) {
+    public Product setIncluded(final List<String> included) {
         this.included = included;
         return this;
     }
 
-    public Product addIncludedItem(Product includedItem) {
+    public Product addIncludedItem(final String includedItem) {
         if (this.included == null) {
-            this.included = new ArrayList<Product>();
+            this.included = new ArrayList<String>();
         }
         this.included.add(includedItem);
         return this;
     }
 
-    
-    public List<Product> getIncluded() {
+    public List<String> getIncluded() {
         return included;
     }
 
-    public void setIncluded(List<Product> included) {
-        this.included = included;
-    }
-
-    public Product category(ProductCategory category) {
-        this.category = category;
+    public Product setAvailable(final List<String> available) {
+        this.available = available;
         return this;
     }
 
-    
-    public ProductCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(ProductCategory category) {
-        this.category = category;
-    }
-
-    public Product catalogName(String catalogName) {
-        this.catalogName = catalogName;
-        return this;
-    }
-
-    
-    public String getCatalogName() {
-        return catalogName;
-    }
-
-    public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName;
-    }
-
-    public Product limits(List<Limit> limits) {
-        this.limits = limits;
-        return this;
-    }
-
-    public Product addLimitsItem(Limit limitsItem) {
-        if (this.limits == null) {
-            this.limits = new ArrayList<Limit>();
+    public Product addAvailableItem(final String availableItem) {
+        if (this.available == null) {
+            this.available = new ArrayList<String>();
         }
-        this.limits.add(limitsItem);
+        this.available.add(availableItem);
         return this;
     }
 
-    
-    public List<Limit> getLimits() {
-        return limits;
-    }
-
-    public void setLimits(List<Limit> limits) {
-        this.limits = limits;
-    }
-
-    public Product name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Product prettyName(String prettyName) {
-        this.prettyName = prettyName;
-        return this;
-    }
-
-    
-    public String getPrettyName() {
-        return prettyName;
-    }
-
-    public void setPrettyName(String prettyName) {
-        this.prettyName = prettyName;
+    public List<String> getAvailable() {
+        return available;
     }
 
 
@@ -182,18 +152,22 @@ public class Product extends KillBillObject {
             return false;
         }
         Product product = (Product) o;
-        return Objects.equals(this.available, product.available) &&
-        Objects.equals(this.included, product.included) &&
-        Objects.equals(this.category, product.category) &&
-        Objects.equals(this.catalogName, product.catalogName) &&
-        Objects.equals(this.limits, product.limits) &&
+        return Objects.equals(this.type, product.type) &&
         Objects.equals(this.name, product.name) &&
-        Objects.equals(this.prettyName, product.prettyName);
+        Objects.equals(this.prettyName, product.prettyName) &&
+        Objects.equals(this.plans, product.plans) &&
+        Objects.equals(this.included, product.included) &&
+        Objects.equals(this.available, product.available);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(available, included, category, catalogName, limits, name, prettyName);
+        return Objects.hash(type,
+                            name,
+                            prettyName,
+                            plans,
+                            included,
+                            available);
     }
 
 
@@ -202,13 +176,12 @@ public class Product extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class Product {\n");
         
-        sb.append("    available: ").append(toIndentedString(available)).append("\n");
-        sb.append("    included: ").append(toIndentedString(included)).append("\n");
-        sb.append("    category: ").append(toIndentedString(category)).append("\n");
-        sb.append("    catalogName: ").append(toIndentedString(catalogName)).append("\n");
-        sb.append("    limits: ").append(toIndentedString(limits)).append("\n");
+        sb.append("    type: ").append(toIndentedString(type)).append("\n");
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    prettyName: ").append(toIndentedString(prettyName)).append("\n");
+        sb.append("    plans: ").append(toIndentedString(plans)).append("\n");
+        sb.append("    included: ").append(toIndentedString(included)).append("\n");
+        sb.append("    available: ").append(toIndentedString(available)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -82,264 +82,220 @@ public class Subscription extends KillBillObject {
 
     private List<PhasePriceOverride> priceOverrides = null;
 
-    public Subscription accountId(UUID accountId) {
+
+    public Subscription() {
+    }
+
+    public Subscription(final UUID accountId,
+                     final UUID bundleId,
+                     final UUID subscriptionId,
+                     final String externalKey,
+                     final LocalDate startDate,
+                     final String productName,
+                     final ProductCategory productCategory,
+                     final BillingPeriod billingPeriod,
+                     final PhaseType phaseType,
+                     final String priceList,
+                     final String planName,
+                     final EntitlementState state,
+                     final EntitlementSourceType sourceType,
+                     final LocalDate cancelledDate,
+                     final LocalDate chargedThroughDate,
+                     final LocalDate billingStartDate,
+                     final LocalDate billingEndDate,
+                     final Integer billCycleDayLocal,
+                     final List<EventSubscription> events,
+                     final List<PhasePriceOverride> priceOverrides) {
+        this.accountId = accountId;
+        this.bundleId = bundleId;
+        this.subscriptionId = subscriptionId;
+        this.externalKey = externalKey;
+        this.startDate = startDate;
+        this.productName = productName;
+        this.productCategory = productCategory;
+        this.billingPeriod = billingPeriod;
+        this.phaseType = phaseType;
+        this.priceList = priceList;
+        this.planName = planName;
+        this.state = state;
+        this.sourceType = sourceType;
+        this.cancelledDate = cancelledDate;
+        this.chargedThroughDate = chargedThroughDate;
+        this.billingStartDate = billingStartDate;
+        this.billingEndDate = billingEndDate;
+        this.billCycleDayLocal = billCycleDayLocal;
+        this.events = events;
+        this.priceOverrides = priceOverrides;
+    }
+
+    public Subscription setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public Subscription bundleId(UUID bundleId) {
+    public Subscription setBundleId(final UUID bundleId) {
         this.bundleId = bundleId;
         return this;
     }
 
-    
     public UUID getBundleId() {
         return bundleId;
     }
 
-    public void setBundleId(UUID bundleId) {
-        this.bundleId = bundleId;
-    }
-
-    public Subscription subscriptionId(UUID subscriptionId) {
+    public Subscription setSubscriptionId(final UUID subscriptionId) {
         this.subscriptionId = subscriptionId;
         return this;
     }
 
-    
     public UUID getSubscriptionId() {
         return subscriptionId;
     }
 
-    public void setSubscriptionId(UUID subscriptionId) {
-        this.subscriptionId = subscriptionId;
-    }
-
-    public Subscription externalKey(String externalKey) {
+    public Subscription setExternalKey(final String externalKey) {
         this.externalKey = externalKey;
         return this;
     }
 
-    
     public String getExternalKey() {
         return externalKey;
     }
 
-    public void setExternalKey(String externalKey) {
-        this.externalKey = externalKey;
-    }
-
-    public Subscription startDate(LocalDate startDate) {
+    public Subscription setStartDate(final LocalDate startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    
     public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public Subscription productName(String productName) {
+    public Subscription setProductName(final String productName) {
         this.productName = productName;
         return this;
     }
 
-    
     public String getProductName() {
         return productName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public Subscription productCategory(ProductCategory productCategory) {
+    public Subscription setProductCategory(final ProductCategory productCategory) {
         this.productCategory = productCategory;
         return this;
     }
 
-    
     public ProductCategory getProductCategory() {
         return productCategory;
     }
 
-    public void setProductCategory(ProductCategory productCategory) {
-        this.productCategory = productCategory;
-    }
-
-    public Subscription billingPeriod(BillingPeriod billingPeriod) {
+    public Subscription setBillingPeriod(final BillingPeriod billingPeriod) {
         this.billingPeriod = billingPeriod;
         return this;
     }
 
-    
     public BillingPeriod getBillingPeriod() {
         return billingPeriod;
     }
 
-    public void setBillingPeriod(BillingPeriod billingPeriod) {
-        this.billingPeriod = billingPeriod;
-    }
-
-    public Subscription phaseType(PhaseType phaseType) {
+    public Subscription setPhaseType(final PhaseType phaseType) {
         this.phaseType = phaseType;
         return this;
     }
 
-    
     public PhaseType getPhaseType() {
         return phaseType;
     }
 
-    public void setPhaseType(PhaseType phaseType) {
-        this.phaseType = phaseType;
-    }
-
-    public Subscription priceList(String priceList) {
+    public Subscription setPriceList(final String priceList) {
         this.priceList = priceList;
         return this;
     }
 
-    
     public String getPriceList() {
         return priceList;
     }
 
-    public void setPriceList(String priceList) {
-        this.priceList = priceList;
-    }
-
-    public Subscription planName(String planName) {
+    public Subscription setPlanName(final String planName) {
         this.planName = planName;
         return this;
     }
 
-    
     public String getPlanName() {
         return planName;
     }
 
-    public void setPlanName(String planName) {
-        this.planName = planName;
-    }
-
-    public Subscription state(EntitlementState state) {
+    public Subscription setState(final EntitlementState state) {
         this.state = state;
         return this;
     }
 
-    
     public EntitlementState getState() {
         return state;
     }
 
-    public void setState(EntitlementState state) {
-        this.state = state;
-    }
-
-    public Subscription sourceType(EntitlementSourceType sourceType) {
+    public Subscription setSourceType(final EntitlementSourceType sourceType) {
         this.sourceType = sourceType;
         return this;
     }
 
-    
     public EntitlementSourceType getSourceType() {
         return sourceType;
     }
 
-    public void setSourceType(EntitlementSourceType sourceType) {
-        this.sourceType = sourceType;
-    }
-
-    public Subscription cancelledDate(LocalDate cancelledDate) {
+    public Subscription setCancelledDate(final LocalDate cancelledDate) {
         this.cancelledDate = cancelledDate;
         return this;
     }
 
-    
     public LocalDate getCancelledDate() {
         return cancelledDate;
     }
 
-    public void setCancelledDate(LocalDate cancelledDate) {
-        this.cancelledDate = cancelledDate;
-    }
-
-    public Subscription chargedThroughDate(LocalDate chargedThroughDate) {
+    public Subscription setChargedThroughDate(final LocalDate chargedThroughDate) {
         this.chargedThroughDate = chargedThroughDate;
         return this;
     }
 
-    
     public LocalDate getChargedThroughDate() {
         return chargedThroughDate;
     }
 
-    public void setChargedThroughDate(LocalDate chargedThroughDate) {
-        this.chargedThroughDate = chargedThroughDate;
-    }
-
-    public Subscription billingStartDate(LocalDate billingStartDate) {
+    public Subscription setBillingStartDate(final LocalDate billingStartDate) {
         this.billingStartDate = billingStartDate;
         return this;
     }
 
-    
     public LocalDate getBillingStartDate() {
         return billingStartDate;
     }
 
-    public void setBillingStartDate(LocalDate billingStartDate) {
-        this.billingStartDate = billingStartDate;
-    }
-
-    public Subscription billingEndDate(LocalDate billingEndDate) {
+    public Subscription setBillingEndDate(final LocalDate billingEndDate) {
         this.billingEndDate = billingEndDate;
         return this;
     }
 
-    
     public LocalDate getBillingEndDate() {
         return billingEndDate;
     }
 
-    public void setBillingEndDate(LocalDate billingEndDate) {
-        this.billingEndDate = billingEndDate;
-    }
-
-    public Subscription billCycleDayLocal(Integer billCycleDayLocal) {
+    public Subscription setBillCycleDayLocal(final Integer billCycleDayLocal) {
         this.billCycleDayLocal = billCycleDayLocal;
         return this;
     }
 
-    
     public Integer getBillCycleDayLocal() {
         return billCycleDayLocal;
     }
 
-    public void setBillCycleDayLocal(Integer billCycleDayLocal) {
-        this.billCycleDayLocal = billCycleDayLocal;
-    }
-
-    public Subscription events(List<EventSubscription> events) {
+    public Subscription setEvents(final List<EventSubscription> events) {
         this.events = events;
         return this;
     }
 
-    public Subscription addEventsItem(EventSubscription eventsItem) {
+    public Subscription addEventsItem(final EventSubscription eventsItem) {
         if (this.events == null) {
             this.events = new ArrayList<EventSubscription>();
         }
@@ -347,21 +303,16 @@ public class Subscription extends KillBillObject {
         return this;
     }
 
-    
     public List<EventSubscription> getEvents() {
         return events;
     }
 
-    public void setEvents(List<EventSubscription> events) {
-        this.events = events;
-    }
-
-    public Subscription priceOverrides(List<PhasePriceOverride> priceOverrides) {
+    public Subscription setPriceOverrides(final List<PhasePriceOverride> priceOverrides) {
         this.priceOverrides = priceOverrides;
         return this;
     }
 
-    public Subscription addPriceOverridesItem(PhasePriceOverride priceOverridesItem) {
+    public Subscription addPriceOverridesItem(final PhasePriceOverride priceOverridesItem) {
         if (this.priceOverrides == null) {
             this.priceOverrides = new ArrayList<PhasePriceOverride>();
         }
@@ -369,13 +320,8 @@ public class Subscription extends KillBillObject {
         return this;
     }
 
-    
     public List<PhasePriceOverride> getPriceOverrides() {
         return priceOverrides;
-    }
-
-    public void setPriceOverrides(List<PhasePriceOverride> priceOverrides) {
-        this.priceOverrides = priceOverrides;
     }
 
 
@@ -412,7 +358,26 @@ public class Subscription extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, bundleId, subscriptionId, externalKey, startDate, productName, productCategory, billingPeriod, phaseType, priceList, planName, state, sourceType, cancelledDate, chargedThroughDate, billingStartDate, billingEndDate, billCycleDayLocal, events, priceOverrides);
+        return Objects.hash(accountId,
+                            bundleId,
+                            subscriptionId,
+                            externalKey,
+                            startDate,
+                            productName,
+                            productCategory,
+                            billingPeriod,
+                            phaseType,
+                            priceList,
+                            planName,
+                            state,
+                            sourceType,
+                            cancelledDate,
+                            chargedThroughDate,
+                            billingStartDate,
+                            billingEndDate,
+                            billCycleDayLocal,
+                            events,
+                            priceOverrides);
     }
 
 

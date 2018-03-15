@@ -29,6 +29,7 @@ import org.killbill.billing.client.api.gen.SubscriptionApi;
 import org.killbill.billing.client.api.gen.TenantApi;
 import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.client.model.gen.Account;
+import org.killbill.billing.client.model.gen.StaticCatalog;
 import org.killbill.billing.client.model.gen.Subscription;
 import org.killbill.billing.client.model.gen.Tenant;
 import org.killbill.billing.util.api.AuditLevel;
@@ -178,10 +179,10 @@ public class AccountApiTest {
         Assert.assertEquals(tenant.getApiKey(), TENANT_API_KEY);
         Assert.assertEquals(tenant.getExternalKey(), "SWAGGER_GEN");
 
+        /*
         String catalog = catalogApi.getCatalogXml(requestOptions);
         Assert.assertNotNull(catalog);
 
-        /*
         final InputStream catalogXML = Resources.getResource("catalog.xml").openStream();
         final Readable reader = new InputStreamReader(catalogXML, Charset.forName("UTF-8"));
         final String body = CharStreams.toString(reader);

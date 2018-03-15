@@ -40,40 +40,42 @@ public class PaymentMethodPluginDetail extends KillBillObject {
 
     private List<PluginProperty> properties = null;
 
-    public PaymentMethodPluginDetail externalPaymentMethodId(String externalPaymentMethodId) {
+
+    public PaymentMethodPluginDetail() {
+    }
+
+    public PaymentMethodPluginDetail(final String externalPaymentMethodId,
+                     final Boolean isDefaultPaymentMethod,
+                     final List<PluginProperty> properties) {
+        this.externalPaymentMethodId = externalPaymentMethodId;
+        this.isDefaultPaymentMethod = isDefaultPaymentMethod;
+        this.properties = properties;
+    }
+
+    public PaymentMethodPluginDetail setExternalPaymentMethodId(final String externalPaymentMethodId) {
         this.externalPaymentMethodId = externalPaymentMethodId;
         return this;
     }
 
-    
     public String getExternalPaymentMethodId() {
         return externalPaymentMethodId;
     }
 
-    public void setExternalPaymentMethodId(String externalPaymentMethodId) {
-        this.externalPaymentMethodId = externalPaymentMethodId;
-    }
-
-    public PaymentMethodPluginDetail isDefaultPaymentMethod(Boolean isDefaultPaymentMethod) {
+    public PaymentMethodPluginDetail setIsDefaultPaymentMethod(final Boolean isDefaultPaymentMethod) {
         this.isDefaultPaymentMethod = isDefaultPaymentMethod;
         return this;
     }
 
-    
     public Boolean isIsDefaultPaymentMethod() {
         return isDefaultPaymentMethod;
     }
 
-    public void setIsDefaultPaymentMethod(Boolean isDefaultPaymentMethod) {
-        this.isDefaultPaymentMethod = isDefaultPaymentMethod;
-    }
-
-    public PaymentMethodPluginDetail properties(List<PluginProperty> properties) {
+    public PaymentMethodPluginDetail setProperties(final List<PluginProperty> properties) {
         this.properties = properties;
         return this;
     }
 
-    public PaymentMethodPluginDetail addPropertiesItem(PluginProperty propertiesItem) {
+    public PaymentMethodPluginDetail addPropertiesItem(final PluginProperty propertiesItem) {
         if (this.properties == null) {
             this.properties = new ArrayList<PluginProperty>();
         }
@@ -81,13 +83,8 @@ public class PaymentMethodPluginDetail extends KillBillObject {
         return this;
     }
 
-    
     public List<PluginProperty> getProperties() {
         return properties;
-    }
-
-    public void setProperties(List<PluginProperty> properties) {
-        this.properties = properties;
     }
 
 
@@ -107,7 +104,9 @@ public class PaymentMethodPluginDetail extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(externalPaymentMethodId, isDefaultPaymentMethod, properties);
+        return Objects.hash(externalPaymentMethodId,
+                            isDefaultPaymentMethod,
+                            properties);
     }
 
 

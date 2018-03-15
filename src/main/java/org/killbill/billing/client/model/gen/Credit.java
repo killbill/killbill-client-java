@@ -48,102 +48,87 @@ public class Credit extends KillBillObject {
 
     private String description = null;
 
-    public Credit creditAmount(BigDecimal creditAmount) {
+
+    public Credit() {
+    }
+
+    public Credit(final BigDecimal creditAmount,
+                     final String currency,
+                     final UUID invoiceId,
+                     final String invoiceNumber,
+                     final LocalDate effectiveDate,
+                     final UUID accountId,
+                     final String description) {
+        this.creditAmount = creditAmount;
+        this.currency = currency;
+        this.invoiceId = invoiceId;
+        this.invoiceNumber = invoiceNumber;
+        this.effectiveDate = effectiveDate;
+        this.accountId = accountId;
+        this.description = description;
+    }
+
+    public Credit setCreditAmount(final BigDecimal creditAmount) {
         this.creditAmount = creditAmount;
         return this;
     }
 
-    
     public BigDecimal getCreditAmount() {
         return creditAmount;
     }
 
-    public void setCreditAmount(BigDecimal creditAmount) {
-        this.creditAmount = creditAmount;
-    }
-
-    public Credit currency(String currency) {
+    public Credit setCurrency(final String currency) {
         this.currency = currency;
         return this;
     }
 
-    
     public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public Credit invoiceId(UUID invoiceId) {
+    public Credit setInvoiceId(final UUID invoiceId) {
         this.invoiceId = invoiceId;
         return this;
     }
 
-    
     public UUID getInvoiceId() {
         return invoiceId;
     }
 
-    public void setInvoiceId(UUID invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
-    public Credit invoiceNumber(String invoiceNumber) {
+    public Credit setInvoiceNumber(final String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
         return this;
     }
 
-    
     public String getInvoiceNumber() {
         return invoiceNumber;
     }
 
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
-    }
-
-    public Credit effectiveDate(LocalDate effectiveDate) {
+    public Credit setEffectiveDate(final LocalDate effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    
     public LocalDate getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(LocalDate effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public Credit accountId(UUID accountId) {
+    public Credit setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public Credit description(String description) {
+    public Credit setDescription(final String description) {
         this.description = description;
         return this;
     }
 
-    
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
 
@@ -167,7 +152,13 @@ public class Credit extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(creditAmount, currency, invoiceId, invoiceNumber, effectiveDate, accountId, description);
+        return Objects.hash(creditAmount,
+                            currency,
+                            invoiceId,
+                            invoiceNumber,
+                            effectiveDate,
+                            accountId,
+                            description);
     }
 
 

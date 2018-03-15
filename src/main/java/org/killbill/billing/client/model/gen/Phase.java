@@ -46,26 +46,37 @@ public class Phase extends KillBillObject {
 
     private List<Usage> usages = null;
 
-    public Phase type(String type) {
+
+    public Phase() {
+    }
+
+    public Phase(final String type,
+                     final List<Price> prices,
+                     final List<Price> fixedPrices,
+                     final Duration duration,
+                     final List<Usage> usages) {
+        this.type = type;
+        this.prices = prices;
+        this.fixedPrices = fixedPrices;
+        this.duration = duration;
+        this.usages = usages;
+    }
+
+    public Phase setType(final String type) {
         this.type = type;
         return this;
     }
 
-    
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Phase prices(List<Price> prices) {
+    public Phase setPrices(final List<Price> prices) {
         this.prices = prices;
         return this;
     }
 
-    public Phase addPricesItem(Price pricesItem) {
+    public Phase addPricesItem(final Price pricesItem) {
         if (this.prices == null) {
             this.prices = new ArrayList<Price>();
         }
@@ -73,21 +84,16 @@ public class Phase extends KillBillObject {
         return this;
     }
 
-    
     public List<Price> getPrices() {
         return prices;
     }
 
-    public void setPrices(List<Price> prices) {
-        this.prices = prices;
-    }
-
-    public Phase fixedPrices(List<Price> fixedPrices) {
+    public Phase setFixedPrices(final List<Price> fixedPrices) {
         this.fixedPrices = fixedPrices;
         return this;
     }
 
-    public Phase addFixedPricesItem(Price fixedPricesItem) {
+    public Phase addFixedPricesItem(final Price fixedPricesItem) {
         if (this.fixedPrices == null) {
             this.fixedPrices = new ArrayList<Price>();
         }
@@ -95,35 +101,25 @@ public class Phase extends KillBillObject {
         return this;
     }
 
-    
     public List<Price> getFixedPrices() {
         return fixedPrices;
     }
 
-    public void setFixedPrices(List<Price> fixedPrices) {
-        this.fixedPrices = fixedPrices;
-    }
-
-    public Phase duration(Duration duration) {
+    public Phase setDuration(final Duration duration) {
         this.duration = duration;
         return this;
     }
 
-    
     public Duration getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
-
-    public Phase usages(List<Usage> usages) {
+    public Phase setUsages(final List<Usage> usages) {
         this.usages = usages;
         return this;
     }
 
-    public Phase addUsagesItem(Usage usagesItem) {
+    public Phase addUsagesItem(final Usage usagesItem) {
         if (this.usages == null) {
             this.usages = new ArrayList<Usage>();
         }
@@ -131,13 +127,8 @@ public class Phase extends KillBillObject {
         return this;
     }
 
-    
     public List<Usage> getUsages() {
         return usages;
-    }
-
-    public void setUsages(List<Usage> usages) {
-        this.usages = usages;
     }
 
 
@@ -159,7 +150,11 @@ public class Phase extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, prices, fixedPrices, duration, usages);
+        return Objects.hash(type,
+                            prices,
+                            fixedPrices,
+                            duration,
+                            usages);
     }
 
 

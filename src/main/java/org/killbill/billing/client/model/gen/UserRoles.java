@@ -39,51 +39,48 @@ public class UserRoles extends KillBillObject {
 
     private List<String> roles = new ArrayList<String>();
 
-    public UserRoles username(String username) {
+
+    public UserRoles() {
+    }
+
+    public UserRoles(final String username,
+                     final String password,
+                     final List<String> roles) {
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public UserRoles setUsername(final String username) {
         this.username = username;
         return this;
     }
 
-    
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public UserRoles password(String password) {
+    public UserRoles setPassword(final String password) {
         this.password = password;
         return this;
     }
 
-    
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserRoles roles(List<String> roles) {
+    public UserRoles setRoles(final List<String> roles) {
         this.roles = roles;
         return this;
     }
 
-    public UserRoles addRolesItem(String rolesItem) {
+    public UserRoles addRolesItem(final String rolesItem) {
         this.roles.add(rolesItem);
         return this;
     }
 
-    
     public List<String> getRoles() {
         return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
     }
 
 
@@ -103,7 +100,9 @@ public class UserRoles extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password, roles);
+        return Objects.hash(username,
+                            password,
+                            roles);
     }
 
 

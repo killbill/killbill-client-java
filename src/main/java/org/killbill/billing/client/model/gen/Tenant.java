@@ -40,60 +40,54 @@ public class Tenant extends KillBillObject {
 
     private String apiSecret = null;
 
-    public Tenant tenantId(UUID tenantId) {
+
+    public Tenant() {
+    }
+
+    public Tenant(final UUID tenantId,
+                     final String externalKey,
+                     final String apiKey,
+                     final String apiSecret) {
+        this.tenantId = tenantId;
+        this.externalKey = externalKey;
+        this.apiKey = apiKey;
+        this.apiSecret = apiSecret;
+    }
+
+    public Tenant setTenantId(final UUID tenantId) {
         this.tenantId = tenantId;
         return this;
     }
 
-    
     public UUID getTenantId() {
         return tenantId;
     }
 
-    public void setTenantId(UUID tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public Tenant externalKey(String externalKey) {
+    public Tenant setExternalKey(final String externalKey) {
         this.externalKey = externalKey;
         return this;
     }
 
-    
     public String getExternalKey() {
         return externalKey;
     }
 
-    public void setExternalKey(String externalKey) {
-        this.externalKey = externalKey;
-    }
-
-    public Tenant apiKey(String apiKey) {
+    public Tenant setApiKey(final String apiKey) {
         this.apiKey = apiKey;
         return this;
     }
 
-    
     public String getApiKey() {
         return apiKey;
     }
 
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
-    }
-
-    public Tenant apiSecret(String apiSecret) {
+    public Tenant setApiSecret(final String apiSecret) {
         this.apiSecret = apiSecret;
         return this;
     }
 
-    
     public String getApiSecret() {
         return apiSecret;
-    }
-
-    public void setApiSecret(String apiSecret) {
-        this.apiSecret = apiSecret;
     }
 
 
@@ -114,7 +108,10 @@ public class Tenant extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(tenantId, externalKey, apiKey, apiSecret);
+        return Objects.hash(tenantId,
+                            externalKey,
+                            apiKey,
+                            apiSecret);
     }
 
 

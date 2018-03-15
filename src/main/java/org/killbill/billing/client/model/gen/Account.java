@@ -86,368 +86,296 @@ public class Account extends KillBillObject {
 
     private BigDecimal accountCBA = null;
 
-    public Account accountId(UUID accountId) {
+
+    public Account() {
+    }
+
+    public Account(final UUID accountId,
+                     final String name,
+                     final Integer firstNameLength,
+                     final String externalKey,
+                     final String email,
+                     final Integer billCycleDayLocal,
+                     final String currency,
+                     final UUID parentAccountId,
+                     final Boolean isPaymentDelegatedToParent,
+                     final UUID paymentMethodId,
+                     final DateTime referenceTime,
+                     final String timeZone,
+                     final String address1,
+                     final String address2,
+                     final String postalCode,
+                     final String company,
+                     final String city,
+                     final String state,
+                     final String country,
+                     final String locale,
+                     final String phone,
+                     final String notes,
+                     final Boolean isMigrated,
+                     final Boolean isNotifiedForInvoices,
+                     final BigDecimal accountBalance,
+                     final BigDecimal accountCBA) {
+        this.accountId = accountId;
+        this.name = name;
+        this.firstNameLength = firstNameLength;
+        this.externalKey = externalKey;
+        this.email = email;
+        this.billCycleDayLocal = billCycleDayLocal;
+        this.currency = currency;
+        this.parentAccountId = parentAccountId;
+        this.isPaymentDelegatedToParent = isPaymentDelegatedToParent;
+        this.paymentMethodId = paymentMethodId;
+        this.referenceTime = referenceTime;
+        this.timeZone = timeZone;
+        this.address1 = address1;
+        this.address2 = address2;
+        this.postalCode = postalCode;
+        this.company = company;
+        this.city = city;
+        this.state = state;
+        this.country = country;
+        this.locale = locale;
+        this.phone = phone;
+        this.notes = notes;
+        this.isMigrated = isMigrated;
+        this.isNotifiedForInvoices = isNotifiedForInvoices;
+        this.accountBalance = accountBalance;
+        this.accountCBA = accountCBA;
+    }
+
+    public Account setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public Account name(String name) {
+    public Account setName(final String name) {
         this.name = name;
         return this;
     }
 
-    
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Account firstNameLength(Integer firstNameLength) {
+    public Account setFirstNameLength(final Integer firstNameLength) {
         this.firstNameLength = firstNameLength;
         return this;
     }
 
-    
     public Integer getFirstNameLength() {
         return firstNameLength;
     }
 
-    public void setFirstNameLength(Integer firstNameLength) {
-        this.firstNameLength = firstNameLength;
-    }
-
-    public Account externalKey(String externalKey) {
+    public Account setExternalKey(final String externalKey) {
         this.externalKey = externalKey;
         return this;
     }
 
-    
     public String getExternalKey() {
         return externalKey;
     }
 
-    public void setExternalKey(String externalKey) {
-        this.externalKey = externalKey;
-    }
-
-    public Account email(String email) {
+    public Account setEmail(final String email) {
         this.email = email;
         return this;
     }
 
-    
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Account billCycleDayLocal(Integer billCycleDayLocal) {
+    public Account setBillCycleDayLocal(final Integer billCycleDayLocal) {
         this.billCycleDayLocal = billCycleDayLocal;
         return this;
     }
 
-    
     public Integer getBillCycleDayLocal() {
         return billCycleDayLocal;
     }
 
-    public void setBillCycleDayLocal(Integer billCycleDayLocal) {
-        this.billCycleDayLocal = billCycleDayLocal;
-    }
-
-    public Account currency(String currency) {
+    public Account setCurrency(final String currency) {
         this.currency = currency;
         return this;
     }
 
-    
     public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public Account parentAccountId(UUID parentAccountId) {
+    public Account setParentAccountId(final UUID parentAccountId) {
         this.parentAccountId = parentAccountId;
         return this;
     }
 
-    
     public UUID getParentAccountId() {
         return parentAccountId;
     }
 
-    public void setParentAccountId(UUID parentAccountId) {
-        this.parentAccountId = parentAccountId;
-    }
-
-    public Account isPaymentDelegatedToParent(Boolean isPaymentDelegatedToParent) {
+    public Account setIsPaymentDelegatedToParent(final Boolean isPaymentDelegatedToParent) {
         this.isPaymentDelegatedToParent = isPaymentDelegatedToParent;
         return this;
     }
 
-    
     public Boolean isIsPaymentDelegatedToParent() {
         return isPaymentDelegatedToParent;
     }
 
-    public void setIsPaymentDelegatedToParent(Boolean isPaymentDelegatedToParent) {
-        this.isPaymentDelegatedToParent = isPaymentDelegatedToParent;
-    }
-
-    public Account paymentMethodId(UUID paymentMethodId) {
+    public Account setPaymentMethodId(final UUID paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
         return this;
     }
 
-    
     public UUID getPaymentMethodId() {
         return paymentMethodId;
     }
 
-    public void setPaymentMethodId(UUID paymentMethodId) {
-        this.paymentMethodId = paymentMethodId;
-    }
-
-    public Account referenceTime(DateTime referenceTime) {
+    public Account setReferenceTime(final DateTime referenceTime) {
         this.referenceTime = referenceTime;
         return this;
     }
 
-    
     public DateTime getReferenceTime() {
         return referenceTime;
     }
 
-    public void setReferenceTime(DateTime referenceTime) {
-        this.referenceTime = referenceTime;
-    }
-
-    public Account timeZone(String timeZone) {
+    public Account setTimeZone(final String timeZone) {
         this.timeZone = timeZone;
         return this;
     }
 
-    
     public String getTimeZone() {
         return timeZone;
     }
 
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
-    }
-
-    public Account address1(String address1) {
+    public Account setAddress1(final String address1) {
         this.address1 = address1;
         return this;
     }
 
-    
     public String getAddress1() {
         return address1;
     }
 
-    public void setAddress1(String address1) {
-        this.address1 = address1;
-    }
-
-    public Account address2(String address2) {
+    public Account setAddress2(final String address2) {
         this.address2 = address2;
         return this;
     }
 
-    
     public String getAddress2() {
         return address2;
     }
 
-    public void setAddress2(String address2) {
-        this.address2 = address2;
-    }
-
-    public Account postalCode(String postalCode) {
+    public Account setPostalCode(final String postalCode) {
         this.postalCode = postalCode;
         return this;
     }
 
-    
     public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public Account company(String company) {
+    public Account setCompany(final String company) {
         this.company = company;
         return this;
     }
 
-    
     public String getCompany() {
         return company;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public Account city(String city) {
+    public Account setCity(final String city) {
         this.city = city;
         return this;
     }
 
-    
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public Account state(String state) {
+    public Account setState(final String state) {
         this.state = state;
         return this;
     }
 
-    
     public String getState() {
         return state;
     }
 
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public Account country(String country) {
+    public Account setCountry(final String country) {
         this.country = country;
         return this;
     }
 
-    
     public String getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public Account locale(String locale) {
+    public Account setLocale(final String locale) {
         this.locale = locale;
         return this;
     }
 
-    
     public String getLocale() {
         return locale;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
-
-    public Account phone(String phone) {
+    public Account setPhone(final String phone) {
         this.phone = phone;
         return this;
     }
 
-    
     public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Account notes(String notes) {
+    public Account setNotes(final String notes) {
         this.notes = notes;
         return this;
     }
 
-    
     public String getNotes() {
         return notes;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public Account isMigrated(Boolean isMigrated) {
+    public Account setIsMigrated(final Boolean isMigrated) {
         this.isMigrated = isMigrated;
         return this;
     }
 
-    
     public Boolean isIsMigrated() {
         return isMigrated;
     }
 
-    public void setIsMigrated(Boolean isMigrated) {
-        this.isMigrated = isMigrated;
-    }
-
-    public Account isNotifiedForInvoices(Boolean isNotifiedForInvoices) {
+    public Account setIsNotifiedForInvoices(final Boolean isNotifiedForInvoices) {
         this.isNotifiedForInvoices = isNotifiedForInvoices;
         return this;
     }
 
-    
     public Boolean isIsNotifiedForInvoices() {
         return isNotifiedForInvoices;
     }
 
-    public void setIsNotifiedForInvoices(Boolean isNotifiedForInvoices) {
-        this.isNotifiedForInvoices = isNotifiedForInvoices;
-    }
-
-    public Account accountBalance(BigDecimal accountBalance) {
+    public Account setAccountBalance(final BigDecimal accountBalance) {
         this.accountBalance = accountBalance;
         return this;
     }
 
-    
     public BigDecimal getAccountBalance() {
         return accountBalance;
     }
 
-    public void setAccountBalance(BigDecimal accountBalance) {
-        this.accountBalance = accountBalance;
-    }
-
-    public Account accountCBA(BigDecimal accountCBA) {
+    public Account setAccountCBA(final BigDecimal accountCBA) {
         this.accountCBA = accountCBA;
         return this;
     }
 
-    
     public BigDecimal getAccountCBA() {
         return accountCBA;
-    }
-
-    public void setAccountCBA(BigDecimal accountCBA) {
-        this.accountCBA = accountCBA;
     }
 
 
@@ -490,7 +418,32 @@ public class Account extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, name, firstNameLength, externalKey, email, billCycleDayLocal, currency, parentAccountId, isPaymentDelegatedToParent, paymentMethodId, referenceTime, timeZone, address1, address2, postalCode, company, city, state, country, locale, phone, notes, isMigrated, isNotifiedForInvoices, accountBalance, accountCBA);
+        return Objects.hash(accountId,
+                            name,
+                            firstNameLength,
+                            externalKey,
+                            email,
+                            billCycleDayLocal,
+                            currency,
+                            parentAccountId,
+                            isPaymentDelegatedToParent,
+                            paymentMethodId,
+                            referenceTime,
+                            timeZone,
+                            address1,
+                            address2,
+                            postalCode,
+                            company,
+                            city,
+                            state,
+                            country,
+                            locale,
+                            phone,
+                            notes,
+                            isMigrated,
+                            isNotifiedForInvoices,
+                            accountBalance,
+                            accountCBA);
     }
 
 

@@ -34,30 +34,26 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class InternationalPrice extends KillBillObject {
 
-    private Boolean zero = false;
-
     private List<Price> prices = null;
 
-    public InternationalPrice zero(Boolean zero) {
-        this.zero = zero;
-        return this;
+    private Boolean zero = false;
+
+
+    public InternationalPrice() {
     }
 
-    
-    public Boolean isZero() {
-        return zero;
-    }
-
-    public void setZero(Boolean zero) {
+    public InternationalPrice(final List<Price> prices,
+                     final Boolean zero) {
+        this.prices = prices;
         this.zero = zero;
     }
 
-    public InternationalPrice prices(List<Price> prices) {
+    public InternationalPrice setPrices(final List<Price> prices) {
         this.prices = prices;
         return this;
     }
 
-    public InternationalPrice addPricesItem(Price pricesItem) {
+    public InternationalPrice addPricesItem(final Price pricesItem) {
         if (this.prices == null) {
             this.prices = new ArrayList<Price>();
         }
@@ -65,13 +61,17 @@ public class InternationalPrice extends KillBillObject {
         return this;
     }
 
-    
     public List<Price> getPrices() {
         return prices;
     }
 
-    public void setPrices(List<Price> prices) {
-        this.prices = prices;
+    public InternationalPrice setZero(final Boolean zero) {
+        this.zero = zero;
+        return this;
+    }
+
+    public Boolean isZero() {
+        return zero;
     }
 
 
@@ -84,13 +84,14 @@ public class InternationalPrice extends KillBillObject {
             return false;
         }
         InternationalPrice internationalPrice = (InternationalPrice) o;
-        return Objects.equals(this.zero, internationalPrice.zero) &&
-        Objects.equals(this.prices, internationalPrice.prices);
+        return Objects.equals(this.prices, internationalPrice.prices) &&
+        Objects.equals(this.zero, internationalPrice.zero);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(zero, prices);
+        return Objects.hash(prices,
+                            zero);
     }
 
 
@@ -99,8 +100,8 @@ public class InternationalPrice extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class InternationalPrice {\n");
         
-        sb.append("    zero: ").append(toIndentedString(zero)).append("\n");
         sb.append("    prices: ").append(toIndentedString(prices)).append("\n");
+        sb.append("    zero: ").append(toIndentedString(zero)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -47,82 +47,75 @@ public class PhasePriceOverride extends KillBillObject {
 
     private List<UsagePriceOverride> usagePriceOverrides = null;
 
-    public PhasePriceOverride planName(String planName) {
+
+    public PhasePriceOverride() {
+    }
+
+    public PhasePriceOverride(final String planName,
+                     final String phaseName,
+                     final String phaseType,
+                     final BigDecimal fixedPrice,
+                     final BigDecimal recurringPrice,
+                     final List<UsagePriceOverride> usagePriceOverrides) {
+        this.planName = planName;
+        this.phaseName = phaseName;
+        this.phaseType = phaseType;
+        this.fixedPrice = fixedPrice;
+        this.recurringPrice = recurringPrice;
+        this.usagePriceOverrides = usagePriceOverrides;
+    }
+
+    public PhasePriceOverride setPlanName(final String planName) {
         this.planName = planName;
         return this;
     }
 
-    
     public String getPlanName() {
         return planName;
     }
 
-    public void setPlanName(String planName) {
-        this.planName = planName;
-    }
-
-    public PhasePriceOverride phaseName(String phaseName) {
+    public PhasePriceOverride setPhaseName(final String phaseName) {
         this.phaseName = phaseName;
         return this;
     }
 
-    
     public String getPhaseName() {
         return phaseName;
     }
 
-    public void setPhaseName(String phaseName) {
-        this.phaseName = phaseName;
-    }
-
-    public PhasePriceOverride phaseType(String phaseType) {
+    public PhasePriceOverride setPhaseType(final String phaseType) {
         this.phaseType = phaseType;
         return this;
     }
 
-    
     public String getPhaseType() {
         return phaseType;
     }
 
-    public void setPhaseType(String phaseType) {
-        this.phaseType = phaseType;
-    }
-
-    public PhasePriceOverride fixedPrice(BigDecimal fixedPrice) {
+    public PhasePriceOverride setFixedPrice(final BigDecimal fixedPrice) {
         this.fixedPrice = fixedPrice;
         return this;
     }
 
-    
     public BigDecimal getFixedPrice() {
         return fixedPrice;
     }
 
-    public void setFixedPrice(BigDecimal fixedPrice) {
-        this.fixedPrice = fixedPrice;
-    }
-
-    public PhasePriceOverride recurringPrice(BigDecimal recurringPrice) {
+    public PhasePriceOverride setRecurringPrice(final BigDecimal recurringPrice) {
         this.recurringPrice = recurringPrice;
         return this;
     }
 
-    
     public BigDecimal getRecurringPrice() {
         return recurringPrice;
     }
 
-    public void setRecurringPrice(BigDecimal recurringPrice) {
-        this.recurringPrice = recurringPrice;
-    }
-
-    public PhasePriceOverride usagePriceOverrides(List<UsagePriceOverride> usagePriceOverrides) {
+    public PhasePriceOverride setUsagePriceOverrides(final List<UsagePriceOverride> usagePriceOverrides) {
         this.usagePriceOverrides = usagePriceOverrides;
         return this;
     }
 
-    public PhasePriceOverride addUsagePriceOverridesItem(UsagePriceOverride usagePriceOverridesItem) {
+    public PhasePriceOverride addUsagePriceOverridesItem(final UsagePriceOverride usagePriceOverridesItem) {
         if (this.usagePriceOverrides == null) {
             this.usagePriceOverrides = new ArrayList<UsagePriceOverride>();
         }
@@ -130,13 +123,8 @@ public class PhasePriceOverride extends KillBillObject {
         return this;
     }
 
-    
     public List<UsagePriceOverride> getUsagePriceOverrides() {
         return usagePriceOverrides;
-    }
-
-    public void setUsagePriceOverrides(List<UsagePriceOverride> usagePriceOverrides) {
-        this.usagePriceOverrides = usagePriceOverrides;
     }
 
 
@@ -159,7 +147,12 @@ public class PhasePriceOverride extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(planName, phaseName, phaseType, fixedPrice, recurringPrice, usagePriceOverrides);
+        return Objects.hash(planName,
+                            phaseName,
+                            phaseType,
+                            fixedPrice,
+                            recurringPrice,
+                            usagePriceOverrides);
     }
 
 

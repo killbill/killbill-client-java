@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-import org.killbill.billing.client.model.gen.Plan;
 
 /**
  *           DO NOT EDIT !!!
@@ -34,60 +33,44 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class PriceList extends KillBillObject {
 
-    private List<Plan> plans = null;
-
     private String name = null;
 
-    private String prettyName = null;
+    private List<String> plans = null;
 
-    public PriceList plans(List<Plan> plans) {
+
+    public PriceList() {
+    }
+
+    public PriceList(final String name,
+                     final List<String> plans) {
+        this.name = name;
+        this.plans = plans;
+    }
+
+    public PriceList setName(final String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public PriceList setPlans(final List<String> plans) {
         this.plans = plans;
         return this;
     }
 
-    public PriceList addPlansItem(Plan plansItem) {
+    public PriceList addPlansItem(final String plansItem) {
         if (this.plans == null) {
-            this.plans = new ArrayList<Plan>();
+            this.plans = new ArrayList<String>();
         }
         this.plans.add(plansItem);
         return this;
     }
 
-    
-    public List<Plan> getPlans() {
+    public List<String> getPlans() {
         return plans;
-    }
-
-    public void setPlans(List<Plan> plans) {
-        this.plans = plans;
-    }
-
-    public PriceList name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public PriceList prettyName(String prettyName) {
-        this.prettyName = prettyName;
-        return this;
-    }
-
-    
-    public String getPrettyName() {
-        return prettyName;
-    }
-
-    public void setPrettyName(String prettyName) {
-        this.prettyName = prettyName;
     }
 
 
@@ -100,14 +83,14 @@ public class PriceList extends KillBillObject {
             return false;
         }
         PriceList priceList = (PriceList) o;
-        return Objects.equals(this.plans, priceList.plans) &&
-        Objects.equals(this.name, priceList.name) &&
-        Objects.equals(this.prettyName, priceList.prettyName);
+        return Objects.equals(this.name, priceList.name) &&
+        Objects.equals(this.plans, priceList.plans);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(plans, name, prettyName);
+        return Objects.hash(name,
+                            plans);
     }
 
 
@@ -116,9 +99,8 @@ public class PriceList extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class PriceList {\n");
         
-        sb.append("    plans: ").append(toIndentedString(plans)).append("\n");
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
-        sb.append("    prettyName: ").append(toIndentedString(prettyName)).append("\n");
+        sb.append("    plans: ").append(toIndentedString(plans)).append("\n");
         sb.append("}");
         return sb.toString();
     }

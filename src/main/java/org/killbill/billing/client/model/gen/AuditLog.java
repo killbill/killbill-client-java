@@ -44,88 +44,76 @@ public class AuditLog extends KillBillObject {
 
     private String userToken = null;
 
-    public AuditLog changeType(String changeType) {
+
+    public AuditLog() {
+    }
+
+    public AuditLog(final String changeType,
+                     final DateTime changeDate,
+                     final String changedBy,
+                     final String reasonCode,
+                     final String comments,
+                     final String userToken) {
+        this.changeType = changeType;
+        this.changeDate = changeDate;
+        this.changedBy = changedBy;
+        this.reasonCode = reasonCode;
+        this.comments = comments;
+        this.userToken = userToken;
+    }
+
+    public AuditLog setChangeType(final String changeType) {
         this.changeType = changeType;
         return this;
     }
 
-    
     public String getChangeType() {
         return changeType;
     }
 
-    public void setChangeType(String changeType) {
-        this.changeType = changeType;
-    }
-
-    public AuditLog changeDate(DateTime changeDate) {
+    public AuditLog setChangeDate(final DateTime changeDate) {
         this.changeDate = changeDate;
         return this;
     }
 
-    
     public DateTime getChangeDate() {
         return changeDate;
     }
 
-    public void setChangeDate(DateTime changeDate) {
-        this.changeDate = changeDate;
-    }
-
-    public AuditLog changedBy(String changedBy) {
+    public AuditLog setChangedBy(final String changedBy) {
         this.changedBy = changedBy;
         return this;
     }
 
-    
     public String getChangedBy() {
         return changedBy;
     }
 
-    public void setChangedBy(String changedBy) {
-        this.changedBy = changedBy;
-    }
-
-    public AuditLog reasonCode(String reasonCode) {
+    public AuditLog setReasonCode(final String reasonCode) {
         this.reasonCode = reasonCode;
         return this;
     }
 
-    
     public String getReasonCode() {
         return reasonCode;
     }
 
-    public void setReasonCode(String reasonCode) {
-        this.reasonCode = reasonCode;
-    }
-
-    public AuditLog comments(String comments) {
+    public AuditLog setComments(final String comments) {
         this.comments = comments;
         return this;
     }
 
-    
     public String getComments() {
         return comments;
     }
 
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    public AuditLog userToken(String userToken) {
+    public AuditLog setUserToken(final String userToken) {
         this.userToken = userToken;
         return this;
     }
 
-    
     public String getUserToken() {
         return userToken;
-    }
-
-    public void setUserToken(String userToken) {
-        this.userToken = userToken;
     }
 
 
@@ -148,7 +136,12 @@ public class AuditLog extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(changeType, changeDate, changedBy, reasonCode, comments, userToken);
+        return Objects.hash(changeType,
+                            changeDate,
+                            changedBy,
+                            reasonCode,
+                            comments,
+                            userToken);
     }
 
 

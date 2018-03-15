@@ -119,6 +119,11 @@ public class AccountApi {
         return httpClient.doPost(uri, body, AccountEmails.class, requestOptions);
     }
 
+    public void closeAccount(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+        closeAccount(accountId, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), inputOptions);
+    }
+
+
     public void closeAccount(final UUID accountId, final Boolean cancelAllSubscriptions, final Boolean writeOffUnpaidInvoices, final Boolean itemAdjustUnpaidInvoices,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling closeAccount");
 
@@ -177,6 +182,10 @@ public class AccountApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
+    public PaymentMethod createPaymentMethod(final PaymentMethod body, final UUID accountId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return createPaymentMethod(body, accountId, Boolean.valueOf(false), Boolean.valueOf(false), controlPluginName, pluginProperty, inputOptions);
+    }
+
     public PaymentMethod createPaymentMethod(final PaymentMethod body, final UUID accountId, final Boolean isDefault, final Boolean payAllUnpaidInvoices, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createPaymentMethod");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createPaymentMethod");
@@ -230,6 +239,7 @@ public class AccountApi {
         return httpClient.doPost(uri, null, Tags.class, requestOptions);
     }
 
+
     public void deleteCustomFields(final UUID accountId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling deleteCustomFields");
 
@@ -249,6 +259,7 @@ public class AccountApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
+
     public void deleteTags(final UUID accountId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling deleteTags");
 
@@ -266,6 +277,10 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
+    }
+
+    public Account getAccount(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccount(accountId, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
     public Account getAccount(final UUID accountId, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -293,6 +308,10 @@ public class AccountApi {
         return httpClient.doGet(uri, Account.class, requestOptions);
     }
 
+    public Bundles getAccountBundles(final UUID accountId, final String externalKey, final String bundlesFilter,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccountBundles(accountId, externalKey, bundlesFilter, AuditLevel.NONE, inputOptions);
+    }
+
     public Bundles getAccountBundles(final UUID accountId, final String externalKey, final String bundlesFilter, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccountBundles");
 
@@ -316,6 +335,10 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Bundles.class, requestOptions);
+    }
+
+    public Account getAccountByKey(final String externalKey,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccountByKey(externalKey, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
     public Account getAccountByKey(final String externalKey, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -345,6 +368,10 @@ public class AccountApi {
         return httpClient.doGet(uri, Account.class, requestOptions);
     }
 
+    public AccountTimeline getAccountTimeline(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccountTimeline(accountId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
+    }
+
     public AccountTimeline getAccountTimeline(final UUID accountId, final AuditLevel auditLevel, final Boolean parallel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccountTimeline");
 
@@ -365,6 +392,10 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, AccountTimeline.class, requestOptions);
+    }
+
+    public Accounts getAccounts( final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccounts(Long.valueOf(0), Long.valueOf(100), Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
     public Accounts getAccounts(final Long offset, final Long limit, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -396,6 +427,10 @@ public class AccountApi {
         return httpClient.doGet(uri, Accounts.class, requestOptions);
     }
 
+    public CustomFields getAllCustomFields(final UUID accountId, final ObjectType objectType,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getAllCustomFields(accountId, objectType, AuditLevel.NONE, inputOptions);
+    }
+
     public CustomFields getAllCustomFields(final UUID accountId, final ObjectType objectType, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAllCustomFields");
 
@@ -416,6 +451,10 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public Tags getAllTags(final UUID accountId, final ObjectType objectType,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getAllTags(accountId, objectType, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
     public Tags getAllTags(final UUID accountId, final ObjectType objectType, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -443,6 +482,10 @@ public class AccountApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
+    public BlockingStates getBlockingStates(final UUID accountId, final List<BlockingStateType> blockingStateTypes, final List<String> blockingStateSvcs,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getBlockingStates(accountId, blockingStateTypes, blockingStateSvcs, AuditLevel.NONE, inputOptions);
+    }
+
     public BlockingStates getBlockingStates(final UUID accountId, final List<BlockingStateType> blockingStateTypes, final List<String> blockingStateSvcs, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getBlockingStates");
 
@@ -468,6 +511,10 @@ public class AccountApi {
         return httpClient.doGet(uri, BlockingStates.class, requestOptions);
     }
 
+    public Accounts getChildrenAccounts(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getChildrenAccounts(accountId, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    }
+
     public Accounts getChildrenAccounts(final UUID accountId, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getChildrenAccounts");
 
@@ -491,6 +538,10 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Accounts.class, requestOptions);
+    }
+
+    public CustomFields getCustomFields(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getCustomFields(accountId, AuditLevel.NONE, inputOptions);
     }
 
     public CustomFields getCustomFields(final UUID accountId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -540,6 +591,10 @@ public class AccountApi {
         return httpClient.doGet(uri, AccountEmails.class, requestOptions);
     }
 
+    public InvoicePayments getInvoicePayments(final UUID accountId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoicePayments(accountId, AuditLevel.NONE, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, inputOptions);
+    }
+
     public InvoicePayments getInvoicePayments(final UUID accountId, final AuditLevel auditLevel, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicePayments");
 
@@ -566,6 +621,10 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, InvoicePayments.class, requestOptions);
+    }
+
+    public Invoice getInvoices(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoices(accountId, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
     public Invoice getInvoices(final UUID accountId, final Boolean withItems, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -613,6 +672,10 @@ public class AccountApi {
         return httpClient.doGet(uri, OverdueState.class, requestOptions);
     }
 
+    public PaymentMethods getPaymentMethods(final UUID accountId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethods(accountId, Boolean.valueOf(false), pluginProperty, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    }
+
     public PaymentMethods getPaymentMethods(final UUID accountId, final Boolean withPluginInfo, final List<String> pluginProperty, final Boolean includedDeleted, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getPaymentMethods");
 
@@ -641,6 +704,10 @@ public class AccountApi {
         return httpClient.doGet(uri, PaymentMethods.class, requestOptions);
     }
 
+    public Payments getPayments(final UUID accountId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getPayments(accountId, AuditLevel.NONE, pluginProperty, Boolean.valueOf(false), Boolean.valueOf(false), inputOptions);
+    }
+
     public Payments getPayments(final UUID accountId, final AuditLevel auditLevel, final List<String> pluginProperty, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getPayments");
 
@@ -667,6 +734,10 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Payments.class, requestOptions);
+    }
+
+    public Tags getTags(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+        return getTags(accountId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
     public Tags getTags(final UUID accountId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -705,6 +776,10 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doPut(uri, body, requestOptions);
+    }
+
+    public void payAllInvoices(final UUID accountId, final BigDecimal paymentAmount, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        payAllInvoices(accountId, Boolean.valueOf(false), paymentAmount, pluginProperty, inputOptions);
     }
 
     public void payAllInvoices(final UUID accountId, final Boolean externalPayment, final BigDecimal paymentAmount, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -836,6 +911,7 @@ public class AccountApi {
         httpClient.doPost(uri, null, requestOptions);
     }
 
+
     public void removeEmail(final UUID accountId, final String email,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling removeEmail");
         Preconditions.checkNotNull(email, "Missing the required parameter 'email' when calling removeEmail");
@@ -849,6 +925,10 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
+    }
+
+    public Accounts searchAccounts(final String searchKey,  final RequestOptions inputOptions) throws KillBillClientException {
+        return searchAccounts(searchKey, Long.valueOf(0), Long.valueOf(100), Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
     public Accounts searchAccounts(final String searchKey, final Long offset, final Long limit, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -880,6 +960,10 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Accounts.class, requestOptions);
+    }
+
+    public void setDefaultPaymentMethod(final UUID accountId, final UUID paymentMethodId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+        setDefaultPaymentMethod(accountId, paymentMethodId, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
     public void setDefaultPaymentMethod(final UUID accountId, final UUID paymentMethodId, final Boolean payAllUnpaidInvoices, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -938,6 +1022,10 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doPost(uri, null, requestOptions);
+    }
+
+    public void updateAccount(final Account body, final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+        updateAccount(body, accountId, Boolean.valueOf(false), inputOptions);
     }
 
     public void updateAccount(final Account body, final UUID accountId, final Boolean treatNullAsReset,  final RequestOptions inputOptions) throws KillBillClientException {

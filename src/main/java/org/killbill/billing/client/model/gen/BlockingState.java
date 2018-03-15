@@ -50,116 +50,98 @@ public class BlockingState extends KillBillObject {
 
     private BlockingStateType type = null;
 
-    public BlockingState blockedId(UUID blockedId) {
+
+    public BlockingState() {
+    }
+
+    public BlockingState(final UUID blockedId,
+                     final String stateName,
+                     final String service,
+                     final Boolean blockChange,
+                     final Boolean blockEntitlement,
+                     final Boolean blockBilling,
+                     final DateTime effectiveDate,
+                     final BlockingStateType type) {
+        this.blockedId = blockedId;
+        this.stateName = stateName;
+        this.service = service;
+        this.blockChange = blockChange;
+        this.blockEntitlement = blockEntitlement;
+        this.blockBilling = blockBilling;
+        this.effectiveDate = effectiveDate;
+        this.type = type;
+    }
+
+    public BlockingState setBlockedId(final UUID blockedId) {
         this.blockedId = blockedId;
         return this;
     }
 
-    
     public UUID getBlockedId() {
         return blockedId;
     }
 
-    public void setBlockedId(UUID blockedId) {
-        this.blockedId = blockedId;
-    }
-
-    public BlockingState stateName(String stateName) {
+    public BlockingState setStateName(final String stateName) {
         this.stateName = stateName;
         return this;
     }
 
-    
     public String getStateName() {
         return stateName;
     }
 
-    public void setStateName(String stateName) {
-        this.stateName = stateName;
-    }
-
-    public BlockingState service(String service) {
+    public BlockingState setService(final String service) {
         this.service = service;
         return this;
     }
 
-    
     public String getService() {
         return service;
     }
 
-    public void setService(String service) {
-        this.service = service;
-    }
-
-    public BlockingState blockChange(Boolean blockChange) {
+    public BlockingState setBlockChange(final Boolean blockChange) {
         this.blockChange = blockChange;
         return this;
     }
 
-    
     public Boolean isBlockChange() {
         return blockChange;
     }
 
-    public void setBlockChange(Boolean blockChange) {
-        this.blockChange = blockChange;
-    }
-
-    public BlockingState blockEntitlement(Boolean blockEntitlement) {
+    public BlockingState setBlockEntitlement(final Boolean blockEntitlement) {
         this.blockEntitlement = blockEntitlement;
         return this;
     }
 
-    
     public Boolean isBlockEntitlement() {
         return blockEntitlement;
     }
 
-    public void setBlockEntitlement(Boolean blockEntitlement) {
-        this.blockEntitlement = blockEntitlement;
-    }
-
-    public BlockingState blockBilling(Boolean blockBilling) {
+    public BlockingState setBlockBilling(final Boolean blockBilling) {
         this.blockBilling = blockBilling;
         return this;
     }
 
-    
     public Boolean isBlockBilling() {
         return blockBilling;
     }
 
-    public void setBlockBilling(Boolean blockBilling) {
-        this.blockBilling = blockBilling;
-    }
-
-    public BlockingState effectiveDate(DateTime effectiveDate) {
+    public BlockingState setEffectiveDate(final DateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    
     public DateTime getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(DateTime effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public BlockingState type(BlockingStateType type) {
+    public BlockingState setType(final BlockingStateType type) {
         this.type = type;
         return this;
     }
 
-    
     public BlockingStateType getType() {
         return type;
-    }
-
-    public void setType(BlockingStateType type) {
-        this.type = type;
     }
 
 
@@ -184,7 +166,14 @@ public class BlockingState extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(blockedId, stateName, service, blockChange, blockEntitlement, blockBilling, effectiveDate, type);
+        return Objects.hash(blockedId,
+                            stateName,
+                            service,
+                            blockChange,
+                            blockEntitlement,
+                            blockBilling,
+                            effectiveDate,
+                            type);
     }
 
 

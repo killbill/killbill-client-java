@@ -32,6 +32,11 @@ import org.killbill.billing.client.model.KillBillObject;
 public class IteratorPlanPhase extends KillBillObject {
 
 
+    public IteratorPlanPhase() {
+    }
+
+
+
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {

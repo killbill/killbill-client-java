@@ -72,180 +72,160 @@ public class Invoice extends KillBillObject {
 
     private UUID parentAccountId = null;
 
-    public Invoice amount(BigDecimal amount) {
+
+    public Invoice() {
+    }
+
+    public Invoice(final BigDecimal amount,
+                     final String currency,
+                     final String status,
+                     final BigDecimal creditAdj,
+                     final BigDecimal refundAdj,
+                     final UUID invoiceId,
+                     final LocalDate invoiceDate,
+                     final LocalDate targetDate,
+                     final String invoiceNumber,
+                     final BigDecimal balance,
+                     final UUID accountId,
+                     final String bundleKeys,
+                     final List<Credit> credits,
+                     final List<InvoiceItem> items,
+                     final Boolean isParentInvoice,
+                     final UUID parentInvoiceId,
+                     final UUID parentAccountId) {
+        this.amount = amount;
+        this.currency = currency;
+        this.status = status;
+        this.creditAdj = creditAdj;
+        this.refundAdj = refundAdj;
+        this.invoiceId = invoiceId;
+        this.invoiceDate = invoiceDate;
+        this.targetDate = targetDate;
+        this.invoiceNumber = invoiceNumber;
+        this.balance = balance;
+        this.accountId = accountId;
+        this.bundleKeys = bundleKeys;
+        this.credits = credits;
+        this.items = items;
+        this.isParentInvoice = isParentInvoice;
+        this.parentInvoiceId = parentInvoiceId;
+        this.parentAccountId = parentAccountId;
+    }
+
+    public Invoice setAmount(final BigDecimal amount) {
         this.amount = amount;
         return this;
     }
 
-    
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public Invoice currency(String currency) {
+    public Invoice setCurrency(final String currency) {
         this.currency = currency;
         return this;
     }
 
-    
     public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public Invoice status(String status) {
+    public Invoice setStatus(final String status) {
         this.status = status;
         return this;
     }
 
-    
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Invoice creditAdj(BigDecimal creditAdj) {
+    public Invoice setCreditAdj(final BigDecimal creditAdj) {
         this.creditAdj = creditAdj;
         return this;
     }
 
-    
     public BigDecimal getCreditAdj() {
         return creditAdj;
     }
 
-    public void setCreditAdj(BigDecimal creditAdj) {
-        this.creditAdj = creditAdj;
-    }
-
-    public Invoice refundAdj(BigDecimal refundAdj) {
+    public Invoice setRefundAdj(final BigDecimal refundAdj) {
         this.refundAdj = refundAdj;
         return this;
     }
 
-    
     public BigDecimal getRefundAdj() {
         return refundAdj;
     }
 
-    public void setRefundAdj(BigDecimal refundAdj) {
-        this.refundAdj = refundAdj;
-    }
-
-    public Invoice invoiceId(UUID invoiceId) {
+    public Invoice setInvoiceId(final UUID invoiceId) {
         this.invoiceId = invoiceId;
         return this;
     }
 
-    
     public UUID getInvoiceId() {
         return invoiceId;
     }
 
-    public void setInvoiceId(UUID invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
-    public Invoice invoiceDate(LocalDate invoiceDate) {
+    public Invoice setInvoiceDate(final LocalDate invoiceDate) {
         this.invoiceDate = invoiceDate;
         return this;
     }
 
-    
     public LocalDate getInvoiceDate() {
         return invoiceDate;
     }
 
-    public void setInvoiceDate(LocalDate invoiceDate) {
-        this.invoiceDate = invoiceDate;
-    }
-
-    public Invoice targetDate(LocalDate targetDate) {
+    public Invoice setTargetDate(final LocalDate targetDate) {
         this.targetDate = targetDate;
         return this;
     }
 
-    
     public LocalDate getTargetDate() {
         return targetDate;
     }
 
-    public void setTargetDate(LocalDate targetDate) {
-        this.targetDate = targetDate;
-    }
-
-    public Invoice invoiceNumber(String invoiceNumber) {
+    public Invoice setInvoiceNumber(final String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
         return this;
     }
 
-    
     public String getInvoiceNumber() {
         return invoiceNumber;
     }
 
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
-    }
-
-    public Invoice balance(BigDecimal balance) {
+    public Invoice setBalance(final BigDecimal balance) {
         this.balance = balance;
         return this;
     }
 
-    
     public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public Invoice accountId(UUID accountId) {
+    public Invoice setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public Invoice bundleKeys(String bundleKeys) {
+    public Invoice setBundleKeys(final String bundleKeys) {
         this.bundleKeys = bundleKeys;
         return this;
     }
 
-    
     public String getBundleKeys() {
         return bundleKeys;
     }
 
-    public void setBundleKeys(String bundleKeys) {
-        this.bundleKeys = bundleKeys;
-    }
-
-    public Invoice credits(List<Credit> credits) {
+    public Invoice setCredits(final List<Credit> credits) {
         this.credits = credits;
         return this;
     }
 
-    public Invoice addCreditsItem(Credit creditsItem) {
+    public Invoice addCreditsItem(final Credit creditsItem) {
         if (this.credits == null) {
             this.credits = new ArrayList<Credit>();
         }
@@ -253,21 +233,16 @@ public class Invoice extends KillBillObject {
         return this;
     }
 
-    
     public List<Credit> getCredits() {
         return credits;
     }
 
-    public void setCredits(List<Credit> credits) {
-        this.credits = credits;
-    }
-
-    public Invoice items(List<InvoiceItem> items) {
+    public Invoice setItems(final List<InvoiceItem> items) {
         this.items = items;
         return this;
     }
 
-    public Invoice addItemsItem(InvoiceItem itemsItem) {
+    public Invoice addItemsItem(final InvoiceItem itemsItem) {
         if (this.items == null) {
             this.items = new ArrayList<InvoiceItem>();
         }
@@ -275,55 +250,35 @@ public class Invoice extends KillBillObject {
         return this;
     }
 
-    
     public List<InvoiceItem> getItems() {
         return items;
     }
 
-    public void setItems(List<InvoiceItem> items) {
-        this.items = items;
-    }
-
-    public Invoice isParentInvoice(Boolean isParentInvoice) {
+    public Invoice setIsParentInvoice(final Boolean isParentInvoice) {
         this.isParentInvoice = isParentInvoice;
         return this;
     }
 
-    
     public Boolean isIsParentInvoice() {
         return isParentInvoice;
     }
 
-    public void setIsParentInvoice(Boolean isParentInvoice) {
-        this.isParentInvoice = isParentInvoice;
-    }
-
-    public Invoice parentInvoiceId(UUID parentInvoiceId) {
+    public Invoice setParentInvoiceId(final UUID parentInvoiceId) {
         this.parentInvoiceId = parentInvoiceId;
         return this;
     }
 
-    
     public UUID getParentInvoiceId() {
         return parentInvoiceId;
     }
 
-    public void setParentInvoiceId(UUID parentInvoiceId) {
-        this.parentInvoiceId = parentInvoiceId;
-    }
-
-    public Invoice parentAccountId(UUID parentAccountId) {
+    public Invoice setParentAccountId(final UUID parentAccountId) {
         this.parentAccountId = parentAccountId;
         return this;
     }
 
-    
     public UUID getParentAccountId() {
         return parentAccountId;
-    }
-
-    public void setParentAccountId(UUID parentAccountId) {
-        this.parentAccountId = parentAccountId;
     }
 
 
@@ -357,7 +312,23 @@ public class Invoice extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(amount, currency, status, creditAdj, refundAdj, invoiceId, invoiceDate, targetDate, invoiceNumber, balance, accountId, bundleKeys, credits, items, isParentInvoice, parentInvoiceId, parentAccountId);
+        return Objects.hash(amount,
+                            currency,
+                            status,
+                            creditAdj,
+                            refundAdj,
+                            invoiceId,
+                            invoiceDate,
+                            targetDate,
+                            invoiceNumber,
+                            balance,
+                            accountId,
+                            bundleKeys,
+                            credits,
+                            items,
+                            isParentInvoice,
+                            parentInvoiceId,
+                            parentAccountId);
     }
 
 

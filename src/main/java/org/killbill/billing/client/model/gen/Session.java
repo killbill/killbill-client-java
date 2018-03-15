@@ -42,74 +42,65 @@ public class Session extends KillBillObject {
 
     private String host = null;
 
-    public Session id(String id) {
+
+    public Session() {
+    }
+
+    public Session(final String id,
+                     final DateTime startDate,
+                     final DateTime lastAccessDate,
+                     final Long timeout,
+                     final String host) {
+        this.id = id;
+        this.startDate = startDate;
+        this.lastAccessDate = lastAccessDate;
+        this.timeout = timeout;
+        this.host = host;
+    }
+
+    public Session setId(final String id) {
         this.id = id;
         return this;
     }
 
-    
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Session startDate(DateTime startDate) {
+    public Session setStartDate(final DateTime startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    
     public DateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(DateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public Session lastAccessDate(DateTime lastAccessDate) {
+    public Session setLastAccessDate(final DateTime lastAccessDate) {
         this.lastAccessDate = lastAccessDate;
         return this;
     }
 
-    
     public DateTime getLastAccessDate() {
         return lastAccessDate;
     }
 
-    public void setLastAccessDate(DateTime lastAccessDate) {
-        this.lastAccessDate = lastAccessDate;
-    }
-
-    public Session timeout(Long timeout) {
+    public Session setTimeout(final Long timeout) {
         this.timeout = timeout;
         return this;
     }
 
-    
     public Long getTimeout() {
         return timeout;
     }
 
-    public void setTimeout(Long timeout) {
-        this.timeout = timeout;
-    }
-
-    public Session host(String host) {
+    public Session setHost(final String host) {
         this.host = host;
         return this;
     }
 
-    
     public String getHost() {
         return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
 
@@ -131,7 +122,11 @@ public class Session extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, startDate, lastAccessDate, timeout, host);
+        return Objects.hash(id,
+                            startDate,
+                            lastAccessDate,
+                            timeout,
+                            host);
     }
 
 

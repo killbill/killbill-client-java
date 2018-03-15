@@ -40,40 +40,42 @@ public class NodeCommand extends KillBillObject {
 
     private List<NodeCommandProperty> nodeCommandProperties = null;
 
-    public NodeCommand systemCommandType(Boolean systemCommandType) {
+
+    public NodeCommand() {
+    }
+
+    public NodeCommand(final Boolean systemCommandType,
+                     final String nodeCommandType,
+                     final List<NodeCommandProperty> nodeCommandProperties) {
+        this.systemCommandType = systemCommandType;
+        this.nodeCommandType = nodeCommandType;
+        this.nodeCommandProperties = nodeCommandProperties;
+    }
+
+    public NodeCommand setSystemCommandType(final Boolean systemCommandType) {
         this.systemCommandType = systemCommandType;
         return this;
     }
 
-    
     public Boolean isSystemCommandType() {
         return systemCommandType;
     }
 
-    public void setSystemCommandType(Boolean systemCommandType) {
-        this.systemCommandType = systemCommandType;
-    }
-
-    public NodeCommand nodeCommandType(String nodeCommandType) {
+    public NodeCommand setNodeCommandType(final String nodeCommandType) {
         this.nodeCommandType = nodeCommandType;
         return this;
     }
 
-    
     public String getNodeCommandType() {
         return nodeCommandType;
     }
 
-    public void setNodeCommandType(String nodeCommandType) {
-        this.nodeCommandType = nodeCommandType;
-    }
-
-    public NodeCommand nodeCommandProperties(List<NodeCommandProperty> nodeCommandProperties) {
+    public NodeCommand setNodeCommandProperties(final List<NodeCommandProperty> nodeCommandProperties) {
         this.nodeCommandProperties = nodeCommandProperties;
         return this;
     }
 
-    public NodeCommand addNodeCommandPropertiesItem(NodeCommandProperty nodeCommandPropertiesItem) {
+    public NodeCommand addNodeCommandPropertiesItem(final NodeCommandProperty nodeCommandPropertiesItem) {
         if (this.nodeCommandProperties == null) {
             this.nodeCommandProperties = new ArrayList<NodeCommandProperty>();
         }
@@ -81,13 +83,8 @@ public class NodeCommand extends KillBillObject {
         return this;
     }
 
-    
     public List<NodeCommandProperty> getNodeCommandProperties() {
         return nodeCommandProperties;
-    }
-
-    public void setNodeCommandProperties(List<NodeCommandProperty> nodeCommandProperties) {
-        this.nodeCommandProperties = nodeCommandProperties;
     }
 
 
@@ -107,7 +104,9 @@ public class NodeCommand extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(systemCommandType, nodeCommandType, nodeCommandProperties);
+        return Objects.hash(systemCommandType,
+                            nodeCommandType,
+                            nodeCommandProperties);
     }
 
 

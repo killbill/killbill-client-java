@@ -65,6 +65,10 @@ public class NodesInfoApi {
         return httpClient.doGet(uri, PluginInfos.class, requestOptions);
     }
 
+    public void triggerNodeCommand(final NodeCommand body,  final RequestOptions inputOptions) throws KillBillClientException {
+        triggerNodeCommand(body, Boolean.valueOf(false), inputOptions);
+    }
+
     public void triggerNodeCommand(final NodeCommand body, final Boolean localNodeOnly,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling triggerNodeCommand");
 

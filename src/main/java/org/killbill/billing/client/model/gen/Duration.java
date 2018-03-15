@@ -36,32 +36,32 @@ public class Duration extends KillBillObject {
 
     private Integer number = null;
 
-    public Duration unit(TimeUnit unit) {
+
+    public Duration() {
+    }
+
+    public Duration(final TimeUnit unit,
+                     final Integer number) {
+        this.unit = unit;
+        this.number = number;
+    }
+
+    public Duration setUnit(final TimeUnit unit) {
         this.unit = unit;
         return this;
     }
 
-    
     public TimeUnit getUnit() {
         return unit;
     }
 
-    public void setUnit(TimeUnit unit) {
-        this.unit = unit;
-    }
-
-    public Duration number(Integer number) {
+    public Duration setNumber(final Integer number) {
         this.number = number;
         return this;
     }
 
-    
     public Integer getNumber() {
         return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
     }
 
 
@@ -80,7 +80,8 @@ public class Duration extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(unit, number);
+        return Objects.hash(unit,
+                            number);
     }
 
 

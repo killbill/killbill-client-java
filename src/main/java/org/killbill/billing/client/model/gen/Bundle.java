@@ -46,54 +46,55 @@ public class Bundle extends KillBillObject {
 
     private BundleTimeline timeline = null;
 
-    public Bundle accountId(UUID accountId) {
+
+    public Bundle() {
+    }
+
+    public Bundle(final UUID accountId,
+                     final UUID bundleId,
+                     final String externalKey,
+                     final List<Subscription> subscriptions,
+                     final BundleTimeline timeline) {
+        this.accountId = accountId;
+        this.bundleId = bundleId;
+        this.externalKey = externalKey;
+        this.subscriptions = subscriptions;
+        this.timeline = timeline;
+    }
+
+    public Bundle setAccountId(final UUID accountId) {
         this.accountId = accountId;
         return this;
     }
 
-    
     public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(UUID accountId) {
-        this.accountId = accountId;
-    }
-
-    public Bundle bundleId(UUID bundleId) {
+    public Bundle setBundleId(final UUID bundleId) {
         this.bundleId = bundleId;
         return this;
     }
 
-    
     public UUID getBundleId() {
         return bundleId;
     }
 
-    public void setBundleId(UUID bundleId) {
-        this.bundleId = bundleId;
-    }
-
-    public Bundle externalKey(String externalKey) {
+    public Bundle setExternalKey(final String externalKey) {
         this.externalKey = externalKey;
         return this;
     }
 
-    
     public String getExternalKey() {
         return externalKey;
     }
 
-    public void setExternalKey(String externalKey) {
-        this.externalKey = externalKey;
-    }
-
-    public Bundle subscriptions(List<Subscription> subscriptions) {
+    public Bundle setSubscriptions(final List<Subscription> subscriptions) {
         this.subscriptions = subscriptions;
         return this;
     }
 
-    public Bundle addSubscriptionsItem(Subscription subscriptionsItem) {
+    public Bundle addSubscriptionsItem(final Subscription subscriptionsItem) {
         if (this.subscriptions == null) {
             this.subscriptions = new ArrayList<Subscription>();
         }
@@ -101,27 +102,17 @@ public class Bundle extends KillBillObject {
         return this;
     }
 
-    
     public List<Subscription> getSubscriptions() {
         return subscriptions;
     }
 
-    public void setSubscriptions(List<Subscription> subscriptions) {
-        this.subscriptions = subscriptions;
-    }
-
-    public Bundle timeline(BundleTimeline timeline) {
+    public Bundle setTimeline(final BundleTimeline timeline) {
         this.timeline = timeline;
         return this;
     }
 
-    
     public BundleTimeline getTimeline() {
         return timeline;
-    }
-
-    public void setTimeline(BundleTimeline timeline) {
-        this.timeline = timeline;
     }
 
 
@@ -143,7 +134,11 @@ public class Bundle extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, bundleId, externalKey, subscriptions, timeline);
+        return Objects.hash(accountId,
+                            bundleId,
+                            externalKey,
+                            subscriptions,
+                            timeline);
     }
 
 

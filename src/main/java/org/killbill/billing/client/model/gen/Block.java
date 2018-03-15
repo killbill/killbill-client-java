@@ -44,74 +44,65 @@ public class Block extends KillBillObject {
 
     private Double minTopUpCredit = null;
 
-    public Block type(BlockType type) {
+
+    public Block() {
+    }
+
+    public Block(final BlockType type,
+                     final Double size,
+                     final Unit unit,
+                     final InternationalPrice price,
+                     final Double minTopUpCredit) {
+        this.type = type;
+        this.size = size;
+        this.unit = unit;
+        this.price = price;
+        this.minTopUpCredit = minTopUpCredit;
+    }
+
+    public Block setType(final BlockType type) {
         this.type = type;
         return this;
     }
 
-    
     public BlockType getType() {
         return type;
     }
 
-    public void setType(BlockType type) {
-        this.type = type;
-    }
-
-    public Block size(Double size) {
+    public Block setSize(final Double size) {
         this.size = size;
         return this;
     }
 
-    
     public Double getSize() {
         return size;
     }
 
-    public void setSize(Double size) {
-        this.size = size;
-    }
-
-    public Block unit(Unit unit) {
+    public Block setUnit(final Unit unit) {
         this.unit = unit;
         return this;
     }
 
-    
     public Unit getUnit() {
         return unit;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
-
-    public Block price(InternationalPrice price) {
+    public Block setPrice(final InternationalPrice price) {
         this.price = price;
         return this;
     }
 
-    
     public InternationalPrice getPrice() {
         return price;
     }
 
-    public void setPrice(InternationalPrice price) {
-        this.price = price;
-    }
-
-    public Block minTopUpCredit(Double minTopUpCredit) {
+    public Block setMinTopUpCredit(final Double minTopUpCredit) {
         this.minTopUpCredit = minTopUpCredit;
         return this;
     }
 
-    
     public Double getMinTopUpCredit() {
         return minTopUpCredit;
-    }
-
-    public void setMinTopUpCredit(Double minTopUpCredit) {
-        this.minTopUpCredit = minTopUpCredit;
     }
 
 
@@ -133,7 +124,11 @@ public class Block extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, size, unit, price, minTopUpCredit);
+        return Objects.hash(type,
+                            size,
+                            unit,
+                            price,
+                            minTopUpCredit);
     }
 
 

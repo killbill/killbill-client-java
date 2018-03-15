@@ -51,6 +51,7 @@ public class AdminApi {
         this.httpClient = httpClient;
     }
 
+
     public void invalidatesCache(final String cacheName,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/admin/cache";
@@ -67,6 +68,7 @@ public class AdminApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
+
     public void invalidatesCacheByAccount(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling invalidatesCacheByAccount");
 
@@ -79,6 +81,7 @@ public class AdminApi {
 
         httpClient.doDelete(uri, requestOptions);
     }
+
 
     public void invalidatesCacheByTenant(final String tenantApiKey,  final RequestOptions inputOptions) throws KillBillClientException {
 
@@ -110,6 +113,7 @@ public class AdminApi {
         httpClient.doPost(uri, null, requestOptions);
     }
 
+
     public void putOutOfRotation( final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/admin/healthcheck";
@@ -119,6 +123,10 @@ public class AdminApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
+    }
+
+    public void triggerInvoiceGenerationForParkedAccounts( final RequestOptions inputOptions) throws KillBillClientException {
+        triggerInvoiceGenerationForParkedAccounts(Long.valueOf(0), Long.valueOf(100), inputOptions);
     }
 
     public void triggerInvoiceGenerationForParkedAccounts(final Long offset, final Long limit,  final RequestOptions inputOptions) throws KillBillClientException {

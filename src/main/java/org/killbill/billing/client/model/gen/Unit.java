@@ -35,32 +35,32 @@ public class Unit extends KillBillObject {
 
     private String prettyName = null;
 
-    public Unit name(String name) {
+
+    public Unit() {
+    }
+
+    public Unit(final String name,
+                     final String prettyName) {
+        this.name = name;
+        this.prettyName = prettyName;
+    }
+
+    public Unit setName(final String name) {
         this.name = name;
         return this;
     }
 
-    
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Unit prettyName(String prettyName) {
+    public Unit setPrettyName(final String prettyName) {
         this.prettyName = prettyName;
         return this;
     }
 
-    
     public String getPrettyName() {
         return prettyName;
-    }
-
-    public void setPrettyName(String prettyName) {
-        this.prettyName = prettyName;
     }
 
 
@@ -79,7 +79,8 @@ public class Unit extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, prettyName);
+        return Objects.hash(name,
+                            prettyName);
     }
 
 

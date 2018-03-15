@@ -49,116 +49,98 @@ public class OverdueStateConfig extends KillBillObject {
 
     private Integer autoReevaluationIntervalDays = null;
 
-    public OverdueStateConfig name(String name) {
+
+    public OverdueStateConfig() {
+    }
+
+    public OverdueStateConfig(final String name,
+                     final Boolean isClearState,
+                     final OverdueCondition condition,
+                     final String externalMessage,
+                     final Boolean blockChanges,
+                     final Boolean disableEntitlement,
+                     final OverdueCancellationPolicy subscriptionCancellationPolicy,
+                     final Integer autoReevaluationIntervalDays) {
+        this.name = name;
+        this.isClearState = isClearState;
+        this.condition = condition;
+        this.externalMessage = externalMessage;
+        this.blockChanges = blockChanges;
+        this.disableEntitlement = disableEntitlement;
+        this.subscriptionCancellationPolicy = subscriptionCancellationPolicy;
+        this.autoReevaluationIntervalDays = autoReevaluationIntervalDays;
+    }
+
+    public OverdueStateConfig setName(final String name) {
         this.name = name;
         return this;
     }
 
-    
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public OverdueStateConfig isClearState(Boolean isClearState) {
+    public OverdueStateConfig setIsClearState(final Boolean isClearState) {
         this.isClearState = isClearState;
         return this;
     }
 
-    
     public Boolean isIsClearState() {
         return isClearState;
     }
 
-    public void setIsClearState(Boolean isClearState) {
-        this.isClearState = isClearState;
-    }
-
-    public OverdueStateConfig condition(OverdueCondition condition) {
+    public OverdueStateConfig setCondition(final OverdueCondition condition) {
         this.condition = condition;
         return this;
     }
 
-    
     public OverdueCondition getCondition() {
         return condition;
     }
 
-    public void setCondition(OverdueCondition condition) {
-        this.condition = condition;
-    }
-
-    public OverdueStateConfig externalMessage(String externalMessage) {
+    public OverdueStateConfig setExternalMessage(final String externalMessage) {
         this.externalMessage = externalMessage;
         return this;
     }
 
-    
     public String getExternalMessage() {
         return externalMessage;
     }
 
-    public void setExternalMessage(String externalMessage) {
-        this.externalMessage = externalMessage;
-    }
-
-    public OverdueStateConfig blockChanges(Boolean blockChanges) {
+    public OverdueStateConfig setBlockChanges(final Boolean blockChanges) {
         this.blockChanges = blockChanges;
         return this;
     }
 
-    
     public Boolean isBlockChanges() {
         return blockChanges;
     }
 
-    public void setBlockChanges(Boolean blockChanges) {
-        this.blockChanges = blockChanges;
-    }
-
-    public OverdueStateConfig disableEntitlement(Boolean disableEntitlement) {
+    public OverdueStateConfig setDisableEntitlement(final Boolean disableEntitlement) {
         this.disableEntitlement = disableEntitlement;
         return this;
     }
 
-    
     public Boolean isDisableEntitlement() {
         return disableEntitlement;
     }
 
-    public void setDisableEntitlement(Boolean disableEntitlement) {
-        this.disableEntitlement = disableEntitlement;
-    }
-
-    public OverdueStateConfig subscriptionCancellationPolicy(OverdueCancellationPolicy subscriptionCancellationPolicy) {
+    public OverdueStateConfig setSubscriptionCancellationPolicy(final OverdueCancellationPolicy subscriptionCancellationPolicy) {
         this.subscriptionCancellationPolicy = subscriptionCancellationPolicy;
         return this;
     }
 
-    
     public OverdueCancellationPolicy getSubscriptionCancellationPolicy() {
         return subscriptionCancellationPolicy;
     }
 
-    public void setSubscriptionCancellationPolicy(OverdueCancellationPolicy subscriptionCancellationPolicy) {
-        this.subscriptionCancellationPolicy = subscriptionCancellationPolicy;
-    }
-
-    public OverdueStateConfig autoReevaluationIntervalDays(Integer autoReevaluationIntervalDays) {
+    public OverdueStateConfig setAutoReevaluationIntervalDays(final Integer autoReevaluationIntervalDays) {
         this.autoReevaluationIntervalDays = autoReevaluationIntervalDays;
         return this;
     }
 
-    
     public Integer getAutoReevaluationIntervalDays() {
         return autoReevaluationIntervalDays;
-    }
-
-    public void setAutoReevaluationIntervalDays(Integer autoReevaluationIntervalDays) {
-        this.autoReevaluationIntervalDays = autoReevaluationIntervalDays;
     }
 
 
@@ -183,7 +165,14 @@ public class OverdueStateConfig extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, isClearState, condition, externalMessage, blockChanges, disableEntitlement, subscriptionCancellationPolicy, autoReevaluationIntervalDays);
+        return Objects.hash(name,
+                            isClearState,
+                            condition,
+                            externalMessage,
+                            blockChanges,
+                            disableEntitlement,
+                            subscriptionCancellationPolicy,
+                            autoReevaluationIntervalDays);
     }
 
 

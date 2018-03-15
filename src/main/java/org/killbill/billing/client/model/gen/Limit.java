@@ -20,7 +20,6 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
-import org.killbill.billing.client.model.gen.Unit;
 
 /**
  *           DO NOT EDIT !!!
@@ -32,52 +31,49 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Limit extends KillBillObject {
 
-    private Double max = null;
+    private String unit = null;
 
-    private Unit unit = null;
+    private String max = null;
 
-    private Double min = null;
+    private String min = null;
 
-    public Limit max(Double max) {
+
+    public Limit() {
+    }
+
+    public Limit(final String unit,
+                     final String max,
+                     final String min) {
+        this.unit = unit;
         this.max = max;
-        return this;
+        this.min = min;
     }
 
-    
-    public Double getMax() {
-        return max;
-    }
-
-    public void setMax(Double max) {
-        this.max = max;
-    }
-
-    public Limit unit(Unit unit) {
+    public Limit setUnit(final String unit) {
         this.unit = unit;
         return this;
     }
 
-    
-    public Unit getUnit() {
+    public String getUnit() {
         return unit;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
+    public Limit setMax(final String max) {
+        this.max = max;
+        return this;
     }
 
-    public Limit min(Double min) {
+    public String getMax() {
+        return max;
+    }
+
+    public Limit setMin(final String min) {
         this.min = min;
         return this;
     }
 
-    
-    public Double getMin() {
+    public String getMin() {
         return min;
-    }
-
-    public void setMin(Double min) {
-        this.min = min;
     }
 
 
@@ -90,14 +86,16 @@ public class Limit extends KillBillObject {
             return false;
         }
         Limit limit = (Limit) o;
-        return Objects.equals(this.max, limit.max) &&
-        Objects.equals(this.unit, limit.unit) &&
+        return Objects.equals(this.unit, limit.unit) &&
+        Objects.equals(this.max, limit.max) &&
         Objects.equals(this.min, limit.min);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(max, unit, min);
+        return Objects.hash(unit,
+                            max,
+                            min);
     }
 
 
@@ -106,8 +104,8 @@ public class Limit extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class Limit {\n");
         
-        sb.append("    max: ").append(toIndentedString(max)).append("\n");
         sb.append("    unit: ").append(toIndentedString(unit)).append("\n");
+        sb.append("    max: ").append(toIndentedString(max)).append("\n");
         sb.append("    min: ").append(toIndentedString(min)).append("\n");
         sb.append("}");
         return sb.toString();

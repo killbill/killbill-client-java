@@ -36,32 +36,32 @@ public class UsageRecord extends KillBillObject {
 
     private Long amount = null;
 
-    public UsageRecord recordDate(LocalDate recordDate) {
+
+    public UsageRecord() {
+    }
+
+    public UsageRecord(final LocalDate recordDate,
+                     final Long amount) {
+        this.recordDate = recordDate;
+        this.amount = amount;
+    }
+
+    public UsageRecord setRecordDate(final LocalDate recordDate) {
         this.recordDate = recordDate;
         return this;
     }
 
-    
     public LocalDate getRecordDate() {
         return recordDate;
     }
 
-    public void setRecordDate(LocalDate recordDate) {
-        this.recordDate = recordDate;
-    }
-
-    public UsageRecord amount(Long amount) {
+    public UsageRecord setAmount(final Long amount) {
         this.amount = amount;
         return this;
     }
 
-    
     public Long getAmount() {
         return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
     }
 
 
@@ -80,7 +80,8 @@ public class UsageRecord extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(recordDate, amount);
+        return Objects.hash(recordDate,
+                            amount);
     }
 
 

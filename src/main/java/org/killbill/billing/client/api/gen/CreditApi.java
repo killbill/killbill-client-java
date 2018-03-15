@@ -51,6 +51,10 @@ public class CreditApi {
         this.httpClient = httpClient;
     }
 
+    public Credit createCredit(final Credit body,  final RequestOptions inputOptions) throws KillBillClientException {
+        return createCredit(body, Boolean.valueOf(false), inputOptions);
+    }
+
     public Credit createCredit(final Credit body, final Boolean autoCommit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCredit");
 

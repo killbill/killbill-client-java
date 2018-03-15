@@ -33,36 +33,36 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Recurring extends KillBillObject {
 
-    private BillingPeriod billingPeriod = null;
-
     private InternationalPrice recurringPrice = null;
 
-    public Recurring billingPeriod(BillingPeriod billingPeriod) {
-        this.billingPeriod = billingPeriod;
-        return this;
+    private BillingPeriod billingPeriod = null;
+
+
+    public Recurring() {
     }
 
-    
-    public BillingPeriod getBillingPeriod() {
-        return billingPeriod;
-    }
-
-    public void setBillingPeriod(BillingPeriod billingPeriod) {
+    public Recurring(final InternationalPrice recurringPrice,
+                     final BillingPeriod billingPeriod) {
+        this.recurringPrice = recurringPrice;
         this.billingPeriod = billingPeriod;
     }
 
-    public Recurring recurringPrice(InternationalPrice recurringPrice) {
+    public Recurring setRecurringPrice(final InternationalPrice recurringPrice) {
         this.recurringPrice = recurringPrice;
         return this;
     }
 
-    
     public InternationalPrice getRecurringPrice() {
         return recurringPrice;
     }
 
-    public void setRecurringPrice(InternationalPrice recurringPrice) {
-        this.recurringPrice = recurringPrice;
+    public Recurring setBillingPeriod(final BillingPeriod billingPeriod) {
+        this.billingPeriod = billingPeriod;
+        return this;
+    }
+
+    public BillingPeriod getBillingPeriod() {
+        return billingPeriod;
     }
 
 
@@ -75,13 +75,14 @@ public class Recurring extends KillBillObject {
             return false;
         }
         Recurring recurring = (Recurring) o;
-        return Objects.equals(this.billingPeriod, recurring.billingPeriod) &&
-        Objects.equals(this.recurringPrice, recurring.recurringPrice);
+        return Objects.equals(this.recurringPrice, recurring.recurringPrice) &&
+        Objects.equals(this.billingPeriod, recurring.billingPeriod);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(billingPeriod, recurringPrice);
+        return Objects.hash(recurringPrice,
+                            billingPeriod);
     }
 
 
@@ -90,8 +91,8 @@ public class Recurring extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class Recurring {\n");
         
-        sb.append("    billingPeriod: ").append(toIndentedString(billingPeriod)).append("\n");
         sb.append("    recurringPrice: ").append(toIndentedString(recurringPrice)).append("\n");
+        sb.append("    billingPeriod: ").append(toIndentedString(billingPeriod)).append("\n");
         sb.append("}");
         return sb.toString();
     }
