@@ -22,8 +22,8 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import org.killbill.billing.client.model.gen.InternationalPrice;
 import org.killbill.billing.client.model.gen.Limit;
-import org.killbill.billing.client.model.gen.Price;
 import org.killbill.billing.client.model.gen.TieredBlock;
 
 /**
@@ -36,13 +36,35 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Tier extends KillBillObject {
 
+    private List<TieredBlock> tieredBlocks = null;
+
     private List<Limit> limits = null;
 
-    private List<Price> fixedPrice = null;
+    private InternationalPrice fixedPrice = null;
 
-    private List<Price> recurringPrice = null;
+    private InternationalPrice recurringPrice = null;
 
-    private List<TieredBlock> blocks = null;
+    public Tier tieredBlocks(List<TieredBlock> tieredBlocks) {
+        this.tieredBlocks = tieredBlocks;
+        return this;
+    }
+
+    public Tier addTieredBlocksItem(TieredBlock tieredBlocksItem) {
+        if (this.tieredBlocks == null) {
+            this.tieredBlocks = new ArrayList<TieredBlock>();
+        }
+        this.tieredBlocks.add(tieredBlocksItem);
+        return this;
+    }
+
+    
+    public List<TieredBlock> getTieredBlocks() {
+        return tieredBlocks;
+    }
+
+    public void setTieredBlocks(List<TieredBlock> tieredBlocks) {
+        this.tieredBlocks = tieredBlocks;
+    }
 
     public Tier limits(List<Limit> limits) {
         this.limits = limits;
@@ -66,70 +88,32 @@ public class Tier extends KillBillObject {
         this.limits = limits;
     }
 
-    public Tier fixedPrice(List<Price> fixedPrice) {
+    public Tier fixedPrice(InternationalPrice fixedPrice) {
         this.fixedPrice = fixedPrice;
         return this;
     }
 
-    public Tier addFixedPriceItem(Price fixedPriceItem) {
-        if (this.fixedPrice == null) {
-            this.fixedPrice = new ArrayList<Price>();
-        }
-        this.fixedPrice.add(fixedPriceItem);
-        return this;
-    }
-
     
-    public List<Price> getFixedPrice() {
+    public InternationalPrice getFixedPrice() {
         return fixedPrice;
     }
 
-    public void setFixedPrice(List<Price> fixedPrice) {
+    public void setFixedPrice(InternationalPrice fixedPrice) {
         this.fixedPrice = fixedPrice;
     }
 
-    public Tier recurringPrice(List<Price> recurringPrice) {
+    public Tier recurringPrice(InternationalPrice recurringPrice) {
         this.recurringPrice = recurringPrice;
         return this;
     }
 
-    public Tier addRecurringPriceItem(Price recurringPriceItem) {
-        if (this.recurringPrice == null) {
-            this.recurringPrice = new ArrayList<Price>();
-        }
-        this.recurringPrice.add(recurringPriceItem);
-        return this;
-    }
-
     
-    public List<Price> getRecurringPrice() {
+    public InternationalPrice getRecurringPrice() {
         return recurringPrice;
     }
 
-    public void setRecurringPrice(List<Price> recurringPrice) {
+    public void setRecurringPrice(InternationalPrice recurringPrice) {
         this.recurringPrice = recurringPrice;
-    }
-
-    public Tier blocks(List<TieredBlock> blocks) {
-        this.blocks = blocks;
-        return this;
-    }
-
-    public Tier addBlocksItem(TieredBlock blocksItem) {
-        if (this.blocks == null) {
-            this.blocks = new ArrayList<TieredBlock>();
-        }
-        this.blocks.add(blocksItem);
-        return this;
-    }
-
-    
-    public List<TieredBlock> getBlocks() {
-        return blocks;
-    }
-
-    public void setBlocks(List<TieredBlock> blocks) {
-        this.blocks = blocks;
     }
 
 
@@ -142,15 +126,15 @@ public class Tier extends KillBillObject {
             return false;
         }
         Tier tier = (Tier) o;
-        return Objects.equals(this.limits, tier.limits) &&
+        return Objects.equals(this.tieredBlocks, tier.tieredBlocks) &&
+        Objects.equals(this.limits, tier.limits) &&
         Objects.equals(this.fixedPrice, tier.fixedPrice) &&
-        Objects.equals(this.recurringPrice, tier.recurringPrice) &&
-        Objects.equals(this.blocks, tier.blocks);
+        Objects.equals(this.recurringPrice, tier.recurringPrice);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(limits, fixedPrice, recurringPrice, blocks);
+        return Objects.hash(tieredBlocks, limits, fixedPrice, recurringPrice);
     }
 
 
@@ -159,10 +143,10 @@ public class Tier extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class Tier {\n");
         
+        sb.append("    tieredBlocks: ").append(toIndentedString(tieredBlocks)).append("\n");
         sb.append("    limits: ").append(toIndentedString(limits)).append("\n");
         sb.append("    fixedPrice: ").append(toIndentedString(fixedPrice)).append("\n");
         sb.append("    recurringPrice: ").append(toIndentedString(recurringPrice)).append("\n");
-        sb.append("    blocks: ").append(toIndentedString(blocks)).append("\n");
         sb.append("}");
         return sb.toString();
     }

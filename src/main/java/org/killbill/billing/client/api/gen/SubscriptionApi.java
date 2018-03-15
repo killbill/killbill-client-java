@@ -71,8 +71,12 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -89,13 +93,27 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
-        queryParams.put("callCompletion", String.valueOf(callCompletion));
-        queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
-        queryParams.put("entitlementPolicy", String.valueOf(entitlementPolicy));
-        queryParams.put("billingPolicy", String.valueOf(billingPolicy));
-        queryParams.put("useRequestedDateForBilling", String.valueOf(useRequestedDateForBilling));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (callCompletion != null) {
+            queryParams.put("callCompletion", String.valueOf(callCompletion));
+        }
+        if (callTimeoutSec != null) {
+            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+        }
+        if (entitlementPolicy != null) {
+            queryParams.put("entitlementPolicy", String.valueOf(entitlementPolicy));
+        }
+        if (billingPolicy != null) {
+            queryParams.put("billingPolicy", String.valueOf(billingPolicy));
+        }
+        if (useRequestedDateForBilling != null) {
+            queryParams.put("useRequestedDateForBilling", String.valueOf(useRequestedDateForBilling));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -112,11 +130,21 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
-        queryParams.put("callCompletion", String.valueOf(callCompletion));
-        queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
-        queryParams.put("billingPolicy", String.valueOf(billingPolicy));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (callCompletion != null) {
+            queryParams.put("callCompletion", String.valueOf(callCompletion));
+        }
+        if (callTimeoutSec != null) {
+            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+        }
+        if (billingPolicy != null) {
+            queryParams.put("billingPolicy", String.valueOf(billingPolicy));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -145,21 +173,36 @@ public class SubscriptionApi {
         httpClient.doPost(uri, body, requestOptions);
     }
 
-    public Subscription createEntitlement(final Subscription body, final String requestedDate, final String entitlementDate, final String billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Integer bcd, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Subscription createEntitlement(final Subscription body, final String entitlementDate, final String billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Integer bcd, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createEntitlement");
 
         final String uri = "/1.0/kb/subscriptions";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
-        queryParams.put("entitlementDate", String.valueOf(entitlementDate));
-        queryParams.put("billingDate", String.valueOf(billingDate));
-        queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
-        queryParams.put("migrated", String.valueOf(migrated));
-        queryParams.put("bcd", String.valueOf(bcd));
-        queryParams.put("callCompletion", String.valueOf(callCompletion));
-        queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (entitlementDate != null) {
+            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+        }
+        if (billingDate != null) {
+            queryParams.put("billingDate", String.valueOf(billingDate));
+        }
+        if (renameKeyIfExistsAndUnused != null) {
+            queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
+        }
+        if (migrated != null) {
+            queryParams.put("migrated", String.valueOf(migrated));
+        }
+        if (bcd != null) {
+            queryParams.put("bcd", String.valueOf(bcd));
+        }
+        if (callCompletion != null) {
+            queryParams.put("callCompletion", String.valueOf(callCompletion));
+        }
+        if (callTimeoutSec != null) {
+            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
@@ -172,20 +215,33 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Subscription.class, requestOptions);
     }
 
-    public Bundle createEntitlementWithAddOns(final Subscriptions body, final String requestedDate, final String entitlementDate, final String billingDate, final Boolean migrated, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle createEntitlementWithAddOns(final Subscriptions body, final String entitlementDate, final String billingDate, final Boolean migrated, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createEntitlementWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createEntitlementWithAddOns";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
-        queryParams.put("entitlementDate", String.valueOf(entitlementDate));
-        queryParams.put("billingDate", String.valueOf(billingDate));
-        queryParams.put("migrated", String.valueOf(migrated));
-        queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
-        queryParams.put("callCompletion", String.valueOf(callCompletion));
-        queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (entitlementDate != null) {
+            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+        }
+        if (billingDate != null) {
+            queryParams.put("billingDate", String.valueOf(billingDate));
+        }
+        if (migrated != null) {
+            queryParams.put("migrated", String.valueOf(migrated));
+        }
+        if (renameKeyIfExistsAndUnused != null) {
+            queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
+        }
+        if (callCompletion != null) {
+            queryParams.put("callCompletion", String.valueOf(callCompletion));
+        }
+        if (callTimeoutSec != null) {
+            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
@@ -198,20 +254,33 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Bundle.class, requestOptions);
     }
 
-    public Bundles createEntitlementsWithAddOns(final BulkSubscriptionsBundles body, final String requestedDate, final String entitlementDate, final String billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundles createEntitlementsWithAddOns(final BulkSubscriptionsBundles body, final String entitlementDate, final String billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createEntitlementsWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createEntitlementsWithAddOns";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
-        queryParams.put("entitlementDate", String.valueOf(entitlementDate));
-        queryParams.put("billingDate", String.valueOf(billingDate));
-        queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
-        queryParams.put("migrated", String.valueOf(migrated));
-        queryParams.put("callCompletion", String.valueOf(callCompletion));
-        queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (entitlementDate != null) {
+            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+        }
+        if (billingDate != null) {
+            queryParams.put("billingDate", String.valueOf(billingDate));
+        }
+        if (renameKeyIfExistsAndUnused != null) {
+            queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
+        }
+        if (migrated != null) {
+            queryParams.put("migrated", String.valueOf(migrated));
+        }
+        if (callCompletion != null) {
+            queryParams.put("callCompletion", String.valueOf(callCompletion));
+        }
+        if (callTimeoutSec != null) {
+            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
@@ -231,7 +300,9 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("tagList", String.valueOf(tagList));
+        if (tagList != null) {
+            queryParams.put("tagList", String.valueOf(tagList));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
@@ -251,7 +322,9 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("customFieldList", String.valueOf(customFieldList));
+        if (customFieldList != null) {
+            queryParams.put("customFieldList", String.valueOf(customFieldList));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -268,7 +341,9 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("tagList", String.valueOf(tagList));
+        if (tagList != null) {
+            queryParams.put("tagList", String.valueOf(tagList));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -285,7 +360,9 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -302,7 +379,9 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -319,8 +398,12 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
-        queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
+        if (includedDeleted != null) {
+            queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -353,7 +436,9 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -370,7 +455,9 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -388,8 +475,12 @@ public class SubscriptionApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("effectiveFromDate", String.valueOf(effectiveFromDate));
-        queryParams.put("forceNewBcdWithPastEffectiveDate", String.valueOf(forceNewBcdWithPastEffectiveDate));
+        if (effectiveFromDate != null) {
+            queryParams.put("effectiveFromDate", String.valueOf(effectiveFromDate));
+        }
+        if (forceNewBcdWithPastEffectiveDate != null) {
+            queryParams.put("forceNewBcdWithPastEffectiveDate", String.valueOf(forceNewBcdWithPastEffectiveDate));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);

@@ -56,7 +56,9 @@ public class AdminApi {
         final String uri = "/1.0/kb/admin/cache";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("cacheName", String.valueOf(cacheName));
+        if (cacheName != null) {
+            queryParams.put("cacheName", String.valueOf(cacheName));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -83,7 +85,9 @@ public class AdminApi {
         final String uri = "/1.0/kb/admin/cache/tenants";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("tenantApiKey", String.valueOf(tenantApiKey));
+        if (tenantApiKey != null) {
+            queryParams.put("tenantApiKey", String.valueOf(tenantApiKey));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -122,8 +126,12 @@ public class AdminApi {
         final String uri = "/1.0/kb/admin/invoices";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("offset", String.valueOf(offset));
-        queryParams.put("limit", String.valueOf(limit));
+        if (offset != null) {
+            queryParams.put("offset", String.valueOf(offset));
+        }
+        if (limit != null) {
+            queryParams.put("limit", String.valueOf(limit));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);

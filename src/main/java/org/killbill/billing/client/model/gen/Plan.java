@@ -22,8 +22,12 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import org.joda.time.DateTime;
+import org.killbill.billing.catalog.api.BillingMode;
 import org.killbill.billing.catalog.api.BillingPeriod;
-import org.killbill.billing.client.model.gen.Phase;
+import org.killbill.billing.client.model.gen.IteratorPlanPhase;
+import org.killbill.billing.client.model.gen.PlanPhase;
+import org.killbill.billing.client.model.gen.Product;
 
 /**
  *           DO NOT EDIT !!!
@@ -35,13 +39,185 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Plan extends KillBillObject {
 
+    private Product product = null;
+
+    private BillingMode recurringBillingMode = null;
+
+    private List<PlanPhase> initialPhases = null;
+
+    private String priceListName = null;
+
+    private IteratorPlanPhase initialPhaseIterator = null;
+
+    private PlanPhase finalPhase = null;
+
+    private BillingPeriod recurringBillingPeriod = null;
+
+    private Integer plansAllowedInBundle = null;
+
+    private List<PlanPhase> allPhases = null;
+
+    private DateTime effectiveDateForExistingSubscriptions = null;
+
     private String name = null;
 
     private String prettyName = null;
 
-    private BillingPeriod billingPeriod = null;
+    public Plan product(Product product) {
+        this.product = product;
+        return this;
+    }
 
-    private List<Phase> phases = null;
+    
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Plan recurringBillingMode(BillingMode recurringBillingMode) {
+        this.recurringBillingMode = recurringBillingMode;
+        return this;
+    }
+
+    
+    public BillingMode getRecurringBillingMode() {
+        return recurringBillingMode;
+    }
+
+    public void setRecurringBillingMode(BillingMode recurringBillingMode) {
+        this.recurringBillingMode = recurringBillingMode;
+    }
+
+    public Plan initialPhases(List<PlanPhase> initialPhases) {
+        this.initialPhases = initialPhases;
+        return this;
+    }
+
+    public Plan addInitialPhasesItem(PlanPhase initialPhasesItem) {
+        if (this.initialPhases == null) {
+            this.initialPhases = new ArrayList<PlanPhase>();
+        }
+        this.initialPhases.add(initialPhasesItem);
+        return this;
+    }
+
+    
+    public List<PlanPhase> getInitialPhases() {
+        return initialPhases;
+    }
+
+    public void setInitialPhases(List<PlanPhase> initialPhases) {
+        this.initialPhases = initialPhases;
+    }
+
+    public Plan priceListName(String priceListName) {
+        this.priceListName = priceListName;
+        return this;
+    }
+
+    
+    public String getPriceListName() {
+        return priceListName;
+    }
+
+    public void setPriceListName(String priceListName) {
+        this.priceListName = priceListName;
+    }
+
+    public Plan initialPhaseIterator(IteratorPlanPhase initialPhaseIterator) {
+        this.initialPhaseIterator = initialPhaseIterator;
+        return this;
+    }
+
+    
+    public IteratorPlanPhase getInitialPhaseIterator() {
+        return initialPhaseIterator;
+    }
+
+    public void setInitialPhaseIterator(IteratorPlanPhase initialPhaseIterator) {
+        this.initialPhaseIterator = initialPhaseIterator;
+    }
+
+    public Plan finalPhase(PlanPhase finalPhase) {
+        this.finalPhase = finalPhase;
+        return this;
+    }
+
+    
+    public PlanPhase getFinalPhase() {
+        return finalPhase;
+    }
+
+    public void setFinalPhase(PlanPhase finalPhase) {
+        this.finalPhase = finalPhase;
+    }
+
+    public Plan recurringBillingPeriod(BillingPeriod recurringBillingPeriod) {
+        this.recurringBillingPeriod = recurringBillingPeriod;
+        return this;
+    }
+
+    
+    public BillingPeriod getRecurringBillingPeriod() {
+        return recurringBillingPeriod;
+    }
+
+    public void setRecurringBillingPeriod(BillingPeriod recurringBillingPeriod) {
+        this.recurringBillingPeriod = recurringBillingPeriod;
+    }
+
+    public Plan plansAllowedInBundle(Integer plansAllowedInBundle) {
+        this.plansAllowedInBundle = plansAllowedInBundle;
+        return this;
+    }
+
+    
+    public Integer getPlansAllowedInBundle() {
+        return plansAllowedInBundle;
+    }
+
+    public void setPlansAllowedInBundle(Integer plansAllowedInBundle) {
+        this.plansAllowedInBundle = plansAllowedInBundle;
+    }
+
+    public Plan allPhases(List<PlanPhase> allPhases) {
+        this.allPhases = allPhases;
+        return this;
+    }
+
+    public Plan addAllPhasesItem(PlanPhase allPhasesItem) {
+        if (this.allPhases == null) {
+            this.allPhases = new ArrayList<PlanPhase>();
+        }
+        this.allPhases.add(allPhasesItem);
+        return this;
+    }
+
+    
+    public List<PlanPhase> getAllPhases() {
+        return allPhases;
+    }
+
+    public void setAllPhases(List<PlanPhase> allPhases) {
+        this.allPhases = allPhases;
+    }
+
+    public Plan effectiveDateForExistingSubscriptions(DateTime effectiveDateForExistingSubscriptions) {
+        this.effectiveDateForExistingSubscriptions = effectiveDateForExistingSubscriptions;
+        return this;
+    }
+
+    
+    public DateTime getEffectiveDateForExistingSubscriptions() {
+        return effectiveDateForExistingSubscriptions;
+    }
+
+    public void setEffectiveDateForExistingSubscriptions(DateTime effectiveDateForExistingSubscriptions) {
+        this.effectiveDateForExistingSubscriptions = effectiveDateForExistingSubscriptions;
+    }
 
     public Plan name(String name) {
         this.name = name;
@@ -71,42 +247,6 @@ public class Plan extends KillBillObject {
         this.prettyName = prettyName;
     }
 
-    public Plan billingPeriod(BillingPeriod billingPeriod) {
-        this.billingPeriod = billingPeriod;
-        return this;
-    }
-
-    
-    public BillingPeriod getBillingPeriod() {
-        return billingPeriod;
-    }
-
-    public void setBillingPeriod(BillingPeriod billingPeriod) {
-        this.billingPeriod = billingPeriod;
-    }
-
-    public Plan phases(List<Phase> phases) {
-        this.phases = phases;
-        return this;
-    }
-
-    public Plan addPhasesItem(Phase phasesItem) {
-        if (this.phases == null) {
-            this.phases = new ArrayList<Phase>();
-        }
-        this.phases.add(phasesItem);
-        return this;
-    }
-
-    
-    public List<Phase> getPhases() {
-        return phases;
-    }
-
-    public void setPhases(List<Phase> phases) {
-        this.phases = phases;
-    }
-
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -117,15 +257,23 @@ public class Plan extends KillBillObject {
             return false;
         }
         Plan plan = (Plan) o;
-        return Objects.equals(this.name, plan.name) &&
-        Objects.equals(this.prettyName, plan.prettyName) &&
-        Objects.equals(this.billingPeriod, plan.billingPeriod) &&
-        Objects.equals(this.phases, plan.phases);
+        return Objects.equals(this.product, plan.product) &&
+        Objects.equals(this.recurringBillingMode, plan.recurringBillingMode) &&
+        Objects.equals(this.initialPhases, plan.initialPhases) &&
+        Objects.equals(this.priceListName, plan.priceListName) &&
+        Objects.equals(this.initialPhaseIterator, plan.initialPhaseIterator) &&
+        Objects.equals(this.finalPhase, plan.finalPhase) &&
+        Objects.equals(this.recurringBillingPeriod, plan.recurringBillingPeriod) &&
+        Objects.equals(this.plansAllowedInBundle, plan.plansAllowedInBundle) &&
+        Objects.equals(this.allPhases, plan.allPhases) &&
+        Objects.equals(this.effectiveDateForExistingSubscriptions, plan.effectiveDateForExistingSubscriptions) &&
+        Objects.equals(this.name, plan.name) &&
+        Objects.equals(this.prettyName, plan.prettyName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, prettyName, billingPeriod, phases);
+        return Objects.hash(product, recurringBillingMode, initialPhases, priceListName, initialPhaseIterator, finalPhase, recurringBillingPeriod, plansAllowedInBundle, allPhases, effectiveDateForExistingSubscriptions, name, prettyName);
     }
 
 
@@ -134,10 +282,18 @@ public class Plan extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class Plan {\n");
         
+        sb.append("    product: ").append(toIndentedString(product)).append("\n");
+        sb.append("    recurringBillingMode: ").append(toIndentedString(recurringBillingMode)).append("\n");
+        sb.append("    initialPhases: ").append(toIndentedString(initialPhases)).append("\n");
+        sb.append("    priceListName: ").append(toIndentedString(priceListName)).append("\n");
+        sb.append("    initialPhaseIterator: ").append(toIndentedString(initialPhaseIterator)).append("\n");
+        sb.append("    finalPhase: ").append(toIndentedString(finalPhase)).append("\n");
+        sb.append("    recurringBillingPeriod: ").append(toIndentedString(recurringBillingPeriod)).append("\n");
+        sb.append("    plansAllowedInBundle: ").append(toIndentedString(plansAllowedInBundle)).append("\n");
+        sb.append("    allPhases: ").append(toIndentedString(allPhases)).append("\n");
+        sb.append("    effectiveDateForExistingSubscriptions: ").append(toIndentedString(effectiveDateForExistingSubscriptions)).append("\n");
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    prettyName: ").append(toIndentedString(prettyName)).append("\n");
-        sb.append("    billingPeriod: ").append(toIndentedString(billingPeriod)).append("\n");
-        sb.append("    phases: ").append(toIndentedString(phases)).append("\n");
         sb.append("}");
         return sb.toString();
     }

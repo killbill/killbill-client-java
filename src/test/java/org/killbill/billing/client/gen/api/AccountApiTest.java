@@ -19,20 +19,25 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.UUID;
 
+import org.killbill.billing.catalog.api.PriceListSet;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
 import org.killbill.billing.client.api.gen.AccountApi;
 import org.killbill.billing.client.api.gen.CatalogApi;
+import org.killbill.billing.client.api.gen.SubscriptionApi;
 import org.killbill.billing.client.api.gen.TenantApi;
 import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.client.model.gen.Account;
+import org.killbill.billing.client.model.gen.Subscription;
 import org.killbill.billing.client.model.gen.Tenant;
 import org.killbill.billing.util.api.AuditLevel;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Resources;
 
@@ -54,6 +59,7 @@ public class AccountApiTest {
     private TenantApi tenantApi;
     private CatalogApi catalogApi;
     private AccountApi accountApi;
+    private SubscriptionApi subscriptionApi;
 
     private RequestOptions requestOptions;
 
@@ -72,6 +78,7 @@ public class AccountApiTest {
         tenantApi = new TenantApi(httpClient);
         catalogApi = new CatalogApi(httpClient);
         accountApi = new AccountApi(httpClient);
+        subscriptionApi = new SubscriptionApi(httpClient);
 
         requestOptions = RequestOptions.builder()
                                        .withCreatedBy("Something")
@@ -97,6 +104,7 @@ public class AccountApiTest {
         final UUID accountId = result.getAccountId();
 
         account.setEmail("somebody@something.org");
+        account.setCurrency("USD");
         accountApi.updateAccount(account, accountId, false, requestOptions);
 
         final Account result3 = accountApi.getAccount(accountId, false, false, AuditLevel.FULL, requestOptions);
@@ -105,6 +113,16 @@ public class AccountApiTest {
         Assert.assertEquals(result3.getExternalKey(), externalKey);
         Assert.assertEquals(result3.getEmail(), "somebody@something.org");
 
+
+        final Subscription subscription = new Subscription();
+        subscription.setAccountId(accountId);
+        //subscription.setExternalKey(bundleExternalKey);
+        subscription.setAccountId(accountId);
+        subscription.setPlanName("simple-monthly");
+        final Subscription subscription2 = subscriptionApi.createEntitlement(subscription, null, null, false, false, null, false, -1L, ImmutableList.<String>of(), requestOptions);
+        Assert.assertNotNull(subscription2);
+
+
         accountApi.closeAccount(accountId, false, false, false, requestOptions);
 
         final Account result4 = accountApi.getAccount(accountId, false, false, AuditLevel.FULL, requestOptions);
@@ -112,6 +130,7 @@ public class AccountApiTest {
         Assert.assertEquals(result4.getAccountId(), accountId);
         Assert.assertEquals(result4.getExternalKey(), externalKey);
         Assert.assertEquals(result4.getEmail(), "somebody@something.org");
+
     }
 
     @Test

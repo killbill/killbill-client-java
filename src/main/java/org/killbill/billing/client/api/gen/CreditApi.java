@@ -57,7 +57,9 @@ public class CreditApi {
         final String uri = "/1.0/kb/credits";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("autoCommit", String.valueOf(autoCommit));
+        if (autoCommit != null) {
+            queryParams.put("autoCommit", String.valueOf(autoCommit));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);

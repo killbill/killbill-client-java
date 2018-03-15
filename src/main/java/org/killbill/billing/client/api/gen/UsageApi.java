@@ -59,8 +59,12 @@ public class UsageApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("startDate", String.valueOf(startDate));
-        queryParams.put("endDate", String.valueOf(endDate));
+        if (startDate != null) {
+            queryParams.put("startDate", String.valueOf(startDate));
+        }
+        if (endDate != null) {
+            queryParams.put("endDate", String.valueOf(endDate));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -79,8 +83,12 @@ public class UsageApi {
           .replaceAll("\\{" + "unitType" + "\\}", unitType.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("startDate", String.valueOf(startDate));
-        queryParams.put("endDate", String.valueOf(endDate));
+        if (startDate != null) {
+            queryParams.put("startDate", String.valueOf(startDate));
+        }
+        if (endDate != null) {
+            queryParams.put("endDate", String.valueOf(endDate));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);

@@ -61,8 +61,12 @@ public class PaymentGatewayApi {
         final String uri = "/1.0/kb/paymentGateways/hosted/form";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("controlPluginName", String.valueOf(controlPluginName));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (controlPluginName != null) {
+            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
@@ -83,9 +87,15 @@ public class PaymentGatewayApi {
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("paymentMethodId", String.valueOf(paymentMethodId));
-        queryParams.put("controlPluginName", String.valueOf(controlPluginName));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (paymentMethodId != null) {
+            queryParams.put("paymentMethodId", String.valueOf(paymentMethodId));
+        }
+        if (controlPluginName != null) {
+            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
@@ -106,8 +116,12 @@ public class PaymentGatewayApi {
           .replaceAll("\\{" + "pluginName" + "\\}", pluginName.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("controlPluginName", String.valueOf(controlPluginName));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (controlPluginName != null) {
+            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);

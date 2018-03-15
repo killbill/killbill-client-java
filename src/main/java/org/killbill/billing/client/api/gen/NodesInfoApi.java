@@ -71,7 +71,9 @@ public class NodesInfoApi {
         final String uri = "/1.0/kb/nodesInfo";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("localNodeOnly", String.valueOf(localNodeOnly));
+        if (localNodeOnly != null) {
+            queryParams.put("localNodeOnly", String.valueOf(localNodeOnly));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);

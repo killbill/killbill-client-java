@@ -81,7 +81,9 @@ public class InvoiceItemApi {
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("tagList", String.valueOf(tagList));
+        if (tagList != null) {
+            queryParams.put("tagList", String.valueOf(tagList));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
@@ -101,7 +103,9 @@ public class InvoiceItemApi {
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("customFieldList", String.valueOf(customFieldList));
+        if (customFieldList != null) {
+            queryParams.put("customFieldList", String.valueOf(customFieldList));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -118,7 +122,9 @@ public class InvoiceItemApi {
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("tagList", String.valueOf(tagList));
+        if (tagList != null) {
+            queryParams.put("tagList", String.valueOf(tagList));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -135,7 +141,9 @@ public class InvoiceItemApi {
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -153,9 +161,15 @@ public class InvoiceItemApi {
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("accountId", String.valueOf(accountId));
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
-        queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        if (accountId != null) {
+            queryParams.put("accountId", String.valueOf(accountId));
+        }
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
+        if (includedDeleted != null) {
+            queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);

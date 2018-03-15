@@ -90,7 +90,9 @@ public class TagDefinitionApi {
           .replaceAll("\\{" + "tagDefinitionId" + "\\}", tagDefinitionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -105,7 +107,9 @@ public class TagDefinitionApi {
         final String uri = "/1.0/kb/tagDefinitions";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);

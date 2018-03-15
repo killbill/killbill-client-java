@@ -58,9 +58,15 @@ public class CustomFieldApi {
         final String uri = "/1.0/kb/customFields/pagination";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("offset", String.valueOf(offset));
-        queryParams.put("limit", String.valueOf(limit));
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (offset != null) {
+            queryParams.put("offset", String.valueOf(offset));
+        }
+        if (limit != null) {
+            queryParams.put("limit", String.valueOf(limit));
+        }
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -77,9 +83,15 @@ public class CustomFieldApi {
           .replaceAll("\\{" + "searchKey" + "\\}", searchKey.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("offset", String.valueOf(offset));
-        queryParams.put("limit", String.valueOf(limit));
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (offset != null) {
+            queryParams.put("offset", String.valueOf(offset));
+        }
+        if (limit != null) {
+            queryParams.put("limit", String.valueOf(limit));
+        }
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);

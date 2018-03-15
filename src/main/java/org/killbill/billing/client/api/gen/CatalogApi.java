@@ -90,8 +90,12 @@ public class CatalogApi {
         final String uri = "/1.0/kb/catalog/availableAddons";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("baseProductName", String.valueOf(baseProductName));
-        queryParams.put("priceListName", String.valueOf(priceListName));
+        if (baseProductName != null) {
+            queryParams.put("baseProductName", String.valueOf(baseProductName));
+        }
+        if (priceListName != null) {
+            queryParams.put("priceListName", String.valueOf(priceListName));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -130,8 +134,12 @@ public class CatalogApi {
         final String uri = "/1.0/kb/catalog/phase";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("subscriptionId", String.valueOf(subscriptionId));
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
+        if (subscriptionId != null) {
+            queryParams.put("subscriptionId", String.valueOf(subscriptionId));
+        }
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -146,8 +154,12 @@ public class CatalogApi {
         final String uri = "/1.0/kb/catalog/plan";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("subscriptionId", String.valueOf(subscriptionId));
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
+        if (subscriptionId != null) {
+            queryParams.put("subscriptionId", String.valueOf(subscriptionId));
+        }
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -162,8 +174,12 @@ public class CatalogApi {
         final String uri = "/1.0/kb/catalog/priceList";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("subscriptionId", String.valueOf(subscriptionId));
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
+        if (subscriptionId != null) {
+            queryParams.put("subscriptionId", String.valueOf(subscriptionId));
+        }
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -178,8 +194,12 @@ public class CatalogApi {
         final String uri = "/1.0/kb/catalog/product";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("subscriptionId", String.valueOf(subscriptionId));
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
+        if (subscriptionId != null) {
+            queryParams.put("subscriptionId", String.valueOf(subscriptionId));
+        }
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);

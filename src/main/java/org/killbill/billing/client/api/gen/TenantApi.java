@@ -57,7 +57,9 @@ public class TenantApi {
         final String uri = "/1.0/kb/tenants";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("useGlobalDefault", String.valueOf(useGlobalDefault));
+        if (useGlobalDefault != null) {
+            queryParams.put("useGlobalDefault", String.valueOf(useGlobalDefault));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
@@ -216,7 +218,9 @@ public class TenantApi {
         final String uri = "/1.0/kb/tenants";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("apiKey", String.valueOf(apiKey));
+        if (apiKey != null) {
+            queryParams.put("apiKey", String.valueOf(apiKey));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -263,7 +267,9 @@ public class TenantApi {
         final String uri = "/1.0/kb/tenants/registerNotificationCallback";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("cb", String.valueOf(cb));
+        if (cb != null) {
+            queryParams.put("cb", String.valueOf(cb));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);

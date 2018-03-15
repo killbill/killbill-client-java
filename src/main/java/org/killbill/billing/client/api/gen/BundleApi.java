@@ -67,8 +67,12 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -103,7 +107,9 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("tagList", String.valueOf(tagList));
+        if (tagList != null) {
+            queryParams.put("tagList", String.valueOf(tagList));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
@@ -123,7 +129,9 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("customFieldList", String.valueOf(customFieldList));
+        if (customFieldList != null) {
+            queryParams.put("customFieldList", String.valueOf(customFieldList));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -140,7 +148,9 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("tagList", String.valueOf(tagList));
+        if (tagList != null) {
+            queryParams.put("tagList", String.valueOf(tagList));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -157,7 +167,9 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -173,9 +185,15 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("externalKey", String.valueOf(externalKey));
-        queryParams.put("includedDeleted", String.valueOf(includedDeleted));
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (externalKey != null) {
+            queryParams.put("externalKey", String.valueOf(externalKey));
+        }
+        if (includedDeleted != null) {
+            queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        }
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -190,9 +208,15 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/pagination";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("offset", String.valueOf(offset));
-        queryParams.put("limit", String.valueOf(limit));
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (offset != null) {
+            queryParams.put("offset", String.valueOf(offset));
+        }
+        if (limit != null) {
+            queryParams.put("limit", String.valueOf(limit));
+        }
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -209,7 +233,9 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -226,8 +252,12 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
-        queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
+        if (includedDeleted != null) {
+            queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -260,8 +290,12 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -294,8 +328,12 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -313,9 +351,15 @@ public class BundleApi {
           .replaceAll("\\{" + "searchKey" + "\\}", searchKey.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("offset", String.valueOf(offset));
-        queryParams.put("limit", String.valueOf(limit));
-        queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (offset != null) {
+            queryParams.put("offset", String.valueOf(offset));
+        }
+        if (limit != null) {
+            queryParams.put("limit", String.valueOf(limit));
+        }
+        if (auditLevel != null) {
+            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -333,9 +377,15 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        queryParams.put("requestedDate", String.valueOf(requestedDate));
-        queryParams.put("billingPolicy", String.valueOf(billingPolicy));
-        queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (billingPolicy != null) {
+            queryParams.put("billingPolicy", String.valueOf(billingPolicy));
+        }
+        if (pluginProperty != null) {
+            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);

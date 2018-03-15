@@ -21,6 +21,7 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.math.BigDecimal;
+import org.killbill.billing.catalog.api.Currency;
 
 /**
  *           DO NOT EDIT !!!
@@ -32,23 +33,9 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Price extends KillBillObject {
 
-    private String currency = null;
-
     private BigDecimal value = null;
 
-    public Price currency(String currency) {
-        this.currency = currency;
-        return this;
-    }
-
-    
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
+    private Currency currency = null;
 
     public Price value(BigDecimal value) {
         this.value = value;
@@ -64,6 +51,20 @@ public class Price extends KillBillObject {
         this.value = value;
     }
 
+    public Price currency(Currency currency) {
+        this.currency = currency;
+        return this;
+    }
+
+    
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -74,13 +75,13 @@ public class Price extends KillBillObject {
             return false;
         }
         Price price = (Price) o;
-        return Objects.equals(this.currency, price.currency) &&
-        Objects.equals(this.value, price.value);
+        return Objects.equals(this.value, price.value) &&
+        Objects.equals(this.currency, price.currency);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(currency, value);
+        return Objects.hash(value, currency);
     }
 
 
@@ -89,8 +90,8 @@ public class Price extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class Price {\n");
         
-        sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
         sb.append("    value: ").append(toIndentedString(value)).append("\n");
+        sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
         sb.append("}");
         return sb.toString();
     }
