@@ -1,0 +1,206 @@
+<catalog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="CatalogSchema.xsd ">
+    <effectiveDate>2018-03-02T01:00:00+00:00</effectiveDate>
+    <catalogName>CatalogTest</catalogName>
+    <recurringBillingMode>IN_ARREAR</recurringBillingMode>
+    <currencies>
+        <currency>USD</currency>
+    </currencies>
+    <units>
+        <unit name="emails"/>
+        <unit name="tickets"/>
+        <unit name="phone-hours"/>
+        <unit name="api-users"/>
+    </units>
+    <products>
+        <product name="simple">
+            <category>BASE</category>
+        </product>
+    </products>
+    <rules>
+        <changePolicy>
+            <!-- Allowed changes, and when to change. Only explicitly listed items in orbitera are
+            allowed to change -->
+            <changePolicyCase>
+                <policy>IMMEDIATE</policy>
+            </changePolicyCase>
+        </changePolicy>
+        <changeAlignment>
+            <changeAlignmentCase>
+                <alignment>START_OF_SUBSCRIPTION</alignment>
+            </changeAlignmentCase>
+        </changeAlignment>
+        <cancelPolicy>
+            <cancelPolicyCase>
+                <policy>IMMEDIATE</policy>
+            </cancelPolicyCase>
+        </cancelPolicy>
+        <createAlignment>
+            <createAlignmentCase>
+                <alignment>START_OF_BUNDLE</alignment>
+            </createAlignmentCase>
+        </createAlignment>
+        <billingAlignment>
+            <billingAlignmentCase>
+                <alignment>BUNDLE</alignment>
+            </billingAlignmentCase>
+        </billingAlignment>
+        <priceList>
+            <priceListCase>
+                <toPriceList>default</toPriceList>
+            </priceListCase>
+        </priceList>
+    </rules>
+    <plans>
+        <plan name="simple-monthly">
+            <product>simple</product>
+            <finalPhase type="FIXEDTERM">
+                <duration>
+                    <unit>MONTHS</unit>
+                    <number>36</number>
+                </duration>
+                <fixed>
+                    <fixedPrice>
+                        <price>
+                            <currency>USD</currency>
+                            <value>200.00</value>
+                        </price>
+                    </fixedPrice>
+                </fixed>
+                <recurring>
+                    <billingPeriod>MONTHLY</billingPeriod>
+                    <recurringPrice>
+                        <price>
+                            <currency>USD</currency>
+                            <value>50.00</value>
+                        </price>
+                    </recurringPrice>
+                </recurring>
+                <usages>
+                    <!-- Number of emails sent per month -->
+                    <usage name="email-usage" billingMode="IN_ARREAR" usageType="CONSUMABLE">
+                        <billingPeriod>MONTHLY</billingPeriod>
+                        <tiers>
+                            <tier>
+                                <blocks>
+                                    <tieredBlock>
+                                        <unit>emails</unit>
+                                        <size>1</size>
+                                        <prices>
+                                          <price>
+                                              <currency>USD</currency>
+                                              <value>0</value>
+                                          </price>                                          
+                                        </prices>
+                                        <max>15</max>
+                                    </tieredBlock>
+                                </blocks>
+                            </tier>
+                            <tier>
+                                <blocks>
+                                    <tieredBlock>
+                                        <unit>emails</unit>
+                                        <size>1</size>
+                                        <prices>
+                                            <price>
+                                                <currency>USD</currency>
+                                                <value>10</value>
+                                            </price>
+                                        </prices>
+                                        <max>99999</max>
+                                    </tieredBlock>
+                                </blocks>
+                            </tier>
+                        </tiers>
+                    </usage>
+                    <!-- Max no. of api users - based on capacity -->
+                    <usage name="api-users-usage" billingMode="IN_ARREAR" usageType="CAPACITY">
+                        <billingPeriod>MONTHLY</billingPeriod>
+                        <tiers>
+                            <tier>
+                                <limits>
+                                    <limit>
+                                        <unit>api-users</unit>
+                                        <max>20</max>
+                                    </limit>
+                                </limits>
+                                <recurringPrice>
+                                    <price>
+                                        <currency>USD</currency>
+                                        <value>0</value>
+                                    </price>
+                                </recurringPrice>
+                            </tier>
+                            <tier>
+                                <limits>
+                                    <limit>
+                                        <unit>api-users</unit>
+                                        <max>40</max>
+                                        <min>21</min>
+                                    </limit>
+                                </limits>
+                                <recurringPrice>
+                                    <price>
+                                        <currency>USD</currency>
+                                        <value>100</value>
+                                    </price>
+                                </recurringPrice>
+                            </tier>
+                        </tiers>
+                    </usage>
+                    <!-- Support - provides phone and ticket support based on capacity -->
+                    <usage name="support-usage" billingMode="IN_ARREAR" usageType="CAPACITY">
+                        <billingPeriod>MONTHLY</billingPeriod>
+                        <tiers>
+                            <tier>
+                                <limits>
+                                    <limit>
+                                        <unit>phone-hours</unit>
+                                        <max>2</max>
+                                    </limit>
+                                    <limit>
+                                        <unit>tickets</unit>
+                                        <max>4</max>
+                                    </limit>
+                                </limits>
+                                <recurringPrice>
+                                    <price>
+                                        <currency>USD</currency>
+                                        <value>400</value>
+                                    </price>
+                                </recurringPrice>
+                            </tier>
+                            <tier>
+                                <limits>
+                                    <limit>
+                                        <unit>phone-hours</unit>
+                                        <max>5</max>
+                                        <min>3</min>
+                                    </limit>
+                                    <limit>
+                                        <unit>tickets</unit>
+                                        <max>10</max>
+                                        <min>5</min>
+                                    </limit>
+                                </limits>
+                                <recurringPrice>
+                                    <price>
+                                        <currency>USD</currency>
+                                        <value>800</value>
+                                    </price>
+                                </recurringPrice>
+                            </tier>
+                        </tiers>
+                    </usage>
+                </usages>
+            </finalPhase>
+        </plan>
+      </plans>
+    <priceLists>
+        <defaultPriceList name="default">
+            <plans>
+                <plan>simple-monthly</plan>
+            </plans>
+        </defaultPriceList>
+    </priceLists>
+</catalog>

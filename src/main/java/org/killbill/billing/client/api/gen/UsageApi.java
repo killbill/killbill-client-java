@@ -31,6 +31,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -52,7 +53,6 @@ public class UsageApi {
     }
 
     public RolledUpUsage getAllUsage(final UUID subscriptionId, final String startDate, final String endDate,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getAllUsage");
 
         final String uri = "/1.0/kb/usages/{subscriptionId}"
@@ -62,13 +62,15 @@ public class UsageApi {
         queryParams.put("startDate", String.valueOf(startDate));
         queryParams.put("endDate", String.valueOf(endDate));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, RolledUpUsage.class, requestOptions);
     }
 
     public RolledUpUsage getUsage(final UUID subscriptionId, final String unitType, final String startDate, final String endDate,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getUsage");
         Preconditions.checkNotNull(unitType, "Missing the required parameter 'unitType' when calling getUsage");
 
@@ -80,24 +82,28 @@ public class UsageApi {
         queryParams.put("startDate", String.valueOf(startDate));
         queryParams.put("endDate", String.valueOf(endDate));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, RolledUpUsage.class, requestOptions);
     }
 
-    public SubscriptionUsageRecord recordUsage(final SubscriptionUsageRecord body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void recordUsage(final SubscriptionUsageRecord body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling recordUsage");
 
         final String uri = "/1.0/kb/usages";
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, SubscriptionUsageRecord.class, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
 }

@@ -31,6 +31,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -53,11 +54,12 @@ public class PluginInfoApi {
 
     public PluginInfos getPluginsInfo( final RequestOptions inputOptions) throws KillBillClientException {
 
-
         final String uri = "/1.0/kb/pluginsInfo";
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, PluginInfos.class, requestOptions);
     }

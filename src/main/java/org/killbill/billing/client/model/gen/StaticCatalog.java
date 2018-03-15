@@ -39,10 +39,6 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class StaticCatalog extends KillBillObject {
 
-    private DateTime effectiveDate = null;
-
-    private List<Listing> availableBasePlanListings = null;
-
     private String catalogName = null;
 
     private List<Product> currentProducts = null;
@@ -53,41 +49,9 @@ public class StaticCatalog extends KillBillObject {
 
     private List<Plan> currentPlans = null;
 
-    public StaticCatalog effectiveDate(DateTime effectiveDate) {
-        this.effectiveDate = effectiveDate;
-        return this;
-    }
+    private DateTime effectiveDate = null;
 
-    
-    public DateTime getEffectiveDate() {
-        return effectiveDate;
-    }
-
-    public void setEffectiveDate(DateTime effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public StaticCatalog availableBasePlanListings(List<Listing> availableBasePlanListings) {
-        this.availableBasePlanListings = availableBasePlanListings;
-        return this;
-    }
-
-    public StaticCatalog addAvailableBasePlanListingsItem(Listing availableBasePlanListingsItem) {
-        if (this.availableBasePlanListings == null) {
-            this.availableBasePlanListings = new ArrayList<Listing>();
-        }
-        this.availableBasePlanListings.add(availableBasePlanListingsItem);
-        return this;
-    }
-
-    
-    public List<Listing> getAvailableBasePlanListings() {
-        return availableBasePlanListings;
-    }
-
-    public void setAvailableBasePlanListings(List<Listing> availableBasePlanListings) {
-        this.availableBasePlanListings = availableBasePlanListings;
-    }
+    private List<Listing> availableBasePlanListings = null;
 
     public StaticCatalog catalogName(String catalogName) {
         this.catalogName = catalogName;
@@ -191,6 +155,42 @@ public class StaticCatalog extends KillBillObject {
         this.currentPlans = currentPlans;
     }
 
+    public StaticCatalog effectiveDate(DateTime effectiveDate) {
+        this.effectiveDate = effectiveDate;
+        return this;
+    }
+
+    
+    public DateTime getEffectiveDate() {
+        return effectiveDate;
+    }
+
+    public void setEffectiveDate(DateTime effectiveDate) {
+        this.effectiveDate = effectiveDate;
+    }
+
+    public StaticCatalog availableBasePlanListings(List<Listing> availableBasePlanListings) {
+        this.availableBasePlanListings = availableBasePlanListings;
+        return this;
+    }
+
+    public StaticCatalog addAvailableBasePlanListingsItem(Listing availableBasePlanListingsItem) {
+        if (this.availableBasePlanListings == null) {
+            this.availableBasePlanListings = new ArrayList<Listing>();
+        }
+        this.availableBasePlanListings.add(availableBasePlanListingsItem);
+        return this;
+    }
+
+    
+    public List<Listing> getAvailableBasePlanListings() {
+        return availableBasePlanListings;
+    }
+
+    public void setAvailableBasePlanListings(List<Listing> availableBasePlanListings) {
+        this.availableBasePlanListings = availableBasePlanListings;
+    }
+
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -201,18 +201,18 @@ public class StaticCatalog extends KillBillObject {
             return false;
         }
         StaticCatalog staticCatalog = (StaticCatalog) o;
-        return Objects.equals(this.effectiveDate, staticCatalog.effectiveDate) &&
-        Objects.equals(this.availableBasePlanListings, staticCatalog.availableBasePlanListings) &&
-        Objects.equals(this.catalogName, staticCatalog.catalogName) &&
+        return Objects.equals(this.catalogName, staticCatalog.catalogName) &&
         Objects.equals(this.currentProducts, staticCatalog.currentProducts) &&
         Objects.equals(this.currentSupportedCurrencies, staticCatalog.currentSupportedCurrencies) &&
         Objects.equals(this.currentUnits, staticCatalog.currentUnits) &&
-        Objects.equals(this.currentPlans, staticCatalog.currentPlans);
+        Objects.equals(this.currentPlans, staticCatalog.currentPlans) &&
+        Objects.equals(this.effectiveDate, staticCatalog.effectiveDate) &&
+        Objects.equals(this.availableBasePlanListings, staticCatalog.availableBasePlanListings);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(effectiveDate, availableBasePlanListings, catalogName, currentProducts, currentSupportedCurrencies, currentUnits, currentPlans);
+        return Objects.hash(catalogName, currentProducts, currentSupportedCurrencies, currentUnits, currentPlans, effectiveDate, availableBasePlanListings);
     }
 
 
@@ -221,13 +221,13 @@ public class StaticCatalog extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class StaticCatalog {\n");
         
-        sb.append("    effectiveDate: ").append(toIndentedString(effectiveDate)).append("\n");
-        sb.append("    availableBasePlanListings: ").append(toIndentedString(availableBasePlanListings)).append("\n");
         sb.append("    catalogName: ").append(toIndentedString(catalogName)).append("\n");
         sb.append("    currentProducts: ").append(toIndentedString(currentProducts)).append("\n");
         sb.append("    currentSupportedCurrencies: ").append(toIndentedString(currentSupportedCurrencies)).append("\n");
         sb.append("    currentUnits: ").append(toIndentedString(currentUnits)).append("\n");
         sb.append("    currentPlans: ").append(toIndentedString(currentPlans)).append("\n");
+        sb.append("    effectiveDate: ").append(toIndentedString(effectiveDate)).append("\n");
+        sb.append("    availableBasePlanListings: ").append(toIndentedString(availableBasePlanListings)).append("\n");
         sb.append("}");
         return sb.toString();
     }

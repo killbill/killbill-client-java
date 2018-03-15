@@ -26,9 +26,9 @@ import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import java.util.List;
 import org.killbill.billing.client.model.CustomFields;
+import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Bundles;
-import org.killbill.billing.client.model.Tags;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -38,6 +38,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -58,7 +59,7 @@ public class BundleApi {
         this.httpClient = httpClient;
     }
 
-    public BlockingState addBundleBlockingState(final BlockingState body, final UUID bundleId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void addBundleBlockingState(final BlockingState body, final UUID bundleId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling addBundleBlockingState");
 
@@ -69,11 +70,12 @@ public class BundleApi {
         queryParams.put("requestedDate", String.valueOf(requestedDate));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, BlockingState.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
     public CustomFields createCustomFields(final UUID bundleId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -84,16 +86,17 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public void createTags(final UUID bundleId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID bundleId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling createTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
@@ -102,14 +105,15 @@ public class BundleApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("tagList", String.valueOf(tagList));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        httpClient.doPost(uri, null, requestOptions);
+        return httpClient.doPost(uri, null, Tags.class, requestOptions);
     }
 
     public void deleteCustomFields(final UUID bundleId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -121,9 +125,10 @@ public class BundleApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("customFieldList", String.valueOf(customFieldList));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
@@ -137,15 +142,15 @@ public class BundleApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("tagList", String.valueOf(tagList));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
 
     public Bundle getBundle(final UUID bundleId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundle");
 
         final String uri = "/1.0/kb/bundles/{bundleId}"
@@ -154,13 +159,15 @@ public class BundleApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Bundle.class, requestOptions);
     }
 
     public Bundle getBundleByKey(final String externalKey, final Boolean includedDeleted, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getBundleByKey");
 
         final String uri = "/1.0/kb/bundles";
@@ -170,13 +177,15 @@ public class BundleApi {
         queryParams.put("includedDeleted", String.valueOf(includedDeleted));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Bundle.class, requestOptions);
     }
 
     public Bundles getBundles(final Long offset, final Long limit, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
 
         final String uri = "/1.0/kb/bundles/pagination";
 
@@ -185,13 +194,15 @@ public class BundleApi {
         queryParams.put("limit", String.valueOf(limit));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
     public CustomFields getCustomFields(final UUID bundleId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
@@ -200,13 +211,15 @@ public class BundleApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
     public Tags getTags(final UUID bundleId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
@@ -216,12 +229,15 @@ public class BundleApi {
         queryParams.put("auditLevel", String.valueOf(auditLevel));
         queryParams.put("includedDeleted", String.valueOf(includedDeleted));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public CustomFields modifyCustomFields(final UUID bundleId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void modifyCustomFields(final UUID bundleId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling modifyCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
 
@@ -229,9 +245,12 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, CustomFields.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
     public void pauseBundle(final UUID bundleId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -244,14 +263,16 @@ public class BundleApi {
         queryParams.put("requestedDate", String.valueOf(requestedDate));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-         httpClient.doPut(uri, null, requestOptions);
+        httpClient.doPut(uri, null, requestOptions);
     }
 
-    public Bundle renameExternalKey(final Bundle body, final UUID bundleId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void renameExternalKey(final Bundle body, final UUID bundleId,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling renameExternalKey");
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling renameExternalKey");
 
@@ -259,9 +280,11 @@ public class BundleApi {
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, Bundle.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
     public void resumeBundle(final UUID bundleId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -274,15 +297,16 @@ public class BundleApi {
         queryParams.put("requestedDate", String.valueOf(requestedDate));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-         httpClient.doPut(uri, null, requestOptions);
+        httpClient.doPut(uri, null, requestOptions);
     }
 
     public Bundles searchBundles(final String searchKey, final Long offset, final Long limit, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchBundles");
 
         final String uri = "/1.0/kb/bundles/search/{searchKey}"
@@ -293,12 +317,15 @@ public class BundleApi {
         queryParams.put("limit", String.valueOf(limit));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
-    public Bundle transferBundle(final Bundle body, final UUID bundleId, final String requestedDate, final String billingPolicy, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void transferBundle(final Bundle body, final UUID bundleId, final String requestedDate, final String billingPolicy, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling transferBundle");
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling transferBundle");
 
@@ -310,11 +337,13 @@ public class BundleApi {
         queryParams.put("billingPolicy", String.valueOf(billingPolicy));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, Bundle.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
 }

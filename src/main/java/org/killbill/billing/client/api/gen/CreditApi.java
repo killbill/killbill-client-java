@@ -30,6 +30,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -58,25 +59,27 @@ public class CreditApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("autoCommit", String.valueOf(autoCommit));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, Credit.class, requestOptions);
     }
 
     public Credit getCredit(final UUID creditId,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(creditId, "Missing the required parameter 'creditId' when calling getCredit");
 
         final String uri = "/1.0/kb/credits/{creditId}"
           .replaceAll("\\{" + "creditId" + "\\}", creditId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Credit.class, requestOptions);
     }

@@ -36,15 +36,15 @@ import org.killbill.billing.client.model.gen.PaymentTransaction;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import java.util.List;
+import org.killbill.billing.client.model.AccountEmails;
 import org.killbill.billing.client.model.CustomFields;
+import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.ObjectType;
-import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.client.model.BlockingStates;
 import org.killbill.billing.entitlement.api.BlockingStateType;
-import org.killbill.billing.client.model.AccountEmails;
 import org.killbill.billing.client.model.InvoicePayments;
 import org.killbill.billing.client.model.PaymentMethods;
 import org.killbill.billing.client.model.Payments;
@@ -57,6 +57,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -77,7 +78,7 @@ public class AccountApi {
         this.httpClient = httpClient;
     }
 
-    public BlockingState addAccountBlockingState(final BlockingState body, final UUID accountId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void addAccountBlockingState(final BlockingState body, final UUID accountId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addAccountBlockingState");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling addAccountBlockingState");
 
@@ -88,14 +89,15 @@ public class AccountApi {
         queryParams.put("requestedDate", String.valueOf(requestedDate));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, BlockingState.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
-    public AccountEmail addEmail(final AccountEmail body, final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public AccountEmails addEmail(final AccountEmail body, final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addEmail");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling addEmail");
 
@@ -103,13 +105,14 @@ public class AccountApi {
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, AccountEmail.class, requestOptions);
+        return httpClient.doPost(uri, body, AccountEmails.class, requestOptions);
     }
 
     public void closeAccount(final UUID accountId, final Boolean cancelAllSubscriptions, final Boolean writeOffUnpaidInvoices, final Boolean itemAdjustUnpaidInvoices,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -123,9 +126,9 @@ public class AccountApi {
         queryParams.put("writeOffUnpaidInvoices", String.valueOf(writeOffUnpaidInvoices));
         queryParams.put("itemAdjustUnpaidInvoices", String.valueOf(itemAdjustUnpaidInvoices));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
@@ -136,11 +139,12 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts";
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, Account.class, requestOptions);
     }
@@ -153,11 +157,12 @@ public class AccountApi {
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
@@ -175,17 +180,18 @@ public class AccountApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, PaymentMethod.class, requestOptions);
     }
 
-    public void createTags(final UUID accountId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID accountId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
@@ -194,14 +200,14 @@ public class AccountApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("tagList", String.valueOf(tagList));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        httpClient.doPost(uri, null, requestOptions);
+        return httpClient.doPost(uri, null, Tags.class, requestOptions);
     }
 
     public void deleteCustomFields(final UUID accountId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -213,9 +219,10 @@ public class AccountApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("customFieldList", String.valueOf(customFieldList));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
@@ -229,15 +236,15 @@ public class AccountApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("tagList", String.valueOf(tagList));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
 
     public Account getAccount(final UUID accountId, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccount");
 
         final String uri = "/1.0/kb/accounts/{accountId}"
@@ -248,13 +255,15 @@ public class AccountApi {
         queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Account.class, requestOptions);
     }
 
     public Bundles getAccountBundles(final UUID accountId, final String externalKey, final String bundlesFilter, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccountBundles");
 
         final String uri = "/1.0/kb/accounts/{accountId}/bundles"
@@ -265,13 +274,15 @@ public class AccountApi {
         queryParams.put("bundlesFilter", String.valueOf(bundlesFilter));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
     public Account getAccountByKey(final String externalKey, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getAccountByKey");
 
         final String uri = "/1.0/kb/accounts";
@@ -282,13 +293,15 @@ public class AccountApi {
         queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Account.class, requestOptions);
     }
 
     public AccountTimeline getAccountTimeline(final UUID accountId, final AuditLevel auditLevel, final Boolean parallel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccountTimeline");
 
         final String uri = "/1.0/kb/accounts/{accountId}/timeline"
@@ -298,13 +311,15 @@ public class AccountApi {
         queryParams.put("auditLevel", String.valueOf(auditLevel));
         queryParams.put("parallel", String.valueOf(parallel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, AccountTimeline.class, requestOptions);
     }
 
     public Accounts getAccounts(final Long offset, final Long limit, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
 
         final String uri = "/1.0/kb/accounts/pagination";
 
@@ -315,13 +330,15 @@ public class AccountApi {
         queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Accounts.class, requestOptions);
     }
 
     public CustomFields getAllCustomFields(final UUID accountId, final ObjectType objectType, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAllCustomFields");
 
         final String uri = "/1.0/kb/accounts/{accountId}/allCustomFields"
@@ -331,13 +348,15 @@ public class AccountApi {
         queryParams.put("objectType", String.valueOf(objectType));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
     public Tags getAllTags(final UUID accountId, final ObjectType objectType, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAllTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/allTags"
@@ -348,13 +367,15 @@ public class AccountApi {
         queryParams.put("auditLevel", String.valueOf(auditLevel));
         queryParams.put("includedDeleted", String.valueOf(includedDeleted));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
     public BlockingStates getBlockingStates(final UUID accountId, final List<BlockingStateType> blockingStateTypes, final List<String> blockingStateSvcs, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getBlockingStates");
 
         final String uri = "/1.0/kb/accounts/{accountId}/block"
@@ -365,13 +386,15 @@ public class AccountApi {
         queryParams.put("blockingStateSvcs", String.valueOf(blockingStateSvcs));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, BlockingStates.class, requestOptions);
     }
 
     public Accounts getChildrenAccounts(final UUID accountId, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getChildrenAccounts");
 
         final String uri = "/1.0/kb/accounts/{accountId}/children"
@@ -382,13 +405,15 @@ public class AccountApi {
         queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Accounts.class, requestOptions);
     }
 
     public CustomFields getCustomFields(final UUID accountId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/accounts/{accountId}/customFields"
@@ -397,39 +422,43 @@ public class AccountApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
     public InvoiceEmail getEmailNotificationsForAccount(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getEmailNotificationsForAccount");
 
         final String uri = "/1.0/kb/accounts/{accountId}/emailNotifications"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, InvoiceEmail.class, requestOptions);
     }
 
     public AccountEmails getEmails(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getEmails");
 
         final String uri = "/1.0/kb/accounts/{accountId}/emails"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, AccountEmails.class, requestOptions);
     }
 
     public InvoicePayments getInvoicePayments(final UUID accountId, final AuditLevel auditLevel, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicePayments");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoicePayments"
@@ -441,13 +470,15 @@ public class AccountApi {
         queryParams.put("withAttempts", String.valueOf(withAttempts));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, InvoicePayments.class, requestOptions);
     }
 
     public Invoice getInvoices(final UUID accountId, final Boolean withItems, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoices");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoices"
@@ -460,26 +491,29 @@ public class AccountApi {
         queryParams.put("includeVoidedInvoices", String.valueOf(includeVoidedInvoices));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Invoice.class, requestOptions);
     }
 
     public OverdueState getOverdueAccount(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getOverdueAccount");
 
         final String uri = "/1.0/kb/accounts/{accountId}/overdue"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, OverdueState.class, requestOptions);
     }
 
     public PaymentMethods getPaymentMethods(final UUID accountId, final Boolean withPluginInfo, final List<String> pluginProperty, final Boolean includedDeleted, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getPaymentMethods");
 
         final String uri = "/1.0/kb/accounts/{accountId}/paymentMethods"
@@ -491,13 +525,15 @@ public class AccountApi {
         queryParams.put("includedDeleted", String.valueOf(includedDeleted));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, PaymentMethods.class, requestOptions);
     }
 
     public Payments getPayments(final UUID accountId, final AuditLevel auditLevel, final List<String> pluginProperty, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getPayments");
 
         final String uri = "/1.0/kb/accounts/{accountId}/payments"
@@ -509,13 +545,15 @@ public class AccountApi {
         queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         queryParams.put("withAttempts", String.valueOf(withAttempts));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Payments.class, requestOptions);
     }
 
     public Tags getTags(final UUID accountId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
@@ -525,12 +563,15 @@ public class AccountApi {
         queryParams.put("auditLevel", String.valueOf(auditLevel));
         queryParams.put("includedDeleted", String.valueOf(includedDeleted));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public CustomFields modifyCustomFields(final UUID accountId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void modifyCustomFields(final UUID accountId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling modifyCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
 
@@ -538,9 +579,12 @@ public class AccountApi {
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, CustomFields.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
     public void payAllInvoices(final UUID accountId, final Boolean externalPayment, final BigDecimal paymentAmount, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -554,17 +598,18 @@ public class AccountApi {
         queryParams.put("paymentAmount", String.valueOf(paymentAmount));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doPost(uri, null, requestOptions);
     }
 
-    public PaymentTransaction processPayment(final PaymentTransaction body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment processPayment(final PaymentTransaction body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processPayment");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling processPayment");
 
@@ -576,17 +621,18 @@ public class AccountApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
+        return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public PaymentTransaction processPaymentByExternalKey(final PaymentTransaction body, final String externalKey, final UUID paymentMethodId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment processPaymentByExternalKey(final PaymentTransaction body, final String externalKey, final UUID paymentMethodId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processPaymentByExternalKey");
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling processPaymentByExternalKey");
 
@@ -598,14 +644,15 @@ public class AccountApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
+        return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
     public void rebalanceExistingCBAOnAccount(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -615,11 +662,12 @@ public class AccountApi {
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doPost(uri, null, requestOptions);
     }
@@ -634,12 +682,12 @@ public class AccountApi {
         queryParams.put("pluginName", String.valueOf(pluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doPost(uri, null, requestOptions);
     }
@@ -653,13 +701,13 @@ public class AccountApi {
           .replaceAll("\\{" + "email" + "\\}", email.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
 
     public Accounts searchAccounts(final String searchKey, final Long offset, final Long limit, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchAccounts");
 
         final String uri = "/1.0/kb/accounts/search/{searchKey}"
@@ -672,7 +720,10 @@ public class AccountApi {
         queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Accounts.class, requestOptions);
     }
@@ -689,14 +740,16 @@ public class AccountApi {
         queryParams.put("payAllUnpaidInvoices", String.valueOf(payAllUnpaidInvoices));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-         httpClient.doPut(uri, null, requestOptions);
+        httpClient.doPut(uri, null, requestOptions);
     }
 
-    public InvoiceEmail setEmailNotificationsForAccount(final InvoiceEmail body, final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void setEmailNotificationsForAccount(final InvoiceEmail body, final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling setEmailNotificationsForAccount");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling setEmailNotificationsForAccount");
 
@@ -704,9 +757,12 @@ public class AccountApi {
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, InvoiceEmail.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
     public void transferChildCreditToParent(final UUID childAccountId,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -716,16 +772,17 @@ public class AccountApi {
           .replaceAll("\\{" + "childAccountId" + "\\}", childAccountId.toString());
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doPost(uri, null, requestOptions);
     }
 
-    public Account updateAccount(final Account body, final UUID accountId, final Boolean treatNullAsReset,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void updateAccount(final Account body, final UUID accountId, final Boolean treatNullAsReset,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateAccount");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling updateAccount");
 
@@ -735,11 +792,13 @@ public class AccountApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("treatNullAsReset", String.valueOf(treatNullAsReset));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, Account.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
 }

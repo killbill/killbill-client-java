@@ -33,23 +33,9 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Listing extends KillBillObject {
 
-    private PriceList priceList = null;
-
     private Plan plan = null;
 
-    public Listing priceList(PriceList priceList) {
-        this.priceList = priceList;
-        return this;
-    }
-
-    
-    public PriceList getPriceList() {
-        return priceList;
-    }
-
-    public void setPriceList(PriceList priceList) {
-        this.priceList = priceList;
-    }
+    private PriceList priceList = null;
 
     public Listing plan(Plan plan) {
         this.plan = plan;
@@ -65,6 +51,20 @@ public class Listing extends KillBillObject {
         this.plan = plan;
     }
 
+    public Listing priceList(PriceList priceList) {
+        this.priceList = priceList;
+        return this;
+    }
+
+    
+    public PriceList getPriceList() {
+        return priceList;
+    }
+
+    public void setPriceList(PriceList priceList) {
+        this.priceList = priceList;
+    }
+
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -75,13 +75,13 @@ public class Listing extends KillBillObject {
             return false;
         }
         Listing listing = (Listing) o;
-        return Objects.equals(this.priceList, listing.priceList) &&
-        Objects.equals(this.plan, listing.plan);
+        return Objects.equals(this.plan, listing.plan) &&
+        Objects.equals(this.priceList, listing.priceList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(priceList, plan);
+        return Objects.hash(plan, priceList);
     }
 
 
@@ -90,8 +90,8 @@ public class Listing extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class Listing {\n");
         
-        sb.append("    priceList: ").append(toIndentedString(priceList)).append("\n");
         sb.append("    plan: ").append(toIndentedString(plan)).append("\n");
+        sb.append("    priceList: ").append(toIndentedString(priceList)).append("\n");
         sb.append("}");
         return sb.toString();
     }

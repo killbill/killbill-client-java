@@ -32,6 +32,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -54,16 +55,17 @@ public class NodesInfoApi {
 
     public PluginInfos getNodesInfo( final RequestOptions inputOptions) throws KillBillClientException {
 
-
         final String uri = "/1.0/kb/nodesInfo";
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, PluginInfos.class, requestOptions);
     }
 
-    public NodeCommand triggerNodeCommand(final NodeCommand body, final Boolean localNodeOnly,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void triggerNodeCommand(final NodeCommand body, final Boolean localNodeOnly,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling triggerNodeCommand");
 
         final String uri = "/1.0/kb/nodesInfo";
@@ -71,14 +73,15 @@ public class NodesInfoApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("localNodeOnly", String.valueOf(localNodeOnly));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, NodeCommand.class, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
 }

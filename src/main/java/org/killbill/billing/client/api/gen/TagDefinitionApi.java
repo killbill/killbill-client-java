@@ -33,6 +33,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -59,11 +60,12 @@ public class TagDefinitionApi {
         final String uri = "/1.0/kb/tagDefinitions";
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, TagDefinition.class, requestOptions);
     }
@@ -75,13 +77,13 @@ public class TagDefinitionApi {
           .replaceAll("\\{" + "tagDefinitionId" + "\\}", tagDefinitionId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
 
     public TagDefinition getTagDefinition(final UUID tagDefinitionId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling getTagDefinition");
 
         final String uri = "/1.0/kb/tagDefinitions/{tagDefinitionId}"
@@ -90,20 +92,25 @@ public class TagDefinitionApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, TagDefinition.class, requestOptions);
     }
 
     public TagDefinitions getTagDefinitions(final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
 
-
         final String uri = "/1.0/kb/tagDefinitions";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, TagDefinitions.class, requestOptions);
     }

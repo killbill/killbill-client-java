@@ -32,6 +32,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -54,7 +55,6 @@ public class TagApi {
 
     public Tags getTags(final Long offset, final Long limit, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
 
-
         final String uri = "/1.0/kb/tags/pagination";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
@@ -62,13 +62,15 @@ public class TagApi {
         queryParams.put("limit", String.valueOf(limit));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
     public Tags searchTags(final String searchKey, final Long offset, final Long limit, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchTags");
 
         final String uri = "/1.0/kb/tags/search/{searchKey}"
@@ -79,7 +81,10 @@ public class TagApi {
         queryParams.put("limit", String.valueOf(limit));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }

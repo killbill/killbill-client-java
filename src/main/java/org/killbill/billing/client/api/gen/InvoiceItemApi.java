@@ -24,8 +24,8 @@ import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import org.killbill.billing.client.model.CustomFields;
 import java.util.List;
-import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Tags;
+import org.killbill.billing.util.api.AuditLevel;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -35,6 +35,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -63,16 +64,17 @@ public class InvoiceItemApi {
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public void createTags(final UUID invoiceItemId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID invoiceItemId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling createTags");
 
         final String uri = "/1.0/kb/invoiceItems/{invoiceItemId}/tags"
@@ -81,14 +83,15 @@ public class InvoiceItemApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("tagList", String.valueOf(tagList));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        httpClient.doPost(uri, null, requestOptions);
+        return httpClient.doPost(uri, null, Tags.class, requestOptions);
     }
 
     public void deleteCustomFields(final UUID invoiceItemId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -100,9 +103,10 @@ public class InvoiceItemApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("customFieldList", String.valueOf(customFieldList));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
@@ -116,15 +120,15 @@ public class InvoiceItemApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("tagList", String.valueOf(tagList));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
 
     public CustomFields getCustomFields(final UUID invoiceItemId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/invoiceItems/{invoiceItemId}/customFields"
@@ -133,13 +137,15 @@ public class InvoiceItemApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
     public Tags getTags(final UUID invoiceItemId, final UUID accountId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling getTags");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getTags");
 
@@ -151,12 +157,15 @@ public class InvoiceItemApi {
         queryParams.put("auditLevel", String.valueOf(auditLevel));
         queryParams.put("includedDeleted", String.valueOf(includedDeleted));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public CustomFields modifyCustomFields(final UUID invoiceItemId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void modifyCustomFields(final UUID invoiceItemId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling modifyCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
 
@@ -164,9 +173,12 @@ public class InvoiceItemApi {
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, CustomFields.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
 }

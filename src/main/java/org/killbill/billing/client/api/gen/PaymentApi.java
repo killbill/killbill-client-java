@@ -27,9 +27,9 @@ import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import java.util.List;
 import org.killbill.billing.client.model.CustomFields;
+import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Payments;
-import org.killbill.billing.client.model.Tags;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -39,6 +39,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -67,9 +68,10 @@ public class PaymentApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("transactionExternalKey", String.valueOf(transactionExternalKey));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
@@ -81,12 +83,14 @@ public class PaymentApi {
           .replaceAll("\\{" + "paymentTransactionId" + "\\}", paymentTransactionId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public PaymentTransaction captureAuthorization(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment captureAuthorization(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling captureAuthorization");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling captureAuthorization");
 
@@ -97,17 +101,18 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
+        return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public PaymentTransaction captureAuthorizationByExternalKey(final PaymentTransaction body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment captureAuthorizationByExternalKey(final PaymentTransaction body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling captureAuthorizationByExternalKey");
 
         final String uri = "/1.0/kb/payments";
@@ -116,17 +121,18 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
+        return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public PaymentTransaction chargebackPayment(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment chargebackPayment(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling chargebackPayment");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling chargebackPayment");
 
@@ -137,17 +143,18 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
+        return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public PaymentTransaction chargebackPaymentByExternalKey(final PaymentTransaction body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment chargebackPaymentByExternalKey(final PaymentTransaction body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling chargebackPaymentByExternalKey");
 
         final String uri = "/1.0/kb/payments/chargebacks";
@@ -156,17 +163,18 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
+        return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public PaymentTransaction chargebackReversalPayment(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment chargebackReversalPayment(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling chargebackReversalPayment");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling chargebackReversalPayment");
 
@@ -177,17 +185,18 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
+        return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public PaymentTransaction chargebackReversalPaymentByExternalKey(final PaymentTransaction body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment chargebackReversalPaymentByExternalKey(final PaymentTransaction body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling chargebackReversalPaymentByExternalKey");
 
         final String uri = "/1.0/kb/payments/chargebackReversals";
@@ -196,17 +205,18 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
+        return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public PaymentTransaction completeTransaction(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void completeTransaction(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling completeTransaction");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling completeTransaction");
 
@@ -217,14 +227,16 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, PaymentTransaction.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
-    public PaymentTransaction completeTransactionByExternalKey(final PaymentTransaction body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void completeTransactionByExternalKey(final PaymentTransaction body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling completeTransactionByExternalKey");
 
         final String uri = "/1.0/kb/payments";
@@ -233,14 +245,16 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, PaymentTransaction.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
-    public ComboPaymentTransaction createComboPayment(final ComboPaymentTransaction body, final List<String> controlPluginName,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment createComboPayment(final ComboPaymentTransaction body, final List<String> controlPluginName,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createComboPayment");
 
         final String uri = "/1.0/kb/payments/combo";
@@ -248,14 +262,15 @@ public class PaymentApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, ComboPaymentTransaction.class, requestOptions);
+        return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
     public CustomFields createCustomFields(final UUID paymentId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -266,16 +281,17 @@ public class PaymentApi {
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public void createTags(final UUID paymentId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID paymentId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createTags");
 
         final String uri = "/1.0/kb/payments/{paymentId}/tags"
@@ -284,14 +300,15 @@ public class PaymentApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("tagList", String.valueOf(tagList));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        httpClient.doPost(uri, null, requestOptions);
+        return httpClient.doPost(uri, null, Tags.class, requestOptions);
     }
 
     public void deleteCustomFields(final UUID paymentId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -303,9 +320,10 @@ public class PaymentApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("customFieldList", String.valueOf(customFieldList));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
@@ -319,15 +337,15 @@ public class PaymentApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("tagList", String.valueOf(tagList));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
 
     public CustomFields getCustomFields(final UUID paymentId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/payments/{paymentId}/customFields"
@@ -336,13 +354,15 @@ public class PaymentApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
     public Payment getPayment(final UUID paymentId, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getPayment");
 
         final String uri = "/1.0/kb/payments/{paymentId}"
@@ -354,13 +374,15 @@ public class PaymentApi {
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Payment.class, requestOptions);
     }
 
     public Payment getPaymentByExternalKey(final String externalKey, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getPaymentByExternalKey");
 
         final String uri = "/1.0/kb/payments";
@@ -372,13 +394,15 @@ public class PaymentApi {
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Payment.class, requestOptions);
     }
 
     public Payments getPayments(final Long offset, final Long limit, final String pluginName, final List<String> pluginProperty, final AuditLevel auditLevel, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
-
 
         final String uri = "/1.0/kb/payments/pagination";
 
@@ -391,13 +415,15 @@ public class PaymentApi {
         queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         queryParams.put("withAttempts", String.valueOf(withAttempts));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Payments.class, requestOptions);
     }
 
     public Tags getTags(final UUID paymentId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getTags");
 
         final String uri = "/1.0/kb/payments/{paymentId}/tags"
@@ -407,12 +433,15 @@ public class PaymentApi {
         queryParams.put("auditLevel", String.valueOf(auditLevel));
         queryParams.put("includedDeleted", String.valueOf(includedDeleted));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public CustomFields modifyCustomFields(final UUID paymentId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void modifyCustomFields(final UUID paymentId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling modifyCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
 
@@ -420,12 +449,15 @@ public class PaymentApi {
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, CustomFields.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
-    public PaymentTransaction refundPayment(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment refundPayment(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling refundPayment");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling refundPayment");
 
@@ -436,17 +468,18 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
+        return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public PaymentTransaction refundPaymentByExternalKey(final PaymentTransaction body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment refundPaymentByExternalKey(final PaymentTransaction body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling refundPaymentByExternalKey");
 
         final String uri = "/1.0/kb/payments/refunds";
@@ -455,18 +488,18 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, PaymentTransaction.class, requestOptions);
+        return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
     public Payments searchPayments(final String searchKey, final Long offset, final Long limit, final String pluginName, final List<String> pluginProperty, final AuditLevel auditLevel, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchPayments");
 
         final String uri = "/1.0/kb/payments/search/{searchKey}"
@@ -481,7 +514,10 @@ public class PaymentApi {
         queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         queryParams.put("withAttempts", String.valueOf(withAttempts));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Payments.class, requestOptions);
     }
@@ -497,9 +533,10 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
@@ -513,9 +550,10 @@ public class PaymentApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }

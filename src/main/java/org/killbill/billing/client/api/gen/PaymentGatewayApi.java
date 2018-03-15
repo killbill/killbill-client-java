@@ -20,6 +20,7 @@ package org.killbill.billing.client.api.gen;
 
 
 import org.killbill.billing.client.model.gen.ComboHostedPaymentPage;
+import org.killbill.billing.client.model.gen.GatewayNotification;
 import org.killbill.billing.client.model.gen.HostedPaymentPageFields;
 import org.killbill.billing.client.model.gen.HostedPaymentPageFormDescriptor;
 import java.util.UUID;
@@ -33,6 +34,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -62,12 +64,13 @@ public class PaymentGatewayApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
@@ -84,17 +87,18 @@ public class PaymentGatewayApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
 
-    public String processNotification(final String body, final String pluginName, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public GatewayNotification processNotification(final String body, final String pluginName, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processNotification");
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling processNotification");
 
@@ -105,14 +109,15 @@ public class PaymentGatewayApi {
         queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "*/*");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, String.class, requestOptions);
+        return httpClient.doPost(uri, body, GatewayNotification.class, requestOptions);
     }
 
 }

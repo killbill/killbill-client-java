@@ -13,17 +13,28 @@
 
 package org.killbill.billing.client.gen.api;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.UUID;
 
+import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
 import org.killbill.billing.client.api.gen.AccountApi;
+import org.killbill.billing.client.api.gen.CatalogApi;
+import org.killbill.billing.client.api.gen.TenantApi;
 import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.client.model.gen.Account;
+import org.killbill.billing.client.model.gen.Tenant;
 import org.killbill.billing.util.api.AuditLevel;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import com.google.common.io.CharStreams;
+import com.google.common.io.Resources;
 
 /**
  * API tests for AccountApi
@@ -33,57 +44,70 @@ public class AccountApiTest {
     private final static String SERVER_HOST = "127.0.0.1";
     private final static int SERVER_PORT = 8080;
 
-    private AccountApi api;
+
+    private final static String TENANT_API_KEY = "swagger";
+    private final static String TENANT_API_SECRET = "swagger$ecr$t";
+
+
+    private Tenant tenant;
+
+    private TenantApi tenantApi;
+    private CatalogApi catalogApi;
+    private AccountApi accountApi;
 
     private RequestOptions requestOptions;
 
     @BeforeClass
-    public void setup() {
+    public void setup() throws KillBillClientException, IOException {
         final KillBillHttpClient httpClient = new KillBillHttpClient(String.format("http://%s:%d", SERVER_HOST, SERVER_PORT),
                                                                      "admin",
                                                                      "password",
-                                                                     "bob",
-                                                                     "lazar",
+                                                                     TENANT_API_KEY,
+                                                                     TENANT_API_SECRET,
                                                                      null,
                                                                      null,
                                                                      3 * 1000,
                                                                      1 * 1000,
                                                                      5 * 1000);
-        api = new AccountApi(httpClient);
+        tenantApi = new TenantApi(httpClient);
+        catalogApi = new CatalogApi(httpClient);
+        accountApi = new AccountApi(httpClient);
 
         requestOptions = RequestOptions.builder()
                                        .withCreatedBy("Something")
                                        .withReason("No Reason")
                                        .withComment("No Comment")
                                        .build();
+
+
+        tenant =  setupTenant();
     }
+
 
     @Test
     public void basicTest() throws Exception {
+
         final Account account = new Account();
         final String externalKey = UUID.randomUUID().toString();
         account.setExternalKey(externalKey);
-        final Account result = api.createAccount(account, requestOptions);
+        final Account result = accountApi.createAccount(account, requestOptions);
         Assert.assertNotNull(result);
         Assert.assertEquals(result.getExternalKey(), externalKey);
 
         final UUID accountId = result.getAccountId();
 
         account.setEmail("somebody@something.org");
-        final Account result2 = api.updateAccount(account, accountId, false, requestOptions);
-        Assert.assertNotNull(result2);
-        Assert.assertEquals(result2.getExternalKey(), externalKey);
-        Assert.assertEquals(result2.getEmail(), "somebody@something.org");
+        accountApi.updateAccount(account, accountId, false, requestOptions);
 
-        final Account result3 = api.getAccount(accountId, false, false, AuditLevel.FULL, requestOptions);
+        final Account result3 = accountApi.getAccount(accountId, false, false, AuditLevel.FULL, requestOptions);
         Assert.assertNotNull(result3);
         Assert.assertEquals(result3.getAccountId(), accountId);
         Assert.assertEquals(result3.getExternalKey(), externalKey);
         Assert.assertEquals(result3.getEmail(), "somebody@something.org");
 
-        api.closeAccount(accountId, false, false, false, requestOptions);
+        accountApi.closeAccount(accountId, false, false, false, requestOptions);
 
-        final Account result4 = api.getAccount(accountId, false, false, AuditLevel.FULL, requestOptions);
+        final Account result4 = accountApi.getAccount(accountId, false, false, AuditLevel.FULL, requestOptions);
         Assert.assertNotNull(result4);
         Assert.assertEquals(result4.getAccountId(), accountId);
         Assert.assertEquals(result4.getExternalKey(), externalKey);
@@ -95,11 +119,11 @@ public class AccountApiTest {
 
         for (int i = 0; i < 5; i++) {
             final Account account = new Account();
-            final Account result = api.createAccount(account, requestOptions);
+            final Account result = accountApi.createAccount(account, requestOptions);
             Assert.assertNotNull(result);
         }
 
-        final Accounts accounts = api.getAccounts(0L, 100L, false, false, AuditLevel.MINIMAL, requestOptions);
+        final Accounts accounts = accountApi.getAccounts(0L, 100L, false, false, AuditLevel.MINIMAL, requestOptions);
         Assert.assertNotNull(accounts);
         Assert.assertTrue(accounts.size() >= 5);
     }
@@ -110,12 +134,41 @@ public class AccountApiTest {
         final String externalKey = "Bingo-" + UUID.randomUUID().toString();
         final Account account = new Account();
         account.setExternalKey(externalKey);
-        final Account result = api.createAccount(account, requestOptions);
+        final Account result = accountApi.createAccount(account, requestOptions);
         Assert.assertNotNull(result);
 
-        final Accounts accounts = api.searchAccounts(externalKey, 0L, 100L, false, false, AuditLevel.MINIMAL, requestOptions);
+        final Accounts accounts = accountApi.searchAccounts(externalKey, 0L, 100L, false, false, AuditLevel.MINIMAL, requestOptions);
         Assert.assertNotNull(accounts);
         Assert.assertEquals(accounts.size(), 1);
+    }
+
+
+    private Tenant setupTenant() throws KillBillClientException, IOException {
+        Tenant tenant = null;
+        try {
+            tenant = tenantApi.getTenantByApiKey(TENANT_API_KEY, requestOptions);
+        } catch (KillBillClientException e) {
+            if (tenant == null) {
+                Tenant inputTenant = new Tenant();
+                inputTenant.setApiKey(TENANT_API_KEY);
+                inputTenant.setApiSecret(TENANT_API_SECRET);
+                inputTenant.setExternalKey("SWAGGER_GEN");
+                tenant = tenantApi.createTenant(inputTenant, false, requestOptions);
+            }
+        }
+        Assert.assertEquals(tenant.getApiKey(), TENANT_API_KEY);
+        Assert.assertEquals(tenant.getExternalKey(), "SWAGGER_GEN");
+
+        String catalog = catalogApi.getCatalogXml(requestOptions);
+        Assert.assertNotNull(catalog);
+
+        /*
+        final InputStream catalogXML = Resources.getResource("catalog.xml").openStream();
+        final Readable reader = new InputStreamReader(catalogXML, Charset.forName("UTF-8"));
+        final String body = CharStreams.toString(reader);
+        catalogApi.uploadCatalogXml(body, requestOptions);
+*/
+        return tenant;
     }
 
 }

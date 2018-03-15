@@ -29,6 +29,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -50,14 +51,15 @@ public class ExportApi {
     }
 
     public String exportDataForAccount(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling exportDataForAccount");
 
         final String uri = "/1.0/kb/export/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, String.class, requestOptions);
     }

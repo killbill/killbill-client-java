@@ -690,11 +690,13 @@ public class KillBillHttpClient implements Closeable {
 
     private <T> T unmarshalResponse(final Response response, final Class<T> clazz) throws KillBillClientException {
         final T result;
+
+        final boolean requiresMapper = (String.class != clazz);
         try {
-            if (DEBUG) {
+            if (DEBUG || !requiresMapper) {
                 final String content = response.getResponseBody();
                 log.debug("Received: " + content);
-                result = mapper.readValue(content, clazz);
+                result = requiresMapper ? mapper.readValue(content, clazz) : (T) content;
             } else {
                 InputStream in = null;
                 try {
@@ -795,13 +797,6 @@ public class KillBillHttpClient implements Closeable {
         if (username != null && password != null) {
             final Realm realm = new RealmBuilder().setPrincipal(username).setPassword(password).setScheme(Realm.AuthScheme.BASIC).setUsePreemptiveAuth(true).build();
             builder.setRealm(realm);
-        }
-
-        if (requestOptions.getHeaders().get(HTTP_HEADER_ACCEPT) == null) {
-            builder.addHeader(HTTP_HEADER_ACCEPT, ACCEPT_JSON);
-        }
-        if (requestOptions.getHeaders().get(HTTP_HEADER_CONTENT_TYPE) == null) {
-            builder.addHeader(HTTP_HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON);
         }
         for (final Entry<String, String> header : requestOptions.getHeaders().entrySet()) {
             builder.addHeader(header.getKey(), header.getValue());

@@ -29,10 +29,10 @@ import java.util.UUID;
 import org.killbill.billing.client.model.CustomFields;
 import java.util.List;
 import org.killbill.billing.client.model.InvoiceItems;
+import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Invoices;
 import org.killbill.billing.client.model.InvoicePayments;
-import org.killbill.billing.client.model.Tags;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -42,6 +42,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -62,7 +63,7 @@ public class InvoiceApi {
         this.httpClient = httpClient;
     }
 
-    public InvoiceItem adjustInvoiceItem(final InvoiceItem body, final UUID invoiceId, final String requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice adjustInvoiceItem(final InvoiceItem body, final UUID invoiceId, final String requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling adjustInvoiceItem");
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling adjustInvoiceItem");
 
@@ -72,14 +73,15 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("requestedDate", String.valueOf(requestedDate));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, InvoiceItem.class, requestOptions);
+        return httpClient.doPost(uri, body, Invoice.class, requestOptions);
     }
 
     public void commitInvoice(final UUID invoiceId,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -89,9 +91,12 @@ public class InvoiceApi {
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-         httpClient.doPut(uri, null, requestOptions);
+        httpClient.doPut(uri, null, requestOptions);
     }
 
     public CustomFields createCustomFields(final UUID invoiceId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -102,11 +107,12 @@ public class InvoiceApi {
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
@@ -126,12 +132,13 @@ public class InvoiceApi {
         queryParams.put("paymentExternalKey", String.valueOf(paymentExternalKey));
         queryParams.put("transactionExternalKey", String.valueOf(transactionExternalKey));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, InvoiceItems.class, requestOptions);
     }
@@ -145,12 +152,13 @@ public class InvoiceApi {
         queryParams.put("accountId", String.valueOf(accountId));
         queryParams.put("targetDate", String.valueOf(targetDate));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, null, Invoice.class, requestOptions);
     }
@@ -166,12 +174,13 @@ public class InvoiceApi {
         queryParams.put("externalPayment", String.valueOf(externalPayment));
         queryParams.put("pluginProperty", String.valueOf(pluginProperty));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, InvoicePayment.class, requestOptions);
     }
@@ -186,17 +195,18 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("targetDate", String.valueOf(targetDate));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, Invoice.class, requestOptions);
     }
 
-    public void createTags(final UUID invoiceId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID invoiceId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createTags");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/tags"
@@ -205,14 +215,15 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("tagList", String.valueOf(tagList));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        httpClient.doPost(uri, null, requestOptions);
+        return httpClient.doPost(uri, null, Tags.class, requestOptions);
     }
 
     public void deleteCBA(final UUID invoiceId, final UUID invoiceItemId, final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -227,9 +238,10 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("accountId", String.valueOf(accountId));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
@@ -243,9 +255,10 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("customFieldList", String.valueOf(customFieldList));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
@@ -259,9 +272,10 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("tagList", String.valueOf(tagList));
 
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withQueryParams(queryParams)
-            .build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
@@ -276,18 +290,32 @@ public class InvoiceApi {
         queryParams.put("accountId", String.valueOf(accountId));
         queryParams.put("targetDate", String.valueOf(targetDate));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
-
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, Invoice.class, requestOptions);
     }
 
-    public CustomFields getCustomFields(final UUID invoiceId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public String getCatalogTranslation(final String locale,  final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling getCatalogTranslation");
 
+        final String uri = "/1.0/kb/invoices/catalogTranslation/{locale}"
+          .replaceAll("\\{" + "locale" + "\\}", locale.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, String.class, requestOptions);
+    }
+
+    public CustomFields getCustomFields(final UUID invoiceId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/customFields"
@@ -296,13 +324,15 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
     public Invoice getInvoice(final UUID invoiceId, final Boolean withItems, final Boolean withChildrenItems, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoice");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}"
@@ -313,26 +343,29 @@ public class InvoiceApi {
         queryParams.put("withChildrenItems", String.valueOf(withChildrenItems));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Invoice.class, requestOptions);
     }
 
     public String getInvoiceAsHTML(final UUID invoiceId,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceAsHTML");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/html"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/html");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, String.class, requestOptions);
     }
 
     public Invoice getInvoiceByNumber(final Integer invoiceNumber, final Boolean withItems, final Boolean withChildrenItems, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(invoiceNumber, "Missing the required parameter 'invoiceNumber' when calling getInvoiceByNumber");
 
         final String uri = "/1.0/kb/invoices/{invoiceNumber}"
@@ -343,13 +376,55 @@ public class InvoiceApi {
         queryParams.put("withChildrenItems", String.valueOf(withChildrenItems));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Invoice.class, requestOptions);
     }
 
-    public Invoices getInvoices(final Long offset, final Long limit, final Boolean withItems, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public String getInvoiceMPTemplate(final String locale,  final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling getInvoiceMPTemplate");
 
+        final String uri = "/1.0/kb/invoices/manualPayTemplate"
+          .replaceAll("\\{" + "locale" + "\\}", locale.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/html");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, String.class, requestOptions);
+    }
+
+    public String getInvoiceTemplate( final RequestOptions inputOptions) throws KillBillClientException {
+
+        final String uri = "/1.0/kb/invoices/template";
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/html");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, String.class, requestOptions);
+    }
+
+    public String getInvoiceTranslation(final String locale,  final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling getInvoiceTranslation");
+
+        final String uri = "/1.0/kb/invoices/translation/{locale}"
+          .replaceAll("\\{" + "locale" + "\\}", locale.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, String.class, requestOptions);
+    }
+
+    public Invoices getInvoices(final Long offset, final Long limit, final Boolean withItems, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/invoices/pagination";
 
@@ -359,13 +434,15 @@ public class InvoiceApi {
         queryParams.put("withItems", String.valueOf(withItems));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Invoices.class, requestOptions);
     }
 
     public InvoicePayments getPayments(final UUID invoiceId, final AuditLevel auditLevel, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getPayments");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/payments"
@@ -376,13 +453,15 @@ public class InvoiceApi {
         queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         queryParams.put("withAttempts", String.valueOf(withAttempts));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, InvoicePayments.class, requestOptions);
     }
 
     public Tags getTags(final UUID invoiceId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getTags");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/tags"
@@ -392,12 +471,15 @@ public class InvoiceApi {
         queryParams.put("auditLevel", String.valueOf(auditLevel));
         queryParams.put("includedDeleted", String.valueOf(includedDeleted));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public CustomFields modifyCustomFields(final UUID invoiceId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void modifyCustomFields(final UUID invoiceId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling modifyCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
 
@@ -405,13 +487,15 @@ public class InvoiceApi {
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, CustomFields.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
     public Invoices searchInvoices(final String searchKey, final Long offset, final Long limit, final Boolean withItems, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchInvoices");
 
         final String uri = "/1.0/kb/invoices/search/{searchKey}"
@@ -423,12 +507,15 @@ public class InvoiceApi {
         queryParams.put("withItems", String.valueOf(withItems));
         queryParams.put("auditLevel", String.valueOf(auditLevel));
 
-        final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Invoices.class, requestOptions);
     }
 
-    public String uploadCatalogTranslation(final String body, final String locale, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadCatalogTranslation(final String body, final String locale, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadCatalogTranslation");
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadCatalogTranslation");
 
@@ -438,17 +525,18 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("deleteIfExists", String.valueOf(deleteIfExists));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/plain");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, String.class, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
-    public String uploadInvoiceMPTemplate(final String body, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadInvoiceMPTemplate(final String body, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceMPTemplate");
 
         final String uri = "/1.0/kb/invoices/manualPayTemplate";
@@ -456,17 +544,18 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("deleteIfExists", String.valueOf(deleteIfExists));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/html");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/html");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, String.class, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
-    public String uploadInvoiceTemplate(final String body, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadInvoiceTemplate(final String body, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTemplate");
 
         final String uri = "/1.0/kb/invoices/template";
@@ -474,17 +563,18 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("deleteIfExists", String.valueOf(deleteIfExists));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/html");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/html");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, String.class, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
-    public String uploadInvoiceTranslation(final String body, final String locale, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadInvoiceTranslation(final String body, final String locale, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTranslation");
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadInvoiceTranslation");
 
@@ -494,14 +584,15 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put("deleteIfExists", String.valueOf(deleteIfExists));
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .withQueryParams(queryParams)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/plain");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, String.class, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
     public void voidInvoice(final UUID invoiceId,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -511,9 +602,12 @@ public class InvoiceApi {
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-         httpClient.doPut(uri, null, requestOptions);
+        httpClient.doPut(uri, null, requestOptions);
     }
 
 }

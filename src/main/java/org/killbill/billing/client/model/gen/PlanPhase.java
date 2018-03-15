@@ -38,19 +38,47 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class PlanPhase extends KillBillObject {
 
+    private Duration duration = null;
+
+    private PhaseType phaseType = null;
+
     private Recurring recurring = null;
 
     private List<Usage> usages = null;
 
     private Fixed fixed = null;
 
-    private Duration duration = null;
-
-    private PhaseType phaseType = null;
-
     private String name = null;
 
     private String prettyName = null;
+
+    public PlanPhase duration(Duration duration) {
+        this.duration = duration;
+        return this;
+    }
+
+    
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public PlanPhase phaseType(PhaseType phaseType) {
+        this.phaseType = phaseType;
+        return this;
+    }
+
+    
+    public PhaseType getPhaseType() {
+        return phaseType;
+    }
+
+    public void setPhaseType(PhaseType phaseType) {
+        this.phaseType = phaseType;
+    }
 
     public PlanPhase recurring(Recurring recurring) {
         this.recurring = recurring;
@@ -102,34 +130,6 @@ public class PlanPhase extends KillBillObject {
         this.fixed = fixed;
     }
 
-    public PlanPhase duration(Duration duration) {
-        this.duration = duration;
-        return this;
-    }
-
-    
-    public Duration getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
-
-    public PlanPhase phaseType(PhaseType phaseType) {
-        this.phaseType = phaseType;
-        return this;
-    }
-
-    
-    public PhaseType getPhaseType() {
-        return phaseType;
-    }
-
-    public void setPhaseType(PhaseType phaseType) {
-        this.phaseType = phaseType;
-    }
-
     public PlanPhase name(String name) {
         this.name = name;
         return this;
@@ -168,18 +168,18 @@ public class PlanPhase extends KillBillObject {
             return false;
         }
         PlanPhase planPhase = (PlanPhase) o;
-        return Objects.equals(this.recurring, planPhase.recurring) &&
+        return Objects.equals(this.duration, planPhase.duration) &&
+        Objects.equals(this.phaseType, planPhase.phaseType) &&
+        Objects.equals(this.recurring, planPhase.recurring) &&
         Objects.equals(this.usages, planPhase.usages) &&
         Objects.equals(this.fixed, planPhase.fixed) &&
-        Objects.equals(this.duration, planPhase.duration) &&
-        Objects.equals(this.phaseType, planPhase.phaseType) &&
         Objects.equals(this.name, planPhase.name) &&
         Objects.equals(this.prettyName, planPhase.prettyName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(recurring, usages, fixed, duration, phaseType, name, prettyName);
+        return Objects.hash(duration, phaseType, recurring, usages, fixed, name, prettyName);
     }
 
 
@@ -188,11 +188,11 @@ public class PlanPhase extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class PlanPhase {\n");
         
+        sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
+        sb.append("    phaseType: ").append(toIndentedString(phaseType)).append("\n");
         sb.append("    recurring: ").append(toIndentedString(recurring)).append("\n");
         sb.append("    usages: ").append(toIndentedString(usages)).append("\n");
         sb.append("    fixed: ").append(toIndentedString(fixed)).append("\n");
-        sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
-        sb.append("    phaseType: ").append(toIndentedString(phaseType)).append("\n");
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    prettyName: ").append(toIndentedString(prettyName)).append("\n");
         sb.append("}");

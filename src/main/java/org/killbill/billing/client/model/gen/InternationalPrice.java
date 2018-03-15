@@ -34,23 +34,9 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class InternationalPrice extends KillBillObject {
 
-    private Boolean zero = false;
-
     private List<Price> prices = null;
 
-    public InternationalPrice zero(Boolean zero) {
-        this.zero = zero;
-        return this;
-    }
-
-    
-    public Boolean isZero() {
-        return zero;
-    }
-
-    public void setZero(Boolean zero) {
-        this.zero = zero;
-    }
+    private Boolean zero = false;
 
     public InternationalPrice prices(List<Price> prices) {
         this.prices = prices;
@@ -74,6 +60,20 @@ public class InternationalPrice extends KillBillObject {
         this.prices = prices;
     }
 
+    public InternationalPrice zero(Boolean zero) {
+        this.zero = zero;
+        return this;
+    }
+
+    
+    public Boolean isZero() {
+        return zero;
+    }
+
+    public void setZero(Boolean zero) {
+        this.zero = zero;
+    }
+
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -84,13 +84,13 @@ public class InternationalPrice extends KillBillObject {
             return false;
         }
         InternationalPrice internationalPrice = (InternationalPrice) o;
-        return Objects.equals(this.zero, internationalPrice.zero) &&
-        Objects.equals(this.prices, internationalPrice.prices);
+        return Objects.equals(this.prices, internationalPrice.prices) &&
+        Objects.equals(this.zero, internationalPrice.zero);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(zero, prices);
+        return Objects.hash(prices, zero);
     }
 
 
@@ -99,8 +99,8 @@ public class InternationalPrice extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class InternationalPrice {\n");
         
-        sb.append("    zero: ").append(toIndentedString(zero)).append("\n");
         sb.append("    prices: ").append(toIndentedString(prices)).append("\n");
+        sb.append("    zero: ").append(toIndentedString(zero)).append("\n");
         sb.append("}");
         return sb.toString();
     }

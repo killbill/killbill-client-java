@@ -33,6 +33,7 @@ import com.google.common.collect.HashMultimap;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
+import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
 
 /**
@@ -53,67 +54,72 @@ public class SecurityApi {
         this.httpClient = httpClient;
     }
 
-    public RoleDefinition addRoleDefinition(final RoleDefinition body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void addRoleDefinition(final RoleDefinition body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addRoleDefinition");
 
         final String uri = "/1.0/kb/security/roles";
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, RoleDefinition.class, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
-    public UserRoles addUserRoles(final UserRoles body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void addUserRoles(final UserRoles body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addUserRoles");
 
         final String uri = "/1.0/kb/security/users";
 
 
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        final RequestOptions requestOptions = inputOptions.extend()
-            .withFollowLocation(followLocation)
-            .build();
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-
-        return httpClient.doPost(uri, body, UserRoles.class, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
     public Strings getCurrentUserPermissions( final RequestOptions inputOptions) throws KillBillClientException {
 
-
         final String uri = "/1.0/kb/security/permissions";
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Strings.class, requestOptions);
     }
 
     public Subject getCurrentUserSubject( final RequestOptions inputOptions) throws KillBillClientException {
 
-
         final String uri = "/1.0/kb/security/subject";
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Subject.class, requestOptions);
     }
 
     public UserRoles getUserRoles(final String username,  final RequestOptions inputOptions) throws KillBillClientException {
-
         Preconditions.checkNotNull(username, "Missing the required parameter 'username' when calling getUserRoles");
 
         final String uri = "/1.0/kb/security/users/{username}/roles"
           .replaceAll("\\{" + "username" + "\\}", username.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, UserRoles.class, requestOptions);
     }
@@ -125,23 +131,28 @@ public class SecurityApi {
           .replaceAll("\\{" + "username" + "\\}", username.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public RoleDefinition updateRoleDefinition(final RoleDefinition body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void updateRoleDefinition(final RoleDefinition body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateRoleDefinition");
 
         final String uri = "/1.0/kb/security/roles";
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, RoleDefinition.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
-    public UserRoles updateUserPassword(final UserRoles body, final String username,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void updateUserPassword(final UserRoles body, final String username,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateUserPassword");
         Preconditions.checkNotNull(username, "Missing the required parameter 'username' when calling updateUserPassword");
 
@@ -149,12 +160,15 @@ public class SecurityApi {
           .replaceAll("\\{" + "username" + "\\}", username.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, UserRoles.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
-    public UserRoles updateUserRoles(final UserRoles body, final String username,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void updateUserRoles(final UserRoles body, final String username,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateUserRoles");
         Preconditions.checkNotNull(username, "Missing the required parameter 'username' when calling updateUserRoles");
 
@@ -162,9 +176,12 @@ public class SecurityApi {
           .replaceAll("\\{" + "username" + "\\}", username.toString());
 
 
-        final RequestOptions requestOptions = inputOptions.extend().build();
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPut(uri, body, UserRoles.class, requestOptions);
+        httpClient.doPut(uri, body, requestOptions);
     }
 
 }
