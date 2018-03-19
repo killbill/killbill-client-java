@@ -1,3 +1,10 @@
+0.41.8
+    Fix for JsonMappingException when creating an object with followLocation=false
+    Add itemDetails to Credit model
+
+0.41.7
+    Add support for new voidInvoice endpoint
+
 0.41.6
     Add rate, quantity and itemDetails to InvoiceItem model
 

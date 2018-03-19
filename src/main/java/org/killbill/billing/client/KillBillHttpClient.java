@@ -497,8 +497,6 @@ public class KillBillHttpClient implements Closeable {
                                                                       .build();
                 return doGet(location, returnClass, optionsForFollow, timeoutSec);
             }
-            throwExceptionOnResponseError(response);
-            return Response.class.isAssignableFrom(returnClass) ? returnClass.cast(response) : null;
         }
         throwExceptionOnResponseError(response);
         return deserializeResponse(response, returnClass);
@@ -643,6 +641,11 @@ public class KillBillHttpClient implements Closeable {
         // No deserialization required
         if (Response.class.isAssignableFrom(clazz)) {
             return clazz.cast(response);
+        }
+
+        // Nothing to deserialize
+        if(!response.hasResponseBody()) {
+            return createEmptyResult(clazz);
         }
 
         final T result = unmarshalResponse(response, clazz);
