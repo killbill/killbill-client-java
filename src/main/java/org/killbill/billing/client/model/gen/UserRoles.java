@@ -31,7 +31,7 @@ import java.util.List;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class UserRoles extends KillBillObject {
+public class UserRoles {
 
     private String username = null;
 
@@ -49,7 +49,9 @@ public class UserRoles extends KillBillObject {
         this.username = username;
         this.password = password;
         this.roles = roles;
+
     }
+
 
     public UserRoles setUsername(final String username) {
         this.username = username;
@@ -83,7 +85,6 @@ public class UserRoles extends KillBillObject {
         return roles;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -96,6 +97,7 @@ public class UserRoles extends KillBillObject {
         return Objects.equals(this.username, userRoles.username) &&
         Objects.equals(this.password, userRoles.password) &&
         Objects.equals(this.roles, userRoles.roles);
+
     }
 
     @Override

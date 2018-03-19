@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.joda.time.LocalDate;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.InvoiceItem;
 
 /**
@@ -84,6 +85,7 @@ public class InvoiceItem extends KillBillObject {
     private List<InvoiceItem> childItems = null;
 
 
+
     public InvoiceItem() {
     }
 
@@ -109,7 +111,9 @@ public class InvoiceItem extends KillBillObject {
                      final String currency,
                      final Integer quantity,
                      final String itemDetails,
-                     final List<InvoiceItem> childItems) {
+                     final List<InvoiceItem> childItems,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.invoiceItemId = invoiceItemId;
         this.invoiceId = invoiceId;
         this.linkedInvoiceItemId = linkedInvoiceItemId;
@@ -133,7 +137,9 @@ public class InvoiceItem extends KillBillObject {
         this.quantity = quantity;
         this.itemDetails = itemDetails;
         this.childItems = childItems;
+
     }
+
 
     public InvoiceItem setInvoiceItemId(final UUID invoiceItemId) {
         this.invoiceItemId = invoiceItemId;
@@ -350,7 +356,6 @@ public class InvoiceItem extends KillBillObject {
         return childItems;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -382,7 +387,9 @@ public class InvoiceItem extends KillBillObject {
         Objects.equals(this.currency, invoiceItem.currency) &&
         Objects.equals(this.quantity, invoiceItem.quantity) &&
         Objects.equals(this.itemDetails, invoiceItem.itemDetails) &&
-        Objects.equals(this.childItems, invoiceItem.childItems);
+        Objects.equals(this.childItems, invoiceItem.childItems) &&
+        Objects.equals(this.auditLogs, invoiceItem.auditLogs);
+
     }
 
     @Override
@@ -409,7 +416,8 @@ public class InvoiceItem extends KillBillObject {
                             currency,
                             quantity,
                             itemDetails,
-                            childItems);
+                            childItems,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -417,7 +425,7 @@ public class InvoiceItem extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class InvoiceItem {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    invoiceItemId: ").append(toIndentedString(invoiceItemId)).append("\n");
         sb.append("    invoiceId: ").append(toIndentedString(invoiceId)).append("\n");
         sb.append("    linkedInvoiceItemId: ").append(toIndentedString(linkedInvoiceItemId)).append("\n");
@@ -441,6 +449,7 @@ public class InvoiceItem extends KillBillObject {
         sb.append("    quantity: ").append(toIndentedString(quantity)).append("\n");
         sb.append("    itemDetails: ").append(toIndentedString(itemDetails)).append("\n");
         sb.append("    childItems: ").append(toIndentedString(childItems)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -20,7 +20,10 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.PaymentMethodPluginDetail;
 
 /**
@@ -46,6 +49,7 @@ public class PaymentMethod extends KillBillObject {
     private PaymentMethodPluginDetail pluginInfo = null;
 
 
+
     public PaymentMethod() {
     }
 
@@ -54,14 +58,18 @@ public class PaymentMethod extends KillBillObject {
                      final UUID accountId,
                      final Boolean isDefault,
                      final String pluginName,
-                     final PaymentMethodPluginDetail pluginInfo) {
+                     final PaymentMethodPluginDetail pluginInfo,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.paymentMethodId = paymentMethodId;
         this.externalKey = externalKey;
         this.accountId = accountId;
         this.isDefault = isDefault;
         this.pluginName = pluginName;
         this.pluginInfo = pluginInfo;
+
     }
+
 
     public PaymentMethod setPaymentMethodId(final UUID paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
@@ -117,7 +125,6 @@ public class PaymentMethod extends KillBillObject {
         return pluginInfo;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -132,7 +139,9 @@ public class PaymentMethod extends KillBillObject {
         Objects.equals(this.accountId, paymentMethod.accountId) &&
         Objects.equals(this.isDefault, paymentMethod.isDefault) &&
         Objects.equals(this.pluginName, paymentMethod.pluginName) &&
-        Objects.equals(this.pluginInfo, paymentMethod.pluginInfo);
+        Objects.equals(this.pluginInfo, paymentMethod.pluginInfo) &&
+        Objects.equals(this.auditLogs, paymentMethod.auditLogs);
+
     }
 
     @Override
@@ -142,7 +151,8 @@ public class PaymentMethod extends KillBillObject {
                             accountId,
                             isDefault,
                             pluginName,
-                            pluginInfo);
+                            pluginInfo,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -150,13 +160,14 @@ public class PaymentMethod extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class PaymentMethod {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    paymentMethodId: ").append(toIndentedString(paymentMethodId)).append("\n");
         sb.append("    externalKey: ").append(toIndentedString(externalKey)).append("\n");
         sb.append("    accountId: ").append(toIndentedString(accountId)).append("\n");
         sb.append("    isDefault: ").append(toIndentedString(isDefault)).append("\n");
         sb.append("    pluginName: ").append(toIndentedString(pluginName)).append("\n");
         sb.append("    pluginInfo: ").append(toIndentedString(pluginInfo)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -33,7 +33,7 @@ import org.killbill.billing.client.model.gen.UnitUsageRecord;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class SubscriptionUsageRecord extends KillBillObject {
+public class SubscriptionUsageRecord {
 
     private UUID subscriptionId = null;
 
@@ -51,7 +51,9 @@ public class SubscriptionUsageRecord extends KillBillObject {
         this.subscriptionId = subscriptionId;
         this.trackingId = trackingId;
         this.unitUsageRecords = unitUsageRecords;
+
     }
+
 
     public SubscriptionUsageRecord setSubscriptionId(final UUID subscriptionId) {
         this.subscriptionId = subscriptionId;
@@ -85,7 +87,6 @@ public class SubscriptionUsageRecord extends KillBillObject {
         return unitUsageRecords;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -98,6 +99,7 @@ public class SubscriptionUsageRecord extends KillBillObject {
         return Objects.equals(this.subscriptionId, subscriptionUsageRecord.subscriptionId) &&
         Objects.equals(this.trackingId, subscriptionUsageRecord.trackingId) &&
         Objects.equals(this.unitUsageRecords, subscriptionUsageRecord.unitUsageRecords);
+
     }
 
     @Override

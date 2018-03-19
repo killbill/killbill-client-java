@@ -34,7 +34,7 @@ import org.killbill.billing.client.model.gen.TieredBlock;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Tier extends KillBillObject {
+public class Tier {
 
     private List<Limit> limits = null;
 
@@ -56,7 +56,9 @@ public class Tier extends KillBillObject {
         this.fixedPrice = fixedPrice;
         this.recurringPrice = recurringPrice;
         this.blocks = blocks;
+
     }
+
 
     public Tier setLimits(final List<Limit> limits) {
         this.limits = limits;
@@ -126,7 +128,6 @@ public class Tier extends KillBillObject {
         return blocks;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -140,6 +141,7 @@ public class Tier extends KillBillObject {
         Objects.equals(this.fixedPrice, tier.fixedPrice) &&
         Objects.equals(this.recurringPrice, tier.recurringPrice) &&
         Objects.equals(this.blocks, tier.blocks);
+
     }
 
     @Override

@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.PluginServiceInfo;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class PluginInfo extends KillBillObject {
+public class PluginInfo {
 
     private String bundleSymbolicName = null;
 
@@ -66,7 +66,9 @@ public class PluginInfo extends KillBillObject {
         this.state = state;
         this.isSelectedForStart = isSelectedForStart;
         this.services = services;
+
     }
+
 
     public PluginInfo setBundleSymbolicName(final String bundleSymbolicName) {
         this.bundleSymbolicName = bundleSymbolicName;
@@ -139,7 +141,6 @@ public class PluginInfo extends KillBillObject {
         return services;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -156,6 +157,7 @@ public class PluginInfo extends KillBillObject {
         Objects.equals(this.state, pluginInfo.state) &&
         Objects.equals(this.isSelectedForStart, pluginInfo.isSelectedForStart) &&
         Objects.equals(this.services, pluginInfo.services);
+
     }
 
     @Override

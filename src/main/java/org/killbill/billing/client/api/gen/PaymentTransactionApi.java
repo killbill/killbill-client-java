@@ -142,15 +142,15 @@ public class PaymentTransactionApi {
         return getCustomFields(transactionId, AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getCustomFields(final UUID transactionId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID transactionId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/customFields"
           .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -165,7 +165,7 @@ public class PaymentTransactionApi {
         return getPaymentByTransactionId(transactionId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public Payment getPaymentByTransactionId(final UUID transactionId, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment getPaymentByTransactionId(final UUID transactionId, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getPaymentByTransactionId");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}"
@@ -181,8 +181,8 @@ public class PaymentTransactionApi {
         if (pluginProperty != null) {
             queryParams.put("pluginProperty", String.valueOf(pluginProperty));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -197,15 +197,15 @@ public class PaymentTransactionApi {
         return getTags(transactionId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
-    public Tags getTags(final UUID transactionId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID transactionId, final AuditLevel audit, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getTags");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/tags"
           .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));

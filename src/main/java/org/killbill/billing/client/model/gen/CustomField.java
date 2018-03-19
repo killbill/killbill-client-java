@@ -20,8 +20,11 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.killbill.billing.ObjectType;
+import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
  *           DO NOT EDIT !!!
@@ -44,6 +47,7 @@ public class CustomField extends KillBillObject {
     private String value = null;
 
 
+
     public CustomField() {
     }
 
@@ -51,13 +55,17 @@ public class CustomField extends KillBillObject {
                      final UUID objectId,
                      final ObjectType objectType,
                      final String name,
-                     final String value) {
+                     final String value,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.customFieldId = customFieldId;
         this.objectId = objectId;
         this.objectType = objectType;
         this.name = name;
         this.value = value;
+
     }
+
 
     public CustomField setCustomFieldId(final UUID customFieldId) {
         this.customFieldId = customFieldId;
@@ -104,7 +112,6 @@ public class CustomField extends KillBillObject {
         return value;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -118,7 +125,9 @@ public class CustomField extends KillBillObject {
         Objects.equals(this.objectId, customField.objectId) &&
         Objects.equals(this.objectType, customField.objectType) &&
         Objects.equals(this.name, customField.name) &&
-        Objects.equals(this.value, customField.value);
+        Objects.equals(this.value, customField.value) &&
+        Objects.equals(this.auditLogs, customField.auditLogs);
+
     }
 
     @Override
@@ -127,7 +136,8 @@ public class CustomField extends KillBillObject {
                             objectId,
                             objectType,
                             name,
-                            value);
+                            value,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -135,12 +145,13 @@ public class CustomField extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class CustomField {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    customFieldId: ").append(toIndentedString(customFieldId)).append("\n");
         sb.append("    objectId: ").append(toIndentedString(objectId)).append("\n");
         sb.append("    objectType: ").append(toIndentedString(objectType)).append("\n");
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    value: ").append(toIndentedString(value)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

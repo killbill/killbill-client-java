@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.PluginProperty;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class PaymentMethodPluginDetail extends KillBillObject {
+public class PaymentMethodPluginDetail {
 
     private String externalPaymentMethodId = null;
 
@@ -50,7 +50,9 @@ public class PaymentMethodPluginDetail extends KillBillObject {
         this.externalPaymentMethodId = externalPaymentMethodId;
         this.isDefaultPaymentMethod = isDefaultPaymentMethod;
         this.properties = properties;
+
     }
+
 
     public PaymentMethodPluginDetail setExternalPaymentMethodId(final String externalPaymentMethodId) {
         this.externalPaymentMethodId = externalPaymentMethodId;
@@ -87,7 +89,6 @@ public class PaymentMethodPluginDetail extends KillBillObject {
         return properties;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -100,6 +101,7 @@ public class PaymentMethodPluginDetail extends KillBillObject {
         return Objects.equals(this.externalPaymentMethodId, paymentMethodPluginDetail.externalPaymentMethodId) &&
         Objects.equals(this.isDefaultPaymentMethod, paymentMethodPluginDetail.isDefaultPaymentMethod) &&
         Objects.equals(this.properties, paymentMethodPluginDetail.properties);
+
     }
 
     @Override

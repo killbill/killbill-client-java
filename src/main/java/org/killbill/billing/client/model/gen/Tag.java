@@ -20,8 +20,11 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.killbill.billing.ObjectType;
+import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
  *           DO NOT EDIT !!!
@@ -44,6 +47,7 @@ public class Tag extends KillBillObject {
     private String tagDefinitionName = null;
 
 
+
     public Tag() {
     }
 
@@ -51,13 +55,17 @@ public class Tag extends KillBillObject {
                      final ObjectType objectType,
                      final UUID objectId,
                      final UUID tagDefinitionId,
-                     final String tagDefinitionName) {
+                     final String tagDefinitionName,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.tagId = tagId;
         this.objectType = objectType;
         this.objectId = objectId;
         this.tagDefinitionId = tagDefinitionId;
         this.tagDefinitionName = tagDefinitionName;
+
     }
+
 
     public Tag setTagId(final UUID tagId) {
         this.tagId = tagId;
@@ -104,7 +112,6 @@ public class Tag extends KillBillObject {
         return tagDefinitionName;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -118,7 +125,9 @@ public class Tag extends KillBillObject {
         Objects.equals(this.objectType, tag.objectType) &&
         Objects.equals(this.objectId, tag.objectId) &&
         Objects.equals(this.tagDefinitionId, tag.tagDefinitionId) &&
-        Objects.equals(this.tagDefinitionName, tag.tagDefinitionName);
+        Objects.equals(this.tagDefinitionName, tag.tagDefinitionName) &&
+        Objects.equals(this.auditLogs, tag.auditLogs);
+
     }
 
     @Override
@@ -127,7 +136,8 @@ public class Tag extends KillBillObject {
                             objectType,
                             objectId,
                             tagDefinitionId,
-                            tagDefinitionName);
+                            tagDefinitionName,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -135,12 +145,13 @@ public class Tag extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class Tag {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    tagId: ").append(toIndentedString(tagId)).append("\n");
         sb.append("    objectType: ").append(toIndentedString(objectType)).append("\n");
         sb.append("    objectId: ").append(toIndentedString(objectId)).append("\n");
         sb.append("    tagDefinitionId: ").append(toIndentedString(tagDefinitionId)).append("\n");
         sb.append("    tagDefinitionName: ").append(toIndentedString(tagDefinitionName)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

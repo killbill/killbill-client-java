@@ -167,15 +167,15 @@ public class BundleApi {
         return getBundle(bundleId, AuditLevel.NONE, inputOptions);
     }
 
-    public Bundle getBundle(final UUID bundleId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle getBundle(final UUID bundleId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundle");
 
         final String uri = "/1.0/kb/bundles/{bundleId}"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -190,7 +190,7 @@ public class BundleApi {
         return getBundleByKey(externalKey, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Bundle getBundleByKey(final String externalKey, final Boolean includedDeleted, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle getBundleByKey(final String externalKey, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getBundleByKey");
 
         final String uri = "/1.0/kb/bundles";
@@ -202,8 +202,8 @@ public class BundleApi {
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -218,7 +218,7 @@ public class BundleApi {
         return getBundles(Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public Bundles getBundles(final Long offset, final Long limit, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundles getBundles(final Long offset, final Long limit, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/bundles/pagination";
 
@@ -229,8 +229,8 @@ public class BundleApi {
         if (limit != null) {
             queryParams.put("limit", String.valueOf(limit));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -245,15 +245,15 @@ public class BundleApi {
         return getCustomFields(bundleId, AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getCustomFields(final UUID bundleId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID bundleId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -268,15 +268,15 @@ public class BundleApi {
         return getTags(bundleId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
-    public Tags getTags(final UUID bundleId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID bundleId, final AuditLevel audit, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
@@ -371,7 +371,7 @@ public class BundleApi {
         return searchBundles(searchKey, Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public Bundles searchBundles(final String searchKey, final Long offset, final Long limit, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundles searchBundles(final String searchKey, final Long offset, final Long limit, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchBundles");
 
         final String uri = "/1.0/kb/bundles/search/{searchKey}"
@@ -384,8 +384,8 @@ public class BundleApi {
         if (limit != null) {
             queryParams.put("limit", String.valueOf(limit));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

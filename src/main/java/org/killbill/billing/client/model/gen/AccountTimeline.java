@@ -35,7 +35,7 @@ import org.killbill.billing.client.model.gen.InvoicePayment;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class AccountTimeline extends KillBillObject {
+public class AccountTimeline {
 
     private Account account = null;
 
@@ -57,7 +57,9 @@ public class AccountTimeline extends KillBillObject {
         this.bundles = bundles;
         this.invoices = invoices;
         this.payments = payments;
+
     }
+
 
     public AccountTimeline setAccount(final Account account) {
         this.account = account;
@@ -119,7 +121,6 @@ public class AccountTimeline extends KillBillObject {
         return payments;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -133,6 +134,7 @@ public class AccountTimeline extends KillBillObject {
         Objects.equals(this.bundles, accountTimeline.bundles) &&
         Objects.equals(this.invoices, accountTimeline.invoices) &&
         Objects.equals(this.payments, accountTimeline.payments);
+
     }
 
     @Override

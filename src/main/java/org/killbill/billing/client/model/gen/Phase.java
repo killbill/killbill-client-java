@@ -34,7 +34,7 @@ import org.killbill.billing.client.model.gen.Usage;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Phase extends KillBillObject {
+public class Phase {
 
     private String type = null;
 
@@ -60,7 +60,9 @@ public class Phase extends KillBillObject {
         this.fixedPrices = fixedPrices;
         this.duration = duration;
         this.usages = usages;
+
     }
+
 
     public Phase setType(final String type) {
         this.type = type;
@@ -131,7 +133,6 @@ public class Phase extends KillBillObject {
         return usages;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -146,6 +147,7 @@ public class Phase extends KillBillObject {
         Objects.equals(this.fixedPrices, phase.fixedPrices) &&
         Objects.equals(this.duration, phase.duration) &&
         Objects.equals(this.usages, phase.usages);
+
     }
 
     @Override

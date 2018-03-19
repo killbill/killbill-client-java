@@ -30,7 +30,7 @@ import org.joda.time.DateTime;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class AuditLog extends KillBillObject {
+public class AuditLog {
 
     private String changeType = null;
 
@@ -60,7 +60,9 @@ public class AuditLog extends KillBillObject {
         this.reasonCode = reasonCode;
         this.comments = comments;
         this.userToken = userToken;
+
     }
+
 
     public AuditLog setChangeType(final String changeType) {
         this.changeType = changeType;
@@ -116,7 +118,6 @@ public class AuditLog extends KillBillObject {
         return userToken;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -132,6 +133,7 @@ public class AuditLog extends KillBillObject {
         Objects.equals(this.reasonCode, auditLog.reasonCode) &&
         Objects.equals(this.comments, auditLog.comments) &&
         Objects.equals(this.userToken, auditLog.userToken);
+
     }
 
     @Override

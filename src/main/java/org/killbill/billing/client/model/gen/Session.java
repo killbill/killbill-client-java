@@ -30,7 +30,7 @@ import org.joda.time.DateTime;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Session extends KillBillObject {
+public class Session {
 
     private String id = null;
 
@@ -56,7 +56,9 @@ public class Session extends KillBillObject {
         this.lastAccessDate = lastAccessDate;
         this.timeout = timeout;
         this.host = host;
+
     }
+
 
     public Session setId(final String id) {
         this.id = id;
@@ -103,7 +105,6 @@ public class Session extends KillBillObject {
         return host;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -118,6 +119,7 @@ public class Session extends KillBillObject {
         Objects.equals(this.lastAccessDate, session.lastAccessDate) &&
         Objects.equals(this.timeout, session.timeout) &&
         Objects.equals(this.host, session.host);
+
     }
 
     @Override

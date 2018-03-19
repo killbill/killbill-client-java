@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.EventSubscription;
 
 /**
@@ -44,18 +45,23 @@ public class BundleTimeline extends KillBillObject {
     private List<EventSubscription> events = null;
 
 
+
     public BundleTimeline() {
     }
 
     public BundleTimeline(final UUID accountId,
                      final UUID bundleId,
                      final String externalKey,
-                     final List<EventSubscription> events) {
+                     final List<EventSubscription> events,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.accountId = accountId;
         this.bundleId = bundleId;
         this.externalKey = externalKey;
         this.events = events;
+
     }
+
 
     public BundleTimeline setAccountId(final UUID accountId) {
         this.accountId = accountId;
@@ -101,7 +107,6 @@ public class BundleTimeline extends KillBillObject {
         return events;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -114,7 +119,9 @@ public class BundleTimeline extends KillBillObject {
         return Objects.equals(this.accountId, bundleTimeline.accountId) &&
         Objects.equals(this.bundleId, bundleTimeline.bundleId) &&
         Objects.equals(this.externalKey, bundleTimeline.externalKey) &&
-        Objects.equals(this.events, bundleTimeline.events);
+        Objects.equals(this.events, bundleTimeline.events) &&
+        Objects.equals(this.auditLogs, bundleTimeline.auditLogs);
+
     }
 
     @Override
@@ -122,7 +129,8 @@ public class BundleTimeline extends KillBillObject {
         return Objects.hash(accountId,
                             bundleId,
                             externalKey,
-                            events);
+                            events,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -130,11 +138,12 @@ public class BundleTimeline extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class BundleTimeline {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    accountId: ").append(toIndentedString(accountId)).append("\n");
         sb.append("    bundleId: ").append(toIndentedString(bundleId)).append("\n");
         sb.append("    externalKey: ").append(toIndentedString(externalKey)).append("\n");
         sb.append("    events: ").append(toIndentedString(events)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -236,15 +236,15 @@ public class InvoicePaymentApi {
         return getCustomFields(paymentId, AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getCustomFields(final UUID paymentId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID paymentId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/customFields"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -259,7 +259,7 @@ public class InvoicePaymentApi {
         return getInvoicePayment(paymentId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public InvoicePayment getInvoicePayment(final UUID paymentId, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment getInvoicePayment(final UUID paymentId, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getInvoicePayment");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}"
@@ -275,8 +275,8 @@ public class InvoicePaymentApi {
         if (pluginProperty != null) {
             queryParams.put("pluginProperty", String.valueOf(pluginProperty));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -291,7 +291,7 @@ public class InvoicePaymentApi {
         return getTags(paymentId, pluginProperty, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
-    public Tags getTags(final UUID paymentId, final List<String> pluginProperty, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID paymentId, final List<String> pluginProperty, final AuditLevel audit, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getTags");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/tags"
@@ -301,8 +301,8 @@ public class InvoicePaymentApi {
         if (pluginProperty != null) {
             queryParams.put("pluginProperty", String.valueOf(pluginProperty));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));

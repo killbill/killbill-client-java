@@ -30,7 +30,7 @@ import org.killbill.billing.catalog.api.TimeUnit;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Duration extends KillBillObject {
+public class Duration {
 
     private TimeUnit unit = null;
 
@@ -44,7 +44,9 @@ public class Duration extends KillBillObject {
                      final Integer number) {
         this.unit = unit;
         this.number = number;
+
     }
+
 
     public Duration setUnit(final TimeUnit unit) {
         this.unit = unit;
@@ -64,7 +66,6 @@ public class Duration extends KillBillObject {
         return number;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -76,6 +77,7 @@ public class Duration extends KillBillObject {
         Duration duration = (Duration) o;
         return Objects.equals(this.unit, duration.unit) &&
         Objects.equals(this.number, duration.number);
+
     }
 
     @Override

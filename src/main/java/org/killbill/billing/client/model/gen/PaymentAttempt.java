@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.UUID;
 import org.joda.time.DateTime;
 import org.killbill.billing.catalog.api.Currency;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.PluginProperty;
 import org.killbill.billing.payment.api.TransactionType;
 
@@ -64,6 +65,7 @@ public class PaymentAttempt extends KillBillObject {
     private List<PluginProperty> pluginProperties = null;
 
 
+
     public PaymentAttempt() {
     }
 
@@ -78,7 +80,9 @@ public class PaymentAttempt extends KillBillObject {
                      final BigDecimal amount,
                      final Currency currency,
                      final String pluginName,
-                     final List<PluginProperty> pluginProperties) {
+                     final List<PluginProperty> pluginProperties,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.accountId = accountId;
         this.paymentMethodId = paymentMethodId;
         this.paymentExternalKey = paymentExternalKey;
@@ -91,7 +95,9 @@ public class PaymentAttempt extends KillBillObject {
         this.currency = currency;
         this.pluginName = pluginName;
         this.pluginProperties = pluginProperties;
+
     }
+
 
     public PaymentAttempt setAccountId(final UUID accountId) {
         this.accountId = accountId;
@@ -209,7 +215,6 @@ public class PaymentAttempt extends KillBillObject {
         return pluginProperties;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -230,7 +235,9 @@ public class PaymentAttempt extends KillBillObject {
         Objects.equals(this.amount, paymentAttempt.amount) &&
         Objects.equals(this.currency, paymentAttempt.currency) &&
         Objects.equals(this.pluginName, paymentAttempt.pluginName) &&
-        Objects.equals(this.pluginProperties, paymentAttempt.pluginProperties);
+        Objects.equals(this.pluginProperties, paymentAttempt.pluginProperties) &&
+        Objects.equals(this.auditLogs, paymentAttempt.auditLogs);
+
     }
 
     @Override
@@ -246,7 +253,8 @@ public class PaymentAttempt extends KillBillObject {
                             amount,
                             currency,
                             pluginName,
-                            pluginProperties);
+                            pluginProperties,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -254,7 +262,7 @@ public class PaymentAttempt extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class PaymentAttempt {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    accountId: ").append(toIndentedString(accountId)).append("\n");
         sb.append("    paymentMethodId: ").append(toIndentedString(paymentMethodId)).append("\n");
         sb.append("    paymentExternalKey: ").append(toIndentedString(paymentExternalKey)).append("\n");
@@ -267,6 +275,7 @@ public class PaymentAttempt extends KillBillObject {
         sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
         sb.append("    pluginName: ").append(toIndentedString(pluginName)).append("\n");
         sb.append("    pluginProperties: ").append(toIndentedString(pluginProperties)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

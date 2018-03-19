@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.UUID;
 import org.joda.time.DateTime;
 import org.killbill.billing.catalog.api.Currency;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.PluginProperty;
 import org.killbill.billing.payment.api.TransactionStatus;
 import org.killbill.billing.payment.api.TransactionType;
@@ -73,6 +74,7 @@ public class PaymentTransaction extends KillBillObject {
     private List<PluginProperty> properties = null;
 
 
+
     public PaymentTransaction() {
     }
 
@@ -91,7 +93,9 @@ public class PaymentTransaction extends KillBillObject {
                      final String gatewayErrorMsg,
                      final String firstPaymentReferenceId,
                      final String secondPaymentReferenceId,
-                     final List<PluginProperty> properties) {
+                     final List<PluginProperty> properties,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.transactionId = transactionId;
         this.transactionExternalKey = transactionExternalKey;
         this.paymentId = paymentId;
@@ -108,7 +112,9 @@ public class PaymentTransaction extends KillBillObject {
         this.firstPaymentReferenceId = firstPaymentReferenceId;
         this.secondPaymentReferenceId = secondPaymentReferenceId;
         this.properties = properties;
+
     }
+
 
     public PaymentTransaction setTransactionId(final UUID transactionId) {
         this.transactionId = transactionId;
@@ -262,7 +268,6 @@ public class PaymentTransaction extends KillBillObject {
         return properties;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -287,7 +292,9 @@ public class PaymentTransaction extends KillBillObject {
         Objects.equals(this.gatewayErrorMsg, paymentTransaction.gatewayErrorMsg) &&
         Objects.equals(this.firstPaymentReferenceId, paymentTransaction.firstPaymentReferenceId) &&
         Objects.equals(this.secondPaymentReferenceId, paymentTransaction.secondPaymentReferenceId) &&
-        Objects.equals(this.properties, paymentTransaction.properties);
+        Objects.equals(this.properties, paymentTransaction.properties) &&
+        Objects.equals(this.auditLogs, paymentTransaction.auditLogs);
+
     }
 
     @Override
@@ -307,7 +314,8 @@ public class PaymentTransaction extends KillBillObject {
                             gatewayErrorMsg,
                             firstPaymentReferenceId,
                             secondPaymentReferenceId,
-                            properties);
+                            properties,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -315,7 +323,7 @@ public class PaymentTransaction extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class PaymentTransaction {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    transactionId: ").append(toIndentedString(transactionId)).append("\n");
         sb.append("    transactionExternalKey: ").append(toIndentedString(transactionExternalKey)).append("\n");
         sb.append("    paymentId: ").append(toIndentedString(paymentId)).append("\n");
@@ -332,6 +340,7 @@ public class PaymentTransaction extends KillBillObject {
         sb.append("    firstPaymentReferenceId: ").append(toIndentedString(firstPaymentReferenceId)).append("\n");
         sb.append("    secondPaymentReferenceId: ").append(toIndentedString(secondPaymentReferenceId)).append("\n");
         sb.append("    properties: ").append(toIndentedString(properties)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

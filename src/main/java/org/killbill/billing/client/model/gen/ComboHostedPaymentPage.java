@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import org.killbill.billing.client.model.gen.Account;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.HostedPaymentPageFields;
 import org.killbill.billing.client.model.gen.PaymentMethod;
 import org.killbill.billing.client.model.gen.PluginProperty;
@@ -43,6 +44,7 @@ public class ComboHostedPaymentPage extends KillBillObject {
 
     private List<PluginProperty> paymentMethodPluginProperties = null;
 
+
     private HostedPaymentPageFields hostedPaymentPageFieldsJson = null;
 
 
@@ -52,12 +54,16 @@ public class ComboHostedPaymentPage extends KillBillObject {
     public ComboHostedPaymentPage(final Account account,
                      final PaymentMethod paymentMethod,
                      final List<PluginProperty> paymentMethodPluginProperties,
+                     final List<AuditLog> auditLogs,
                      final HostedPaymentPageFields hostedPaymentPageFieldsJson) {
+        super(auditLogs);
         this.account = account;
         this.paymentMethod = paymentMethod;
         this.paymentMethodPluginProperties = paymentMethodPluginProperties;
         this.hostedPaymentPageFieldsJson = hostedPaymentPageFieldsJson;
+
     }
+
 
     public ComboHostedPaymentPage setAccount(final Account account) {
         this.account = account;
@@ -103,7 +109,6 @@ public class ComboHostedPaymentPage extends KillBillObject {
         return hostedPaymentPageFieldsJson;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -116,7 +121,9 @@ public class ComboHostedPaymentPage extends KillBillObject {
         return Objects.equals(this.account, comboHostedPaymentPage.account) &&
         Objects.equals(this.paymentMethod, comboHostedPaymentPage.paymentMethod) &&
         Objects.equals(this.paymentMethodPluginProperties, comboHostedPaymentPage.paymentMethodPluginProperties) &&
+        Objects.equals(this.auditLogs, comboHostedPaymentPage.auditLogs) &&
         Objects.equals(this.hostedPaymentPageFieldsJson, comboHostedPaymentPage.hostedPaymentPageFieldsJson);
+
     }
 
     @Override
@@ -124,7 +131,8 @@ public class ComboHostedPaymentPage extends KillBillObject {
         return Objects.hash(account,
                             paymentMethod,
                             paymentMethodPluginProperties,
-                            hostedPaymentPageFieldsJson);
+                            auditLogs,
+                            hostedPaymentPageFieldsJson, super.hashCode());
     }
 
 
@@ -132,10 +140,11 @@ public class ComboHostedPaymentPage extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class ComboHostedPaymentPage {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    account: ").append(toIndentedString(account)).append("\n");
         sb.append("    paymentMethod: ").append(toIndentedString(paymentMethod)).append("\n");
         sb.append("    paymentMethodPluginProperties: ").append(toIndentedString(paymentMethodPluginProperties)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("    hostedPaymentPageFieldsJson: ").append(toIndentedString(hostedPaymentPageFieldsJson)).append("\n");
         sb.append("}");
         return sb.toString();

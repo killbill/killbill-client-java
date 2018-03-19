@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.UsageRecord;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class UnitUsageRecord extends KillBillObject {
+public class UnitUsageRecord {
 
     private String unitType = null;
 
@@ -46,7 +46,9 @@ public class UnitUsageRecord extends KillBillObject {
                      final List<UsageRecord> usageRecords) {
         this.unitType = unitType;
         this.usageRecords = usageRecords;
+
     }
+
 
     public UnitUsageRecord setUnitType(final String unitType) {
         this.unitType = unitType;
@@ -74,7 +76,6 @@ public class UnitUsageRecord extends KillBillObject {
         return usageRecords;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -86,6 +87,7 @@ public class UnitUsageRecord extends KillBillObject {
         UnitUsageRecord unitUsageRecord = (UnitUsageRecord) o;
         return Objects.equals(this.unitType, unitUsageRecord.unitType) &&
         Objects.equals(this.usageRecords, unitUsageRecord.usageRecords);
+
     }
 
     @Override

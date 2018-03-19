@@ -33,7 +33,7 @@ import org.killbill.billing.client.model.gen.Price;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class PlanDetail extends KillBillObject {
+public class PlanDetail {
 
     private String product = null;
 
@@ -59,7 +59,9 @@ public class PlanDetail extends KillBillObject {
         this.priceList = priceList;
         this.finalPhaseBillingPeriod = finalPhaseBillingPeriod;
         this.finalPhaseRecurringPrice = finalPhaseRecurringPrice;
+
     }
+
 
     public PlanDetail setProduct(final String product) {
         this.product = product;
@@ -114,7 +116,6 @@ public class PlanDetail extends KillBillObject {
         return finalPhaseRecurringPrice;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -129,6 +130,7 @@ public class PlanDetail extends KillBillObject {
         Objects.equals(this.priceList, planDetail.priceList) &&
         Objects.equals(this.finalPhaseBillingPeriod, planDetail.finalPhaseBillingPeriod) &&
         Objects.equals(this.finalPhaseRecurringPrice, planDetail.finalPhaseRecurringPrice);
+
     }
 
     @Override

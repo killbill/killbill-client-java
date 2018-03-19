@@ -30,7 +30,7 @@ import org.joda.time.LocalDate;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class UsageRecord extends KillBillObject {
+public class UsageRecord {
 
     private LocalDate recordDate = null;
 
@@ -44,7 +44,9 @@ public class UsageRecord extends KillBillObject {
                      final Long amount) {
         this.recordDate = recordDate;
         this.amount = amount;
+
     }
+
 
     public UsageRecord setRecordDate(final LocalDate recordDate) {
         this.recordDate = recordDate;
@@ -64,7 +66,6 @@ public class UsageRecord extends KillBillObject {
         return amount;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -76,6 +77,7 @@ public class UsageRecord extends KillBillObject {
         UsageRecord usageRecord = (UsageRecord) o;
         return Objects.equals(this.recordDate, usageRecord.recordDate) &&
         Objects.equals(this.amount, usageRecord.amount);
+
     }
 
     @Override

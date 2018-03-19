@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.Tier;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Usage extends KillBillObject {
+public class Usage {
 
     private String billingPeriod = null;
 
@@ -46,7 +46,9 @@ public class Usage extends KillBillObject {
                      final List<Tier> tiers) {
         this.billingPeriod = billingPeriod;
         this.tiers = tiers;
+
     }
+
 
     public Usage setBillingPeriod(final String billingPeriod) {
         this.billingPeriod = billingPeriod;
@@ -74,7 +76,6 @@ public class Usage extends KillBillObject {
         return tiers;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -86,6 +87,7 @@ public class Usage extends KillBillObject {
         Usage usage = (Usage) o;
         return Objects.equals(this.billingPeriod, usage.billingPeriod) &&
         Objects.equals(this.tiers, usage.tiers);
+
     }
 
     @Override

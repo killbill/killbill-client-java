@@ -33,7 +33,7 @@ import org.killbill.billing.client.model.gen.Phase;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Plan extends KillBillObject {
+public class Plan {
 
     private String name = null;
 
@@ -55,7 +55,9 @@ public class Plan extends KillBillObject {
         this.prettyName = prettyName;
         this.billingPeriod = billingPeriod;
         this.phases = phases;
+
     }
+
 
     public Plan setName(final String name) {
         this.name = name;
@@ -101,7 +103,6 @@ public class Plan extends KillBillObject {
         return phases;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -115,6 +116,7 @@ public class Plan extends KillBillObject {
         Objects.equals(this.prettyName, plan.prettyName) &&
         Objects.equals(this.billingPeriod, plan.billingPeriod) &&
         Objects.equals(this.phases, plan.phases);
+
     }
 
     @Override

@@ -88,15 +88,15 @@ public class TagDefinitionApi {
         return getTagDefinition(tagDefinitionId, AuditLevel.NONE, inputOptions);
     }
 
-    public TagDefinition getTagDefinition(final UUID tagDefinitionId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TagDefinition getTagDefinition(final UUID tagDefinitionId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling getTagDefinition");
 
         final String uri = "/1.0/kb/tagDefinitions/{tagDefinitionId}"
           .replaceAll("\\{" + "tagDefinitionId" + "\\}", tagDefinitionId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -111,13 +111,13 @@ public class TagDefinitionApi {
         return getTagDefinitions(AuditLevel.NONE, inputOptions);
     }
 
-    public TagDefinitions getTagDefinitions(final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TagDefinitions getTagDefinitions(final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/tagDefinitions";
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Payment"
-- name: "PaymentTransaction"
-- name: "InvoiceItem"
-- name: "PaymentMethod"
-- name: "Tenant"
-- name: "NodesInfo"
-- name: "Account"
-- name: "Bundle"
-- name: "Export"
-- name: "TagDefinition"
-- name: "Usage"
+- name: "Overdue"
 - name: "InvoicePayment"
-- name: "Tag"
-- name: "Catalog"
+- name: "PaymentGateway"
+- name: "Bundle"
+- name: "Security"
+- name: "InvoiceItem"
+- name: "Export"
+- name: "Subscription"
+- name: "PaymentTransaction"
+- name: "Tenant"
+- name: "Usage"
 - name: "CustomField"
+- name: "NodesInfo"
+- name: "Invoice"
+- name: "PaymentMethod"
+- name: "Catalog"
 - name: "Admin"
 - name: "PluginInfo"
-- name: "Security"
-- name: "PaymentGateway"
-- name: "Overdue"
 - name: "Credit"
-- name: "Invoice"
-- name: "Subscription"
+- name: "TagDefinition"
+- name: "Payment"
+- name: "Tag"
+- name: "Account"
 paths:
   /1.0/kb/accounts:
     get:
@@ -57,7 +57,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -160,7 +160,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -307,7 +307,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -359,7 +359,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -535,7 +535,7 @@ paths:
         - "TAG_DEFINITION"
         - "TENANT"
         - "TENANT_KVS"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -606,7 +606,7 @@ paths:
         - "TAG_DEFINITION"
         - "TENANT"
         - "TENANT_KVS"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -675,7 +675,7 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -785,7 +785,7 @@ paths:
         in: "query"
         required: false
         type: "string"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -884,7 +884,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -930,7 +930,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -1343,7 +1343,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -1486,7 +1486,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -1507,7 +1507,9 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/Invoice"
+            type: "array"
+            items:
+              $ref: "#/definitions/Invoice"
         400:
           description: "Invalid account id supplied"
         404:
@@ -1582,7 +1584,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -1822,7 +1824,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -1967,7 +1969,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -2115,7 +2117,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -2444,7 +2446,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -2492,7 +2494,7 @@ paths:
         type: "integer"
         default: 100
         format: "int64"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -2545,7 +2547,7 @@ paths:
         type: "integer"
         default: 100
         format: "int64"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -2587,7 +2589,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -2760,7 +2762,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -3114,7 +3116,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -3697,7 +3699,7 @@ paths:
         type: "integer"
         default: 100
         format: "int64"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -3750,7 +3752,7 @@ paths:
         type: "integer"
         default: 100
         format: "int64"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -3839,7 +3841,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -4038,7 +4040,7 @@ paths:
         required: true
         type: "string"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -4204,7 +4206,7 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -4431,7 +4433,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -4703,7 +4705,7 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -5275,7 +5277,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -5333,7 +5335,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -5543,7 +5545,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -5687,7 +5689,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -5914,7 +5916,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -6035,7 +6037,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -6295,7 +6297,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -6406,19 +6408,17 @@ paths:
     post:
       tags:
       - "Overdue"
-      summary: "Upload the full overdue config as JSON"
+      summary: "Upload the full overdue config as XML"
       description: ""
-      operationId: "uploadOverdueConfigJson"
+      operationId: "uploadOverdueConfigXml"
       consumes:
-      - "application/json"
-      produces:
-      - "application/json"
+      - "text/xml"
       parameters:
       - in: "body"
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/Overdue"
+          type: "string"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -6440,10 +6440,8 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
+        default:
           description: "successful operation"
-          schema:
-            $ref: "#/definitions/Overdue"
       security:
       - basicAuth: []
   /1.0/kb/paymentGateways/hosted/form:
@@ -6668,7 +6666,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -6732,7 +6730,7 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -6801,7 +6799,7 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -6860,7 +6858,7 @@ paths:
         required: false
         type: "boolean"
         default: false
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -6968,7 +6966,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -7179,7 +7177,7 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -7281,7 +7279,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -7475,7 +7473,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -7639,7 +7637,7 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -8154,7 +8152,7 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -8300,7 +8298,7 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -8369,7 +8367,7 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -8802,7 +8800,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -9076,7 +9074,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -9822,7 +9820,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -10147,7 +10145,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -10335,7 +10333,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -10578,7 +10576,7 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -10665,7 +10663,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -10753,7 +10751,7 @@ paths:
         type: "integer"
         default: 100
         format: "int64"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -10806,7 +10804,7 @@ paths:
         type: "integer"
         default: 100
         format: "int64"
-      - name: "auditLevel"
+      - name: "audit"
         in: "query"
         required: false
         type: "string"
@@ -11832,13 +11830,13 @@ definitions:
   InternationalPrice:
     type: "object"
     properties:
+      zero:
+        type: "boolean"
+        default: false
       prices:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-      zero:
-        type: "boolean"
-        default: false
   Product:
     type: "object"
     properties:
@@ -12013,6 +12011,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      blockChanges:
+        type: "boolean"
+        default: false
+      disableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -12249,33 +12274,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      blockChanges:
-        type: "boolean"
-        default: false
-      disableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -13012,23 +13010,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  AccountTimeline:
-    type: "object"
-    properties:
-      account:
-        $ref: "#/definitions/Account"
-      bundles:
-        type: "array"
-        items:
-          $ref: "#/definitions/Bundle"
-      invoices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Invoice"
-      payments:
-        type: "array"
-        items:
-          $ref: "#/definitions/InvoicePayment"
   PhasePriceOverride:
     type: "object"
     properties:
@@ -13046,6 +13027,23 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/UsagePriceOverride"
+  AccountTimeline:
+    type: "object"
+    properties:
+      account:
+        $ref: "#/definitions/Account"
+      bundles:
+        type: "array"
+        items:
+          $ref: "#/definitions/Bundle"
+      invoices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Invoice"
+      payments:
+        type: "array"
+        items:
+          $ref: "#/definitions/InvoicePayment"
   PaymentMethod:
     type: "object"
     properties:
@@ -13330,13 +13328,13 @@ definitions:
   StaticCatalog:
     type: "object"
     properties:
-      effectiveDate:
-        type: "string"
-        format: "date-time"
       availableBasePlanListings:
         type: "array"
         items:
           $ref: "#/definitions/Listing"
+      effectiveDate:
+        type: "string"
+        format: "date-time"
       catalogName:
         type: "string"
       currentProducts:
@@ -13686,13 +13684,8 @@ definitions:
   PlanPhase:
     type: "object"
     properties:
-      phaseType:
-        type: "string"
-        enum:
-        - "TRIAL"
-        - "DISCOUNT"
-        - "FIXEDTERM"
-        - "EVERGREEN"
+      duration:
+        $ref: "#/definitions/Duration"
       recurring:
         $ref: "#/definitions/Recurring"
       usages:
@@ -13701,8 +13694,13 @@ definitions:
           $ref: "#/definitions/Usage"
       fixed:
         $ref: "#/definitions/Fixed"
-      duration:
-        $ref: "#/definitions/Duration"
+      phaseType:
+        type: "string"
+        enum:
+        - "TRIAL"
+        - "DISCOUNT"
+        - "FIXEDTERM"
+        - "EVERGREEN"
       name:
         type: "string"
       prettyName:
@@ -14015,21 +14013,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  UserRoles:
-    type: "object"
-    required:
-    - "password"
-    - "roles"
-    - "username"
-    properties:
-      username:
-        type: "string"
-      password:
-        type: "string"
-      roles:
-        type: "array"
-        items:
-          type: "string"
   GatewayNotification:
     type: "object"
     properties:
@@ -14055,6 +14038,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  UserRoles:
+    type: "object"
+    required:
+    - "password"
+    - "roles"
+    - "username"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+      roles:
+        type: "array"
+        items:
+          type: "string"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -14069,18 +14079,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   Plan:
     type: "object"
     properties:

@@ -46,6 +46,7 @@ import org.killbill.billing.ObjectType;
 import org.killbill.billing.client.model.BlockingStates;
 import org.killbill.billing.entitlement.api.BlockingStateType;
 import org.killbill.billing.client.model.InvoicePayments;
+import org.killbill.billing.client.model.Invoices;
 import org.killbill.billing.client.model.PaymentMethods;
 import org.killbill.billing.client.model.Payments;
 
@@ -283,7 +284,7 @@ public class AccountApi {
         return getAccount(accountId, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Account getAccount(final UUID accountId, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Account getAccount(final UUID accountId, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccount");
 
         final String uri = "/1.0/kb/accounts/{accountId}"
@@ -296,8 +297,8 @@ public class AccountApi {
         if (accountWithBalanceAndCBA != null) {
             queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -312,7 +313,7 @@ public class AccountApi {
         return getAccountBundles(accountId, externalKey, bundlesFilter, AuditLevel.NONE, inputOptions);
     }
 
-    public Bundles getAccountBundles(final UUID accountId, final String externalKey, final String bundlesFilter, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundles getAccountBundles(final UUID accountId, final String externalKey, final String bundlesFilter, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccountBundles");
 
         final String uri = "/1.0/kb/accounts/{accountId}/bundles"
@@ -325,8 +326,8 @@ public class AccountApi {
         if (bundlesFilter != null) {
             queryParams.put("bundlesFilter", String.valueOf(bundlesFilter));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -341,7 +342,7 @@ public class AccountApi {
         return getAccountByKey(externalKey, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Account getAccountByKey(final String externalKey, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Account getAccountByKey(final String externalKey, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getAccountByKey");
 
         final String uri = "/1.0/kb/accounts";
@@ -356,8 +357,8 @@ public class AccountApi {
         if (accountWithBalanceAndCBA != null) {
             queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -372,15 +373,15 @@ public class AccountApi {
         return getAccountTimeline(accountId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
-    public AccountTimeline getAccountTimeline(final UUID accountId, final AuditLevel auditLevel, final Boolean parallel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public AccountTimeline getAccountTimeline(final UUID accountId, final AuditLevel audit, final Boolean parallel,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccountTimeline");
 
         final String uri = "/1.0/kb/accounts/{accountId}/timeline"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
         if (parallel != null) {
             queryParams.put("parallel", String.valueOf(parallel));
@@ -398,7 +399,7 @@ public class AccountApi {
         return getAccounts(Long.valueOf(0), Long.valueOf(100), Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Accounts getAccounts(final Long offset, final Long limit, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Accounts getAccounts(final Long offset, final Long limit, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/accounts/pagination";
 
@@ -415,8 +416,8 @@ public class AccountApi {
         if (accountWithBalanceAndCBA != null) {
             queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -431,7 +432,7 @@ public class AccountApi {
         return getAllCustomFields(accountId, objectType, AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getAllCustomFields(final UUID accountId, final ObjectType objectType, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getAllCustomFields(final UUID accountId, final ObjectType objectType, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAllCustomFields");
 
         final String uri = "/1.0/kb/accounts/{accountId}/allCustomFields"
@@ -441,8 +442,8 @@ public class AccountApi {
         if (objectType != null) {
             queryParams.put("objectType", String.valueOf(objectType));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -457,7 +458,7 @@ public class AccountApi {
         return getAllTags(accountId, objectType, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
-    public Tags getAllTags(final UUID accountId, final ObjectType objectType, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getAllTags(final UUID accountId, final ObjectType objectType, final AuditLevel audit, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAllTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/allTags"
@@ -467,8 +468,8 @@ public class AccountApi {
         if (objectType != null) {
             queryParams.put("objectType", String.valueOf(objectType));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
@@ -486,7 +487,7 @@ public class AccountApi {
         return getBlockingStates(accountId, blockingStateTypes, blockingStateSvcs, AuditLevel.NONE, inputOptions);
     }
 
-    public BlockingStates getBlockingStates(final UUID accountId, final List<BlockingStateType> blockingStateTypes, final List<String> blockingStateSvcs, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public BlockingStates getBlockingStates(final UUID accountId, final List<BlockingStateType> blockingStateTypes, final List<String> blockingStateSvcs, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getBlockingStates");
 
         final String uri = "/1.0/kb/accounts/{accountId}/block"
@@ -499,8 +500,8 @@ public class AccountApi {
         if (blockingStateSvcs != null) {
             queryParams.put("blockingStateSvcs", String.valueOf(blockingStateSvcs));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -515,7 +516,7 @@ public class AccountApi {
         return getChildrenAccounts(accountId, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Accounts getChildrenAccounts(final UUID accountId, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Accounts getChildrenAccounts(final UUID accountId, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getChildrenAccounts");
 
         final String uri = "/1.0/kb/accounts/{accountId}/children"
@@ -528,8 +529,8 @@ public class AccountApi {
         if (accountWithBalanceAndCBA != null) {
             queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -544,15 +545,15 @@ public class AccountApi {
         return getCustomFields(accountId, AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getCustomFields(final UUID accountId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID accountId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/accounts/{accountId}/customFields"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -595,15 +596,15 @@ public class AccountApi {
         return getInvoicePayments(accountId, AuditLevel.NONE, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public InvoicePayments getInvoicePayments(final UUID accountId, final AuditLevel auditLevel, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayments getInvoicePayments(final UUID accountId, final AuditLevel audit, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicePayments");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoicePayments"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
@@ -623,11 +624,11 @@ public class AccountApi {
         return httpClient.doGet(uri, InvoicePayments.class, requestOptions);
     }
 
-    public Invoice getInvoices(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices getInvoices(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
         return getInvoices(accountId, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoice getInvoices(final UUID accountId, final Boolean withItems, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices getInvoices(final UUID accountId, final Boolean withItems, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoices");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoices"
@@ -646,8 +647,8 @@ public class AccountApi {
         if (includeVoidedInvoices != null) {
             queryParams.put("includeVoidedInvoices", String.valueOf(includeVoidedInvoices));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -655,7 +656,7 @@ public class AccountApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, Invoice.class, requestOptions);
+        return httpClient.doGet(uri, Invoices.class, requestOptions);
     }
 
     public OverdueState getOverdueAccount(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -676,7 +677,7 @@ public class AccountApi {
         return getPaymentMethods(accountId, Boolean.valueOf(false), pluginProperty, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public PaymentMethods getPaymentMethods(final UUID accountId, final Boolean withPluginInfo, final List<String> pluginProperty, final Boolean includedDeleted, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PaymentMethods getPaymentMethods(final UUID accountId, final Boolean withPluginInfo, final List<String> pluginProperty, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getPaymentMethods");
 
         final String uri = "/1.0/kb/accounts/{accountId}/paymentMethods"
@@ -692,8 +693,8 @@ public class AccountApi {
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -708,15 +709,15 @@ public class AccountApi {
         return getPayments(accountId, AuditLevel.NONE, pluginProperty, Boolean.valueOf(false), Boolean.valueOf(false), inputOptions);
     }
 
-    public Payments getPayments(final UUID accountId, final AuditLevel auditLevel, final List<String> pluginProperty, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payments getPayments(final UUID accountId, final AuditLevel audit, final List<String> pluginProperty, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getPayments");
 
         final String uri = "/1.0/kb/accounts/{accountId}/payments"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
         if (pluginProperty != null) {
             queryParams.put("pluginProperty", String.valueOf(pluginProperty));
@@ -740,15 +741,15 @@ public class AccountApi {
         return getTags(accountId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
-    public Tags getTags(final UUID accountId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID accountId, final AuditLevel audit, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
@@ -931,7 +932,7 @@ public class AccountApi {
         return searchAccounts(searchKey, Long.valueOf(0), Long.valueOf(100), Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Accounts searchAccounts(final String searchKey, final Long offset, final Long limit, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Accounts searchAccounts(final String searchKey, final Long offset, final Long limit, final Boolean accountWithBalance, final Boolean accountWithBalanceAndCBA, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchAccounts");
 
         final String uri = "/1.0/kb/accounts/search/{searchKey}"
@@ -950,8 +951,8 @@ public class AccountApi {
         if (accountWithBalanceAndCBA != null) {
             queryParams.put("accountWithBalanceAndCBA", String.valueOf(accountWithBalanceAndCBA));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

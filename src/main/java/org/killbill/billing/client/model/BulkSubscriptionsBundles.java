@@ -17,15 +17,10 @@
 
 package org.killbill.billing.client.model;
 
-import org.killbill.billing.client.KillBillClientException;
+import java.util.ArrayList;
+
 import org.killbill.billing.client.model.gen.BulkSubscriptionsBundle;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+public class BulkSubscriptionsBundles extends ArrayList<BulkSubscriptionsBundle> {
 
-public class BulkSubscriptionsBundles extends KillBillObjects<BulkSubscriptionsBundle> {
-
-    @JsonIgnore
-    public BulkSubscriptionsBundles getNext() throws KillBillClientException {
-        return getNext(BulkSubscriptionsBundles.class);
-    }
 }

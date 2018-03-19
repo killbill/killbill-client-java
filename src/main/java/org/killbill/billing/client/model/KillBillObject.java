@@ -17,11 +17,12 @@
 
 package org.killbill.billing.client.model;
 
-import org.killbill.billing.util.audit.AuditLog;
 
 import java.util.List;
 
 import javax.annotation.Nullable;
+
+import org.killbill.billing.client.model.gen.AuditLog;
 
 public abstract class KillBillObject {
 

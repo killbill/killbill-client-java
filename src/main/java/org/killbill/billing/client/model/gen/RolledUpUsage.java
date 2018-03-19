@@ -34,7 +34,7 @@ import org.killbill.billing.client.model.gen.RolledUpUnit;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class RolledUpUsage extends KillBillObject {
+public class RolledUpUsage {
 
     private UUID subscriptionId = null;
 
@@ -56,7 +56,9 @@ public class RolledUpUsage extends KillBillObject {
         this.startDate = startDate;
         this.endDate = endDate;
         this.rolledUpUnits = rolledUpUnits;
+
     }
+
 
     public RolledUpUsage setSubscriptionId(final UUID subscriptionId) {
         this.subscriptionId = subscriptionId;
@@ -102,7 +104,6 @@ public class RolledUpUsage extends KillBillObject {
         return rolledUpUnits;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -116,6 +117,7 @@ public class RolledUpUsage extends KillBillObject {
         Objects.equals(this.startDate, rolledUpUsage.startDate) &&
         Objects.equals(this.endDate, rolledUpUsage.endDate) &&
         Objects.equals(this.rolledUpUnits, rolledUpUsage.rolledUpUnits);
+
     }
 
     @Override

@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.Plan;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Product extends KillBillObject {
+public class Product {
 
     private String type = null;
 
@@ -62,7 +62,9 @@ public class Product extends KillBillObject {
         this.plans = plans;
         this.included = included;
         this.available = available;
+
     }
+
 
     public Product setType(final String type) {
         this.type = type;
@@ -142,7 +144,6 @@ public class Product extends KillBillObject {
         return available;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -158,6 +159,7 @@ public class Product extends KillBillObject {
         Objects.equals(this.plans, product.plans) &&
         Objects.equals(this.included, product.included) &&
         Objects.equals(this.available, product.available);
+
     }
 
     @Override

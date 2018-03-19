@@ -31,7 +31,7 @@ import java.util.List;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class PriceList extends KillBillObject {
+public class PriceList {
 
     private String name = null;
 
@@ -45,7 +45,9 @@ public class PriceList extends KillBillObject {
                      final List<String> plans) {
         this.name = name;
         this.plans = plans;
+
     }
+
 
     public PriceList setName(final String name) {
         this.name = name;
@@ -73,7 +75,6 @@ public class PriceList extends KillBillObject {
         return plans;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -85,6 +86,7 @@ public class PriceList extends KillBillObject {
         PriceList priceList = (PriceList) o;
         return Objects.equals(this.name, priceList.name) &&
         Objects.equals(this.plans, priceList.plans);
+
     }
 
     @Override

@@ -36,9 +36,9 @@ import org.killbill.billing.client.model.gen.Usage;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class PlanPhase extends KillBillObject {
+public class PlanPhase {
 
-    private PhaseType phaseType = null;
+    private Duration duration = null;
 
     private Recurring recurring = null;
 
@@ -46,7 +46,7 @@ public class PlanPhase extends KillBillObject {
 
     private Fixed fixed = null;
 
-    private Duration duration = null;
+    private PhaseType phaseType = null;
 
     private String name = null;
 
@@ -56,29 +56,31 @@ public class PlanPhase extends KillBillObject {
     public PlanPhase() {
     }
 
-    public PlanPhase(final PhaseType phaseType,
+    public PlanPhase(final Duration duration,
                      final Recurring recurring,
                      final List<Usage> usages,
                      final Fixed fixed,
-                     final Duration duration,
+                     final PhaseType phaseType,
                      final String name,
                      final String prettyName) {
-        this.phaseType = phaseType;
+        this.duration = duration;
         this.recurring = recurring;
         this.usages = usages;
         this.fixed = fixed;
-        this.duration = duration;
+        this.phaseType = phaseType;
         this.name = name;
         this.prettyName = prettyName;
+
     }
 
-    public PlanPhase setPhaseType(final PhaseType phaseType) {
-        this.phaseType = phaseType;
+
+    public PlanPhase setDuration(final Duration duration) {
+        this.duration = duration;
         return this;
     }
 
-    public PhaseType getPhaseType() {
-        return phaseType;
+    public Duration getDuration() {
+        return duration;
     }
 
     public PlanPhase setRecurring(final Recurring recurring) {
@@ -116,13 +118,13 @@ public class PlanPhase extends KillBillObject {
         return fixed;
     }
 
-    public PlanPhase setDuration(final Duration duration) {
-        this.duration = duration;
+    public PlanPhase setPhaseType(final PhaseType phaseType) {
+        this.phaseType = phaseType;
         return this;
     }
 
-    public Duration getDuration() {
-        return duration;
+    public PhaseType getPhaseType() {
+        return phaseType;
     }
 
     public PlanPhase setName(final String name) {
@@ -143,7 +145,6 @@ public class PlanPhase extends KillBillObject {
         return prettyName;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -153,22 +154,23 @@ public class PlanPhase extends KillBillObject {
             return false;
         }
         PlanPhase planPhase = (PlanPhase) o;
-        return Objects.equals(this.phaseType, planPhase.phaseType) &&
+        return Objects.equals(this.duration, planPhase.duration) &&
         Objects.equals(this.recurring, planPhase.recurring) &&
         Objects.equals(this.usages, planPhase.usages) &&
         Objects.equals(this.fixed, planPhase.fixed) &&
-        Objects.equals(this.duration, planPhase.duration) &&
+        Objects.equals(this.phaseType, planPhase.phaseType) &&
         Objects.equals(this.name, planPhase.name) &&
         Objects.equals(this.prettyName, planPhase.prettyName);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(phaseType,
+        return Objects.hash(duration,
                             recurring,
                             usages,
                             fixed,
-                            duration,
+                            phaseType,
                             name,
                             prettyName);
     }
@@ -179,11 +181,11 @@ public class PlanPhase extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class PlanPhase {\n");
         
-        sb.append("    phaseType: ").append(toIndentedString(phaseType)).append("\n");
+        sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
         sb.append("    recurring: ").append(toIndentedString(recurring)).append("\n");
         sb.append("    usages: ").append(toIndentedString(usages)).append("\n");
         sb.append("    fixed: ").append(toIndentedString(fixed)).append("\n");
-        sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
+        sb.append("    phaseType: ").append(toIndentedString(phaseType)).append("\n");
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    prettyName: ").append(toIndentedString(prettyName)).append("\n");
         sb.append("}");

@@ -30,7 +30,7 @@ import java.math.BigDecimal;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Price extends KillBillObject {
+public class Price {
 
     private String currency = null;
 
@@ -44,7 +44,9 @@ public class Price extends KillBillObject {
                      final BigDecimal value) {
         this.currency = currency;
         this.value = value;
+
     }
+
 
     public Price setCurrency(final String currency) {
         this.currency = currency;
@@ -64,7 +66,6 @@ public class Price extends KillBillObject {
         return value;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -76,6 +77,7 @@ public class Price extends KillBillObject {
         Price price = (Price) o;
         return Objects.equals(this.currency, price.currency) &&
         Objects.equals(this.value, price.value);
+
     }
 
     @Override

@@ -140,15 +140,15 @@ public class InvoiceItemApi {
         return getCustomFields(invoiceItemId, AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getCustomFields(final UUID invoiceItemId, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID invoiceItemId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/invoiceItems/{invoiceItemId}/customFields"
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -163,7 +163,7 @@ public class InvoiceItemApi {
         return getTags(invoiceItemId, accountId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
     }
 
-    public Tags getTags(final UUID invoiceItemId, final UUID accountId, final AuditLevel auditLevel, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID invoiceItemId, final UUID accountId, final AuditLevel audit, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling getTags");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getTags");
 
@@ -174,8 +174,8 @@ public class InvoiceItemApi {
         if (accountId != null) {
             queryParams.put("accountId", String.valueOf(accountId));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));

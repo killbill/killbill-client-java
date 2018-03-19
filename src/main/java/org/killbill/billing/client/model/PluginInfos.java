@@ -17,16 +17,10 @@
 
 package org.killbill.billing.client.model;
 
-import org.killbill.billing.client.KillBillClientException;
+import java.util.ArrayList;
+
 import org.killbill.billing.client.model.gen.PluginInfo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-public class PluginInfos extends KillBillObjects<PluginInfo> {
-
-    @JsonIgnore
-    public PluginInfos getNext() throws KillBillClientException {
-        return getNext(PluginInfos.class);
-    }
+public class PluginInfos extends ArrayList<PluginInfo> {
 
 }

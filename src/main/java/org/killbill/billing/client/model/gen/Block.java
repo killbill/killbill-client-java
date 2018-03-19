@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.Unit;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Block extends KillBillObject {
+public class Block {
 
     private BlockType type = null;
 
@@ -58,7 +58,9 @@ public class Block extends KillBillObject {
         this.unit = unit;
         this.price = price;
         this.minTopUpCredit = minTopUpCredit;
+
     }
+
 
     public Block setType(final BlockType type) {
         this.type = type;
@@ -105,7 +107,6 @@ public class Block extends KillBillObject {
         return minTopUpCredit;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -120,6 +121,7 @@ public class Block extends KillBillObject {
         Objects.equals(this.unit, block.unit) &&
         Objects.equals(this.price, block.price) &&
         Objects.equals(this.minTopUpCredit, block.minTopUpCredit);
+
     }
 
     @Override

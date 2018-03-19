@@ -29,7 +29,7 @@ import java.util.Arrays;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class PluginProperty extends KillBillObject {
+public class PluginProperty {
 
     private String key = null;
 
@@ -47,7 +47,9 @@ public class PluginProperty extends KillBillObject {
         this.key = key;
         this.value = value;
         this.isUpdatable = isUpdatable;
+
     }
+
 
     public PluginProperty setKey(final String key) {
         this.key = key;
@@ -76,7 +78,6 @@ public class PluginProperty extends KillBillObject {
         return isUpdatable;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -89,6 +90,7 @@ public class PluginProperty extends KillBillObject {
         return Objects.equals(this.key, pluginProperty.key) &&
         Objects.equals(this.value, pluginProperty.value) &&
         Objects.equals(this.isUpdatable, pluginProperty.isUpdatable);
+
     }
 
     @Override

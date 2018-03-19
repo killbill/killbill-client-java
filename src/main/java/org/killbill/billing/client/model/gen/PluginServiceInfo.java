@@ -29,7 +29,7 @@ import java.util.Arrays;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class PluginServiceInfo extends KillBillObject {
+public class PluginServiceInfo {
 
     private String serviceTypeName = null;
 
@@ -43,7 +43,9 @@ public class PluginServiceInfo extends KillBillObject {
                      final String registrationName) {
         this.serviceTypeName = serviceTypeName;
         this.registrationName = registrationName;
+
     }
+
 
     public PluginServiceInfo setServiceTypeName(final String serviceTypeName) {
         this.serviceTypeName = serviceTypeName;
@@ -63,7 +65,6 @@ public class PluginServiceInfo extends KillBillObject {
         return registrationName;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -75,6 +76,7 @@ public class PluginServiceInfo extends KillBillObject {
         PluginServiceInfo pluginServiceInfo = (PluginServiceInfo) o;
         return Objects.equals(this.serviceTypeName, pluginServiceInfo.serviceTypeName) &&
         Objects.equals(this.registrationName, pluginServiceInfo.registrationName);
+
     }
 
     @Override

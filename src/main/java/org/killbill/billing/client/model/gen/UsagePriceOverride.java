@@ -35,7 +35,7 @@ import org.killbill.billing.client.model.gen.TierPriceOverride;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class UsagePriceOverride extends KillBillObject {
+public class UsagePriceOverride {
 
     private String usageName = null;
 
@@ -61,7 +61,9 @@ public class UsagePriceOverride extends KillBillObject {
         this.billingMode = billingMode;
         this.tierBlockPolicy = tierBlockPolicy;
         this.tierPriceOverrides = tierPriceOverrides;
+
     }
+
 
     public UsagePriceOverride setUsageName(final String usageName) {
         this.usageName = usageName;
@@ -116,7 +118,6 @@ public class UsagePriceOverride extends KillBillObject {
         return tierPriceOverrides;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -131,6 +132,7 @@ public class UsagePriceOverride extends KillBillObject {
         Objects.equals(this.billingMode, usagePriceOverride.billingMode) &&
         Objects.equals(this.tierBlockPolicy, usagePriceOverride.tierBlockPolicy) &&
         Objects.equals(this.tierPriceOverrides, usagePriceOverride.tierPriceOverrides);
+
     }
 
     @Override

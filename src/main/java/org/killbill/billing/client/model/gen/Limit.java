@@ -29,7 +29,7 @@ import java.util.Arrays;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Limit extends KillBillObject {
+public class Limit {
 
     private String unit = null;
 
@@ -47,7 +47,9 @@ public class Limit extends KillBillObject {
         this.unit = unit;
         this.max = max;
         this.min = min;
+
     }
+
 
     public Limit setUnit(final String unit) {
         this.unit = unit;
@@ -76,7 +78,6 @@ public class Limit extends KillBillObject {
         return min;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -89,6 +90,7 @@ public class Limit extends KillBillObject {
         return Objects.equals(this.unit, limit.unit) &&
         Objects.equals(this.max, limit.max) &&
         Objects.equals(this.min, limit.min);
+
     }
 
     @Override

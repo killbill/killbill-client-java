@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.OverdueStateConfig;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Overdue extends KillBillObject {
+public class Overdue {
 
     private Integer initialReevaluationInterval = null;
 
@@ -46,7 +46,9 @@ public class Overdue extends KillBillObject {
                      final List<OverdueStateConfig> overdueStates) {
         this.initialReevaluationInterval = initialReevaluationInterval;
         this.overdueStates = overdueStates;
+
     }
+
 
     public Overdue setInitialReevaluationInterval(final Integer initialReevaluationInterval) {
         this.initialReevaluationInterval = initialReevaluationInterval;
@@ -74,7 +76,6 @@ public class Overdue extends KillBillObject {
         return overdueStates;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -86,6 +87,7 @@ public class Overdue extends KillBillObject {
         Overdue overdue = (Overdue) o;
         return Objects.equals(this.initialReevaluationInterval, overdue.initialReevaluationInterval) &&
         Objects.equals(this.overdueStates, overdue.overdueStates);
+
     }
 
     @Override

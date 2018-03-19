@@ -29,7 +29,7 @@ import java.util.Arrays;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class IteratorPlanPhase extends KillBillObject {
+public class IteratorPlanPhase {
 
 
     public IteratorPlanPhase() {
@@ -46,6 +46,7 @@ public class IteratorPlanPhase extends KillBillObject {
             return false;
         }
         return true;
+
     }
 
     @Override

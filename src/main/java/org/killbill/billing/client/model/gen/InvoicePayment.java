@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.PaymentAttempt;
 import org.killbill.billing.client.model.gen.PaymentTransaction;
 
@@ -66,6 +67,7 @@ public class InvoicePayment extends KillBillObject {
     private List<PaymentAttempt> paymentAttempts = null;
 
 
+
     public InvoicePayment() {
     }
 
@@ -82,7 +84,9 @@ public class InvoicePayment extends KillBillObject {
                      final String currency,
                      final UUID paymentMethodId,
                      final List<PaymentTransaction> transactions,
-                     final List<PaymentAttempt> paymentAttempts) {
+                     final List<PaymentAttempt> paymentAttempts,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.targetInvoiceId = targetInvoiceId;
         this.accountId = accountId;
         this.paymentId = paymentId;
@@ -97,7 +101,9 @@ public class InvoicePayment extends KillBillObject {
         this.paymentMethodId = paymentMethodId;
         this.transactions = transactions;
         this.paymentAttempts = paymentAttempts;
+
     }
+
 
     public InvoicePayment setTargetInvoiceId(final UUID targetInvoiceId) {
         this.targetInvoiceId = targetInvoiceId;
@@ -241,7 +247,6 @@ public class InvoicePayment extends KillBillObject {
         return paymentAttempts;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -264,7 +269,9 @@ public class InvoicePayment extends KillBillObject {
         Objects.equals(this.currency, invoicePayment.currency) &&
         Objects.equals(this.paymentMethodId, invoicePayment.paymentMethodId) &&
         Objects.equals(this.transactions, invoicePayment.transactions) &&
-        Objects.equals(this.paymentAttempts, invoicePayment.paymentAttempts);
+        Objects.equals(this.paymentAttempts, invoicePayment.paymentAttempts) &&
+        Objects.equals(this.auditLogs, invoicePayment.auditLogs);
+
     }
 
     @Override
@@ -282,7 +289,8 @@ public class InvoicePayment extends KillBillObject {
                             currency,
                             paymentMethodId,
                             transactions,
-                            paymentAttempts);
+                            paymentAttempts,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -290,7 +298,7 @@ public class InvoicePayment extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class InvoicePayment {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    targetInvoiceId: ").append(toIndentedString(targetInvoiceId)).append("\n");
         sb.append("    accountId: ").append(toIndentedString(accountId)).append("\n");
         sb.append("    paymentId: ").append(toIndentedString(paymentId)).append("\n");
@@ -305,6 +313,7 @@ public class InvoicePayment extends KillBillObject {
         sb.append("    paymentMethodId: ").append(toIndentedString(paymentMethodId)).append("\n");
         sb.append("    transactions: ").append(toIndentedString(transactions)).append("\n");
         sb.append("    paymentAttempts: ").append(toIndentedString(paymentAttempts)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

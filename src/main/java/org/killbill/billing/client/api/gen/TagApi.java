@@ -57,7 +57,7 @@ public class TagApi {
         return getTags(Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final Long offset, final Long limit, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final Long offset, final Long limit, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/tags/pagination";
 
@@ -68,8 +68,8 @@ public class TagApi {
         if (limit != null) {
             queryParams.put("limit", String.valueOf(limit));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -84,7 +84,7 @@ public class TagApi {
         return searchTags(searchKey, Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags searchTags(final String searchKey, final Long offset, final Long limit, final AuditLevel auditLevel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags searchTags(final String searchKey, final Long offset, final Long limit, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchTags");
 
         final String uri = "/1.0/kb/tags/search/{searchKey}"
@@ -97,8 +97,8 @@ public class TagApi {
         if (limit != null) {
             queryParams.put("limit", String.valueOf(limit));
         }
-        if (auditLevel != null) {
-            queryParams.put("auditLevel", String.valueOf(auditLevel));
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

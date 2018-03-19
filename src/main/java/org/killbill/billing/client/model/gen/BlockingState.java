@@ -20,8 +20,11 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.joda.time.DateTime;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.entitlement.api.BlockingStateType;
 
 /**
@@ -51,6 +54,7 @@ public class BlockingState extends KillBillObject {
     private BlockingStateType type = null;
 
 
+
     public BlockingState() {
     }
 
@@ -61,7 +65,9 @@ public class BlockingState extends KillBillObject {
                      final Boolean blockEntitlement,
                      final Boolean blockBilling,
                      final DateTime effectiveDate,
-                     final BlockingStateType type) {
+                     final BlockingStateType type,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.blockedId = blockedId;
         this.stateName = stateName;
         this.service = service;
@@ -70,7 +76,9 @@ public class BlockingState extends KillBillObject {
         this.blockBilling = blockBilling;
         this.effectiveDate = effectiveDate;
         this.type = type;
+
     }
+
 
     public BlockingState setBlockedId(final UUID blockedId) {
         this.blockedId = blockedId;
@@ -144,7 +152,6 @@ public class BlockingState extends KillBillObject {
         return type;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -161,7 +168,9 @@ public class BlockingState extends KillBillObject {
         Objects.equals(this.blockEntitlement, blockingState.blockEntitlement) &&
         Objects.equals(this.blockBilling, blockingState.blockBilling) &&
         Objects.equals(this.effectiveDate, blockingState.effectiveDate) &&
-        Objects.equals(this.type, blockingState.type);
+        Objects.equals(this.type, blockingState.type) &&
+        Objects.equals(this.auditLogs, blockingState.auditLogs);
+
     }
 
     @Override
@@ -173,7 +182,8 @@ public class BlockingState extends KillBillObject {
                             blockEntitlement,
                             blockBilling,
                             effectiveDate,
-                            type);
+                            type,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -181,7 +191,7 @@ public class BlockingState extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class BlockingState {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    blockedId: ").append(toIndentedString(blockedId)).append("\n");
         sb.append("    stateName: ").append(toIndentedString(stateName)).append("\n");
         sb.append("    service: ").append(toIndentedString(service)).append("\n");
@@ -190,6 +200,7 @@ public class BlockingState extends KillBillObject {
         sb.append("    blockBilling: ").append(toIndentedString(blockBilling)).append("\n");
         sb.append("    effectiveDate: ").append(toIndentedString(effectiveDate)).append("\n");
         sb.append("    type: ").append(toIndentedString(type)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

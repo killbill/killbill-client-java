@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.NodeCommandProperty;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class NodeCommand extends KillBillObject {
+public class NodeCommand {
 
     private Boolean systemCommandType = false;
 
@@ -50,7 +50,9 @@ public class NodeCommand extends KillBillObject {
         this.systemCommandType = systemCommandType;
         this.nodeCommandType = nodeCommandType;
         this.nodeCommandProperties = nodeCommandProperties;
+
     }
+
 
     public NodeCommand setSystemCommandType(final Boolean systemCommandType) {
         this.systemCommandType = systemCommandType;
@@ -87,7 +89,6 @@ public class NodeCommand extends KillBillObject {
         return nodeCommandProperties;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -100,6 +101,7 @@ public class NodeCommand extends KillBillObject {
         return Objects.equals(this.systemCommandType, nodeCommand.systemCommandType) &&
         Objects.equals(this.nodeCommandType, nodeCommand.nodeCommandType) &&
         Objects.equals(this.nodeCommandProperties, nodeCommand.nodeCommandProperties);
+
     }
 
     @Override

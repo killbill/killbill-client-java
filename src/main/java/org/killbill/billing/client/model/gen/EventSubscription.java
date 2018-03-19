@@ -20,8 +20,11 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.joda.time.LocalDate;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.entitlement.api.SubscriptionEventType;
 
 /**
@@ -59,6 +62,7 @@ public class EventSubscription extends KillBillObject {
     private String phase = null;
 
 
+
     public EventSubscription() {
     }
 
@@ -73,7 +77,9 @@ public class EventSubscription extends KillBillObject {
                      final Boolean isBlockedEntitlement,
                      final String serviceName,
                      final String serviceStateName,
-                     final String phase) {
+                     final String phase,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.eventId = eventId;
         this.billingPeriod = billingPeriod;
         this.effectiveDate = effectiveDate;
@@ -86,7 +92,9 @@ public class EventSubscription extends KillBillObject {
         this.serviceName = serviceName;
         this.serviceStateName = serviceStateName;
         this.phase = phase;
+
     }
+
 
     public EventSubscription setEventId(final UUID eventId) {
         this.eventId = eventId;
@@ -196,7 +204,6 @@ public class EventSubscription extends KillBillObject {
         return phase;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -217,7 +224,9 @@ public class EventSubscription extends KillBillObject {
         Objects.equals(this.isBlockedEntitlement, eventSubscription.isBlockedEntitlement) &&
         Objects.equals(this.serviceName, eventSubscription.serviceName) &&
         Objects.equals(this.serviceStateName, eventSubscription.serviceStateName) &&
-        Objects.equals(this.phase, eventSubscription.phase);
+        Objects.equals(this.phase, eventSubscription.phase) &&
+        Objects.equals(this.auditLogs, eventSubscription.auditLogs);
+
     }
 
     @Override
@@ -233,7 +242,8 @@ public class EventSubscription extends KillBillObject {
                             isBlockedEntitlement,
                             serviceName,
                             serviceStateName,
-                            phase);
+                            phase,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -241,7 +251,7 @@ public class EventSubscription extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class EventSubscription {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    eventId: ").append(toIndentedString(eventId)).append("\n");
         sb.append("    billingPeriod: ").append(toIndentedString(billingPeriod)).append("\n");
         sb.append("    effectiveDate: ").append(toIndentedString(effectiveDate)).append("\n");
@@ -254,6 +264,7 @@ public class EventSubscription extends KillBillObject {
         sb.append("    serviceName: ").append(toIndentedString(serviceName)).append("\n");
         sb.append("    serviceStateName: ").append(toIndentedString(serviceStateName)).append("\n");
         sb.append("    phase: ").append(toIndentedString(phase)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

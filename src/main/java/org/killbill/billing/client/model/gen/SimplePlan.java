@@ -36,7 +36,7 @@ import org.killbill.billing.catalog.api.TimeUnit;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class SimplePlan extends KillBillObject {
+public class SimplePlan {
 
     private String planId = null;
 
@@ -78,7 +78,9 @@ public class SimplePlan extends KillBillObject {
         this.trialLength = trialLength;
         this.trialTimeUnit = trialTimeUnit;
         this.availableBaseProducts = availableBaseProducts;
+
     }
+
 
     public SimplePlan setPlanId(final String planId) {
         this.planId = planId;
@@ -169,7 +171,6 @@ public class SimplePlan extends KillBillObject {
         return availableBaseProducts;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -188,6 +189,7 @@ public class SimplePlan extends KillBillObject {
         Objects.equals(this.trialLength, simplePlan.trialLength) &&
         Objects.equals(this.trialTimeUnit, simplePlan.trialTimeUnit) &&
         Objects.equals(this.availableBaseProducts, simplePlan.availableBaseProducts);
+
     }
 
     @Override

@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.PluginProperty;
 
 /**
@@ -34,15 +35,20 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class HostedPaymentPageFields extends KillBillObject {
 
+
     private List<PluginProperty> customFields = null;
 
 
     public HostedPaymentPageFields() {
     }
 
-    public HostedPaymentPageFields(final List<PluginProperty> customFields) {
+    public HostedPaymentPageFields(final List<AuditLog> auditLogs,
+                     final List<PluginProperty> customFields) {
+        super(auditLogs);
         this.customFields = customFields;
+
     }
+
 
     public HostedPaymentPageFields setCustomFields(final List<PluginProperty> customFields) {
         this.customFields = customFields;
@@ -61,7 +67,6 @@ public class HostedPaymentPageFields extends KillBillObject {
         return customFields;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -71,12 +76,15 @@ public class HostedPaymentPageFields extends KillBillObject {
             return false;
         }
         HostedPaymentPageFields hostedPaymentPageFields = (HostedPaymentPageFields) o;
-        return Objects.equals(this.customFields, hostedPaymentPageFields.customFields);
+        return Objects.equals(this.auditLogs, hostedPaymentPageFields.auditLogs) &&
+        Objects.equals(this.customFields, hostedPaymentPageFields.customFields);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(customFields);
+        return Objects.hash(auditLogs,
+                            customFields, super.hashCode());
     }
 
 
@@ -84,7 +92,8 @@ public class HostedPaymentPageFields extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class HostedPaymentPageFields {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("    customFields: ").append(toIndentedString(customFields)).append("\n");
         sb.append("}");
         return sb.toString();

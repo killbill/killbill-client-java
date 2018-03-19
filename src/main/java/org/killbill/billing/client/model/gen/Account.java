@@ -21,8 +21,11 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.joda.time.DateTime;
+import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
  *           DO NOT EDIT !!!
@@ -87,6 +90,7 @@ public class Account extends KillBillObject {
     private BigDecimal accountCBA = null;
 
 
+
     public Account() {
     }
 
@@ -115,7 +119,9 @@ public class Account extends KillBillObject {
                      final Boolean isMigrated,
                      final Boolean isNotifiedForInvoices,
                      final BigDecimal accountBalance,
-                     final BigDecimal accountCBA) {
+                     final BigDecimal accountCBA,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.accountId = accountId;
         this.name = name;
         this.firstNameLength = firstNameLength;
@@ -142,7 +148,9 @@ public class Account extends KillBillObject {
         this.isNotifiedForInvoices = isNotifiedForInvoices;
         this.accountBalance = accountBalance;
         this.accountCBA = accountCBA;
+
     }
+
 
     public Account setAccountId(final UUID accountId) {
         this.accountId = accountId;
@@ -378,7 +386,6 @@ public class Account extends KillBillObject {
         return accountCBA;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -413,7 +420,9 @@ public class Account extends KillBillObject {
         Objects.equals(this.isMigrated, account.isMigrated) &&
         Objects.equals(this.isNotifiedForInvoices, account.isNotifiedForInvoices) &&
         Objects.equals(this.accountBalance, account.accountBalance) &&
-        Objects.equals(this.accountCBA, account.accountCBA);
+        Objects.equals(this.accountCBA, account.accountCBA) &&
+        Objects.equals(this.auditLogs, account.auditLogs);
+
     }
 
     @Override
@@ -443,7 +452,8 @@ public class Account extends KillBillObject {
                             isMigrated,
                             isNotifiedForInvoices,
                             accountBalance,
-                            accountCBA);
+                            accountCBA,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -451,7 +461,7 @@ public class Account extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class Account {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    accountId: ").append(toIndentedString(accountId)).append("\n");
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    firstNameLength: ").append(toIndentedString(firstNameLength)).append("\n");
@@ -478,6 +488,7 @@ public class Account extends KillBillObject {
         sb.append("    isNotifiedForInvoices: ").append(toIndentedString(isNotifiedForInvoices)).append("\n");
         sb.append("    accountBalance: ").append(toIndentedString(accountBalance)).append("\n");
         sb.append("    accountCBA: ").append(toIndentedString(accountCBA)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

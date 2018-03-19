@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.Subscription;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class BulkSubscriptionsBundle extends KillBillObject {
+public class BulkSubscriptionsBundle {
 
     private List<Subscription> baseEntitlementAndAddOns = new ArrayList<Subscription>();
 
@@ -42,7 +42,9 @@ public class BulkSubscriptionsBundle extends KillBillObject {
 
     public BulkSubscriptionsBundle(final List<Subscription> baseEntitlementAndAddOns) {
         this.baseEntitlementAndAddOns = baseEntitlementAndAddOns;
+
     }
+
 
     public BulkSubscriptionsBundle setBaseEntitlementAndAddOns(final List<Subscription> baseEntitlementAndAddOns) {
         this.baseEntitlementAndAddOns = baseEntitlementAndAddOns;
@@ -58,7 +60,6 @@ public class BulkSubscriptionsBundle extends KillBillObject {
         return baseEntitlementAndAddOns;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -69,6 +70,7 @@ public class BulkSubscriptionsBundle extends KillBillObject {
         }
         BulkSubscriptionsBundle bulkSubscriptionsBundle = (BulkSubscriptionsBundle) o;
         return Objects.equals(this.baseEntitlementAndAddOns, bulkSubscriptionsBundle.baseEntitlementAndAddOns);
+
     }
 
     @Override

@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.Price;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class TieredBlock extends KillBillObject {
+public class TieredBlock {
 
     private String unit = null;
 
@@ -54,7 +54,9 @@ public class TieredBlock extends KillBillObject {
         this.size = size;
         this.max = max;
         this.prices = prices;
+
     }
+
 
     public TieredBlock setUnit(final String unit) {
         this.unit = unit;
@@ -100,7 +102,6 @@ public class TieredBlock extends KillBillObject {
         return prices;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -114,6 +115,7 @@ public class TieredBlock extends KillBillObject {
         Objects.equals(this.size, tieredBlock.size) &&
         Objects.equals(this.max, tieredBlock.max) &&
         Objects.equals(this.prices, tieredBlock.prices);
+
     }
 
     @Override

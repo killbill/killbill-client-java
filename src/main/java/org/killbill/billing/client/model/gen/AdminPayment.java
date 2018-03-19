@@ -29,7 +29,7 @@ import java.util.Arrays;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class AdminPayment extends KillBillObject {
+public class AdminPayment {
 
     private String lastSuccessPaymentState = null;
 
@@ -47,7 +47,9 @@ public class AdminPayment extends KillBillObject {
         this.lastSuccessPaymentState = lastSuccessPaymentState;
         this.currentPaymentStateName = currentPaymentStateName;
         this.transactionStatus = transactionStatus;
+
     }
+
 
     public AdminPayment setLastSuccessPaymentState(final String lastSuccessPaymentState) {
         this.lastSuccessPaymentState = lastSuccessPaymentState;
@@ -76,7 +78,6 @@ public class AdminPayment extends KillBillObject {
         return transactionStatus;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -89,6 +90,7 @@ public class AdminPayment extends KillBillObject {
         return Objects.equals(this.lastSuccessPaymentState, adminPayment.lastSuccessPaymentState) &&
         Objects.equals(this.currentPaymentStateName, adminPayment.currentPaymentStateName) &&
         Objects.equals(this.transactionStatus, adminPayment.transactionStatus);
+
     }
 
     @Override

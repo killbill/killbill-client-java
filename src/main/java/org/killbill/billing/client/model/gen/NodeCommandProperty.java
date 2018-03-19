@@ -29,7 +29,7 @@ import java.util.Arrays;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class NodeCommandProperty extends KillBillObject {
+public class NodeCommandProperty {
 
     private String key = null;
 
@@ -43,7 +43,9 @@ public class NodeCommandProperty extends KillBillObject {
                      final Object value) {
         this.key = key;
         this.value = value;
+
     }
+
 
     public NodeCommandProperty setKey(final String key) {
         this.key = key;
@@ -63,7 +65,6 @@ public class NodeCommandProperty extends KillBillObject {
         return value;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -75,6 +76,7 @@ public class NodeCommandProperty extends KillBillObject {
         NodeCommandProperty nodeCommandProperty = (NodeCommandProperty) o;
         return Objects.equals(this.key, nodeCommandProperty.key) &&
         Objects.equals(this.value, nodeCommandProperty.value);
+
     }
 
     @Override

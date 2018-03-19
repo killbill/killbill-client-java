@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.BlockPriceOverride;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class TierPriceOverride extends KillBillObject {
+public class TierPriceOverride {
 
     private List<BlockPriceOverride> blockPriceOverrides = null;
 
@@ -42,7 +42,9 @@ public class TierPriceOverride extends KillBillObject {
 
     public TierPriceOverride(final List<BlockPriceOverride> blockPriceOverrides) {
         this.blockPriceOverrides = blockPriceOverrides;
+
     }
+
 
     public TierPriceOverride setBlockPriceOverrides(final List<BlockPriceOverride> blockPriceOverrides) {
         this.blockPriceOverrides = blockPriceOverrides;
@@ -61,7 +63,6 @@ public class TierPriceOverride extends KillBillObject {
         return blockPriceOverrides;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -72,6 +73,7 @@ public class TierPriceOverride extends KillBillObject {
         }
         TierPriceOverride tierPriceOverride = (TierPriceOverride) o;
         return Objects.equals(this.blockPriceOverrides, tierPriceOverride.blockPriceOverrides);
+
     }
 
     @Override

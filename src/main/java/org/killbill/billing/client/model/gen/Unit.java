@@ -29,7 +29,7 @@ import java.util.Arrays;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Unit extends KillBillObject {
+public class Unit {
 
     private String name = null;
 
@@ -43,7 +43,9 @@ public class Unit extends KillBillObject {
                      final String prettyName) {
         this.name = name;
         this.prettyName = prettyName;
+
     }
+
 
     public Unit setName(final String name) {
         this.name = name;
@@ -63,7 +65,6 @@ public class Unit extends KillBillObject {
         return prettyName;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -75,6 +76,7 @@ public class Unit extends KillBillObject {
         Unit unit = (Unit) o;
         return Objects.equals(this.name, unit.name) &&
         Objects.equals(this.prettyName, unit.prettyName);
+
     }
 
     @Override

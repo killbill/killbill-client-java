@@ -30,7 +30,7 @@ import java.math.BigDecimal;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class BlockPriceOverride extends KillBillObject {
+public class BlockPriceOverride {
 
     private String unitName = null;
 
@@ -52,7 +52,9 @@ public class BlockPriceOverride extends KillBillObject {
         this.size = size;
         this.price = price;
         this.max = max;
+
     }
+
 
     public BlockPriceOverride setUnitName(final String unitName) {
         this.unitName = unitName;
@@ -90,7 +92,6 @@ public class BlockPriceOverride extends KillBillObject {
         return max;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -104,6 +105,7 @@ public class BlockPriceOverride extends KillBillObject {
         Objects.equals(this.size, blockPriceOverride.size) &&
         Objects.equals(this.price, blockPriceOverride.price) &&
         Objects.equals(this.max, blockPriceOverride.max);
+
     }
 
     @Override

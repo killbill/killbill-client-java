@@ -31,7 +31,7 @@ import org.killbill.billing.overdue.api.OverdueCancellationPolicy;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class OverdueStateConfig extends KillBillObject {
+public class OverdueStateConfig {
 
     private String name = null;
 
@@ -69,7 +69,9 @@ public class OverdueStateConfig extends KillBillObject {
         this.disableEntitlement = disableEntitlement;
         this.subscriptionCancellationPolicy = subscriptionCancellationPolicy;
         this.autoReevaluationIntervalDays = autoReevaluationIntervalDays;
+
     }
+
 
     public OverdueStateConfig setName(final String name) {
         this.name = name;
@@ -143,7 +145,6 @@ public class OverdueStateConfig extends KillBillObject {
         return autoReevaluationIntervalDays;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -161,6 +162,7 @@ public class OverdueStateConfig extends KillBillObject {
         Objects.equals(this.disableEntitlement, overdueStateConfig.disableEntitlement) &&
         Objects.equals(this.subscriptionCancellationPolicy, overdueStateConfig.subscriptionCancellationPolicy) &&
         Objects.equals(this.autoReevaluationIntervalDays, overdueStateConfig.autoReevaluationIntervalDays);
+
     }
 
     @Override

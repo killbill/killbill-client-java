@@ -30,7 +30,7 @@ import org.killbill.billing.client.model.gen.Session;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Subject extends KillBillObject {
+public class Subject {
 
     private String principal = null;
 
@@ -52,7 +52,9 @@ public class Subject extends KillBillObject {
         this.isAuthenticated = isAuthenticated;
         this.isRemembered = isRemembered;
         this.session = session;
+
     }
+
 
     public Subject setPrincipal(final String principal) {
         this.principal = principal;
@@ -90,7 +92,6 @@ public class Subject extends KillBillObject {
         return session;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -104,6 +105,7 @@ public class Subject extends KillBillObject {
         Objects.equals(this.isAuthenticated, subject.isAuthenticated) &&
         Objects.equals(this.isRemembered, subject.isRemembered) &&
         Objects.equals(this.session, subject.session);
+
     }
 
     @Override

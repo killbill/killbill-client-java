@@ -33,7 +33,7 @@ import org.killbill.billing.client.model.gen.UsagePriceOverride;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class PhasePriceOverride extends KillBillObject {
+public class PhasePriceOverride {
 
     private String planName = null;
 
@@ -63,7 +63,9 @@ public class PhasePriceOverride extends KillBillObject {
         this.fixedPrice = fixedPrice;
         this.recurringPrice = recurringPrice;
         this.usagePriceOverrides = usagePriceOverrides;
+
     }
+
 
     public PhasePriceOverride setPlanName(final String planName) {
         this.planName = planName;
@@ -127,7 +129,6 @@ public class PhasePriceOverride extends KillBillObject {
         return usagePriceOverrides;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -143,6 +144,7 @@ public class PhasePriceOverride extends KillBillObject {
         Objects.equals(this.fixedPrice, phasePriceOverride.fixedPrice) &&
         Objects.equals(this.recurringPrice, phasePriceOverride.recurringPrice) &&
         Objects.equals(this.usagePriceOverrides, phasePriceOverride.usagePriceOverrides);
+
     }
 
     @Override

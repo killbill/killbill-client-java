@@ -31,7 +31,7 @@ import java.util.List;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class RoleDefinition extends KillBillObject {
+public class RoleDefinition {
 
     private String role = null;
 
@@ -45,7 +45,9 @@ public class RoleDefinition extends KillBillObject {
                      final List<String> permissions) {
         this.role = role;
         this.permissions = permissions;
+
     }
+
 
     public RoleDefinition setRole(final String role) {
         this.role = role;
@@ -70,7 +72,6 @@ public class RoleDefinition extends KillBillObject {
         return permissions;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -82,6 +83,7 @@ public class RoleDefinition extends KillBillObject {
         RoleDefinition roleDefinition = (RoleDefinition) o;
         return Objects.equals(this.role, roleDefinition.role) &&
         Objects.equals(this.permissions, roleDefinition.permissions);
+
     }
 
     @Override

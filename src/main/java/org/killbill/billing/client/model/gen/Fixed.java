@@ -31,7 +31,7 @@ import org.killbill.billing.client.model.gen.InternationalPrice;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Fixed extends KillBillObject {
+public class Fixed {
 
     private FixedType type = null;
 
@@ -45,7 +45,9 @@ public class Fixed extends KillBillObject {
                      final InternationalPrice price) {
         this.type = type;
         this.price = price;
+
     }
+
 
     public Fixed setType(final FixedType type) {
         this.type = type;
@@ -65,7 +67,6 @@ public class Fixed extends KillBillObject {
         return price;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -77,6 +78,7 @@ public class Fixed extends KillBillObject {
         Fixed fixed = (Fixed) o;
         return Objects.equals(this.type, fixed.type) &&
         Objects.equals(this.price, fixed.price);
+
     }
 
     @Override

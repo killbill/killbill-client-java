@@ -20,7 +20,10 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
  *           DO NOT EDIT !!!
@@ -37,14 +40,19 @@ public class AccountEmail extends KillBillObject {
     private String email = null;
 
 
+
     public AccountEmail() {
     }
 
     public AccountEmail(final UUID accountId,
-                     final String email) {
+                     final String email,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.accountId = accountId;
         this.email = email;
+
     }
+
 
     public AccountEmail setAccountId(final UUID accountId) {
         this.accountId = accountId;
@@ -64,7 +72,6 @@ public class AccountEmail extends KillBillObject {
         return email;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -75,13 +82,16 @@ public class AccountEmail extends KillBillObject {
         }
         AccountEmail accountEmail = (AccountEmail) o;
         return Objects.equals(this.accountId, accountEmail.accountId) &&
-        Objects.equals(this.email, accountEmail.email);
+        Objects.equals(this.email, accountEmail.email) &&
+        Objects.equals(this.auditLogs, accountEmail.auditLogs);
+
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(accountId,
-                            email);
+                            email,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -89,9 +99,10 @@ public class AccountEmail extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class AccountEmail {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    accountId: ").append(toIndentedString(accountId)).append("\n");
         sb.append("    email: ").append(toIndentedString(email)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
  *           DO NOT EDIT !!!
@@ -47,6 +48,7 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
     private Map<String, Object> properties = null;
 
 
+
     public HostedPaymentPageFormDescriptor() {
     }
 
@@ -54,13 +56,17 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
                      final String formMethod,
                      final String formUrl,
                      final Map<String, Object> formFields,
-                     final Map<String, Object> properties) {
+                     final Map<String, Object> properties,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.kbAccountId = kbAccountId;
         this.formMethod = formMethod;
         this.formUrl = formUrl;
         this.formFields = formFields;
         this.properties = properties;
+
     }
+
 
     public HostedPaymentPageFormDescriptor setKbAccountId(final UUID kbAccountId) {
         this.kbAccountId = kbAccountId;
@@ -123,7 +129,6 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
         return properties;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -137,7 +142,9 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
         Objects.equals(this.formMethod, hostedPaymentPageFormDescriptor.formMethod) &&
         Objects.equals(this.formUrl, hostedPaymentPageFormDescriptor.formUrl) &&
         Objects.equals(this.formFields, hostedPaymentPageFormDescriptor.formFields) &&
-        Objects.equals(this.properties, hostedPaymentPageFormDescriptor.properties);
+        Objects.equals(this.properties, hostedPaymentPageFormDescriptor.properties) &&
+        Objects.equals(this.auditLogs, hostedPaymentPageFormDescriptor.auditLogs);
+
     }
 
     @Override
@@ -146,7 +153,8 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
                             formMethod,
                             formUrl,
                             formFields,
-                            properties);
+                            properties,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -154,12 +162,13 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class HostedPaymentPageFormDescriptor {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    kbAccountId: ").append(toIndentedString(kbAccountId)).append("\n");
         sb.append("    formMethod: ").append(toIndentedString(formMethod)).append("\n");
         sb.append("    formUrl: ").append(toIndentedString(formUrl)).append("\n");
         sb.append("    formFields: ").append(toIndentedString(formFields)).append("\n");
         sb.append("    properties: ").append(toIndentedString(properties)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

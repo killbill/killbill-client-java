@@ -31,7 +31,7 @@ import java.util.List;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class OverdueState extends KillBillObject {
+public class OverdueState {
 
     private String name = null;
 
@@ -65,7 +65,9 @@ public class OverdueState extends KillBillObject {
         this.blockChanges = blockChanges;
         this.clearState = clearState;
         this.reevaluationIntervalDays = reevaluationIntervalDays;
+
     }
+
 
     public OverdueState setName(final String name) {
         this.name = name;
@@ -138,7 +140,6 @@ public class OverdueState extends KillBillObject {
         return reevaluationIntervalDays;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -155,6 +156,7 @@ public class OverdueState extends KillBillObject {
         Objects.equals(this.blockChanges, overdueState.blockChanges) &&
         Objects.equals(this.clearState, overdueState.clearState) &&
         Objects.equals(this.reevaluationIntervalDays, overdueState.reevaluationIntervalDays);
+
     }
 
     @Override

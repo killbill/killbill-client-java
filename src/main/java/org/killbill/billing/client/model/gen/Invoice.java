@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.joda.time.LocalDate;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.Credit;
 import org.killbill.billing.client.model.gen.InvoiceItem;
 
@@ -73,6 +74,7 @@ public class Invoice extends KillBillObject {
     private UUID parentAccountId = null;
 
 
+
     public Invoice() {
     }
 
@@ -92,7 +94,9 @@ public class Invoice extends KillBillObject {
                      final List<InvoiceItem> items,
                      final Boolean isParentInvoice,
                      final UUID parentInvoiceId,
-                     final UUID parentAccountId) {
+                     final UUID parentAccountId,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.amount = amount;
         this.currency = currency;
         this.status = status;
@@ -110,7 +114,9 @@ public class Invoice extends KillBillObject {
         this.isParentInvoice = isParentInvoice;
         this.parentInvoiceId = parentInvoiceId;
         this.parentAccountId = parentAccountId;
+
     }
+
 
     public Invoice setAmount(final BigDecimal amount) {
         this.amount = amount;
@@ -281,7 +287,6 @@ public class Invoice extends KillBillObject {
         return parentAccountId;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -307,7 +312,9 @@ public class Invoice extends KillBillObject {
         Objects.equals(this.items, invoice.items) &&
         Objects.equals(this.isParentInvoice, invoice.isParentInvoice) &&
         Objects.equals(this.parentInvoiceId, invoice.parentInvoiceId) &&
-        Objects.equals(this.parentAccountId, invoice.parentAccountId);
+        Objects.equals(this.parentAccountId, invoice.parentAccountId) &&
+        Objects.equals(this.auditLogs, invoice.auditLogs);
+
     }
 
     @Override
@@ -328,7 +335,8 @@ public class Invoice extends KillBillObject {
                             items,
                             isParentInvoice,
                             parentInvoiceId,
-                            parentAccountId);
+                            parentAccountId,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -336,7 +344,7 @@ public class Invoice extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class Invoice {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
         sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
         sb.append("    status: ").append(toIndentedString(status)).append("\n");
@@ -354,6 +362,7 @@ public class Invoice extends KillBillObject {
         sb.append("    isParentInvoice: ").append(toIndentedString(isParentInvoice)).append("\n");
         sb.append("    parentInvoiceId: ").append(toIndentedString(parentInvoiceId)).append("\n");
         sb.append("    parentAccountId: ").append(toIndentedString(parentAccountId)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

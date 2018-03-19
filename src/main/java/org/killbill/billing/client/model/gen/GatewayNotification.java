@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
  *           DO NOT EDIT !!!
@@ -47,6 +48,7 @@ public class GatewayNotification extends KillBillObject {
     private Map<String, Object> properties = null;
 
 
+
     public GatewayNotification() {
     }
 
@@ -54,13 +56,17 @@ public class GatewayNotification extends KillBillObject {
                      final Integer status,
                      final String entity,
                      final Map<String, List<String>> headers,
-                     final Map<String, Object> properties) {
+                     final Map<String, Object> properties,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.kbPaymentId = kbPaymentId;
         this.status = status;
         this.entity = entity;
         this.headers = headers;
         this.properties = properties;
+
     }
+
 
     public GatewayNotification setKbPaymentId(final UUID kbPaymentId) {
         this.kbPaymentId = kbPaymentId;
@@ -123,7 +129,6 @@ public class GatewayNotification extends KillBillObject {
         return properties;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -137,7 +142,9 @@ public class GatewayNotification extends KillBillObject {
         Objects.equals(this.status, gatewayNotification.status) &&
         Objects.equals(this.entity, gatewayNotification.entity) &&
         Objects.equals(this.headers, gatewayNotification.headers) &&
-        Objects.equals(this.properties, gatewayNotification.properties);
+        Objects.equals(this.properties, gatewayNotification.properties) &&
+        Objects.equals(this.auditLogs, gatewayNotification.auditLogs);
+
     }
 
     @Override
@@ -146,7 +153,8 @@ public class GatewayNotification extends KillBillObject {
                             status,
                             entity,
                             headers,
-                            properties);
+                            properties,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -154,12 +162,13 @@ public class GatewayNotification extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class GatewayNotification {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    kbPaymentId: ").append(toIndentedString(kbPaymentId)).append("\n");
         sb.append("    status: ").append(toIndentedString(status)).append("\n");
         sb.append("    entity: ").append(toIndentedString(entity)).append("\n");
         sb.append("    headers: ").append(toIndentedString(headers)).append("\n");
         sb.append("    properties: ").append(toIndentedString(properties)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

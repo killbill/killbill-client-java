@@ -21,8 +21,11 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.joda.time.LocalDate;
+import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
  *           DO NOT EDIT !!!
@@ -49,6 +52,7 @@ public class Credit extends KillBillObject {
     private String description = null;
 
 
+
     public Credit() {
     }
 
@@ -58,7 +62,9 @@ public class Credit extends KillBillObject {
                      final String invoiceNumber,
                      final LocalDate effectiveDate,
                      final UUID accountId,
-                     final String description) {
+                     final String description,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.creditAmount = creditAmount;
         this.currency = currency;
         this.invoiceId = invoiceId;
@@ -66,7 +72,9 @@ public class Credit extends KillBillObject {
         this.effectiveDate = effectiveDate;
         this.accountId = accountId;
         this.description = description;
+
     }
+
 
     public Credit setCreditAmount(final BigDecimal creditAmount) {
         this.creditAmount = creditAmount;
@@ -131,7 +139,6 @@ public class Credit extends KillBillObject {
         return description;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -147,7 +154,9 @@ public class Credit extends KillBillObject {
         Objects.equals(this.invoiceNumber, credit.invoiceNumber) &&
         Objects.equals(this.effectiveDate, credit.effectiveDate) &&
         Objects.equals(this.accountId, credit.accountId) &&
-        Objects.equals(this.description, credit.description);
+        Objects.equals(this.description, credit.description) &&
+        Objects.equals(this.auditLogs, credit.auditLogs);
+
     }
 
     @Override
@@ -158,7 +167,8 @@ public class Credit extends KillBillObject {
                             invoiceNumber,
                             effectiveDate,
                             accountId,
-                            description);
+                            description,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -166,7 +176,7 @@ public class Credit extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class Credit {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    creditAmount: ").append(toIndentedString(creditAmount)).append("\n");
         sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
         sb.append("    invoiceId: ").append(toIndentedString(invoiceId)).append("\n");
@@ -174,6 +184,7 @@ public class Credit extends KillBillObject {
         sb.append("    effectiveDate: ").append(toIndentedString(effectiveDate)).append("\n");
         sb.append("    accountId: ").append(toIndentedString(accountId)).append("\n");
         sb.append("    description: ").append(toIndentedString(description)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

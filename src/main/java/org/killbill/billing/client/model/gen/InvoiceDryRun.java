@@ -34,7 +34,7 @@ import org.killbill.billing.client.model.gen.PhasePriceOverride;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class InvoiceDryRun extends KillBillObject {
+public class InvoiceDryRun {
 
     private String dryRunType = null;
 
@@ -88,7 +88,9 @@ public class InvoiceDryRun extends KillBillObject {
         this.effectiveDate = effectiveDate;
         this.billingPolicy = billingPolicy;
         this.priceOverrides = priceOverrides;
+
     }
+
 
     public InvoiceDryRun setDryRunType(final String dryRunType) {
         this.dryRunType = dryRunType;
@@ -206,7 +208,6 @@ public class InvoiceDryRun extends KillBillObject {
         return priceOverrides;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -228,6 +229,7 @@ public class InvoiceDryRun extends KillBillObject {
         Objects.equals(this.effectiveDate, invoiceDryRun.effectiveDate) &&
         Objects.equals(this.billingPolicy, invoiceDryRun.billingPolicy) &&
         Objects.equals(this.priceOverrides, invoiceDryRun.priceOverrides);
+
     }
 
     @Override

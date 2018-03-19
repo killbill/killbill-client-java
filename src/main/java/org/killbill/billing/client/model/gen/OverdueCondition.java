@@ -35,7 +35,7 @@ import org.killbill.billing.util.tag.ControlTagType;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class OverdueCondition extends KillBillObject {
+public class OverdueCondition {
 
     private Duration timeSinceEarliestUnpaidInvoiceEqualsOrExceeds = null;
 
@@ -65,7 +65,9 @@ public class OverdueCondition extends KillBillObject {
         this.numberOfUnpaidInvoicesEqualsOrExceeds = numberOfUnpaidInvoicesEqualsOrExceeds;
         this.responseForLastFailedPayment = responseForLastFailedPayment;
         this.totalUnpaidInvoiceBalanceEqualsOrExceeds = totalUnpaidInvoiceBalanceEqualsOrExceeds;
+
     }
+
 
     public OverdueCondition setTimeSinceEarliestUnpaidInvoiceEqualsOrExceeds(final Duration timeSinceEarliestUnpaidInvoiceEqualsOrExceeds) {
         this.timeSinceEarliestUnpaidInvoiceEqualsOrExceeds = timeSinceEarliestUnpaidInvoiceEqualsOrExceeds;
@@ -129,7 +131,6 @@ public class OverdueCondition extends KillBillObject {
         return totalUnpaidInvoiceBalanceEqualsOrExceeds;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -145,6 +146,7 @@ public class OverdueCondition extends KillBillObject {
         Objects.equals(this.numberOfUnpaidInvoicesEqualsOrExceeds, overdueCondition.numberOfUnpaidInvoicesEqualsOrExceeds) &&
         Objects.equals(this.responseForLastFailedPayment, overdueCondition.responseForLastFailedPayment) &&
         Objects.equals(this.totalUnpaidInvoiceBalanceEqualsOrExceeds, overdueCondition.totalUnpaidInvoiceBalanceEqualsOrExceeds);
+
     }
 
     @Override

@@ -31,7 +31,7 @@ import org.killbill.billing.client.model.gen.InternationalPrice;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class Recurring extends KillBillObject {
+public class Recurring {
 
     private InternationalPrice recurringPrice = null;
 
@@ -45,7 +45,9 @@ public class Recurring extends KillBillObject {
                      final BillingPeriod billingPeriod) {
         this.recurringPrice = recurringPrice;
         this.billingPeriod = billingPeriod;
+
     }
+
 
     public Recurring setRecurringPrice(final InternationalPrice recurringPrice) {
         this.recurringPrice = recurringPrice;
@@ -65,7 +67,6 @@ public class Recurring extends KillBillObject {
         return billingPeriod;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -77,6 +78,7 @@ public class Recurring extends KillBillObject {
         Recurring recurring = (Recurring) o;
         return Objects.equals(this.recurringPrice, recurring.recurringPrice) &&
         Objects.equals(this.billingPeriod, recurring.billingPeriod);
+
     }
 
     @Override

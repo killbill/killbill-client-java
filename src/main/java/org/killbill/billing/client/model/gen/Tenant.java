@@ -20,7 +20,10 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
  *           DO NOT EDIT !!!
@@ -41,18 +44,23 @@ public class Tenant extends KillBillObject {
     private String apiSecret = null;
 
 
+
     public Tenant() {
     }
 
     public Tenant(final UUID tenantId,
                      final String externalKey,
                      final String apiKey,
-                     final String apiSecret) {
+                     final String apiSecret,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.tenantId = tenantId;
         this.externalKey = externalKey;
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
+
     }
+
 
     public Tenant setTenantId(final UUID tenantId) {
         this.tenantId = tenantId;
@@ -90,7 +98,6 @@ public class Tenant extends KillBillObject {
         return apiSecret;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -103,7 +110,9 @@ public class Tenant extends KillBillObject {
         return Objects.equals(this.tenantId, tenant.tenantId) &&
         Objects.equals(this.externalKey, tenant.externalKey) &&
         Objects.equals(this.apiKey, tenant.apiKey) &&
-        Objects.equals(this.apiSecret, tenant.apiSecret);
+        Objects.equals(this.apiSecret, tenant.apiSecret) &&
+        Objects.equals(this.auditLogs, tenant.auditLogs);
+
     }
 
     @Override
@@ -111,7 +120,8 @@ public class Tenant extends KillBillObject {
         return Objects.hash(tenantId,
                             externalKey,
                             apiKey,
-                            apiSecret);
+                            apiSecret,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -119,11 +129,12 @@ public class Tenant extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class Tenant {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    tenantId: ").append(toIndentedString(tenantId)).append("\n");
         sb.append("    externalKey: ").append(toIndentedString(externalKey)).append("\n");
         sb.append("    apiKey: ").append(toIndentedString(apiKey)).append("\n");
         sb.append("    apiSecret: ").append(toIndentedString(apiSecret)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

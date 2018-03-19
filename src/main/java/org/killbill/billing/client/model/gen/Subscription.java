@@ -27,6 +27,7 @@ import org.joda.time.LocalDate;
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.catalog.api.PhaseType;
 import org.killbill.billing.catalog.api.ProductCategory;
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.EventSubscription;
 import org.killbill.billing.client.model.gen.PhasePriceOverride;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementSourceType;
@@ -83,6 +84,7 @@ public class Subscription extends KillBillObject {
     private List<PhasePriceOverride> priceOverrides = null;
 
 
+
     public Subscription() {
     }
 
@@ -105,7 +107,9 @@ public class Subscription extends KillBillObject {
                      final LocalDate billingEndDate,
                      final Integer billCycleDayLocal,
                      final List<EventSubscription> events,
-                     final List<PhasePriceOverride> priceOverrides) {
+                     final List<PhasePriceOverride> priceOverrides,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.accountId = accountId;
         this.bundleId = bundleId;
         this.subscriptionId = subscriptionId;
@@ -126,7 +130,9 @@ public class Subscription extends KillBillObject {
         this.billCycleDayLocal = billCycleDayLocal;
         this.events = events;
         this.priceOverrides = priceOverrides;
+
     }
+
 
     public Subscription setAccountId(final UUID accountId) {
         this.accountId = accountId;
@@ -324,7 +330,6 @@ public class Subscription extends KillBillObject {
         return priceOverrides;
     }
 
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -353,7 +358,9 @@ public class Subscription extends KillBillObject {
         Objects.equals(this.billingEndDate, subscription.billingEndDate) &&
         Objects.equals(this.billCycleDayLocal, subscription.billCycleDayLocal) &&
         Objects.equals(this.events, subscription.events) &&
-        Objects.equals(this.priceOverrides, subscription.priceOverrides);
+        Objects.equals(this.priceOverrides, subscription.priceOverrides) &&
+        Objects.equals(this.auditLogs, subscription.auditLogs);
+
     }
 
     @Override
@@ -377,7 +384,8 @@ public class Subscription extends KillBillObject {
                             billingEndDate,
                             billCycleDayLocal,
                             events,
-                            priceOverrides);
+                            priceOverrides,
+                            auditLogs, super.hashCode());
     }
 
 
@@ -385,7 +393,7 @@ public class Subscription extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class Subscription {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    accountId: ").append(toIndentedString(accountId)).append("\n");
         sb.append("    bundleId: ").append(toIndentedString(bundleId)).append("\n");
         sb.append("    subscriptionId: ").append(toIndentedString(subscriptionId)).append("\n");
@@ -406,6 +414,7 @@ public class Subscription extends KillBillObject {
         sb.append("    billCycleDayLocal: ").append(toIndentedString(billCycleDayLocal)).append("\n");
         sb.append("    events: ").append(toIndentedString(events)).append("\n");
         sb.append("    priceOverrides: ").append(toIndentedString(priceOverrides)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }
