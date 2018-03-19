@@ -39,7 +39,7 @@ import org.killbill.billing.util.api.AuditLevel;
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
@@ -72,7 +72,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/block"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
@@ -99,7 +99,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
@@ -140,7 +140,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
@@ -193,7 +193,7 @@ public class SubscriptionApi {
 
         final String uri = "/1.0/kb/subscriptions";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (entitlementDate != null) {
             queryParams.put("entitlementDate", String.valueOf(entitlementDate));
         }
@@ -216,7 +216,7 @@ public class SubscriptionApi {
             queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -239,7 +239,7 @@ public class SubscriptionApi {
 
         final String uri = "/1.0/kb/subscriptions/createEntitlementWithAddOns";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (entitlementDate != null) {
             queryParams.put("entitlementDate", String.valueOf(entitlementDate));
         }
@@ -259,7 +259,7 @@ public class SubscriptionApi {
             queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -282,7 +282,7 @@ public class SubscriptionApi {
 
         final String uri = "/1.0/kb/subscriptions/createEntitlementsWithAddOns";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (entitlementDate != null) {
             queryParams.put("entitlementDate", String.valueOf(entitlementDate));
         }
@@ -302,7 +302,7 @@ public class SubscriptionApi {
             queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -322,7 +322,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (tagList != null) {
             queryParams.put("tagList", String.valueOf(tagList));
         }
@@ -345,7 +345,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (customFieldList != null) {
             queryParams.put("customFieldList", String.valueOf(customFieldList));
         }
@@ -365,7 +365,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (tagList != null) {
             queryParams.put("tagList", String.valueOf(tagList));
         }
@@ -388,7 +388,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -411,7 +411,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -434,7 +434,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -472,7 +472,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/uncancel"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (pluginProperty != null) {
             queryParams.put("pluginProperty", String.valueOf(pluginProperty));
         }
@@ -491,7 +491,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/undoChangePlan"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (pluginProperty != null) {
             queryParams.put("pluginProperty", String.valueOf(pluginProperty));
         }
@@ -515,7 +515,7 @@ public class SubscriptionApi {
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/bcd"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (effectiveFromDate != null) {
             queryParams.put("effectiveFromDate", String.valueOf(effectiveFromDate));
         }

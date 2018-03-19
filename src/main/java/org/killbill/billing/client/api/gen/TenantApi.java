@@ -25,7 +25,7 @@ import java.util.UUID;
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
@@ -60,7 +60,7 @@ public class TenantApi {
 
         final String uri = "/1.0/kb/tenants";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (useGlobalDefault != null) {
             queryParams.put("useGlobalDefault", String.valueOf(useGlobalDefault));
         }
@@ -226,7 +226,7 @@ public class TenantApi {
 
         final String uri = "/1.0/kb/tenants";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (apiKey != null) {
             queryParams.put("apiKey", String.valueOf(apiKey));
         }
@@ -275,7 +275,7 @@ public class TenantApi {
 
         final String uri = "/1.0/kb/tenants/registerNotificationCallback";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (cb != null) {
             queryParams.put("cb", String.valueOf(cb));
         }

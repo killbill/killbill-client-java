@@ -34,7 +34,7 @@ import org.killbill.billing.catalog.api.BillingActionPolicy;
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
@@ -67,7 +67,7 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/{bundleId}/block"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
@@ -107,7 +107,7 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (tagList != null) {
             queryParams.put("tagList", String.valueOf(tagList));
         }
@@ -130,7 +130,7 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (customFieldList != null) {
             queryParams.put("customFieldList", String.valueOf(customFieldList));
         }
@@ -150,7 +150,7 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (tagList != null) {
             queryParams.put("tagList", String.valueOf(tagList));
         }
@@ -173,7 +173,7 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/{bundleId}"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -195,7 +195,7 @@ public class BundleApi {
 
         final String uri = "/1.0/kb/bundles";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (externalKey != null) {
             queryParams.put("externalKey", String.valueOf(externalKey));
         }
@@ -222,7 +222,7 @@ public class BundleApi {
 
         final String uri = "/1.0/kb/bundles/pagination";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (offset != null) {
             queryParams.put("offset", String.valueOf(offset));
         }
@@ -251,7 +251,7 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -274,7 +274,7 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -312,7 +312,7 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/{bundleId}/pause"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
@@ -350,7 +350,7 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/{bundleId}/resume"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
@@ -377,7 +377,7 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/search/{searchKey}"
           .replaceAll("\\{" + "searchKey" + "\\}", searchKey.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (offset != null) {
             queryParams.put("offset", String.valueOf(offset));
         }
@@ -407,7 +407,7 @@ public class BundleApi {
         final String uri = "/1.0/kb/bundles/{bundleId}"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }

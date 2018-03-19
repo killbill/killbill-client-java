@@ -53,7 +53,7 @@ import org.killbill.billing.client.model.Payments;
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
@@ -86,7 +86,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/block"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
@@ -131,7 +131,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (cancelAllSubscriptions != null) {
             queryParams.put("cancelAllSubscriptions", String.valueOf(cancelAllSubscriptions));
         }
@@ -194,7 +194,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/paymentMethods"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (isDefault != null) {
             queryParams.put("isDefault", String.valueOf(isDefault));
         }
@@ -202,10 +202,10 @@ public class AccountApi {
             queryParams.put("payAllUnpaidInvoices", String.valueOf(payAllUnpaidInvoices));
         }
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -225,7 +225,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (tagList != null) {
             queryParams.put("tagList", String.valueOf(tagList));
         }
@@ -247,7 +247,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/customFields"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (customFieldList != null) {
             queryParams.put("customFieldList", String.valueOf(customFieldList));
         }
@@ -267,7 +267,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (tagList != null) {
             queryParams.put("tagList", String.valueOf(tagList));
         }
@@ -290,7 +290,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (accountWithBalance != null) {
             queryParams.put("accountWithBalance", String.valueOf(accountWithBalance));
         }
@@ -319,7 +319,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/bundles"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (externalKey != null) {
             queryParams.put("externalKey", String.valueOf(externalKey));
         }
@@ -347,7 +347,7 @@ public class AccountApi {
 
         final String uri = "/1.0/kb/accounts";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (externalKey != null) {
             queryParams.put("externalKey", String.valueOf(externalKey));
         }
@@ -379,7 +379,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/timeline"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -403,7 +403,7 @@ public class AccountApi {
 
         final String uri = "/1.0/kb/accounts/pagination";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (offset != null) {
             queryParams.put("offset", String.valueOf(offset));
         }
@@ -438,7 +438,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/allCustomFields"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (objectType != null) {
             queryParams.put("objectType", String.valueOf(objectType));
         }
@@ -464,7 +464,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/allTags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (objectType != null) {
             queryParams.put("objectType", String.valueOf(objectType));
         }
@@ -493,7 +493,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/block"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (blockingStateTypes != null) {
             queryParams.put("blockingStateTypes", String.valueOf(blockingStateTypes));
         }
@@ -522,7 +522,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/children"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (accountWithBalance != null) {
             queryParams.put("accountWithBalance", String.valueOf(accountWithBalance));
         }
@@ -551,7 +551,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/customFields"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -602,7 +602,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/invoicePayments"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -634,7 +634,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/invoices"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (withItems != null) {
             queryParams.put("withItems", String.valueOf(withItems));
         }
@@ -683,7 +683,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/paymentMethods"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         }
@@ -715,7 +715,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/payments"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -747,7 +747,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -789,7 +789,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/invoicePayments"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (externalPayment != null) {
             queryParams.put("externalPayment", String.valueOf(externalPayment));
         }
@@ -797,7 +797,7 @@ public class AccountApi {
             queryParams.put("paymentAmount", String.valueOf(paymentAmount));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -818,15 +818,15 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/payments"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (paymentMethodId != null) {
             queryParams.put("paymentMethodId", String.valueOf(paymentMethodId));
         }
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -846,7 +846,7 @@ public class AccountApi {
 
         final String uri = "/1.0/kb/accounts/payments";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (externalKey != null) {
             queryParams.put("externalKey", String.valueOf(externalKey));
         }
@@ -854,10 +854,10 @@ public class AccountApi {
             queryParams.put("paymentMethodId", String.valueOf(paymentMethodId));
         }
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -894,12 +894,12 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}/paymentMethods/refresh"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (pluginName != null) {
             queryParams.put("pluginName", String.valueOf(pluginName));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -938,7 +938,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/search/{searchKey}"
           .replaceAll("\\{" + "searchKey" + "\\}", searchKey.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (offset != null) {
             queryParams.put("offset", String.valueOf(offset));
         }
@@ -975,7 +975,7 @@ public class AccountApi {
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString())
           .replaceAll("\\{" + "paymentMethodId" + "\\}", paymentMethodId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (payAllUnpaidInvoices != null) {
             queryParams.put("payAllUnpaidInvoices", String.valueOf(payAllUnpaidInvoices));
         }
@@ -1036,7 +1036,7 @@ public class AccountApi {
         final String uri = "/1.0/kb/accounts/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (treatNullAsReset != null) {
             queryParams.put("treatNullAsReset", String.valueOf(treatNullAsReset));
         }

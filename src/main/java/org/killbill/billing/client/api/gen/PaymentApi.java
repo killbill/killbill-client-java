@@ -34,7 +34,7 @@ import org.killbill.billing.client.model.Payments;
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
@@ -66,7 +66,7 @@ public class PaymentApi {
 
         final String uri = "/1.0/kb/payments/cancelScheduledPaymentTransaction";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (transactionExternalKey != null) {
             queryParams.put("transactionExternalKey", String.valueOf(transactionExternalKey));
         }
@@ -101,12 +101,12 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -125,12 +125,12 @@ public class PaymentApi {
 
         final String uri = "/1.0/kb/payments";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -151,12 +151,12 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}/chargebacks"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -175,12 +175,12 @@ public class PaymentApi {
 
         final String uri = "/1.0/kb/payments/chargebacks";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -201,12 +201,12 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}/chargebackReversals"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -225,12 +225,12 @@ public class PaymentApi {
 
         final String uri = "/1.0/kb/payments/chargebackReversals";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -251,7 +251,7 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
             queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         }
@@ -273,7 +273,7 @@ public class PaymentApi {
 
         final String uri = "/1.0/kb/payments";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
             queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         }
@@ -295,9 +295,9 @@ public class PaymentApi {
 
         final String uri = "/1.0/kb/payments/combo";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -335,7 +335,7 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}/tags"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (tagList != null) {
             queryParams.put("tagList", String.valueOf(tagList));
         }
@@ -358,7 +358,7 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}/customFields"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (customFieldList != null) {
             queryParams.put("customFieldList", String.valueOf(customFieldList));
         }
@@ -378,7 +378,7 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}/tags"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (tagList != null) {
             queryParams.put("tagList", String.valueOf(tagList));
         }
@@ -401,7 +401,7 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}/customFields"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -424,7 +424,7 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         }
@@ -455,7 +455,7 @@ public class PaymentApi {
 
         final String uri = "/1.0/kb/payments";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         }
@@ -488,7 +488,7 @@ public class PaymentApi {
 
         final String uri = "/1.0/kb/payments/pagination";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (offset != null) {
             queryParams.put("offset", String.valueOf(offset));
         }
@@ -529,7 +529,7 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}/tags"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
         }
@@ -568,12 +568,12 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}/refunds"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -592,12 +592,12 @@ public class PaymentApi {
 
         final String uri = "/1.0/kb/payments/refunds";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
-            queryParams.put("controlPluginName", String.valueOf(controlPluginName));
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -621,7 +621,7 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/search/{searchKey}"
           .replaceAll("\\{" + "searchKey" + "\\}", searchKey.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (offset != null) {
             queryParams.put("offset", String.valueOf(offset));
         }
@@ -660,7 +660,7 @@ public class PaymentApi {
         final String uri = "/1.0/kb/payments/{paymentId}"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
             queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         }
@@ -682,7 +682,7 @@ public class PaymentApi {
 
         final String uri = "/1.0/kb/payments";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (controlPluginName != null) {
             queryParams.put("controlPluginName", String.valueOf(controlPluginName));
         }

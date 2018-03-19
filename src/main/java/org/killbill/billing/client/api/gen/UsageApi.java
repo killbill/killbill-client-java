@@ -26,7 +26,7 @@ import java.util.UUID;
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
@@ -58,7 +58,7 @@ public class UsageApi {
         final String uri = "/1.0/kb/usages/{subscriptionId}"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (startDate != null) {
             queryParams.put("startDate", String.valueOf(startDate));
         }
@@ -82,7 +82,7 @@ public class UsageApi {
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString())
           .replaceAll("\\{" + "unitType" + "\\}", unitType.toString());
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (startDate != null) {
             queryParams.put("startDate", String.valueOf(startDate));
         }

@@ -33,7 +33,7 @@ import java.util.List;
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
@@ -91,7 +91,7 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/availableAddons";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (baseProductName != null) {
             queryParams.put("baseProductName", String.valueOf(baseProductName));
         }
@@ -123,7 +123,7 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
@@ -140,7 +140,7 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/phase";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (subscriptionId != null) {
             queryParams.put("subscriptionId", String.valueOf(subscriptionId));
         }
@@ -160,7 +160,7 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/plan";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (subscriptionId != null) {
             queryParams.put("subscriptionId", String.valueOf(subscriptionId));
         }
@@ -180,7 +180,7 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/priceList";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (subscriptionId != null) {
             queryParams.put("subscriptionId", String.valueOf(subscriptionId));
         }
@@ -200,7 +200,7 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/product";
 
-        final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (subscriptionId != null) {
             queryParams.put("subscriptionId", String.valueOf(subscriptionId));
         }
