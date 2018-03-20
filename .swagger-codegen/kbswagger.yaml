@@ -10,28 +10,28 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
 - name: "Overdue"
-- name: "InvoicePayment"
-- name: "PaymentGateway"
-- name: "Bundle"
-- name: "Security"
-- name: "InvoiceItem"
-- name: "Export"
-- name: "Subscription"
-- name: "PaymentTransaction"
 - name: "Tenant"
-- name: "Usage"
-- name: "CustomField"
-- name: "NodesInfo"
-- name: "Invoice"
 - name: "PaymentMethod"
-- name: "Catalog"
-- name: "Admin"
+- name: "CustomField"
 - name: "PluginInfo"
-- name: "Credit"
-- name: "TagDefinition"
-- name: "Payment"
-- name: "Tag"
+- name: "NodesInfo"
+- name: "PaymentGateway"
+- name: "InvoiceItem"
+- name: "Usage"
+- name: "Export"
+- name: "InvoicePayment"
+- name: "PaymentTransaction"
+- name: "Bundle"
+- name: "Catalog"
 - name: "Account"
+- name: "Payment"
+- name: "Subscription"
+- name: "Credit"
+- name: "Tag"
+- name: "Admin"
+- name: "Invoice"
+- name: "Security"
+- name: "TagDefinition"
 paths:
   /1.0/kb/accounts:
     get:
@@ -3253,16 +3253,12 @@ paths:
     get:
       tags:
       - "Catalog"
-      summary: "Retrieve the catalog as JSON"
+      summary: "Retrieve the full catalog as XML"
       description: ""
-      operationId: "getCatalogJson"
+      operationId: "getCatalogXml"
       produces:
-      - "application/json"
+      - "text/xml"
       parameters:
-      - name: "requestedDate"
-        in: "query"
-        required: false
-        type: "string"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -3275,7 +3271,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/StaticCatalog"
+            type: "string"
       security:
       - basicAuth: []
     post:
@@ -6408,17 +6404,19 @@ paths:
     post:
       tags:
       - "Overdue"
-      summary: "Upload the full overdue config as XML"
+      summary: "Upload the full overdue config as JSON"
       description: ""
-      operationId: "uploadOverdueConfigXml"
+      operationId: "uploadOverdueConfigJson"
       consumes:
-      - "text/xml"
+      - "application/json"
+      produces:
+      - "application/json"
       parameters:
       - in: "body"
         name: "body"
         required: true
         schema:
-          type: "string"
+          $ref: "#/definitions/Overdue"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -6440,8 +6438,10 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
+        200:
           description: "successful operation"
+          schema:
+            $ref: "#/definitions/Overdue"
       security:
       - basicAuth: []
   /1.0/kb/paymentGateways/hosted/form:
@@ -11830,13 +11830,13 @@ definitions:
   InternationalPrice:
     type: "object"
     properties:
-      zero:
-        type: "boolean"
-        default: false
       prices:
         type: "array"
         items:
           $ref: "#/definitions/Price"
+      zero:
+        type: "boolean"
+        default: false
   Product:
     type: "object"
     properties:
@@ -12332,6 +12332,21 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
+  SubscriptionUsageRecord:
+    type: "object"
+    required:
+    - "subscriptionId"
+    - "unitUsageRecords"
+    properties:
+      subscriptionId:
+        type: "string"
+        format: "uuid"
+      trackingId:
+        type: "string"
+      unitUsageRecords:
+        type: "array"
+        items:
+          $ref: "#/definitions/UnitUsageRecord"
   Subscription:
     type: "object"
     required:
@@ -12431,21 +12446,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  SubscriptionUsageRecord:
-    type: "object"
-    required:
-    - "subscriptionId"
-    - "unitUsageRecords"
-    properties:
-      subscriptionId:
-        type: "string"
-        format: "uuid"
-      trackingId:
-        type: "string"
-      unitUsageRecords:
-        type: "array"
-        items:
-          $ref: "#/definitions/UnitUsageRecord"
   Tier:
     type: "object"
     properties:
@@ -13090,28 +13090,68 @@ definitions:
       size:
         type: "number"
         format: "double"
+      minTopUpCredit:
+        type: "number"
+        format: "double"
       unit:
         $ref: "#/definitions/Unit"
       price:
         $ref: "#/definitions/InternationalPrice"
-      minTopUpCredit:
-        type: "number"
-        format: "double"
   InvoiceDryRun:
     type: "object"
     properties:
       dryRunType:
         type: "string"
+        enum:
+        - "TARGET_DATE"
+        - "UPCOMING_INVOICE"
+        - "SUBSCRIPTION_ACTION"
       dryRunAction:
         type: "string"
+        enum:
+        - "START_ENTITLEMENT"
+        - "START_BILLING"
+        - "PAUSE_ENTITLEMENT"
+        - "PAUSE_BILLING"
+        - "RESUME_ENTITLEMENT"
+        - "RESUME_BILLING"
+        - "PHASE"
+        - "CHANGE"
+        - "STOP_ENTITLEMENT"
+        - "STOP_BILLING"
+        - "SERVICE_STATE_CHANGE"
       phaseType:
         type: "string"
+        enum:
+        - "TRIAL"
+        - "DISCOUNT"
+        - "FIXEDTERM"
+        - "EVERGREEN"
       productName:
         type: "string"
       productCategory:
         type: "string"
+        enum:
+        - "BASE"
+        - "ADD_ON"
+        - "STANDALONE"
       billingPeriod:
         type: "string"
+        enum:
+        - "DAILY"
+        - "WEEKLY"
+        - "BIWEEKLY"
+        - "THIRTY_DAYS"
+        - "SIXTY_DAYS"
+        - "NINETY_DAYS"
+        - "MONTHLY"
+        - "BIMESTRIAL"
+        - "QUARTERLY"
+        - "TRIANNUAL"
+        - "BIANNUAL"
+        - "ANNUAL"
+        - "BIENNIAL"
+        - "NO_BILLING_PERIOD"
       priceListName:
         type: "string"
       subscriptionId:
@@ -13125,6 +13165,11 @@ definitions:
         format: "date"
       billingPolicy:
         type: "string"
+        enum:
+        - "START_OF_TERM"
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "ILLEGAL"
       priceOverrides:
         type: "array"
         items:
@@ -13328,19 +13373,15 @@ definitions:
   StaticCatalog:
     type: "object"
     properties:
+      catalogName:
+        type: "string"
+      effectiveDate:
+        type: "string"
+        format: "date-time"
       availableBasePlanListings:
         type: "array"
         items:
           $ref: "#/definitions/Listing"
-      effectiveDate:
-        type: "string"
-        format: "date-time"
-      catalogName:
-        type: "string"
-      currentProducts:
-        type: "array"
-        items:
-          $ref: "#/definitions/Product"
       currentSupportedCurrencies:
         type: "array"
         items:
@@ -13511,6 +13552,10 @@ definitions:
           - "ZMW"
           - "ZWD"
           - "BTC"
+      currentProducts:
+        type: "array"
+        items:
+          $ref: "#/definitions/Product"
       currentUnits:
         type: "array"
         items:
@@ -13551,6 +13596,28 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Recurring:
+    type: "object"
+    properties:
+      billingPeriod:
+        type: "string"
+        enum:
+        - "DAILY"
+        - "WEEKLY"
+        - "BIWEEKLY"
+        - "THIRTY_DAYS"
+        - "SIXTY_DAYS"
+        - "NINETY_DAYS"
+        - "MONTHLY"
+        - "BIMESTRIAL"
+        - "QUARTERLY"
+        - "TRIANNUAL"
+        - "BIANNUAL"
+        - "ANNUAL"
+        - "BIENNIAL"
+        - "NO_BILLING_PERIOD"
+      recurringPrice:
+        $ref: "#/definitions/InternationalPrice"
   Credit:
     type: "object"
     required:
@@ -13578,28 +13645,14 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Recurring:
+  RolledUpUnit:
     type: "object"
     properties:
-      recurringPrice:
-        $ref: "#/definitions/InternationalPrice"
-      billingPeriod:
+      unitType:
         type: "string"
-        enum:
-        - "DAILY"
-        - "WEEKLY"
-        - "BIWEEKLY"
-        - "THIRTY_DAYS"
-        - "SIXTY_DAYS"
-        - "NINETY_DAYS"
-        - "MONTHLY"
-        - "BIMESTRIAL"
-        - "QUARTERLY"
-        - "TRIANNUAL"
-        - "BIANNUAL"
-        - "ANNUAL"
-        - "BIENNIAL"
-        - "NO_BILLING_PERIOD"
+      amount:
+        type: "integer"
+        format: "int64"
   EventSubscription:
     type: "object"
     properties:
@@ -13647,14 +13700,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RolledUpUnit:
-    type: "object"
-    properties:
-      unitType:
-        type: "string"
-      amount:
-        type: "integer"
-        format: "int64"
   UnitUsageRecord:
     type: "object"
     properties:
@@ -14053,18 +14098,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -14079,6 +14112,18 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   Plan:
     type: "object"
     properties:

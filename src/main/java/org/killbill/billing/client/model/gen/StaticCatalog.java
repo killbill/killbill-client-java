@@ -39,15 +39,15 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class StaticCatalog {
 
-    private List<Listing> availableBasePlanListings = null;
+    private String catalogName = null;
 
     private DateTime effectiveDate = null;
 
-    private String catalogName = null;
-
-    private List<Product> currentProducts = null;
+    private List<Listing> availableBasePlanListings = null;
 
     private List<Currency> currentSupportedCurrencies = null;
+
+    private List<Product> currentProducts = null;
 
     private List<Unit> currentUnits = null;
 
@@ -57,23 +57,41 @@ public class StaticCatalog {
     public StaticCatalog() {
     }
 
-    public StaticCatalog(final List<Listing> availableBasePlanListings,
+    public StaticCatalog(final String catalogName,
                      final DateTime effectiveDate,
-                     final String catalogName,
-                     final List<Product> currentProducts,
+                     final List<Listing> availableBasePlanListings,
                      final List<Currency> currentSupportedCurrencies,
+                     final List<Product> currentProducts,
                      final List<Unit> currentUnits,
                      final List<Plan> currentPlans) {
-        this.availableBasePlanListings = availableBasePlanListings;
-        this.effectiveDate = effectiveDate;
         this.catalogName = catalogName;
-        this.currentProducts = currentProducts;
+        this.effectiveDate = effectiveDate;
+        this.availableBasePlanListings = availableBasePlanListings;
         this.currentSupportedCurrencies = currentSupportedCurrencies;
+        this.currentProducts = currentProducts;
         this.currentUnits = currentUnits;
         this.currentPlans = currentPlans;
 
     }
 
+
+    public StaticCatalog setCatalogName(final String catalogName) {
+        this.catalogName = catalogName;
+        return this;
+    }
+
+    public String getCatalogName() {
+        return catalogName;
+    }
+
+    public StaticCatalog setEffectiveDate(final DateTime effectiveDate) {
+        this.effectiveDate = effectiveDate;
+        return this;
+    }
+
+    public DateTime getEffectiveDate() {
+        return effectiveDate;
+    }
 
     public StaticCatalog setAvailableBasePlanListings(final List<Listing> availableBasePlanListings) {
         this.availableBasePlanListings = availableBasePlanListings;
@@ -92,22 +110,21 @@ public class StaticCatalog {
         return availableBasePlanListings;
     }
 
-    public StaticCatalog setEffectiveDate(final DateTime effectiveDate) {
-        this.effectiveDate = effectiveDate;
+    public StaticCatalog setCurrentSupportedCurrencies(final List<Currency> currentSupportedCurrencies) {
+        this.currentSupportedCurrencies = currentSupportedCurrencies;
         return this;
     }
 
-    public DateTime getEffectiveDate() {
-        return effectiveDate;
-    }
-
-    public StaticCatalog setCatalogName(final String catalogName) {
-        this.catalogName = catalogName;
+    public StaticCatalog addCurrentSupportedCurrenciesItem(final Currency currentSupportedCurrenciesItem) {
+        if (this.currentSupportedCurrencies == null) {
+            this.currentSupportedCurrencies = new ArrayList<Currency>();
+        }
+        this.currentSupportedCurrencies.add(currentSupportedCurrenciesItem);
         return this;
     }
 
-    public String getCatalogName() {
-        return catalogName;
+    public List<Currency> getCurrentSupportedCurrencies() {
+        return currentSupportedCurrencies;
     }
 
     public StaticCatalog setCurrentProducts(final List<Product> currentProducts) {
@@ -125,23 +142,6 @@ public class StaticCatalog {
 
     public List<Product> getCurrentProducts() {
         return currentProducts;
-    }
-
-    public StaticCatalog setCurrentSupportedCurrencies(final List<Currency> currentSupportedCurrencies) {
-        this.currentSupportedCurrencies = currentSupportedCurrencies;
-        return this;
-    }
-
-    public StaticCatalog addCurrentSupportedCurrenciesItem(final Currency currentSupportedCurrenciesItem) {
-        if (this.currentSupportedCurrencies == null) {
-            this.currentSupportedCurrencies = new ArrayList<Currency>();
-        }
-        this.currentSupportedCurrencies.add(currentSupportedCurrenciesItem);
-        return this;
-    }
-
-    public List<Currency> getCurrentSupportedCurrencies() {
-        return currentSupportedCurrencies;
     }
 
     public StaticCatalog setCurrentUnits(final List<Unit> currentUnits) {
@@ -187,11 +187,11 @@ public class StaticCatalog {
             return false;
         }
         StaticCatalog staticCatalog = (StaticCatalog) o;
-        return Objects.equals(this.availableBasePlanListings, staticCatalog.availableBasePlanListings) &&
+        return Objects.equals(this.catalogName, staticCatalog.catalogName) &&
         Objects.equals(this.effectiveDate, staticCatalog.effectiveDate) &&
-        Objects.equals(this.catalogName, staticCatalog.catalogName) &&
-        Objects.equals(this.currentProducts, staticCatalog.currentProducts) &&
+        Objects.equals(this.availableBasePlanListings, staticCatalog.availableBasePlanListings) &&
         Objects.equals(this.currentSupportedCurrencies, staticCatalog.currentSupportedCurrencies) &&
+        Objects.equals(this.currentProducts, staticCatalog.currentProducts) &&
         Objects.equals(this.currentUnits, staticCatalog.currentUnits) &&
         Objects.equals(this.currentPlans, staticCatalog.currentPlans);
 
@@ -199,11 +199,11 @@ public class StaticCatalog {
 
     @Override
     public int hashCode() {
-        return Objects.hash(availableBasePlanListings,
+        return Objects.hash(catalogName,
                             effectiveDate,
-                            catalogName,
-                            currentProducts,
+                            availableBasePlanListings,
                             currentSupportedCurrencies,
+                            currentProducts,
                             currentUnits,
                             currentPlans);
     }
@@ -214,11 +214,11 @@ public class StaticCatalog {
         StringBuilder sb = new StringBuilder();
         sb.append("class StaticCatalog {\n");
         
-        sb.append("    availableBasePlanListings: ").append(toIndentedString(availableBasePlanListings)).append("\n");
-        sb.append("    effectiveDate: ").append(toIndentedString(effectiveDate)).append("\n");
         sb.append("    catalogName: ").append(toIndentedString(catalogName)).append("\n");
-        sb.append("    currentProducts: ").append(toIndentedString(currentProducts)).append("\n");
+        sb.append("    effectiveDate: ").append(toIndentedString(effectiveDate)).append("\n");
+        sb.append("    availableBasePlanListings: ").append(toIndentedString(availableBasePlanListings)).append("\n");
         sb.append("    currentSupportedCurrencies: ").append(toIndentedString(currentSupportedCurrencies)).append("\n");
+        sb.append("    currentProducts: ").append(toIndentedString(currentProducts)).append("\n");
         sb.append("    currentUnits: ").append(toIndentedString(currentUnits)).append("\n");
         sb.append("    currentPlans: ").append(toIndentedString(currentPlans)).append("\n");
         sb.append("}");

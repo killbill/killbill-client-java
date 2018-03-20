@@ -34,30 +34,21 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class InternationalPrice {
 
-    private Boolean zero = false;
-
     private List<Price> prices = null;
+
+    private Boolean zero = false;
 
 
     public InternationalPrice() {
     }
 
-    public InternationalPrice(final Boolean zero,
-                     final List<Price> prices) {
-        this.zero = zero;
+    public InternationalPrice(final List<Price> prices,
+                     final Boolean zero) {
         this.prices = prices;
-
-    }
-
-
-    public InternationalPrice setZero(final Boolean zero) {
         this.zero = zero;
-        return this;
+
     }
 
-    public Boolean isZero() {
-        return zero;
-    }
 
     public InternationalPrice setPrices(final List<Price> prices) {
         this.prices = prices;
@@ -76,6 +67,15 @@ public class InternationalPrice {
         return prices;
     }
 
+    public InternationalPrice setZero(final Boolean zero) {
+        this.zero = zero;
+        return this;
+    }
+
+    public Boolean isZero() {
+        return zero;
+    }
+
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -85,15 +85,15 @@ public class InternationalPrice {
             return false;
         }
         InternationalPrice internationalPrice = (InternationalPrice) o;
-        return Objects.equals(this.zero, internationalPrice.zero) &&
-        Objects.equals(this.prices, internationalPrice.prices);
+        return Objects.equals(this.prices, internationalPrice.prices) &&
+        Objects.equals(this.zero, internationalPrice.zero);
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(zero,
-                            prices);
+        return Objects.hash(prices,
+                            zero);
     }
 
 
@@ -102,8 +102,8 @@ public class InternationalPrice {
         StringBuilder sb = new StringBuilder();
         sb.append("class InternationalPrice {\n");
         
-        sb.append("    zero: ").append(toIndentedString(zero)).append("\n");
         sb.append("    prices: ").append(toIndentedString(prices)).append("\n");
+        sb.append("    zero: ").append(toIndentedString(zero)).append("\n");
         sb.append("}");
         return sb.toString();
     }

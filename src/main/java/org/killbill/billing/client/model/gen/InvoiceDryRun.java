@@ -24,7 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.joda.time.LocalDate;
+import org.killbill.billing.catalog.api.BillingActionPolicy;
+import org.killbill.billing.catalog.api.BillingPeriod;
+import org.killbill.billing.catalog.api.PhaseType;
+import org.killbill.billing.catalog.api.ProductCategory;
 import org.killbill.billing.client.model.gen.PhasePriceOverride;
+import org.killbill.billing.entitlement.api.SubscriptionEventType;
+import org.killbill.billing.invoice.api.DryRunType;
 
 /**
  *           DO NOT EDIT !!!
@@ -36,17 +42,17 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class InvoiceDryRun {
 
-    private String dryRunType = null;
+    private DryRunType dryRunType = null;
 
-    private String dryRunAction = null;
+    private SubscriptionEventType dryRunAction = null;
 
-    private String phaseType = null;
+    private PhaseType phaseType = null;
 
     private String productName = null;
 
-    private String productCategory = null;
+    private ProductCategory productCategory = null;
 
-    private String billingPeriod = null;
+    private BillingPeriod billingPeriod = null;
 
     private String priceListName = null;
 
@@ -56,7 +62,7 @@ public class InvoiceDryRun {
 
     private LocalDate effectiveDate = null;
 
-    private String billingPolicy = null;
+    private BillingActionPolicy billingPolicy = null;
 
     private List<PhasePriceOverride> priceOverrides = null;
 
@@ -64,17 +70,17 @@ public class InvoiceDryRun {
     public InvoiceDryRun() {
     }
 
-    public InvoiceDryRun(final String dryRunType,
-                     final String dryRunAction,
-                     final String phaseType,
+    public InvoiceDryRun(final DryRunType dryRunType,
+                     final SubscriptionEventType dryRunAction,
+                     final PhaseType phaseType,
                      final String productName,
-                     final String productCategory,
-                     final String billingPeriod,
+                     final ProductCategory productCategory,
+                     final BillingPeriod billingPeriod,
                      final String priceListName,
                      final UUID subscriptionId,
                      final UUID bundleId,
                      final LocalDate effectiveDate,
-                     final String billingPolicy,
+                     final BillingActionPolicy billingPolicy,
                      final List<PhasePriceOverride> priceOverrides) {
         this.dryRunType = dryRunType;
         this.dryRunAction = dryRunAction;
@@ -92,30 +98,30 @@ public class InvoiceDryRun {
     }
 
 
-    public InvoiceDryRun setDryRunType(final String dryRunType) {
+    public InvoiceDryRun setDryRunType(final DryRunType dryRunType) {
         this.dryRunType = dryRunType;
         return this;
     }
 
-    public String getDryRunType() {
+    public DryRunType getDryRunType() {
         return dryRunType;
     }
 
-    public InvoiceDryRun setDryRunAction(final String dryRunAction) {
+    public InvoiceDryRun setDryRunAction(final SubscriptionEventType dryRunAction) {
         this.dryRunAction = dryRunAction;
         return this;
     }
 
-    public String getDryRunAction() {
+    public SubscriptionEventType getDryRunAction() {
         return dryRunAction;
     }
 
-    public InvoiceDryRun setPhaseType(final String phaseType) {
+    public InvoiceDryRun setPhaseType(final PhaseType phaseType) {
         this.phaseType = phaseType;
         return this;
     }
 
-    public String getPhaseType() {
+    public PhaseType getPhaseType() {
         return phaseType;
     }
 
@@ -128,21 +134,21 @@ public class InvoiceDryRun {
         return productName;
     }
 
-    public InvoiceDryRun setProductCategory(final String productCategory) {
+    public InvoiceDryRun setProductCategory(final ProductCategory productCategory) {
         this.productCategory = productCategory;
         return this;
     }
 
-    public String getProductCategory() {
+    public ProductCategory getProductCategory() {
         return productCategory;
     }
 
-    public InvoiceDryRun setBillingPeriod(final String billingPeriod) {
+    public InvoiceDryRun setBillingPeriod(final BillingPeriod billingPeriod) {
         this.billingPeriod = billingPeriod;
         return this;
     }
 
-    public String getBillingPeriod() {
+    public BillingPeriod getBillingPeriod() {
         return billingPeriod;
     }
 
@@ -182,12 +188,12 @@ public class InvoiceDryRun {
         return effectiveDate;
     }
 
-    public InvoiceDryRun setBillingPolicy(final String billingPolicy) {
+    public InvoiceDryRun setBillingPolicy(final BillingActionPolicy billingPolicy) {
         this.billingPolicy = billingPolicy;
         return this;
     }
 
-    public String getBillingPolicy() {
+    public BillingActionPolicy getBillingPolicy() {
         return billingPolicy;
     }
 

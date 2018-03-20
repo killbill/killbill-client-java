@@ -33,30 +33,21 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Recurring {
 
-    private InternationalPrice recurringPrice = null;
-
     private BillingPeriod billingPeriod = null;
+
+    private InternationalPrice recurringPrice = null;
 
 
     public Recurring() {
     }
 
-    public Recurring(final InternationalPrice recurringPrice,
-                     final BillingPeriod billingPeriod) {
-        this.recurringPrice = recurringPrice;
+    public Recurring(final BillingPeriod billingPeriod,
+                     final InternationalPrice recurringPrice) {
         this.billingPeriod = billingPeriod;
-
-    }
-
-
-    public Recurring setRecurringPrice(final InternationalPrice recurringPrice) {
         this.recurringPrice = recurringPrice;
-        return this;
+
     }
 
-    public InternationalPrice getRecurringPrice() {
-        return recurringPrice;
-    }
 
     public Recurring setBillingPeriod(final BillingPeriod billingPeriod) {
         this.billingPeriod = billingPeriod;
@@ -65,6 +56,15 @@ public class Recurring {
 
     public BillingPeriod getBillingPeriod() {
         return billingPeriod;
+    }
+
+    public Recurring setRecurringPrice(final InternationalPrice recurringPrice) {
+        this.recurringPrice = recurringPrice;
+        return this;
+    }
+
+    public InternationalPrice getRecurringPrice() {
+        return recurringPrice;
     }
 
     @Override
@@ -76,15 +76,15 @@ public class Recurring {
             return false;
         }
         Recurring recurring = (Recurring) o;
-        return Objects.equals(this.recurringPrice, recurring.recurringPrice) &&
-        Objects.equals(this.billingPeriod, recurring.billingPeriod);
+        return Objects.equals(this.billingPeriod, recurring.billingPeriod) &&
+        Objects.equals(this.recurringPrice, recurring.recurringPrice);
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(recurringPrice,
-                            billingPeriod);
+        return Objects.hash(billingPeriod,
+                            recurringPrice);
     }
 
 
@@ -93,8 +93,8 @@ public class Recurring {
         StringBuilder sb = new StringBuilder();
         sb.append("class Recurring {\n");
         
-        sb.append("    recurringPrice: ").append(toIndentedString(recurringPrice)).append("\n");
         sb.append("    billingPeriod: ").append(toIndentedString(billingPeriod)).append("\n");
+        sb.append("    recurringPrice: ").append(toIndentedString(recurringPrice)).append("\n");
         sb.append("}");
         return sb.toString();
     }
