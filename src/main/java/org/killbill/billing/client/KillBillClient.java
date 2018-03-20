@@ -50,6 +50,7 @@ import org.killbill.billing.client.model.BulkBaseSubscriptionAndAddOns;
 import org.killbill.billing.client.model.Bundle;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Catalog;
+import org.killbill.billing.client.model.CatalogVersions;
 import org.killbill.billing.client.model.Catalogs;
 import org.killbill.billing.client.model.ComboHostedPaymentPage;
 import org.killbill.billing.client.model.ComboPaymentTransaction;
@@ -3783,6 +3784,11 @@ public class KillBillClient implements Closeable {
     public void uploadXMLCatalog(final InputStream catalogInputStream, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.CATALOG_PATH;
         uploadFile(catalogInputStream, uri, CONTENT_TYPE_XML, inputOptions, null);
+    }
+
+    public List<DateTime> getCatalogVersions(final RequestOptions inputOptions) throws KillBillClientException {
+        final String uri = JaxrsResource.CATALOG_PATH + "/" + JaxrsResource.VERSIONS;
+        return httpClient.doGet(uri, CatalogVersions.class, inputOptions);
     }
 
     @Deprecated
