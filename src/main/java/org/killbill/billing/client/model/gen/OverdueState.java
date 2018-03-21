@@ -39,11 +39,11 @@ public class OverdueState {
 
     private List<Integer> daysBetweenPaymentRetries = null;
 
-    private Boolean disableEntitlementAndChangesBlocked = false;
+    private Boolean isDisableEntitlementAndChangesBlocked = false;
 
-    private Boolean blockChanges = false;
+    private Boolean isBlockChanges = false;
 
-    private Boolean clearState = false;
+    private Boolean isClearState = false;
 
     private Integer reevaluationIntervalDays = null;
 
@@ -54,16 +54,16 @@ public class OverdueState {
     public OverdueState(final String name,
                      final String externalMessage,
                      final List<Integer> daysBetweenPaymentRetries,
-                     final Boolean disableEntitlementAndChangesBlocked,
-                     final Boolean blockChanges,
-                     final Boolean clearState,
+                     final Boolean isDisableEntitlementAndChangesBlocked,
+                     final Boolean isBlockChanges,
+                     final Boolean isClearState,
                      final Integer reevaluationIntervalDays) {
         this.name = name;
         this.externalMessage = externalMessage;
         this.daysBetweenPaymentRetries = daysBetweenPaymentRetries;
-        this.disableEntitlementAndChangesBlocked = disableEntitlementAndChangesBlocked;
-        this.blockChanges = blockChanges;
-        this.clearState = clearState;
+        this.isDisableEntitlementAndChangesBlocked = isDisableEntitlementAndChangesBlocked;
+        this.isBlockChanges = isBlockChanges;
+        this.isClearState = isClearState;
         this.reevaluationIntervalDays = reevaluationIntervalDays;
 
     }
@@ -104,31 +104,31 @@ public class OverdueState {
         return daysBetweenPaymentRetries;
     }
 
-    public OverdueState setDisableEntitlementAndChangesBlocked(final Boolean disableEntitlementAndChangesBlocked) {
-        this.disableEntitlementAndChangesBlocked = disableEntitlementAndChangesBlocked;
+    public OverdueState setIsDisableEntitlementAndChangesBlocked(final Boolean isDisableEntitlementAndChangesBlocked) {
+        this.isDisableEntitlementAndChangesBlocked = isDisableEntitlementAndChangesBlocked;
         return this;
     }
 
-    public Boolean isDisableEntitlementAndChangesBlocked() {
-        return disableEntitlementAndChangesBlocked;
+    public Boolean isIsDisableEntitlementAndChangesBlocked() {
+        return isDisableEntitlementAndChangesBlocked;
     }
 
-    public OverdueState setBlockChanges(final Boolean blockChanges) {
-        this.blockChanges = blockChanges;
+    public OverdueState setIsBlockChanges(final Boolean isBlockChanges) {
+        this.isBlockChanges = isBlockChanges;
         return this;
     }
 
-    public Boolean isBlockChanges() {
-        return blockChanges;
+    public Boolean isIsBlockChanges() {
+        return isBlockChanges;
     }
 
-    public OverdueState setClearState(final Boolean clearState) {
-        this.clearState = clearState;
+    public OverdueState setIsClearState(final Boolean isClearState) {
+        this.isClearState = isClearState;
         return this;
     }
 
-    public Boolean isClearState() {
-        return clearState;
+    public Boolean isIsClearState() {
+        return isClearState;
     }
 
     public OverdueState setReevaluationIntervalDays(final Integer reevaluationIntervalDays) {
@@ -152,9 +152,9 @@ public class OverdueState {
         return Objects.equals(this.name, overdueState.name) &&
         Objects.equals(this.externalMessage, overdueState.externalMessage) &&
         Objects.equals(this.daysBetweenPaymentRetries, overdueState.daysBetweenPaymentRetries) &&
-        Objects.equals(this.disableEntitlementAndChangesBlocked, overdueState.disableEntitlementAndChangesBlocked) &&
-        Objects.equals(this.blockChanges, overdueState.blockChanges) &&
-        Objects.equals(this.clearState, overdueState.clearState) &&
+        Objects.equals(this.isDisableEntitlementAndChangesBlocked, overdueState.isDisableEntitlementAndChangesBlocked) &&
+        Objects.equals(this.isBlockChanges, overdueState.isBlockChanges) &&
+        Objects.equals(this.isClearState, overdueState.isClearState) &&
         Objects.equals(this.reevaluationIntervalDays, overdueState.reevaluationIntervalDays);
 
     }
@@ -164,9 +164,9 @@ public class OverdueState {
         return Objects.hash(name,
                             externalMessage,
                             daysBetweenPaymentRetries,
-                            disableEntitlementAndChangesBlocked,
-                            blockChanges,
-                            clearState,
+                            isDisableEntitlementAndChangesBlocked,
+                            isBlockChanges,
+                            isClearState,
                             reevaluationIntervalDays);
     }
 
@@ -179,9 +179,9 @@ public class OverdueState {
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    externalMessage: ").append(toIndentedString(externalMessage)).append("\n");
         sb.append("    daysBetweenPaymentRetries: ").append(toIndentedString(daysBetweenPaymentRetries)).append("\n");
-        sb.append("    disableEntitlementAndChangesBlocked: ").append(toIndentedString(disableEntitlementAndChangesBlocked)).append("\n");
-        sb.append("    blockChanges: ").append(toIndentedString(blockChanges)).append("\n");
-        sb.append("    clearState: ").append(toIndentedString(clearState)).append("\n");
+        sb.append("    isDisableEntitlementAndChangesBlocked: ").append(toIndentedString(isDisableEntitlementAndChangesBlocked)).append("\n");
+        sb.append("    isBlockChanges: ").append(toIndentedString(isBlockChanges)).append("\n");
+        sb.append("    isClearState: ").append(toIndentedString(isClearState)).append("\n");
         sb.append("    reevaluationIntervalDays: ").append(toIndentedString(reevaluationIntervalDays)).append("\n");
         sb.append("}");
         return sb.toString();

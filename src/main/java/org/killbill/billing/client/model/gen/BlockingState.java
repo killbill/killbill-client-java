@@ -43,11 +43,11 @@ public class BlockingState extends KillBillObject {
 
     private String service = null;
 
-    private Boolean blockChange = false;
+    private Boolean isBlockChange = false;
 
-    private Boolean blockEntitlement = false;
+    private Boolean isBlockEntitlement = false;
 
-    private Boolean blockBilling = false;
+    private Boolean isBlockBilling = false;
 
     private DateTime effectiveDate = null;
 
@@ -61,9 +61,9 @@ public class BlockingState extends KillBillObject {
     public BlockingState(final UUID blockedId,
                      final String stateName,
                      final String service,
-                     final Boolean blockChange,
-                     final Boolean blockEntitlement,
-                     final Boolean blockBilling,
+                     final Boolean isBlockChange,
+                     final Boolean isBlockEntitlement,
+                     final Boolean isBlockBilling,
                      final DateTime effectiveDate,
                      final BlockingStateType type,
                      final List<AuditLog> auditLogs) {
@@ -71,9 +71,9 @@ public class BlockingState extends KillBillObject {
         this.blockedId = blockedId;
         this.stateName = stateName;
         this.service = service;
-        this.blockChange = blockChange;
-        this.blockEntitlement = blockEntitlement;
-        this.blockBilling = blockBilling;
+        this.isBlockChange = isBlockChange;
+        this.isBlockEntitlement = isBlockEntitlement;
+        this.isBlockBilling = isBlockBilling;
         this.effectiveDate = effectiveDate;
         this.type = type;
 
@@ -107,31 +107,31 @@ public class BlockingState extends KillBillObject {
         return service;
     }
 
-    public BlockingState setBlockChange(final Boolean blockChange) {
-        this.blockChange = blockChange;
+    public BlockingState setIsBlockChange(final Boolean isBlockChange) {
+        this.isBlockChange = isBlockChange;
         return this;
     }
 
-    public Boolean isBlockChange() {
-        return blockChange;
+    public Boolean isIsBlockChange() {
+        return isBlockChange;
     }
 
-    public BlockingState setBlockEntitlement(final Boolean blockEntitlement) {
-        this.blockEntitlement = blockEntitlement;
+    public BlockingState setIsBlockEntitlement(final Boolean isBlockEntitlement) {
+        this.isBlockEntitlement = isBlockEntitlement;
         return this;
     }
 
-    public Boolean isBlockEntitlement() {
-        return blockEntitlement;
+    public Boolean isIsBlockEntitlement() {
+        return isBlockEntitlement;
     }
 
-    public BlockingState setBlockBilling(final Boolean blockBilling) {
-        this.blockBilling = blockBilling;
+    public BlockingState setIsBlockBilling(final Boolean isBlockBilling) {
+        this.isBlockBilling = isBlockBilling;
         return this;
     }
 
-    public Boolean isBlockBilling() {
-        return blockBilling;
+    public Boolean isIsBlockBilling() {
+        return isBlockBilling;
     }
 
     public BlockingState setEffectiveDate(final DateTime effectiveDate) {
@@ -164,9 +164,9 @@ public class BlockingState extends KillBillObject {
         return Objects.equals(this.blockedId, blockingState.blockedId) &&
         Objects.equals(this.stateName, blockingState.stateName) &&
         Objects.equals(this.service, blockingState.service) &&
-        Objects.equals(this.blockChange, blockingState.blockChange) &&
-        Objects.equals(this.blockEntitlement, blockingState.blockEntitlement) &&
-        Objects.equals(this.blockBilling, blockingState.blockBilling) &&
+        Objects.equals(this.isBlockChange, blockingState.isBlockChange) &&
+        Objects.equals(this.isBlockEntitlement, blockingState.isBlockEntitlement) &&
+        Objects.equals(this.isBlockBilling, blockingState.isBlockBilling) &&
         Objects.equals(this.effectiveDate, blockingState.effectiveDate) &&
         Objects.equals(this.type, blockingState.type) &&
         Objects.equals(this.auditLogs, blockingState.auditLogs);
@@ -178,9 +178,9 @@ public class BlockingState extends KillBillObject {
         return Objects.hash(blockedId,
                             stateName,
                             service,
-                            blockChange,
-                            blockEntitlement,
-                            blockBilling,
+                            isBlockChange,
+                            isBlockEntitlement,
+                            isBlockBilling,
                             effectiveDate,
                             type,
                             auditLogs, super.hashCode());
@@ -195,9 +195,9 @@ public class BlockingState extends KillBillObject {
         sb.append("    blockedId: ").append(toIndentedString(blockedId)).append("\n");
         sb.append("    stateName: ").append(toIndentedString(stateName)).append("\n");
         sb.append("    service: ").append(toIndentedString(service)).append("\n");
-        sb.append("    blockChange: ").append(toIndentedString(blockChange)).append("\n");
-        sb.append("    blockEntitlement: ").append(toIndentedString(blockEntitlement)).append("\n");
-        sb.append("    blockBilling: ").append(toIndentedString(blockBilling)).append("\n");
+        sb.append("    isBlockChange: ").append(toIndentedString(isBlockChange)).append("\n");
+        sb.append("    isBlockEntitlement: ").append(toIndentedString(isBlockEntitlement)).append("\n");
+        sb.append("    isBlockBilling: ").append(toIndentedString(isBlockBilling)).append("\n");
         sb.append("    effectiveDate: ").append(toIndentedString(effectiveDate)).append("\n");
         sb.append("    type: ").append(toIndentedString(type)).append("\n");
         sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");

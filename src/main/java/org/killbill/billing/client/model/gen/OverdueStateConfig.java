@@ -41,9 +41,9 @@ public class OverdueStateConfig {
 
     private String externalMessage = null;
 
-    private Boolean blockChanges = false;
+    private Boolean isBlockChanges = false;
 
-    private Boolean disableEntitlement = false;
+    private Boolean isDisableEntitlement = false;
 
     private OverdueCancellationPolicy subscriptionCancellationPolicy = null;
 
@@ -57,16 +57,16 @@ public class OverdueStateConfig {
                      final Boolean isClearState,
                      final OverdueCondition condition,
                      final String externalMessage,
-                     final Boolean blockChanges,
-                     final Boolean disableEntitlement,
+                     final Boolean isBlockChanges,
+                     final Boolean isDisableEntitlement,
                      final OverdueCancellationPolicy subscriptionCancellationPolicy,
                      final Integer autoReevaluationIntervalDays) {
         this.name = name;
         this.isClearState = isClearState;
         this.condition = condition;
         this.externalMessage = externalMessage;
-        this.blockChanges = blockChanges;
-        this.disableEntitlement = disableEntitlement;
+        this.isBlockChanges = isBlockChanges;
+        this.isDisableEntitlement = isDisableEntitlement;
         this.subscriptionCancellationPolicy = subscriptionCancellationPolicy;
         this.autoReevaluationIntervalDays = autoReevaluationIntervalDays;
 
@@ -109,22 +109,22 @@ public class OverdueStateConfig {
         return externalMessage;
     }
 
-    public OverdueStateConfig setBlockChanges(final Boolean blockChanges) {
-        this.blockChanges = blockChanges;
+    public OverdueStateConfig setIsBlockChanges(final Boolean isBlockChanges) {
+        this.isBlockChanges = isBlockChanges;
         return this;
     }
 
-    public Boolean isBlockChanges() {
-        return blockChanges;
+    public Boolean isIsBlockChanges() {
+        return isBlockChanges;
     }
 
-    public OverdueStateConfig setDisableEntitlement(final Boolean disableEntitlement) {
-        this.disableEntitlement = disableEntitlement;
+    public OverdueStateConfig setIsDisableEntitlement(final Boolean isDisableEntitlement) {
+        this.isDisableEntitlement = isDisableEntitlement;
         return this;
     }
 
-    public Boolean isDisableEntitlement() {
-        return disableEntitlement;
+    public Boolean isIsDisableEntitlement() {
+        return isDisableEntitlement;
     }
 
     public OverdueStateConfig setSubscriptionCancellationPolicy(final OverdueCancellationPolicy subscriptionCancellationPolicy) {
@@ -158,8 +158,8 @@ public class OverdueStateConfig {
         Objects.equals(this.isClearState, overdueStateConfig.isClearState) &&
         Objects.equals(this.condition, overdueStateConfig.condition) &&
         Objects.equals(this.externalMessage, overdueStateConfig.externalMessage) &&
-        Objects.equals(this.blockChanges, overdueStateConfig.blockChanges) &&
-        Objects.equals(this.disableEntitlement, overdueStateConfig.disableEntitlement) &&
+        Objects.equals(this.isBlockChanges, overdueStateConfig.isBlockChanges) &&
+        Objects.equals(this.isDisableEntitlement, overdueStateConfig.isDisableEntitlement) &&
         Objects.equals(this.subscriptionCancellationPolicy, overdueStateConfig.subscriptionCancellationPolicy) &&
         Objects.equals(this.autoReevaluationIntervalDays, overdueStateConfig.autoReevaluationIntervalDays);
 
@@ -171,8 +171,8 @@ public class OverdueStateConfig {
                             isClearState,
                             condition,
                             externalMessage,
-                            blockChanges,
-                            disableEntitlement,
+                            isBlockChanges,
+                            isDisableEntitlement,
                             subscriptionCancellationPolicy,
                             autoReevaluationIntervalDays);
     }
@@ -187,8 +187,8 @@ public class OverdueStateConfig {
         sb.append("    isClearState: ").append(toIndentedString(isClearState)).append("\n");
         sb.append("    condition: ").append(toIndentedString(condition)).append("\n");
         sb.append("    externalMessage: ").append(toIndentedString(externalMessage)).append("\n");
-        sb.append("    blockChanges: ").append(toIndentedString(blockChanges)).append("\n");
-        sb.append("    disableEntitlement: ").append(toIndentedString(disableEntitlement)).append("\n");
+        sb.append("    isBlockChanges: ").append(toIndentedString(isBlockChanges)).append("\n");
+        sb.append("    isDisableEntitlement: ").append(toIndentedString(isDisableEntitlement)).append("\n");
         sb.append("    subscriptionCancellationPolicy: ").append(toIndentedString(subscriptionCancellationPolicy)).append("\n");
         sb.append("    autoReevaluationIntervalDays: ").append(toIndentedString(autoReevaluationIntervalDays)).append("\n");
         sb.append("}");

@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Admin"
-- name: "InvoicePayment"
-- name: "PluginInfo"
-- name: "Bundle"
-- name: "Tenant"
-- name: "Payment"
-- name: "PaymentMethod"
-- name: "Overdue"
-- name: "Credit"
-- name: "TagDefinition"
-- name: "Catalog"
-- name: "PaymentGateway"
-- name: "CustomField"
-- name: "Export"
 - name: "Security"
+- name: "InvoicePayment"
+- name: "InvoiceItem"
+- name: "Tag"
+- name: "PaymentMethod"
 - name: "Account"
+- name: "Invoice"
+- name: "TagDefinition"
+- name: "CustomField"
+- name: "Tenant"
+- name: "PluginInfo"
+- name: "Credit"
 - name: "PaymentTransaction"
+- name: "Export"
 - name: "NodesInfo"
 - name: "Usage"
+- name: "Overdue"
+- name: "Bundle"
 - name: "Subscription"
-- name: "InvoiceItem"
-- name: "Invoice"
-- name: "Tag"
+- name: "Payment"
+- name: "Catalog"
+- name: "PaymentGateway"
+- name: "Admin"
 paths:
   /1.0/kb/accounts:
     get:
@@ -12063,13 +12063,13 @@ definitions:
         type: "string"
       service:
         type: "string"
-      blockChange:
+      isBlockChange:
         type: "boolean"
         default: false
-      blockEntitlement:
+      isBlockEntitlement:
         type: "boolean"
         default: false
-      blockBilling:
+      isBlockBilling:
         type: "boolean"
         default: false
       effectiveDate:
@@ -12133,13 +12133,13 @@ definitions:
         items:
           type: "integer"
           format: "int32"
-      disableEntitlementAndChangesBlocked:
+      isDisableEntitlementAndChangesBlocked:
         type: "boolean"
         default: false
-      blockChanges:
+      isBlockChanges:
         type: "boolean"
         default: false
-      clearState:
+      isClearState:
         type: "boolean"
         default: false
       reevaluationIntervalDays:
@@ -12445,10 +12445,10 @@ definitions:
         $ref: "#/definitions/OverdueCondition"
       externalMessage:
         type: "string"
-      blockChanges:
+      isBlockChanges:
         type: "boolean"
         default: false
-      disableEntitlement:
+      isDisableEntitlement:
         type: "boolean"
         default: false
       subscriptionCancellationPolicy:
@@ -13532,7 +13532,7 @@ definitions:
   NodeCommand:
     type: "object"
     properties:
-      systemCommandType:
+      isSystemCommandType:
         type: "boolean"
         default: false
       nodeCommandType:
@@ -13738,25 +13738,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  Tenant:
-    type: "object"
-    required:
-    - "apiKey"
-    - "apiSecret"
-    properties:
-      tenantId:
-        type: "string"
-        format: "uuid"
-      externalKey:
-        type: "string"
-      apiKey:
-        type: "string"
-      apiSecret:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
   Credit:
     type: "object"
     required:
@@ -13779,6 +13760,25 @@ definitions:
         type: "string"
         format: "uuid"
       description:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
+  Tenant:
+    type: "object"
+    required:
+    - "apiKey"
+    - "apiSecret"
+    properties:
+      tenantId:
+        type: "string"
+        format: "uuid"
+      externalKey:
+        type: "string"
+      apiKey:
+        type: "string"
+      apiSecret:
         type: "string"
       auditLogs:
         type: "array"
@@ -14164,6 +14164,21 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  UserRoles:
+    type: "object"
+    required:
+    - "password"
+    - "roles"
+    - "username"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+      roles:
+        type: "array"
+        items:
+          type: "string"
   GatewayNotification:
     type: "object"
     properties:
@@ -14189,21 +14204,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  UserRoles:
-    type: "object"
-    required:
-    - "password"
-    - "roles"
-    - "username"
-    properties:
-      username:
-        type: "string"
-      password:
-        type: "string"
-      roles:
-        type: "array"
-        items:
-          type: "string"
   RoleDefinition:
     type: "object"
     required:

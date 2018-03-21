@@ -34,7 +34,7 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class NodeCommand {
 
-    private Boolean systemCommandType = false;
+    private Boolean isSystemCommandType = false;
 
     private String nodeCommandType = null;
 
@@ -44,23 +44,23 @@ public class NodeCommand {
     public NodeCommand() {
     }
 
-    public NodeCommand(final Boolean systemCommandType,
+    public NodeCommand(final Boolean isSystemCommandType,
                      final String nodeCommandType,
                      final List<NodeCommandProperty> nodeCommandProperties) {
-        this.systemCommandType = systemCommandType;
+        this.isSystemCommandType = isSystemCommandType;
         this.nodeCommandType = nodeCommandType;
         this.nodeCommandProperties = nodeCommandProperties;
 
     }
 
 
-    public NodeCommand setSystemCommandType(final Boolean systemCommandType) {
-        this.systemCommandType = systemCommandType;
+    public NodeCommand setIsSystemCommandType(final Boolean isSystemCommandType) {
+        this.isSystemCommandType = isSystemCommandType;
         return this;
     }
 
-    public Boolean isSystemCommandType() {
-        return systemCommandType;
+    public Boolean isIsSystemCommandType() {
+        return isSystemCommandType;
     }
 
     public NodeCommand setNodeCommandType(final String nodeCommandType) {
@@ -98,7 +98,7 @@ public class NodeCommand {
             return false;
         }
         NodeCommand nodeCommand = (NodeCommand) o;
-        return Objects.equals(this.systemCommandType, nodeCommand.systemCommandType) &&
+        return Objects.equals(this.isSystemCommandType, nodeCommand.isSystemCommandType) &&
         Objects.equals(this.nodeCommandType, nodeCommand.nodeCommandType) &&
         Objects.equals(this.nodeCommandProperties, nodeCommand.nodeCommandProperties);
 
@@ -106,7 +106,7 @@ public class NodeCommand {
 
     @Override
     public int hashCode() {
-        return Objects.hash(systemCommandType,
+        return Objects.hash(isSystemCommandType,
                             nodeCommandType,
                             nodeCommandProperties);
     }
@@ -117,7 +117,7 @@ public class NodeCommand {
         StringBuilder sb = new StringBuilder();
         sb.append("class NodeCommand {\n");
         
-        sb.append("    systemCommandType: ").append(toIndentedString(systemCommandType)).append("\n");
+        sb.append("    isSystemCommandType: ").append(toIndentedString(isSystemCommandType)).append("\n");
         sb.append("    nodeCommandType: ").append(toIndentedString(nodeCommandType)).append("\n");
         sb.append("    nodeCommandProperties: ").append(toIndentedString(nodeCommandProperties)).append("\n");
         sb.append("}");
