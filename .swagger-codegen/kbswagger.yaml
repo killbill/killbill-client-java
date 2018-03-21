@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Catalog"
-- name: "Subscription"
-- name: "Bundle"
-- name: "Usage"
-- name: "InvoiceItem"
-- name: "NodesInfo"
-- name: "Overdue"
-- name: "Account"
 - name: "Admin"
-- name: "Security"
-- name: "Payment"
-- name: "Invoice"
-- name: "PaymentMethod"
 - name: "InvoicePayment"
 - name: "PluginInfo"
-- name: "PaymentTransaction"
-- name: "Tag"
-- name: "TagDefinition"
-- name: "Export"
-- name: "Credit"
-- name: "CustomField"
+- name: "Bundle"
 - name: "Tenant"
+- name: "Payment"
+- name: "PaymentMethod"
+- name: "Overdue"
+- name: "Credit"
+- name: "TagDefinition"
+- name: "Catalog"
 - name: "PaymentGateway"
+- name: "CustomField"
+- name: "Export"
+- name: "Security"
+- name: "Account"
+- name: "PaymentTransaction"
+- name: "NodesInfo"
+- name: "Usage"
+- name: "Subscription"
+- name: "InvoiceItem"
+- name: "Invoice"
+- name: "Tag"
 paths:
   /1.0/kb/accounts:
     get:
@@ -1080,7 +1080,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFields"
+      - name: "customField"
         in: "query"
         required: false
         type: "array"
@@ -2023,7 +2023,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -2078,7 +2078,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -2923,7 +2923,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFields"
+      - name: "customField"
         in: "query"
         required: false
         type: "array"
@@ -3185,7 +3185,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -3240,7 +3240,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -4045,7 +4045,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFields"
+      - name: "customField"
         in: "query"
         required: false
         type: "array"
@@ -4150,7 +4150,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -4205,7 +4205,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -4646,7 +4646,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFields"
+      - name: "customField"
         in: "query"
         required: false
         type: "array"
@@ -4824,7 +4824,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -4879,7 +4879,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -5913,7 +5913,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFields"
+      - name: "customField"
         in: "query"
         required: false
         type: "array"
@@ -6167,7 +6167,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -6222,7 +6222,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -7267,7 +7267,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFields"
+      - name: "customField"
         in: "query"
         required: false
         type: "array"
@@ -7583,7 +7583,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFields"
+      - name: "customField"
         in: "query"
         required: false
         type: "array"
@@ -7683,7 +7683,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -7738,7 +7738,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -9113,7 +9113,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFields"
+      - name: "customField"
         in: "query"
         required: false
         type: "array"
@@ -9293,7 +9293,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -9348,7 +9348,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -10471,7 +10471,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFields"
+      - name: "customField"
         in: "query"
         required: false
         type: "array"
@@ -10571,7 +10571,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -10626,7 +10626,7 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tags"
+      - name: "tag"
         in: "query"
         required: false
         type: "array"
@@ -12121,13 +12121,6 @@ definitions:
         type: "string"
       userToken:
         type: "string"
-  NodeCommandProperty:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      value:
-        type: "object"
   OverdueState:
     type: "object"
     properties:
@@ -12152,6 +12145,13 @@ definitions:
       reevaluationIntervalDays:
         type: "integer"
         format: "int32"
+  NodeCommandProperty:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "object"
   ComboPaymentTransaction:
     type: "object"
     properties:
@@ -12197,33 +12197,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      blockChanges:
-        type: "boolean"
-        default: false
-      disableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -12460,6 +12433,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      blockChanges:
+        type: "boolean"
+        default: false
+      disableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -12467,6 +12467,27 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
+  PluginInfo:
+    type: "object"
+    properties:
+      bundleSymbolicName:
+        type: "string"
+      pluginKey:
+        type: "string"
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -12497,27 +12518,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  PluginInfo:
-    type: "object"
-    properties:
-      bundleSymbolicName:
-        type: "string"
-      pluginKey:
-        type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/PluginServiceInfo"
   Subscription:
     type: "object"
     required:
@@ -13579,25 +13579,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -13666,6 +13647,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -13738,6 +13738,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
+  Tenant:
+    type: "object"
+    required:
+    - "apiKey"
+    - "apiSecret"
+    properties:
+      tenantId:
+        type: "string"
+        format: "uuid"
+      externalKey:
+        type: "string"
+      apiKey:
+        type: "string"
+      apiSecret:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
   Credit:
     type: "object"
     required:
@@ -13760,25 +13779,6 @@ definitions:
         type: "string"
         format: "uuid"
       description:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
-  Tenant:
-    type: "object"
-    required:
-    - "apiKey"
-    - "apiSecret"
-    properties:
-      tenantId:
-        type: "string"
-        format: "uuid"
-      externalKey:
-        type: "string"
-      apiKey:
-        type: "string"
-      apiSecret:
         type: "string"
       auditLogs:
         type: "array"
@@ -14164,21 +14164,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  UserRoles:
-    type: "object"
-    required:
-    - "password"
-    - "roles"
-    - "username"
-    properties:
-      username:
-        type: "string"
-      password:
-        type: "string"
-      roles:
-        type: "array"
-        items:
-          type: "string"
   GatewayNotification:
     type: "object"
     properties:
@@ -14204,6 +14189,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  UserRoles:
+    type: "object"
+    required:
+    - "password"
+    - "roles"
+    - "username"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+      roles:
+        type: "array"
+        items:
+          type: "string"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -14218,18 +14230,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   Plan:
     type: "object"
     properties:
@@ -14287,15 +14287,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/RolledUpUnit"
-  BulkSubscriptionsBundle:
-    type: "object"
-    required:
-    - "baseEntitlementAndAddOns"
-    properties:
-      baseEntitlementAndAddOns:
-        type: "array"
-        items:
-          $ref: "#/definitions/Subscription"
   CustomField:
     type: "object"
     required:
@@ -14339,15 +14330,15 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Limit:
+  BulkSubscriptionsBundle:
     type: "object"
+    required:
+    - "baseEntitlementAndAddOns"
     properties:
-      unit:
-        type: "string"
-      max:
-        type: "string"
-      min:
-        type: "string"
+      baseEntitlementAndAddOns:
+        type: "array"
+        items:
+          $ref: "#/definitions/Subscription"
   Tag:
     type: "object"
     properties:
@@ -14389,6 +14380,15 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Limit:
+    type: "object"
+    properties:
+      unit:
+        type: "string"
+      max:
+        type: "string"
+      min:
+        type: "string"
   Session:
     type: "object"
     properties:

@@ -330,15 +330,15 @@ public class PaymentApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public Tags createTags(final UUID paymentId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID paymentId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createTags");
 
         final String uri = "/1.0/kb/payments/{paymentId}/tags"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tags != null) {
-            queryParams.putAll("tags", tags);
+        if (tag != null) {
+            queryParams.putAll("tag", tag);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -353,15 +353,15 @@ public class PaymentApi {
     }
 
 
-    public void deleteCustomFields(final UUID paymentId, final List<String> customFields,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID paymentId, final List<String> customField,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/payments/{paymentId}/customFields"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (customFields != null) {
-            queryParams.putAll("customFields", customFields);
+        if (customField != null) {
+            queryParams.putAll("customField", customField);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -373,15 +373,15 @@ public class PaymentApi {
     }
 
 
-    public void deleteTags(final UUID paymentId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID paymentId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling deleteTags");
 
         final String uri = "/1.0/kb/payments/{paymentId}/tags"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tags != null) {
-            queryParams.putAll("tags", tags);
+        if (tag != null) {
+            queryParams.putAll("tag", tag);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

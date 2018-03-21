@@ -318,15 +318,15 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Bundles.class, requestOptions);
     }
 
-    public Tags createTags(final UUID subscriptionId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID subscriptionId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tags != null) {
-            queryParams.putAll("tags", tags);
+        if (tag != null) {
+            queryParams.putAll("tag", tag);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -341,15 +341,15 @@ public class SubscriptionApi {
     }
 
 
-    public void deleteCustomFields(final UUID subscriptionId, final List<String> customFields,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID subscriptionId, final List<String> customField,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (customFields != null) {
-            queryParams.putAll("customFields", customFields);
+        if (customField != null) {
+            queryParams.putAll("customField", customField);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -361,15 +361,15 @@ public class SubscriptionApi {
     }
 
 
-    public void deleteTags(final UUID subscriptionId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID subscriptionId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tags != null) {
-            queryParams.putAll("tags", tags);
+        if (tag != null) {
+            queryParams.putAll("tag", tag);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

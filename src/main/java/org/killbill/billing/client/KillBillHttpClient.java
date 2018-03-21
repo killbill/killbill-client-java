@@ -479,22 +479,18 @@ public class KillBillHttpClient implements Closeable {
             return createEmptyResult(returnClass);
         }
 
-        if (requestOptions.shouldFollowLocation()) {
-            if (response.getHeader("Location") != null) {
-                final String location = response.getHeader("Location");
-                final RequestOptions optionsForFollow = RequestOptions.builder()
-                                                                      .withUser(requestOptions.getUser())
-                                                                      .withPassword(requestOptions.getPassword())
-                                                                      .withTenantApiKey(requestOptions.getTenantApiKey())
-                                                                      .withTenantApiSecret(requestOptions.getTenantApiSecret())
-                                                                      .withRequestId(requestOptions.getRequestId())
-                                                                      .withFollowLocation(false)
-                                                                      .withQueryParams(requestOptions.getQueryParamsForFollow())
-                                                                      .build();
-                return doGet(location, returnClass, optionsForFollow, timeoutSec);
-            }
-            throwExceptionOnResponseError(response);
-            return Response.class.isAssignableFrom(returnClass) ? returnClass.cast(response) : null;
+        if (requestOptions.shouldFollowLocation() && response.getHeader("Location") != null) {
+            final String location = response.getHeader("Location");
+            final RequestOptions optionsForFollow = RequestOptions.builder()
+                                                                  .withUser(requestOptions.getUser())
+                                                                  .withPassword(requestOptions.getPassword())
+                                                                  .withTenantApiKey(requestOptions.getTenantApiKey())
+                                                                  .withTenantApiSecret(requestOptions.getTenantApiSecret())
+                                                                  .withRequestId(requestOptions.getRequestId())
+                                                                  .withFollowLocation(false)
+                                                                  .withQueryParams(requestOptions.getQueryParamsForFollow())
+                                                                  .build();
+            return doGet(location, returnClass, optionsForFollow, timeoutSec);
         }
         throwExceptionOnResponseError(response);
         return deserializeResponse(response, returnClass);
@@ -579,13 +575,9 @@ public class KillBillHttpClient implements Closeable {
             return createEmptyResult(clazz);
         }
 
-        if (followLocation) {
-            if (response.getHeader("Location") != null) {
+        if (followLocation && response.getHeader("Location") != null) {
                 final String location = response.getHeader("Location");
                 return doGetWithUrl(location, optionsForFollow, timeoutSec, clazz);
-            }
-            throwExceptionOnResponseError(response);
-            return Response.class.isAssignableFrom(clazz) ? clazz.cast(response) : null;
         }
         throwExceptionOnResponseError(response);
         return deserializeResponse(response, clazz);

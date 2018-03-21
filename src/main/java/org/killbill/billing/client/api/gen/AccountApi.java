@@ -221,15 +221,15 @@ public class AccountApi {
         return httpClient.doPost(uri, body, PaymentMethod.class, requestOptions);
     }
 
-    public Tags createTags(final UUID accountId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID accountId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tags != null) {
-            queryParams.putAll("tags", tags);
+        if (tag != null) {
+            queryParams.putAll("tag", tag);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -243,15 +243,15 @@ public class AccountApi {
     }
 
 
-    public void deleteCustomFields(final UUID accountId, final List<String> customFields,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID accountId, final List<String> customField,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/accounts/{accountId}/customFields"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (customFields != null) {
-            queryParams.putAll("customFields", customFields);
+        if (customField != null) {
+            queryParams.putAll("customField", customField);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -263,15 +263,15 @@ public class AccountApi {
     }
 
 
-    public void deleteTags(final UUID accountId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID accountId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling deleteTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tags != null) {
-            queryParams.putAll("tags", tags);
+        if (tag != null) {
+            queryParams.putAll("tag", tag);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
