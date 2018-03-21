@@ -23,6 +23,7 @@ import org.killbill.billing.client.model.gen.BlockingState;
 import org.killbill.billing.client.model.gen.BulkSubscriptionsBundle;
 import org.killbill.billing.client.model.gen.Bundle;
 import org.killbill.billing.client.model.gen.CustomField;
+import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.Subscription;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
@@ -41,6 +42,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.LinkedListMultimap;
 
+import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
@@ -65,7 +67,7 @@ public class SubscriptionApi {
         this.httpClient = httpClient;
     }
 
-    public void addSubscriptionBlockingState(final BlockingState body, final UUID subscriptionId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void addSubscriptionBlockingState(final BlockingState body, final UUID subscriptionId, final LocalDate requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addSubscriptionBlockingState");
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling addSubscriptionBlockingState");
 
@@ -77,7 +79,7 @@ public class SubscriptionApi {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -88,12 +90,12 @@ public class SubscriptionApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void cancelEntitlementPlan(final UUID subscriptionId, final String requestedDate, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void cancelEntitlementPlan(final UUID subscriptionId, final LocalDate requestedDate, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         cancelEntitlementPlan(subscriptionId, requestedDate, Boolean.valueOf(false), Long.valueOf(5), entitlementPolicy, billingPolicy, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
 
-    public void cancelEntitlementPlan(final UUID subscriptionId, final String requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Boolean useRequestedDateForBilling, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void cancelEntitlementPlan(final UUID subscriptionId, final LocalDate requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Boolean useRequestedDateForBilling, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling cancelEntitlementPlan");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
@@ -119,7 +121,7 @@ public class SubscriptionApi {
             queryParams.put("useRequestedDateForBilling", String.valueOf(useRequestedDateForBilling));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -129,11 +131,11 @@ public class SubscriptionApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public void changeEntitlementPlan(final Subscription body, final UUID subscriptionId, final String requestedDate, final BillingActionPolicy billingPolicy, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void changeEntitlementPlan(final Subscription body, final UUID subscriptionId, final LocalDate requestedDate, final BillingActionPolicy billingPolicy, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         changeEntitlementPlan(body, subscriptionId, requestedDate, Boolean.valueOf(false), Long.valueOf(3), billingPolicy, pluginProperty, inputOptions);
     }
 
-    public void changeEntitlementPlan(final Subscription body, final UUID subscriptionId, final String requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final BillingActionPolicy billingPolicy, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void changeEntitlementPlan(final Subscription body, final UUID subscriptionId, final LocalDate requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final BillingActionPolicy billingPolicy, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling changeEntitlementPlan");
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling changeEntitlementPlan");
 
@@ -154,7 +156,7 @@ public class SubscriptionApi {
             queryParams.put("billingPolicy", String.valueOf(billingPolicy));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -184,11 +186,11 @@ public class SubscriptionApi {
         httpClient.doPost(uri, body, requestOptions);
     }
 
-    public Subscription createEntitlement(final Subscription body, final String entitlementDate, final String billingDate, final Integer bcd, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Subscription createEntitlement(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Integer bcd, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return createEntitlement(body, entitlementDate, billingDate, Boolean.valueOf(true), Boolean.valueOf(false), bcd, Boolean.valueOf(false), Long.valueOf(3), pluginProperty, inputOptions);
     }
 
-    public Subscription createEntitlement(final Subscription body, final String entitlementDate, final String billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Integer bcd, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Subscription createEntitlement(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Integer bcd, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createEntitlement");
 
         final String uri = "/1.0/kb/subscriptions";
@@ -230,11 +232,11 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Subscription.class, requestOptions);
     }
 
-    public Bundle createEntitlementWithAddOns(final Subscriptions body, final String entitlementDate, final String billingDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle createEntitlementWithAddOns(final Subscriptions body, final LocalDate entitlementDate, final LocalDate billingDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return createEntitlementWithAddOns(body, entitlementDate, billingDate, Boolean.valueOf(false), Boolean.valueOf(true), Boolean.valueOf(false), Long.valueOf(3), pluginProperty, inputOptions);
     }
 
-    public Bundle createEntitlementWithAddOns(final Subscriptions body, final String entitlementDate, final String billingDate, final Boolean migrated, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle createEntitlementWithAddOns(final Subscriptions body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean migrated, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createEntitlementWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createEntitlementWithAddOns";
@@ -273,11 +275,11 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Bundle.class, requestOptions);
     }
 
-    public Bundles createEntitlementsWithAddOns(final BulkSubscriptionsBundles body, final String entitlementDate, final String billingDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundles createEntitlementsWithAddOns(final BulkSubscriptionsBundles body, final LocalDate entitlementDate, final LocalDate billingDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return createEntitlementsWithAddOns(body, entitlementDate, billingDate, Boolean.valueOf(true), Boolean.valueOf(false), Boolean.valueOf(false), Long.valueOf(3), pluginProperty, inputOptions);
     }
 
-    public Bundles createEntitlementsWithAddOns(final BulkSubscriptionsBundles body, final String entitlementDate, final String billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundles createEntitlementsWithAddOns(final BulkSubscriptionsBundles body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean callCompletion, final Long callTimeoutSec, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createEntitlementsWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createEntitlementsWithAddOns";
@@ -474,7 +476,7 @@ public class SubscriptionApi {
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -493,7 +495,7 @@ public class SubscriptionApi {
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -504,11 +506,11 @@ public class SubscriptionApi {
         httpClient.doPut(uri, null, requestOptions);
     }
 
-    public void updateSubscriptionBCD(final Subscription body, final UUID subscriptionId, final String effectiveFromDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void updateSubscriptionBCD(final Subscription body, final UUID subscriptionId, final LocalDate effectiveFromDate,  final RequestOptions inputOptions) throws KillBillClientException {
         updateSubscriptionBCD(body, subscriptionId, effectiveFromDate, Boolean.valueOf(false), inputOptions);
     }
 
-    public void updateSubscriptionBCD(final Subscription body, final UUID subscriptionId, final String effectiveFromDate, final Boolean forceNewBcdWithPastEffectiveDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void updateSubscriptionBCD(final Subscription body, final UUID subscriptionId, final LocalDate effectiveFromDate, final Boolean forceNewBcdWithPastEffectiveDate,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateSubscriptionBCD");
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling updateSubscriptionBCD");
 

@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Overdue"
-- name: "Tenant"
-- name: "PaymentMethod"
-- name: "CustomField"
-- name: "PluginInfo"
-- name: "NodesInfo"
 - name: "PaymentGateway"
-- name: "InvoiceItem"
-- name: "Usage"
-- name: "Export"
-- name: "InvoicePayment"
-- name: "PaymentTransaction"
-- name: "Bundle"
 - name: "Catalog"
-- name: "Account"
 - name: "Payment"
-- name: "Subscription"
-- name: "Credit"
-- name: "Tag"
-- name: "Admin"
-- name: "Invoice"
 - name: "Security"
+- name: "Export"
+- name: "PaymentTransaction"
+- name: "InvoiceItem"
+- name: "PluginInfo"
+- name: "CustomField"
+- name: "InvoicePayment"
 - name: "TagDefinition"
+- name: "Tag"
+- name: "Tenant"
+- name: "Overdue"
+- name: "Admin"
+- name: "Bundle"
+- name: "Credit"
+- name: "Usage"
+- name: "Subscription"
+- name: "NodesInfo"
+- name: "Account"
+- name: "PaymentMethod"
+- name: "Invoice"
 paths:
   /1.0/kb/accounts:
     get:
@@ -727,6 +727,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -2643,6 +2644,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "billingPolicy"
         in: "query"
         required: false
@@ -2712,6 +2714,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -2962,6 +2965,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -3066,6 +3070,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -3253,12 +3258,17 @@ paths:
     get:
       tags:
       - "Catalog"
-      summary: "Retrieve the full catalog as XML"
+      summary: "Retrieve the catalog as JSON"
       description: ""
-      operationId: "getCatalogXml"
+      operationId: "getCatalogJson"
       produces:
-      - "text/xml"
+      - "application/json"
       parameters:
+      - name: "requestedDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -3271,7 +3281,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            type: "string"
+            $ref: "#/definitions/StaticCatalog"
       security:
       - basicAuth: []
     post:
@@ -3426,6 +3436,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -3460,6 +3471,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -3494,6 +3506,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -3528,6 +3541,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -4998,6 +5012,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "payInvoice"
         in: "query"
         required: false
@@ -5595,6 +5610,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -6380,11 +6396,11 @@ paths:
     get:
       tags:
       - "Overdue"
-      summary: "Retrieve the overdue config as JSON"
+      summary: "Retrieve the overdue config as XML"
       description: ""
-      operationId: "getOverdueConfigJson"
+      operationId: "getOverdueConfigXml"
       produces:
-      - "application/json"
+      - "text/xml"
       parameters:
       - name: "X-Killbill-ApiKey"
         in: "header"
@@ -6398,25 +6414,23 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/Overdue"
+            type: "string"
       security:
       - basicAuth: []
     post:
       tags:
       - "Overdue"
-      summary: "Upload the full overdue config as JSON"
+      summary: "Upload the full overdue config as XML"
       description: ""
-      operationId: "uploadOverdueConfigJson"
+      operationId: "uploadOverdueConfigXml"
       consumes:
-      - "application/json"
-      produces:
-      - "application/json"
+      - "text/xml"
       parameters:
       - in: "body"
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/Overdue"
+          type: "string"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -6438,10 +6452,8 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
+        default:
           description: "successful operation"
-          schema:
-            $ref: "#/definitions/Overdue"
       security:
       - basicAuth: []
   /1.0/kb/paymentGateways/hosted/form:
@@ -9568,10 +9580,12 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "billingDate"
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "renameKeyIfExistsAndUnused"
         in: "query"
         required: false
@@ -9657,10 +9671,12 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "billingDate"
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "migrated"
         in: "query"
         required: false
@@ -9741,10 +9757,12 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "billingDate"
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "renameKeyIfExistsAndUnused"
         in: "query"
         required: false
@@ -9874,6 +9892,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "callCompletion"
         in: "query"
         required: false
@@ -9947,6 +9966,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "callCompletion"
         in: "query"
         required: false
@@ -10040,6 +10060,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "forceNewBcdWithPastEffectiveDate"
         in: "query"
         required: false
@@ -10095,6 +10116,7 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -11588,10 +11610,12 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "endDate"
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -11633,10 +11657,12 @@ paths:
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "endDate"
         in: "query"
         required: false
         type: "string"
+        format: "date"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -12011,33 +12037,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      blockChanges:
-        type: "boolean"
-        default: false
-      disableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -12274,6 +12273,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      blockChanges:
+        type: "boolean"
+        default: false
+      disableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -12281,27 +12307,6 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
-  PluginInfo:
-    type: "object"
-    properties:
-      bundleSymbolicName:
-        type: "string"
-      pluginKey:
-        type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -12332,21 +12337,27 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  SubscriptionUsageRecord:
+  PluginInfo:
     type: "object"
-    required:
-    - "subscriptionId"
-    - "unitUsageRecords"
     properties:
-      subscriptionId:
+      bundleSymbolicName:
         type: "string"
-        format: "uuid"
-      trackingId:
+      pluginKey:
         type: "string"
-      unitUsageRecords:
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
         type: "array"
+        uniqueItems: true
         items:
-          $ref: "#/definitions/UnitUsageRecord"
+          $ref: "#/definitions/PluginServiceInfo"
   Subscription:
     type: "object"
     required:
@@ -12446,6 +12457,21 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  SubscriptionUsageRecord:
+    type: "object"
+    required:
+    - "subscriptionId"
+    - "unitUsageRecords"
+    properties:
+      subscriptionId:
+        type: "string"
+        format: "uuid"
+      trackingId:
+        type: "string"
+      unitUsageRecords:
+        type: "array"
+        items:
+          $ref: "#/definitions/UnitUsageRecord"
   Tier:
     type: "object"
     properties:
@@ -13090,13 +13116,13 @@ definitions:
       size:
         type: "number"
         format: "double"
+      price:
+        $ref: "#/definitions/InternationalPrice"
       minTopUpCredit:
         type: "number"
         format: "double"
       unit:
         $ref: "#/definitions/Unit"
-      price:
-        $ref: "#/definitions/InternationalPrice"
   InvoiceDryRun:
     type: "object"
     properties:
@@ -13224,6 +13250,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -13292,25 +13337,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -13375,13 +13401,10 @@ definitions:
     properties:
       catalogName:
         type: "string"
-      effectiveDate:
-        type: "string"
-        format: "date-time"
-      availableBasePlanListings:
+      currentProducts:
         type: "array"
         items:
-          $ref: "#/definitions/Listing"
+          $ref: "#/definitions/Product"
       currentSupportedCurrencies:
         type: "array"
         items:
@@ -13552,10 +13575,6 @@ definitions:
           - "ZMW"
           - "ZWD"
           - "BTC"
-      currentProducts:
-        type: "array"
-        items:
-          $ref: "#/definitions/Product"
       currentUnits:
         type: "array"
         items:
@@ -13564,6 +13583,13 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Plan"
+      effectiveDate:
+        type: "string"
+        format: "date-time"
+      availableBasePlanListings:
+        type: "array"
+        items:
+          $ref: "#/definitions/Listing"
   TieredBlock:
     type: "object"
     properties:
@@ -13577,25 +13603,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  Tenant:
-    type: "object"
-    required:
-    - "apiKey"
-    - "apiSecret"
-    properties:
-      tenantId:
-        type: "string"
-        format: "uuid"
-      externalKey:
-        type: "string"
-      apiKey:
-        type: "string"
-      apiSecret:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
   Recurring:
     type: "object"
     properties:
@@ -13618,6 +13625,25 @@ definitions:
         - "NO_BILLING_PERIOD"
       recurringPrice:
         $ref: "#/definitions/InternationalPrice"
+  Tenant:
+    type: "object"
+    required:
+    - "apiKey"
+    - "apiSecret"
+    properties:
+      tenantId:
+        type: "string"
+        format: "uuid"
+      externalKey:
+        type: "string"
+      apiKey:
+        type: "string"
+      apiSecret:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
   Credit:
     type: "object"
     required:
@@ -13645,14 +13671,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RolledUpUnit:
-    type: "object"
-    properties:
-      unitType:
-        type: "string"
-      amount:
-        type: "integer"
-        format: "int64"
   EventSubscription:
     type: "object"
     properties:
@@ -13700,6 +13718,14 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RolledUpUnit:
+    type: "object"
+    properties:
+      unitType:
+        type: "string"
+      amount:
+        type: "integer"
+        format: "int64"
   UnitUsageRecord:
     type: "object"
     properties:
@@ -13731,14 +13757,14 @@ definitions:
     properties:
       duration:
         $ref: "#/definitions/Duration"
+      fixed:
+        $ref: "#/definitions/Fixed"
       recurring:
         $ref: "#/definitions/Recurring"
       usages:
         type: "array"
         items:
           $ref: "#/definitions/Usage"
-      fixed:
-        $ref: "#/definitions/Fixed"
       phaseType:
         type: "string"
         enum:
@@ -14098,6 +14124,18 @@ definitions:
         type: "array"
         items:
           type: "string"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -14112,18 +14150,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   Plan:
     type: "object"
     properties:
@@ -14165,6 +14191,13 @@ definitions:
         default: false
       session:
         $ref: "#/definitions/Session"
+  Listing:
+    type: "object"
+    properties:
+      plan:
+        $ref: "#/definitions/Plan"
+      priceList:
+        $ref: "#/definitions/PriceList"
   RolledUpUsage:
     type: "object"
     properties:
@@ -14181,13 +14214,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/RolledUpUnit"
-  Listing:
-    type: "object"
-    properties:
-      priceList:
-        $ref: "#/definitions/PriceList"
-      plan:
-        $ref: "#/definitions/Plan"
   CustomField:
     type: "object"
     required:
@@ -14240,6 +14266,15 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Subscription"
+  Limit:
+    type: "object"
+    properties:
+      unit:
+        type: "string"
+      max:
+        type: "string"
+      min:
+        type: "string"
   Tag:
     type: "object"
     properties:
@@ -14281,15 +14316,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Limit:
-    type: "object"
-    properties:
-      unit:
-        type: "string"
-      max:
-        type: "string"
-      min:
-        type: "string"
   Session:
     type: "object"
     properties:

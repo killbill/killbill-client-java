@@ -34,6 +34,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.LinkedListMultimap;
 
+import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
@@ -179,7 +180,7 @@ public class PaymentTransactionApi {
             queryParams.put("withAttempts", String.valueOf(withAttempts));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));

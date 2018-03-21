@@ -22,6 +22,7 @@ package org.killbill.billing.client.api.gen;
 import org.killbill.billing.client.model.gen.BlockingState;
 import org.killbill.billing.client.model.gen.Bundle;
 import org.killbill.billing.client.model.gen.CustomField;
+import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import java.util.List;
@@ -36,6 +37,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.LinkedListMultimap;
 
+import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
@@ -60,7 +62,7 @@ public class BundleApi {
         this.httpClient = httpClient;
     }
 
-    public void addBundleBlockingState(final BlockingState body, final UUID bundleId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void addBundleBlockingState(final BlockingState body, final UUID bundleId, final LocalDate requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling addBundleBlockingState");
 
@@ -72,7 +74,7 @@ public class BundleApi {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -306,7 +308,7 @@ public class BundleApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void pauseBundle(final UUID bundleId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void pauseBundle(final UUID bundleId, final LocalDate requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling pauseBundle");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/pause"
@@ -317,7 +319,7 @@ public class BundleApi {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -344,7 +346,7 @@ public class BundleApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void resumeBundle(final UUID bundleId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void resumeBundle(final UUID bundleId, final LocalDate requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling resumeBundle");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/resume"
@@ -355,7 +357,7 @@ public class BundleApi {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -396,11 +398,11 @@ public class BundleApi {
         return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
-    public void transferBundle(final Bundle body, final UUID bundleId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void transferBundle(final Bundle body, final UUID bundleId, final LocalDate requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         transferBundle(body, bundleId, requestedDate, BillingActionPolicy.END_OF_TERM, pluginProperty, inputOptions);
     }
 
-    public void transferBundle(final Bundle body, final UUID bundleId, final String requestedDate, final BillingActionPolicy billingPolicy, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void transferBundle(final Bundle body, final UUID bundleId, final LocalDate requestedDate, final BillingActionPolicy billingPolicy, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling transferBundle");
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling transferBundle");
 
@@ -415,7 +417,7 @@ public class BundleApi {
             queryParams.put("billingPolicy", String.valueOf(billingPolicy));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

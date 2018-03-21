@@ -24,6 +24,7 @@ import org.killbill.billing.client.model.gen.Invoice;
 import org.killbill.billing.client.model.gen.InvoiceDryRun;
 import org.killbill.billing.client.model.gen.InvoiceItem;
 import org.killbill.billing.client.model.gen.InvoicePayment;
+import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import org.killbill.billing.client.model.CustomFields;
@@ -39,6 +40,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.LinkedListMultimap;
 
+import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
@@ -63,7 +65,7 @@ public class InvoiceApi {
         this.httpClient = httpClient;
     }
 
-    public Invoice adjustInvoiceItem(final InvoiceItem body, final UUID invoiceId, final String requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice adjustInvoiceItem(final InvoiceItem body, final UUID invoiceId, final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling adjustInvoiceItem");
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling adjustInvoiceItem");
 
@@ -119,11 +121,11 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final String requestedDate, final List<String> pluginProperty, final String paymentExternalKey, final String transactionExternalKey,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final List<String> pluginProperty, final String paymentExternalKey, final String transactionExternalKey,  final RequestOptions inputOptions) throws KillBillClientException {
         return createExternalCharges(body, accountId, requestedDate, Boolean.valueOf(false), pluginProperty, Boolean.valueOf(false), paymentExternalKey, transactionExternalKey, inputOptions);
     }
 
-    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final String requestedDate, final Boolean payInvoice, final List<String> pluginProperty, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final Boolean payInvoice, final List<String> pluginProperty, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createExternalCharges");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createExternalCharges");
 

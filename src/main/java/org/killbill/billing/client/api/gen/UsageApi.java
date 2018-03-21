@@ -19,6 +19,7 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.RolledUpUsage;
 import org.killbill.billing.client.model.gen.SubscriptionUsageRecord;
 import java.util.UUID;
@@ -28,6 +29,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.LinkedListMultimap;
 
+import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
@@ -52,7 +54,7 @@ public class UsageApi {
         this.httpClient = httpClient;
     }
 
-    public RolledUpUsage getAllUsage(final UUID subscriptionId, final String startDate, final String endDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public RolledUpUsage getAllUsage(final UUID subscriptionId, final LocalDate startDate, final LocalDate endDate,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getAllUsage");
 
         final String uri = "/1.0/kb/usages/{subscriptionId}"
@@ -74,7 +76,7 @@ public class UsageApi {
         return httpClient.doGet(uri, RolledUpUsage.class, requestOptions);
     }
 
-    public RolledUpUsage getUsage(final UUID subscriptionId, final String unitType, final String startDate, final String endDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public RolledUpUsage getUsage(final UUID subscriptionId, final String unitType, final LocalDate startDate, final LocalDate endDate,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getUsage");
         Preconditions.checkNotNull(unitType, "Missing the required parameter 'unitType' when calling getUsage");
 

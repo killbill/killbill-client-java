@@ -19,12 +19,14 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.Phase;
 import org.killbill.billing.client.model.gen.Plan;
 import org.killbill.billing.client.model.gen.PlanDetail;
 import org.killbill.billing.client.model.gen.PriceList;
 import org.killbill.billing.client.model.gen.Product;
 import org.killbill.billing.client.model.gen.SimplePlan;
+import org.killbill.billing.client.model.gen.StaticCatalog;
 import java.util.UUID;
 import org.killbill.billing.client.model.PlanDetails;
 import java.util.List;
@@ -34,6 +36,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.LinkedListMultimap;
 
+import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
@@ -118,19 +121,24 @@ public class CatalogApi {
         return httpClient.doGet(uri, PlanDetails.class, requestOptions);
     }
 
-    public String getCatalogXml( final RequestOptions inputOptions) throws KillBillClientException {
+    public StaticCatalog getCatalogJson(final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog";
 
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/xml");
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, String.class, requestOptions);
+        return httpClient.doGet(uri, StaticCatalog.class, requestOptions);
     }
 
-    public Phase getPhaseForSubscriptionAndDate(final UUID subscriptionId, final String requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Phase getPhaseForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/phase";
 
@@ -150,7 +158,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, Phase.class, requestOptions);
     }
 
-    public Plan getPlanForSubscriptionAndDate(final UUID subscriptionId, final String requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Plan getPlanForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/plan";
 
@@ -170,7 +178,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, Plan.class, requestOptions);
     }
 
-    public PriceList getPriceListForSubscriptionAndDate(final UUID subscriptionId, final String requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PriceList getPriceListForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/priceList";
 
@@ -190,7 +198,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, PriceList.class, requestOptions);
     }
 
-    public Product getProductForSubscriptionAndDate(final UUID subscriptionId, final String requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Product getProductForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/product";
 

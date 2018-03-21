@@ -29,6 +29,7 @@ import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.Invoice;
 import org.killbill.billing.client.model.gen.InvoiceEmail;
 import org.killbill.billing.client.model.gen.InvoicePayment;
+import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.OverdueState;
 import org.killbill.billing.client.model.gen.Payment;
 import org.killbill.billing.client.model.gen.PaymentMethod;
@@ -55,6 +56,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.LinkedListMultimap;
 
+import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
@@ -79,7 +81,7 @@ public class AccountApi {
         this.httpClient = httpClient;
     }
 
-    public void addAccountBlockingState(final BlockingState body, final UUID accountId, final String requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void addAccountBlockingState(final BlockingState body, final UUID accountId, final LocalDate requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addAccountBlockingState");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling addAccountBlockingState");
 
@@ -91,7 +93,7 @@ public class AccountApi {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -495,10 +497,10 @@ public class AccountApi {
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (blockingStateTypes != null) {
-            queryParams.put("blockingStateTypes", String.valueOf(blockingStateTypes));
+            queryParams.putAll("blockingStateTypes", Converter.convertToListString(blockingStateTypes));
         }
         if (blockingStateSvcs != null) {
-            queryParams.put("blockingStateSvcs", String.valueOf(blockingStateSvcs));
+            queryParams.putAll("blockingStateSvcs", blockingStateSvcs);
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
@@ -613,7 +615,7 @@ public class AccountApi {
             queryParams.put("withAttempts", String.valueOf(withAttempts));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -688,7 +690,7 @@ public class AccountApi {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
@@ -720,7 +722,7 @@ public class AccountApi {
             queryParams.put("audit", String.valueOf(audit));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
@@ -980,7 +982,7 @@ public class AccountApi {
             queryParams.put("payAllUnpaidInvoices", String.valueOf(payAllUnpaidInvoices));
         }
         if (pluginProperty != null) {
-            queryParams.put("pluginProperty", String.valueOf(pluginProperty));
+            queryParams.putAll("pluginProperty", pluginProperty);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

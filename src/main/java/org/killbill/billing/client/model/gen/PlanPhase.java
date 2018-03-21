@@ -40,11 +40,11 @@ public class PlanPhase {
 
     private Duration duration = null;
 
+    private Fixed fixed = null;
+
     private Recurring recurring = null;
 
     private List<Usage> usages = null;
-
-    private Fixed fixed = null;
 
     private PhaseType phaseType = null;
 
@@ -57,16 +57,16 @@ public class PlanPhase {
     }
 
     public PlanPhase(final Duration duration,
+                     final Fixed fixed,
                      final Recurring recurring,
                      final List<Usage> usages,
-                     final Fixed fixed,
                      final PhaseType phaseType,
                      final String name,
                      final String prettyName) {
         this.duration = duration;
+        this.fixed = fixed;
         this.recurring = recurring;
         this.usages = usages;
-        this.fixed = fixed;
         this.phaseType = phaseType;
         this.name = name;
         this.prettyName = prettyName;
@@ -81,6 +81,15 @@ public class PlanPhase {
 
     public Duration getDuration() {
         return duration;
+    }
+
+    public PlanPhase setFixed(final Fixed fixed) {
+        this.fixed = fixed;
+        return this;
+    }
+
+    public Fixed getFixed() {
+        return fixed;
     }
 
     public PlanPhase setRecurring(final Recurring recurring) {
@@ -107,15 +116,6 @@ public class PlanPhase {
 
     public List<Usage> getUsages() {
         return usages;
-    }
-
-    public PlanPhase setFixed(final Fixed fixed) {
-        this.fixed = fixed;
-        return this;
-    }
-
-    public Fixed getFixed() {
-        return fixed;
     }
 
     public PlanPhase setPhaseType(final PhaseType phaseType) {
@@ -155,9 +155,9 @@ public class PlanPhase {
         }
         PlanPhase planPhase = (PlanPhase) o;
         return Objects.equals(this.duration, planPhase.duration) &&
+        Objects.equals(this.fixed, planPhase.fixed) &&
         Objects.equals(this.recurring, planPhase.recurring) &&
         Objects.equals(this.usages, planPhase.usages) &&
-        Objects.equals(this.fixed, planPhase.fixed) &&
         Objects.equals(this.phaseType, planPhase.phaseType) &&
         Objects.equals(this.name, planPhase.name) &&
         Objects.equals(this.prettyName, planPhase.prettyName);
@@ -167,9 +167,9 @@ public class PlanPhase {
     @Override
     public int hashCode() {
         return Objects.hash(duration,
+                            fixed,
                             recurring,
                             usages,
-                            fixed,
                             phaseType,
                             name,
                             prettyName);
@@ -182,9 +182,9 @@ public class PlanPhase {
         sb.append("class PlanPhase {\n");
         
         sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
+        sb.append("    fixed: ").append(toIndentedString(fixed)).append("\n");
         sb.append("    recurring: ").append(toIndentedString(recurring)).append("\n");
         sb.append("    usages: ").append(toIndentedString(usages)).append("\n");
-        sb.append("    fixed: ").append(toIndentedString(fixed)).append("\n");
         sb.append("    phaseType: ").append(toIndentedString(phaseType)).append("\n");
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    prettyName: ").append(toIndentedString(prettyName)).append("\n");
