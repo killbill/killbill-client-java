@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Security"
-- name: "InvoicePayment"
-- name: "InvoiceItem"
-- name: "Tag"
-- name: "PaymentMethod"
-- name: "Account"
-- name: "Invoice"
-- name: "TagDefinition"
-- name: "CustomField"
-- name: "Tenant"
-- name: "PluginInfo"
 - name: "Credit"
-- name: "PaymentTransaction"
-- name: "Export"
-- name: "NodesInfo"
-- name: "Usage"
 - name: "Overdue"
-- name: "Bundle"
+- name: "NodesInfo"
 - name: "Subscription"
-- name: "Payment"
-- name: "Catalog"
+- name: "Account"
+- name: "Usage"
 - name: "PaymentGateway"
+- name: "PaymentMethod"
+- name: "Catalog"
+- name: "InvoicePayment"
+- name: "Bundle"
+- name: "Payment"
+- name: "Tenant"
+- name: "InvoiceItem"
+- name: "PaymentTransaction"
+- name: "CustomField"
+- name: "Tag"
+- name: "PluginInfo"
+- name: "Security"
+- name: "Invoice"
 - name: "Admin"
+- name: "Export"
+- name: "TagDefinition"
 paths:
   /1.0/kb/accounts:
     get:
@@ -3286,7 +3286,7 @@ paths:
         in: "query"
         required: false
         type: "string"
-        format: "date"
+        format: "date-time"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -12121,6 +12121,13 @@ definitions:
         type: "string"
       userToken:
         type: "string"
+  NodeCommandProperty:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "object"
   OverdueState:
     type: "object"
     properties:
@@ -12145,13 +12152,6 @@ definitions:
       reevaluationIntervalDays:
         type: "integer"
         format: "int32"
-  NodeCommandProperty:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      value:
-        type: "object"
   ComboPaymentTransaction:
     type: "object"
     properties:
@@ -12197,6 +12197,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      isBlockChanges:
+        type: "boolean"
+        default: false
+      isDisableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -12433,33 +12460,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      isBlockChanges:
-        type: "boolean"
-        default: false
-      isDisableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -14164,21 +14164,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  UserRoles:
-    type: "object"
-    required:
-    - "password"
-    - "roles"
-    - "username"
-    properties:
-      username:
-        type: "string"
-      password:
-        type: "string"
-      roles:
-        type: "array"
-        items:
-          type: "string"
   GatewayNotification:
     type: "object"
     properties:
@@ -14204,15 +14189,18 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RoleDefinition:
+  UserRoles:
     type: "object"
     required:
-    - "permissions"
-    - "role"
+    - "password"
+    - "roles"
+    - "username"
     properties:
-      role:
+      username:
         type: "string"
-      permissions:
+      password:
+        type: "string"
+      roles:
         type: "array"
         items:
           type: "string"
@@ -14230,6 +14218,18 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   Plan:
     type: "object"
     properties:

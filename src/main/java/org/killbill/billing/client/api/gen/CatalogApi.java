@@ -20,6 +20,7 @@ package org.killbill.billing.client.api.gen;
 
 
 import org.killbill.billing.client.model.gen.Catalog;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.Phase;
 import org.killbill.billing.client.model.gen.Plan;
@@ -122,7 +123,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, PlanDetails.class, requestOptions);
     }
 
-    public Catalogs getCatalogJson(final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Catalogs getCatalogJson(final DateTime requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog";
 
