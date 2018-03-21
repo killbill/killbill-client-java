@@ -75,15 +75,15 @@ public class InvoiceItemApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public Tags createTags(final UUID invoiceItemId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID invoiceItemId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling createTags");
 
         final String uri = "/1.0/kb/invoiceItems/{invoiceItemId}/tags"
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tagList != null) {
-            queryParams.put("tagList", String.valueOf(tagList));
+        if (tags != null) {
+            queryParams.putAll("tags", tags);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -98,15 +98,15 @@ public class InvoiceItemApi {
     }
 
 
-    public void deleteCustomFields(final UUID invoiceItemId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID invoiceItemId, final List<String> customFields,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/invoiceItems/{invoiceItemId}/customFields"
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (customFieldList != null) {
-            queryParams.put("customFieldList", String.valueOf(customFieldList));
+        if (customFields != null) {
+            queryParams.putAll("customFields", customFields);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -118,15 +118,15 @@ public class InvoiceItemApi {
     }
 
 
-    public void deleteTags(final UUID invoiceItemId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID invoiceItemId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling deleteTags");
 
         final String uri = "/1.0/kb/invoiceItems/{invoiceItemId}/tags"
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tagList != null) {
-            queryParams.put("tagList", String.valueOf(tagList));
+        if (tags != null) {
+            queryParams.putAll("tags", tags);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -161,10 +161,10 @@ public class InvoiceItemApi {
     }
 
     public Tags getTags(final UUID invoiceItemId, final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getTags(invoiceItemId, accountId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
+        return getTags(invoiceItemId, accountId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID invoiceItemId, final UUID accountId, final AuditLevel audit, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID invoiceItemId, final UUID accountId, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling getTags");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getTags");
 
@@ -175,11 +175,11 @@ public class InvoiceItemApi {
         if (accountId != null) {
             queryParams.put("accountId", String.valueOf(accountId));
         }
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

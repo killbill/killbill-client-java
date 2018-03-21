@@ -103,15 +103,15 @@ public class BundleApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public Tags createTags(final UUID bundleId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID bundleId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling createTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tagList != null) {
-            queryParams.put("tagList", String.valueOf(tagList));
+        if (tags != null) {
+            queryParams.putAll("tags", tags);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -126,15 +126,15 @@ public class BundleApi {
     }
 
 
-    public void deleteCustomFields(final UUID bundleId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID bundleId, final List<String> customFields,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (customFieldList != null) {
-            queryParams.put("customFieldList", String.valueOf(customFieldList));
+        if (customFields != null) {
+            queryParams.putAll("customFields", customFields);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -146,15 +146,15 @@ public class BundleApi {
     }
 
 
-    public void deleteTags(final UUID bundleId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID bundleId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tagList != null) {
-            queryParams.put("tagList", String.valueOf(tagList));
+        if (tags != null) {
+            queryParams.putAll("tags", tags);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -267,21 +267,21 @@ public class BundleApi {
     }
 
     public Tags getTags(final UUID bundleId,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getTags(bundleId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
+        return getTags(bundleId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID bundleId, final AuditLevel audit, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID bundleId, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

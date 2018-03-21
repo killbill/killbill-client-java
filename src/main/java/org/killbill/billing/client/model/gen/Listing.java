@@ -33,30 +33,21 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Listing {
 
-    private Plan plan = null;
-
     private PriceList priceList = null;
+
+    private Plan plan = null;
 
 
     public Listing() {
     }
 
-    public Listing(final Plan plan,
-                     final PriceList priceList) {
-        this.plan = plan;
+    public Listing(final PriceList priceList,
+                     final Plan plan) {
         this.priceList = priceList;
-
-    }
-
-
-    public Listing setPlan(final Plan plan) {
         this.plan = plan;
-        return this;
+
     }
 
-    public Plan getPlan() {
-        return plan;
-    }
 
     public Listing setPriceList(final PriceList priceList) {
         this.priceList = priceList;
@@ -65,6 +56,15 @@ public class Listing {
 
     public PriceList getPriceList() {
         return priceList;
+    }
+
+    public Listing setPlan(final Plan plan) {
+        this.plan = plan;
+        return this;
+    }
+
+    public Plan getPlan() {
+        return plan;
     }
 
     @Override
@@ -76,15 +76,15 @@ public class Listing {
             return false;
         }
         Listing listing = (Listing) o;
-        return Objects.equals(this.plan, listing.plan) &&
-        Objects.equals(this.priceList, listing.priceList);
+        return Objects.equals(this.priceList, listing.priceList) &&
+        Objects.equals(this.plan, listing.plan);
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(plan,
-                            priceList);
+        return Objects.hash(priceList,
+                            plan);
     }
 
 
@@ -93,8 +93,8 @@ public class Listing {
         StringBuilder sb = new StringBuilder();
         sb.append("class Listing {\n");
         
-        sb.append("    plan: ").append(toIndentedString(plan)).append("\n");
         sb.append("    priceList: ").append(toIndentedString(priceList)).append("\n");
+        sb.append("    plan: ").append(toIndentedString(plan)).append("\n");
         sb.append("}");
         return sb.toString();
     }

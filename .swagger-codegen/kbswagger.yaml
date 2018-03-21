@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "PaymentGateway"
 - name: "Catalog"
-- name: "Payment"
-- name: "Security"
-- name: "Export"
-- name: "PaymentTransaction"
-- name: "InvoiceItem"
-- name: "PluginInfo"
-- name: "CustomField"
-- name: "InvoicePayment"
-- name: "TagDefinition"
-- name: "Tag"
-- name: "Tenant"
-- name: "Overdue"
-- name: "Admin"
-- name: "Bundle"
-- name: "Credit"
-- name: "Usage"
 - name: "Subscription"
+- name: "Bundle"
+- name: "Usage"
+- name: "InvoiceItem"
 - name: "NodesInfo"
+- name: "Overdue"
 - name: "Account"
-- name: "PaymentMethod"
+- name: "Admin"
+- name: "Security"
+- name: "Payment"
 - name: "Invoice"
+- name: "PaymentMethod"
+- name: "InvoicePayment"
+- name: "PluginInfo"
+- name: "PaymentTransaction"
+- name: "Tag"
+- name: "TagDefinition"
+- name: "Export"
+- name: "Credit"
+- name: "CustomField"
+- name: "Tenant"
+- name: "PaymentGateway"
 paths:
   /1.0/kb/accounts:
     get:
@@ -606,6 +606,11 @@ paths:
         - "TAG_DEFINITION"
         - "TENANT"
         - "TENANT_KVS"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -615,11 +620,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -1080,10 +1080,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFieldList"
+      - name: "customFields"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -1970,6 +1973,11 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -1979,11 +1987,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -2020,10 +2023,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -2072,10 +2078,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -2914,10 +2923,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFieldList"
+      - name: "customFields"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -3121,6 +3133,11 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -3130,11 +3147,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -3173,10 +3185,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -3225,10 +3240,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -3281,46 +3299,9 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/StaticCatalog"
-      security:
-      - basicAuth: []
-    post:
-      tags:
-      - "Catalog"
-      summary: "Upload the full catalog as XML"
-      description: ""
-      operationId: "uploadCatalogXml"
-      consumes:
-      - "text/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "string"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-ApiKey"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-ApiSecret"
-        in: "header"
-        required: true
-        type: "string"
-      responses:
-        default:
-          description: "successful operation"
+            type: "array"
+            items:
+              $ref: "#/definitions/Catalog"
       security:
       - basicAuth: []
     delete:
@@ -3574,6 +3555,70 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/SimplePlan"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - basicAuth: []
+  /1.0/kb/catalog/xml:
+    get:
+      tags:
+      - "Catalog"
+      summary: "Retrieve the full catalog as XML"
+      description: ""
+      operationId: "getCatalogXml"
+      produces:
+      - "text/xml"
+      parameters:
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      security:
+      - basicAuth: []
+    post:
+      tags:
+      - "Catalog"
+      summary: "Upload the full catalog as XML"
+      description: ""
+      operationId: "uploadCatalogXml"
+      consumes:
+      - "text/xml"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "string"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -4000,10 +4045,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFieldList"
+      - name: "customFields"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -4050,6 +4098,11 @@ paths:
         required: true
         type: "string"
         format: "uuid"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -4059,11 +4112,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -4102,10 +4150,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -4154,10 +4205,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -4592,10 +4646,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFieldList"
+      - name: "customFields"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -4715,6 +4772,11 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -4724,11 +4786,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -4767,10 +4824,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -4819,10 +4879,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -5850,10 +5913,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFieldList"
+      - name: "customFields"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -6049,6 +6115,11 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -6058,11 +6129,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -6101,10 +6167,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -6153,10 +6222,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -6393,6 +6465,74 @@ paths:
       security:
       - basicAuth: []
   /1.0/kb/overdue:
+    get:
+      tags:
+      - "Overdue"
+      summary: "Retrieve the overdue config as JSON"
+      description: ""
+      operationId: "getOverdueConfigJson"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Overdue"
+      security:
+      - basicAuth: []
+    post:
+      tags:
+      - "Overdue"
+      summary: "Upload the full overdue config as JSON"
+      description: ""
+      operationId: "uploadOverdueConfigJson"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Overdue"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Overdue"
+      security:
+      - basicAuth: []
+  /1.0/kb/overdue/xml:
     get:
       tags:
       - "Overdue"
@@ -7127,10 +7267,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFieldList"
+      - name: "customFields"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -7440,10 +7583,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFieldList"
+      - name: "customFields"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -7485,6 +7631,11 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -7494,11 +7645,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -7537,10 +7683,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -7589,10 +7738,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -8961,10 +9113,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFieldList"
+      - name: "customFields"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -9086,6 +9241,11 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -9095,11 +9255,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -9138,10 +9293,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -9190,10 +9348,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -10310,10 +10471,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "customFieldList"
+      - name: "customFields"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -10355,6 +10519,11 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -10364,11 +10533,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -10407,10 +10571,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -10459,10 +10626,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagList"
+      - name: "tags"
         in: "query"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -11853,16 +12023,6 @@ definitions:
           - "OTHER"
       totalUnpaidInvoiceBalanceEqualsOrExceeds:
         type: "number"
-  InternationalPrice:
-    type: "object"
-    properties:
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      zero:
-        type: "boolean"
-        default: false
   Product:
     type: "object"
     properties:
@@ -12037,6 +12197,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      blockChanges:
+        type: "boolean"
+        default: false
+      disableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -12273,33 +12460,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      blockChanges:
-        type: "boolean"
-        default: false
-      disableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -12739,8 +12899,196 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/OverdueStateConfig"
-  IteratorPlanPhase:
+  Catalog:
     type: "object"
+    properties:
+      name:
+        type: "string"
+      effectiveDate:
+        type: "string"
+        format: "date-time"
+      currencies:
+        type: "array"
+        items:
+          type: "string"
+          enum:
+          - "AED"
+          - "AFN"
+          - "ALL"
+          - "AMD"
+          - "ANG"
+          - "AOA"
+          - "ARS"
+          - "AUD"
+          - "AWG"
+          - "AZN"
+          - "BAM"
+          - "BBD"
+          - "BDT"
+          - "BGN"
+          - "BHD"
+          - "BIF"
+          - "BMD"
+          - "BND"
+          - "BOB"
+          - "BRL"
+          - "BSD"
+          - "BTN"
+          - "BWP"
+          - "BYR"
+          - "BZD"
+          - "CAD"
+          - "CDF"
+          - "CHF"
+          - "CLP"
+          - "CNY"
+          - "COP"
+          - "CRC"
+          - "CUC"
+          - "CUP"
+          - "CVE"
+          - "CZK"
+          - "DJF"
+          - "DKK"
+          - "DOP"
+          - "DZD"
+          - "EGP"
+          - "ERN"
+          - "ETB"
+          - "EUR"
+          - "FJD"
+          - "FKP"
+          - "GBP"
+          - "GEL"
+          - "GGP"
+          - "GHS"
+          - "GIP"
+          - "GMD"
+          - "GNF"
+          - "GTQ"
+          - "GYD"
+          - "HKD"
+          - "HNL"
+          - "HRK"
+          - "HTG"
+          - "HUF"
+          - "IDR"
+          - "ILS"
+          - "IMP"
+          - "INR"
+          - "IQD"
+          - "IRR"
+          - "ISK"
+          - "JEP"
+          - "JMD"
+          - "JOD"
+          - "JPY"
+          - "KES"
+          - "KGS"
+          - "KHR"
+          - "KMF"
+          - "KPW"
+          - "KRW"
+          - "KWD"
+          - "KYD"
+          - "KZT"
+          - "LAK"
+          - "LBP"
+          - "LKR"
+          - "LRD"
+          - "LSL"
+          - "LTL"
+          - "LVL"
+          - "LYD"
+          - "MAD"
+          - "MDL"
+          - "MGA"
+          - "MKD"
+          - "MMK"
+          - "MNT"
+          - "MOP"
+          - "MRO"
+          - "MUR"
+          - "MVR"
+          - "MWK"
+          - "MXN"
+          - "MYR"
+          - "MZN"
+          - "NAD"
+          - "NGN"
+          - "NIO"
+          - "NOK"
+          - "NPR"
+          - "NZD"
+          - "OMR"
+          - "PAB"
+          - "PEN"
+          - "PGK"
+          - "PHP"
+          - "PKR"
+          - "PLN"
+          - "PYG"
+          - "QAR"
+          - "RON"
+          - "RSD"
+          - "RUB"
+          - "RWF"
+          - "SAR"
+          - "SBD"
+          - "SCR"
+          - "SDG"
+          - "SEK"
+          - "SGD"
+          - "SHP"
+          - "SLL"
+          - "SOS"
+          - "SPL"
+          - "SRD"
+          - "STD"
+          - "SVC"
+          - "SYP"
+          - "SZL"
+          - "THB"
+          - "TJS"
+          - "TMT"
+          - "TND"
+          - "TOP"
+          - "TRY"
+          - "TTD"
+          - "TVD"
+          - "TWD"
+          - "TZS"
+          - "UAH"
+          - "UGX"
+          - "USD"
+          - "UYU"
+          - "UZS"
+          - "VEF"
+          - "VND"
+          - "VUV"
+          - "WST"
+          - "XAF"
+          - "XCD"
+          - "XDR"
+          - "XOF"
+          - "XPF"
+          - "YER"
+          - "ZAR"
+          - "ZMW"
+          - "ZWD"
+          - "BTC"
+      units:
+        type: "array"
+        items:
+          $ref: "#/definitions/Unit"
+      products:
+        type: "array"
+        items:
+          $ref: "#/definitions/Product"
+      priceLists:
+        type: "array"
+        items:
+          $ref: "#/definitions/PriceList"
   PaymentTransaction:
     type: "object"
     properties:
@@ -13104,25 +13452,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/PluginProperty"
-  Block:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-        enum:
-        - "VANILLA"
-        - "TOP_UP"
-        - "TIERED"
-      size:
-        type: "number"
-        format: "double"
-      price:
-        $ref: "#/definitions/InternationalPrice"
-      minTopUpCredit:
-        type: "number"
-        format: "double"
-      unit:
-        $ref: "#/definitions/Unit"
   InvoiceDryRun:
     type: "object"
     properties:
@@ -13396,200 +13725,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/TierPriceOverride"
-  StaticCatalog:
-    type: "object"
-    properties:
-      catalogName:
-        type: "string"
-      currentProducts:
-        type: "array"
-        items:
-          $ref: "#/definitions/Product"
-      currentSupportedCurrencies:
-        type: "array"
-        items:
-          type: "string"
-          enum:
-          - "AED"
-          - "AFN"
-          - "ALL"
-          - "AMD"
-          - "ANG"
-          - "AOA"
-          - "ARS"
-          - "AUD"
-          - "AWG"
-          - "AZN"
-          - "BAM"
-          - "BBD"
-          - "BDT"
-          - "BGN"
-          - "BHD"
-          - "BIF"
-          - "BMD"
-          - "BND"
-          - "BOB"
-          - "BRL"
-          - "BSD"
-          - "BTN"
-          - "BWP"
-          - "BYR"
-          - "BZD"
-          - "CAD"
-          - "CDF"
-          - "CHF"
-          - "CLP"
-          - "CNY"
-          - "COP"
-          - "CRC"
-          - "CUC"
-          - "CUP"
-          - "CVE"
-          - "CZK"
-          - "DJF"
-          - "DKK"
-          - "DOP"
-          - "DZD"
-          - "EGP"
-          - "ERN"
-          - "ETB"
-          - "EUR"
-          - "FJD"
-          - "FKP"
-          - "GBP"
-          - "GEL"
-          - "GGP"
-          - "GHS"
-          - "GIP"
-          - "GMD"
-          - "GNF"
-          - "GTQ"
-          - "GYD"
-          - "HKD"
-          - "HNL"
-          - "HRK"
-          - "HTG"
-          - "HUF"
-          - "IDR"
-          - "ILS"
-          - "IMP"
-          - "INR"
-          - "IQD"
-          - "IRR"
-          - "ISK"
-          - "JEP"
-          - "JMD"
-          - "JOD"
-          - "JPY"
-          - "KES"
-          - "KGS"
-          - "KHR"
-          - "KMF"
-          - "KPW"
-          - "KRW"
-          - "KWD"
-          - "KYD"
-          - "KZT"
-          - "LAK"
-          - "LBP"
-          - "LKR"
-          - "LRD"
-          - "LSL"
-          - "LTL"
-          - "LVL"
-          - "LYD"
-          - "MAD"
-          - "MDL"
-          - "MGA"
-          - "MKD"
-          - "MMK"
-          - "MNT"
-          - "MOP"
-          - "MRO"
-          - "MUR"
-          - "MVR"
-          - "MWK"
-          - "MXN"
-          - "MYR"
-          - "MZN"
-          - "NAD"
-          - "NGN"
-          - "NIO"
-          - "NOK"
-          - "NPR"
-          - "NZD"
-          - "OMR"
-          - "PAB"
-          - "PEN"
-          - "PGK"
-          - "PHP"
-          - "PKR"
-          - "PLN"
-          - "PYG"
-          - "QAR"
-          - "RON"
-          - "RSD"
-          - "RUB"
-          - "RWF"
-          - "SAR"
-          - "SBD"
-          - "SCR"
-          - "SDG"
-          - "SEK"
-          - "SGD"
-          - "SHP"
-          - "SLL"
-          - "SOS"
-          - "SPL"
-          - "SRD"
-          - "STD"
-          - "SVC"
-          - "SYP"
-          - "SZL"
-          - "THB"
-          - "TJS"
-          - "TMT"
-          - "TND"
-          - "TOP"
-          - "TRY"
-          - "TTD"
-          - "TVD"
-          - "TWD"
-          - "TZS"
-          - "UAH"
-          - "UGX"
-          - "USD"
-          - "UYU"
-          - "UZS"
-          - "VEF"
-          - "VND"
-          - "VUV"
-          - "WST"
-          - "XAF"
-          - "XCD"
-          - "XDR"
-          - "XOF"
-          - "XPF"
-          - "YER"
-          - "ZAR"
-          - "ZMW"
-          - "ZWD"
-          - "BTC"
-      currentUnits:
-        type: "array"
-        items:
-          $ref: "#/definitions/Unit"
-      currentPlans:
-        type: "array"
-        items:
-          $ref: "#/definitions/Plan"
-      effectiveDate:
-        type: "string"
-        format: "date-time"
-      availableBasePlanListings:
-        type: "array"
-        items:
-          $ref: "#/definitions/Listing"
   TieredBlock:
     type: "object"
     properties:
@@ -13603,47 +13738,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  Recurring:
-    type: "object"
-    properties:
-      billingPeriod:
-        type: "string"
-        enum:
-        - "DAILY"
-        - "WEEKLY"
-        - "BIWEEKLY"
-        - "THIRTY_DAYS"
-        - "SIXTY_DAYS"
-        - "NINETY_DAYS"
-        - "MONTHLY"
-        - "BIMESTRIAL"
-        - "QUARTERLY"
-        - "TRIANNUAL"
-        - "BIANNUAL"
-        - "ANNUAL"
-        - "BIENNIAL"
-        - "NO_BILLING_PERIOD"
-      recurringPrice:
-        $ref: "#/definitions/InternationalPrice"
-  Tenant:
-    type: "object"
-    required:
-    - "apiKey"
-    - "apiSecret"
-    properties:
-      tenantId:
-        type: "string"
-        format: "uuid"
-      externalKey:
-        type: "string"
-      apiKey:
-        type: "string"
-      apiSecret:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
   Credit:
     type: "object"
     required:
@@ -13666,6 +13760,25 @@ definitions:
         type: "string"
         format: "uuid"
       description:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
+  Tenant:
+    type: "object"
+    required:
+    - "apiKey"
+    - "apiSecret"
+    properties:
+      tenantId:
+        type: "string"
+        format: "uuid"
+      externalKey:
+        type: "string"
+      apiKey:
+        type: "string"
+      apiSecret:
         type: "string"
       auditLogs:
         type: "array"
@@ -13752,30 +13865,6 @@ definitions:
           $ref: "#/definitions/AuditLog"
       hostedPaymentPageFieldsJson:
         $ref: "#/definitions/HostedPaymentPageFields"
-  PlanPhase:
-    type: "object"
-    properties:
-      duration:
-        $ref: "#/definitions/Duration"
-      fixed:
-        $ref: "#/definitions/Fixed"
-      recurring:
-        $ref: "#/definitions/Recurring"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
-      phaseType:
-        type: "string"
-        enum:
-        - "TRIAL"
-        - "DISCOUNT"
-        - "FIXEDTERM"
-        - "EVERGREEN"
-      name:
-        type: "string"
-      prettyName:
-        type: "string"
   PriceList:
     type: "object"
     properties:
@@ -13785,15 +13874,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  Fixed:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-        enum:
-        - "ONE_TIME"
-      price:
-        $ref: "#/definitions/InternationalPrice"
   SimplePlan:
     type: "object"
     properties:
@@ -14084,6 +14164,21 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  UserRoles:
+    type: "object"
+    required:
+    - "password"
+    - "roles"
+    - "username"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+      roles:
+        type: "array"
+        items:
+          type: "string"
   GatewayNotification:
     type: "object"
     properties:
@@ -14109,33 +14204,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  UserRoles:
-    type: "object"
-    required:
-    - "password"
-    - "roles"
-    - "username"
-    properties:
-      username:
-        type: "string"
-      password:
-        type: "string"
-      roles:
-        type: "array"
-        items:
-          type: "string"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -14150,6 +14218,18 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   Plan:
     type: "object"
     properties:
@@ -14191,13 +14271,6 @@ definitions:
         default: false
       session:
         $ref: "#/definitions/Session"
-  Listing:
-    type: "object"
-    properties:
-      plan:
-        $ref: "#/definitions/Plan"
-      priceList:
-        $ref: "#/definitions/PriceList"
   RolledUpUsage:
     type: "object"
     properties:
@@ -14214,6 +14287,15 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/RolledUpUnit"
+  BulkSubscriptionsBundle:
+    type: "object"
+    required:
+    - "baseEntitlementAndAddOns"
+    properties:
+      baseEntitlementAndAddOns:
+        type: "array"
+        items:
+          $ref: "#/definitions/Subscription"
   CustomField:
     type: "object"
     required:
@@ -14257,15 +14339,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  BulkSubscriptionsBundle:
-    type: "object"
-    required:
-    - "baseEntitlementAndAddOns"
-    properties:
-      baseEntitlementAndAddOns:
-        type: "array"
-        items:
-          $ref: "#/definitions/Subscription"
   Limit:
     type: "object"
     properties:

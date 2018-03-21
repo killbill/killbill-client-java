@@ -221,15 +221,15 @@ public class AccountApi {
         return httpClient.doPost(uri, body, PaymentMethod.class, requestOptions);
     }
 
-    public Tags createTags(final UUID accountId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID accountId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tagList != null) {
-            queryParams.put("tagList", String.valueOf(tagList));
+        if (tags != null) {
+            queryParams.putAll("tags", tags);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -243,15 +243,15 @@ public class AccountApi {
     }
 
 
-    public void deleteCustomFields(final UUID accountId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID accountId, final List<String> customFields,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/accounts/{accountId}/customFields"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (customFieldList != null) {
-            queryParams.put("customFieldList", String.valueOf(customFieldList));
+        if (customFields != null) {
+            queryParams.putAll("customFields", customFields);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -263,15 +263,15 @@ public class AccountApi {
     }
 
 
-    public void deleteTags(final UUID accountId, final String tagList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID accountId, final List<String> tags,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling deleteTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tagList != null) {
-            queryParams.put("tagList", String.valueOf(tagList));
+        if (tags != null) {
+            queryParams.putAll("tags", tags);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -457,10 +457,10 @@ public class AccountApi {
     }
 
     public Tags getAllTags(final UUID accountId, final ObjectType objectType,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getAllTags(accountId, objectType, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
+        return getAllTags(accountId, objectType, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getAllTags(final UUID accountId, final ObjectType objectType, final AuditLevel audit, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getAllTags(final UUID accountId, final ObjectType objectType, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAllTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/allTags"
@@ -470,11 +470,11 @@ public class AccountApi {
         if (objectType != null) {
             queryParams.put("objectType", String.valueOf(objectType));
         }
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -740,21 +740,21 @@ public class AccountApi {
     }
 
     public Tags getTags(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getTags(accountId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
+        return getTags(accountId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID accountId, final AuditLevel audit, final Boolean includedDeleted,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID accountId, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

@@ -38,11 +38,11 @@ public class Block {
 
     private Double size = null;
 
+    private Unit unit = null;
+
     private InternationalPrice price = null;
 
     private Double minTopUpCredit = null;
-
-    private Unit unit = null;
 
 
     public Block() {
@@ -50,14 +50,14 @@ public class Block {
 
     public Block(final BlockType type,
                      final Double size,
+                     final Unit unit,
                      final InternationalPrice price,
-                     final Double minTopUpCredit,
-                     final Unit unit) {
+                     final Double minTopUpCredit) {
         this.type = type;
         this.size = size;
+        this.unit = unit;
         this.price = price;
         this.minTopUpCredit = minTopUpCredit;
-        this.unit = unit;
 
     }
 
@@ -80,6 +80,15 @@ public class Block {
         return size;
     }
 
+    public Block setUnit(final Unit unit) {
+        this.unit = unit;
+        return this;
+    }
+
+    public Unit getUnit() {
+        return unit;
+    }
+
     public Block setPrice(final InternationalPrice price) {
         this.price = price;
         return this;
@@ -98,15 +107,6 @@ public class Block {
         return minTopUpCredit;
     }
 
-    public Block setUnit(final Unit unit) {
-        this.unit = unit;
-        return this;
-    }
-
-    public Unit getUnit() {
-        return unit;
-    }
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -118,9 +118,9 @@ public class Block {
         Block block = (Block) o;
         return Objects.equals(this.type, block.type) &&
         Objects.equals(this.size, block.size) &&
+        Objects.equals(this.unit, block.unit) &&
         Objects.equals(this.price, block.price) &&
-        Objects.equals(this.minTopUpCredit, block.minTopUpCredit) &&
-        Objects.equals(this.unit, block.unit);
+        Objects.equals(this.minTopUpCredit, block.minTopUpCredit);
 
     }
 
@@ -128,9 +128,9 @@ public class Block {
     public int hashCode() {
         return Objects.hash(type,
                             size,
+                            unit,
                             price,
-                            minTopUpCredit,
-                            unit);
+                            minTopUpCredit);
     }
 
 
@@ -141,9 +141,9 @@ public class Block {
         
         sb.append("    type: ").append(toIndentedString(type)).append("\n");
         sb.append("    size: ").append(toIndentedString(size)).append("\n");
+        sb.append("    unit: ").append(toIndentedString(unit)).append("\n");
         sb.append("    price: ").append(toIndentedString(price)).append("\n");
         sb.append("    minTopUpCredit: ").append(toIndentedString(minTopUpCredit)).append("\n");
-        sb.append("    unit: ").append(toIndentedString(unit)).append("\n");
         sb.append("}");
         return sb.toString();
     }

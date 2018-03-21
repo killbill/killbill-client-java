@@ -76,15 +76,15 @@ public class PaymentMethodApi {
     }
 
 
-    public void deleteCustomFields(final UUID paymentMethodId, final String customFieldList,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID paymentMethodId, final List<String> customFields,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/paymentMethods/{paymentMethodId}/customFields"
           .replaceAll("\\{" + "paymentMethodId" + "\\}", paymentMethodId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (customFieldList != null) {
-            queryParams.put("customFieldList", String.valueOf(customFieldList));
+        if (customFields != null) {
+            queryParams.putAll("customFields", customFields);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
