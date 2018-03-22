@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.joda.time.LocalDate;
+import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.Credit;
 import org.killbill.billing.client.model.gen.InvoiceItem;
+import org.killbill.billing.invoice.api.InvoiceStatus;
 
 /**
  *           DO NOT EDIT !!!
@@ -41,9 +43,9 @@ public class Invoice extends KillBillObject {
 
     private BigDecimal amount = null;
 
-    private String currency = null;
+    private Currency currency = null;
 
-    private String status = null;
+    private InvoiceStatus status = null;
 
     private BigDecimal creditAdj = null;
 
@@ -79,8 +81,8 @@ public class Invoice extends KillBillObject {
     }
 
     public Invoice(final BigDecimal amount,
-                     final String currency,
-                     final String status,
+                     final Currency currency,
+                     final InvoiceStatus status,
                      final BigDecimal creditAdj,
                      final BigDecimal refundAdj,
                      final UUID invoiceId,
@@ -127,21 +129,21 @@ public class Invoice extends KillBillObject {
         return amount;
     }
 
-    public Invoice setCurrency(final String currency) {
+    public Invoice setCurrency(final Currency currency) {
         this.currency = currency;
         return this;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public Invoice setStatus(final String status) {
+    public Invoice setStatus(final InvoiceStatus status) {
         this.status = status;
         return this;
     }
 
-    public String getStatus() {
+    public InvoiceStatus getStatus() {
         return status;
     }
 

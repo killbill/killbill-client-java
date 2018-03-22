@@ -18,6 +18,7 @@
 package org.killbill.billing.client;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
@@ -25,11 +26,19 @@ import com.google.common.collect.Iterables;
 
 public class Converter {
 
-    public static List<String> convertToListString(List<? extends Enum> in) {
+    public static List<String> convertEnumListToStringList(List<? extends Enum> in) {
         return ImmutableList.copyOf(Iterables.transform(in, new Function<Enum, String>() {
             @Override
             public String apply(final Enum input) {
                 return input.name();
+            }
+        }));
+    }
+    public static List<String> convertUUIDListToStringList(List<UUID> in) {
+        return ImmutableList.copyOf(Iterables.transform(in, new Function<UUID, String>() {
+            @Override
+            public String apply(final UUID input) {
+                return input.toString();
             }
         }));
     }

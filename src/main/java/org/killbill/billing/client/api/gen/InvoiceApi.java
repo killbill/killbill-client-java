@@ -163,7 +163,7 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, InvoiceItems.class, requestOptions);
     }
 
-    public Invoice createFutureInvoice(final UUID accountId, final String targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice createFutureInvoice(final UUID accountId, final LocalDate targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createFutureInvoice");
 
         final String uri = "/1.0/kb/invoices";
@@ -217,7 +217,7 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, InvoicePayment.class, requestOptions);
     }
 
-    public Invoice createMigrationInvoice(final InvoiceItems body, final UUID accountId, final String targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice createMigrationInvoice(final InvoiceItems body, final UUID accountId, final LocalDate targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createMigrationInvoice");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createMigrationInvoice");
 
@@ -240,15 +240,15 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, Invoice.class, requestOptions);
     }
 
-    public Tags createTags(final UUID invoiceId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID invoiceId, final List<String> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createTags");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/tags"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tag != null) {
-            queryParams.putAll("tag", tag);
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", tagDef);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -306,15 +306,15 @@ public class InvoiceApi {
     }
 
 
-    public void deleteTags(final UUID invoiceId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID invoiceId, final List<UUID> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling deleteTags");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/tags"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tag != null) {
-            queryParams.putAll("tag", tag);
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", Converter.convertUUIDListToStringList(tagDef));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -325,7 +325,7 @@ public class InvoiceApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public Invoice generateDryRunInvoice(final InvoiceDryRun body, final UUID accountId, final String targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice generateDryRunInvoice(final InvoiceDryRun body, final UUID accountId, final LocalDate targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling generateDryRunInvoice");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling generateDryRunInvoice");
 

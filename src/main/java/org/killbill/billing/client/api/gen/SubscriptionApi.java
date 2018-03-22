@@ -318,15 +318,15 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Bundles.class, requestOptions);
     }
 
-    public Tags createTags(final UUID subscriptionId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID subscriptionId, final List<String> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tag != null) {
-            queryParams.putAll("tag", tag);
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", tagDef);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -361,15 +361,15 @@ public class SubscriptionApi {
     }
 
 
-    public void deleteTags(final UUID subscriptionId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID subscriptionId, final List<UUID> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tag != null) {
-            queryParams.putAll("tag", tag);
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", Converter.convertUUIDListToStringList(tagDef));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

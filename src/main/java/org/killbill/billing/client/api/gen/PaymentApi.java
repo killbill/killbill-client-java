@@ -330,15 +330,15 @@ public class PaymentApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public Tags createTags(final UUID paymentId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID paymentId, final List<String> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createTags");
 
         final String uri = "/1.0/kb/payments/{paymentId}/tags"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tag != null) {
-            queryParams.putAll("tag", tag);
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", tagDef);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -373,15 +373,15 @@ public class PaymentApi {
     }
 
 
-    public void deleteTags(final UUID paymentId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID paymentId, final List<UUID> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling deleteTags");
 
         final String uri = "/1.0/kb/payments/{paymentId}/tags"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tag != null) {
-            queryParams.putAll("tag", tag);
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", Converter.convertUUIDListToStringList(tagDef));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

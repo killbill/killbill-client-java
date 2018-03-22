@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.joda.time.DateTime;
+import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
@@ -49,7 +50,7 @@ public class Account extends KillBillObject {
 
     private Integer billCycleDayLocal = null;
 
-    private String currency = null;
+    private Currency currency = null;
 
     private UUID parentAccountId = null;
 
@@ -100,7 +101,7 @@ public class Account extends KillBillObject {
                      final String externalKey,
                      final String email,
                      final Integer billCycleDayLocal,
-                     final String currency,
+                     final Currency currency,
                      final UUID parentAccountId,
                      final Boolean isPaymentDelegatedToParent,
                      final UUID paymentMethodId,
@@ -206,12 +207,12 @@ public class Account extends KillBillObject {
         return billCycleDayLocal;
     }
 
-    public Account setCurrency(final String currency) {
+    public Account setCurrency(final Currency currency) {
         this.currency = currency;
         return this;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 

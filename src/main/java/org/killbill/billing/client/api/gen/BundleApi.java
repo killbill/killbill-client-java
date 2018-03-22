@@ -103,15 +103,15 @@ public class BundleApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public Tags createTags(final UUID bundleId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID bundleId, final List<String> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling createTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tag != null) {
-            queryParams.putAll("tag", tag);
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", tagDef);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -146,15 +146,15 @@ public class BundleApi {
     }
 
 
-    public void deleteTags(final UUID bundleId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID bundleId, final List<UUID> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tag != null) {
-            queryParams.putAll("tag", tag);
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", Converter.convertUUIDListToStringList(tagDef));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

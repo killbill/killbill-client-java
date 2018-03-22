@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.UUID;
 
+import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.catalog.api.PriceListSet;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
@@ -105,7 +106,7 @@ public class AccountApiTest {
         final UUID accountId = result.getAccountId();
 
         account.setEmail("somebody@something.org");
-        account.setCurrency("USD");
+        account.setCurrency(Currency.USD);
         accountApi.updateAccount(account, accountId, false, requestOptions);
 
         final Account result3 = accountApi.getAccount(accountId, false, false, AuditLevel.FULL, requestOptions);

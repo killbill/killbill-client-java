@@ -221,15 +221,15 @@ public class AccountApi {
         return httpClient.doPost(uri, body, PaymentMethod.class, requestOptions);
     }
 
-    public Tags createTags(final UUID accountId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID accountId, final List<String> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tag != null) {
-            queryParams.putAll("tag", tag);
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", tagDef);
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -263,15 +263,15 @@ public class AccountApi {
     }
 
 
-    public void deleteTags(final UUID accountId, final List<String> tag,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID accountId, final List<UUID> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling deleteTags");
 
         final String uri = "/1.0/kb/accounts/{accountId}/tags"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tag != null) {
-            queryParams.putAll("tag", tag);
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", Converter.convertUUIDListToStringList(tagDef));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -497,7 +497,7 @@ public class AccountApi {
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (blockingStateTypes != null) {
-            queryParams.putAll("blockingStateTypes", Converter.convertToListString(blockingStateTypes));
+            queryParams.putAll("blockingStateTypes", Converter.convertEnumListToStringList(blockingStateTypes));
         }
         if (blockingStateSvcs != null) {
             queryParams.putAll("blockingStateSvcs", blockingStateSvcs);
@@ -881,13 +881,11 @@ public class AccountApi {
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, null, requestOptions);
+        httpClient.doPut(uri, null, requestOptions);
     }
 
     public void refreshPaymentMethods(final UUID accountId, final String pluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -905,13 +903,11 @@ public class AccountApi {
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, null, requestOptions);
+        httpClient.doPut(uri, null, requestOptions);
     }
 
 
@@ -1018,13 +1014,11 @@ public class AccountApi {
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, null, requestOptions);
+        httpClient.doPut(uri, null, requestOptions);
     }
 
     public void updateAccount(final Account body, final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {

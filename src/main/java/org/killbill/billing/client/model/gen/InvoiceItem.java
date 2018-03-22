@@ -25,8 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.joda.time.LocalDate;
+import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.InvoiceItem;
+import org.killbill.billing.invoice.api.InvoiceItemType;
 
 /**
  *           DO NOT EDIT !!!
@@ -64,7 +66,7 @@ public class InvoiceItem extends KillBillObject {
 
     private String prettyUsageName = null;
 
-    private String itemType = null;
+    private InvoiceItemType itemType = null;
 
     private String description = null;
 
@@ -76,7 +78,7 @@ public class InvoiceItem extends KillBillObject {
 
     private BigDecimal rate = null;
 
-    private String currency = null;
+    private Currency currency = null;
 
     private Integer quantity = null;
 
@@ -102,13 +104,13 @@ public class InvoiceItem extends KillBillObject {
                      final String prettyPlanName,
                      final String prettyPhaseName,
                      final String prettyUsageName,
-                     final String itemType,
+                     final InvoiceItemType itemType,
                      final String description,
                      final LocalDate startDate,
                      final LocalDate endDate,
                      final BigDecimal amount,
                      final BigDecimal rate,
-                     final String currency,
+                     final Currency currency,
                      final Integer quantity,
                      final String itemDetails,
                      final List<InvoiceItem> childItems,
@@ -258,12 +260,12 @@ public class InvoiceItem extends KillBillObject {
         return prettyUsageName;
     }
 
-    public InvoiceItem setItemType(final String itemType) {
+    public InvoiceItem setItemType(final InvoiceItemType itemType) {
         this.itemType = itemType;
         return this;
     }
 
-    public String getItemType() {
+    public InvoiceItemType getItemType() {
         return itemType;
     }
 
@@ -312,12 +314,12 @@ public class InvoiceItem extends KillBillObject {
         return rate;
     }
 
-    public InvoiceItem setCurrency(final String currency) {
+    public InvoiceItem setCurrency(final Currency currency) {
         this.currency = currency;
         return this;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
