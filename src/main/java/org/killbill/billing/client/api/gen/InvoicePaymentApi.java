@@ -26,6 +26,7 @@ import org.killbill.billing.client.model.gen.PaymentTransaction;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import java.util.List;
+import java.util.Map;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
@@ -60,7 +61,7 @@ public class InvoicePaymentApi {
         this.httpClient = httpClient;
     }
 
-    public void completeInvoicePaymentTransaction(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void completeInvoicePaymentTransaction(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling completeInvoicePaymentTransaction");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling completeInvoicePaymentTransaction");
 
@@ -72,7 +73,7 @@ public class InvoicePaymentApi {
             queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -138,11 +139,11 @@ public class InvoicePaymentApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public InvoicePayment createRefundWithAdjustments(final InvoicePaymentTransaction body, final UUID paymentId, final UUID paymentMethodId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment createRefundWithAdjustments(final InvoicePaymentTransaction body, final UUID paymentId, final UUID paymentMethodId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return createRefundWithAdjustments(body, paymentId, Boolean.valueOf(false), paymentMethodId, pluginProperty, inputOptions);
     }
 
-    public InvoicePayment createRefundWithAdjustments(final InvoicePaymentTransaction body, final UUID paymentId, final Boolean externalPayment, final UUID paymentMethodId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment createRefundWithAdjustments(final InvoicePaymentTransaction body, final UUID paymentId, final Boolean externalPayment, final UUID paymentMethodId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createRefundWithAdjustments");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createRefundWithAdjustments");
 
@@ -157,7 +158,7 @@ public class InvoicePaymentApi {
             queryParams.put("paymentMethodId", String.valueOf(paymentMethodId));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -256,11 +257,11 @@ public class InvoicePaymentApi {
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
-    public InvoicePayment getInvoicePayment(final UUID paymentId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment getInvoicePayment(final UUID paymentId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return getInvoicePayment(paymentId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public InvoicePayment getInvoicePayment(final UUID paymentId, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment getInvoicePayment(final UUID paymentId, final Boolean withPluginInfo, final Boolean withAttempts, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getInvoicePayment");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}"
@@ -274,7 +275,7 @@ public class InvoicePaymentApi {
             queryParams.put("withAttempts", String.valueOf(withAttempts));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
@@ -288,11 +289,11 @@ public class InvoicePaymentApi {
         return httpClient.doGet(uri, InvoicePayment.class, requestOptions);
     }
 
-    public Tags getTags(final UUID paymentId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID paymentId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return getTags(paymentId, pluginProperty, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID paymentId, final List<String> pluginProperty, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID paymentId, final Map<String, String> pluginProperty, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getTags");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/tags"
@@ -300,7 +301,7 @@ public class InvoicePaymentApi {
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));

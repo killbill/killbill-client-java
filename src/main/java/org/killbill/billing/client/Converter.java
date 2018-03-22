@@ -17,8 +17,12 @@
 
 package org.killbill.billing.client;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import com.ning.http.util.UTF8UrlEncoder;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
@@ -34,6 +38,7 @@ public class Converter {
             }
         }));
     }
+
     public static List<String> convertUUIDListToStringList(List<UUID> in) {
         return ImmutableList.copyOf(Iterables.transform(in, new Function<UUID, String>() {
             @Override
@@ -41,6 +46,17 @@ public class Converter {
                 return input.toString();
             }
         }));
+    }
+
+    public static List<String> convertPluginPropertyMap(Map<String, String> pluginProperties) {
+        if (pluginProperties == null || pluginProperties.isEmpty()) {
+            return ImmutableList.of();
+        }
+        List<String> result = new ArrayList<String>();
+        for (final String key : pluginProperties.keySet()) {
+            result.add(String.format("%s=%s", UTF8UrlEncoder.encodeQueryElement(key), UTF8UrlEncoder.encodeQueryElement(pluginProperties.get(key))));
+        }
+        return result;
     }
 
 }

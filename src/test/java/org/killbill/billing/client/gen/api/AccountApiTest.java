@@ -39,6 +39,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Resources;
@@ -121,7 +122,7 @@ public class AccountApiTest {
         //subscription.setExternalKey(bundleExternalKey);
         subscription.setAccountId(accountId);
         subscription.setPlanName("simple-monthly");
-        final Subscription subscription2 = subscriptionApi.createEntitlement(subscription, null, null, false, false, null, false, -1L, ImmutableList.<String>of(), requestOptions);
+        final Subscription subscription2 = subscriptionApi.createEntitlement(subscription, null, null, false, false, null, false, -1L, ImmutableMap.<String, String>of(), requestOptions);
         Assert.assertNotNull(subscription2);
 
 

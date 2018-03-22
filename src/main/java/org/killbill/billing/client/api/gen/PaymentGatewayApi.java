@@ -25,6 +25,7 @@ import org.killbill.billing.client.model.gen.HostedPaymentPageFields;
 import org.killbill.billing.client.model.gen.HostedPaymentPageFormDescriptor;
 import java.util.UUID;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -56,7 +57,7 @@ public class PaymentGatewayApi {
         this.httpClient = httpClient;
     }
 
-    public HostedPaymentPageFormDescriptor buildComboFormDescriptor(final ComboHostedPaymentPage body, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public HostedPaymentPageFormDescriptor buildComboFormDescriptor(final ComboHostedPaymentPage body, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling buildComboFormDescriptor");
 
         final String uri = "/1.0/kb/paymentGateways/hosted/form";
@@ -66,7 +67,7 @@ public class PaymentGatewayApi {
             queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -80,7 +81,7 @@ public class PaymentGatewayApi {
         return httpClient.doPost(uri, body, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
 
-    public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling buildFormDescriptor");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling buildFormDescriptor");
 
@@ -95,7 +96,7 @@ public class PaymentGatewayApi {
             queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -109,7 +110,7 @@ public class PaymentGatewayApi {
         return httpClient.doPost(uri, body, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
 
-    public GatewayNotification processNotification(final String body, final String pluginName, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public GatewayNotification processNotification(final String body, final String pluginName, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processNotification");
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling processNotification");
 
@@ -121,7 +122,7 @@ public class PaymentGatewayApi {
             queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

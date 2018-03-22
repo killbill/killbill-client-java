@@ -28,6 +28,7 @@ import org.killbill.billing.client.model.CustomFields;
 import java.util.List;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
+import java.util.Map;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -162,11 +163,11 @@ public class PaymentTransactionApi {
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
-    public Payment getPaymentByTransactionId(final UUID transactionId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment getPaymentByTransactionId(final UUID transactionId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return getPaymentByTransactionId(transactionId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public Payment getPaymentByTransactionId(final UUID transactionId, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment getPaymentByTransactionId(final UUID transactionId, final Boolean withPluginInfo, final Boolean withAttempts, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getPaymentByTransactionId");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}"
@@ -180,7 +181,7 @@ public class PaymentTransactionApi {
             queryParams.put("withAttempts", String.valueOf(withAttempts));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));

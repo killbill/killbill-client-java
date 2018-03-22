@@ -36,8 +36,9 @@ import org.killbill.billing.client.model.gen.PaymentMethod;
 import org.killbill.billing.client.model.gen.PaymentTransaction;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
-import java.util.List;
+import java.util.Map;
 import org.killbill.billing.client.model.AccountEmails;
+import java.util.List;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
@@ -81,7 +82,7 @@ public class AccountApi {
         this.httpClient = httpClient;
     }
 
-    public void addAccountBlockingState(final BlockingState body, final UUID accountId, final LocalDate requestedDate, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void addAccountBlockingState(final BlockingState body, final UUID accountId, final LocalDate requestedDate, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addAccountBlockingState");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling addAccountBlockingState");
 
@@ -93,7 +94,7 @@ public class AccountApi {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -185,11 +186,11 @@ public class AccountApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public PaymentMethod createPaymentMethod(final PaymentMethod body, final UUID accountId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PaymentMethod createPaymentMethod(final PaymentMethod body, final UUID accountId, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return createPaymentMethod(body, accountId, Boolean.valueOf(false), Boolean.valueOf(false), controlPluginName, pluginProperty, inputOptions);
     }
 
-    public PaymentMethod createPaymentMethod(final PaymentMethod body, final UUID accountId, final Boolean isDefault, final Boolean payAllUnpaidInvoices, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PaymentMethod createPaymentMethod(final PaymentMethod body, final UUID accountId, final Boolean isDefault, final Boolean payAllUnpaidInvoices, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createPaymentMethod");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createPaymentMethod");
 
@@ -207,7 +208,7 @@ public class AccountApi {
             queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -594,11 +595,11 @@ public class AccountApi {
         return httpClient.doGet(uri, AccountEmails.class, requestOptions);
     }
 
-    public InvoicePayments getInvoicePayments(final UUID accountId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayments getInvoicePayments(final UUID accountId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return getInvoicePayments(accountId, AuditLevel.NONE, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public InvoicePayments getInvoicePayments(final UUID accountId, final AuditLevel audit, final Boolean withPluginInfo, final Boolean withAttempts, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayments getInvoicePayments(final UUID accountId, final AuditLevel audit, final Boolean withPluginInfo, final Boolean withAttempts, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicePayments");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoicePayments"
@@ -615,7 +616,7 @@ public class AccountApi {
             queryParams.put("withAttempts", String.valueOf(withAttempts));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -675,11 +676,11 @@ public class AccountApi {
         return httpClient.doGet(uri, OverdueState.class, requestOptions);
     }
 
-    public PaymentMethods getPaymentMethods(final UUID accountId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PaymentMethods getPaymentMethods(final UUID accountId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return getPaymentMethods(accountId, Boolean.valueOf(false), pluginProperty, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public PaymentMethods getPaymentMethods(final UUID accountId, final Boolean withPluginInfo, final List<String> pluginProperty, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PaymentMethods getPaymentMethods(final UUID accountId, final Boolean withPluginInfo, final Map<String, String> pluginProperty, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getPaymentMethods");
 
         final String uri = "/1.0/kb/accounts/{accountId}/paymentMethods"
@@ -690,7 +691,7 @@ public class AccountApi {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
@@ -707,11 +708,11 @@ public class AccountApi {
         return httpClient.doGet(uri, PaymentMethods.class, requestOptions);
     }
 
-    public Payments getPayments(final UUID accountId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payments getPayments(final UUID accountId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return getPayments(accountId, AuditLevel.NONE, pluginProperty, Boolean.valueOf(false), Boolean.valueOf(false), inputOptions);
     }
 
-    public Payments getPayments(final UUID accountId, final AuditLevel audit, final List<String> pluginProperty, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payments getPayments(final UUID accountId, final AuditLevel audit, final Map<String, String> pluginProperty, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getPayments");
 
         final String uri = "/1.0/kb/accounts/{accountId}/payments"
@@ -722,7 +723,7 @@ public class AccountApi {
             queryParams.put("audit", String.valueOf(audit));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
@@ -781,11 +782,11 @@ public class AccountApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void payAllInvoices(final UUID accountId, final BigDecimal paymentAmount, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void payAllInvoices(final UUID accountId, final BigDecimal paymentAmount, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         payAllInvoices(accountId, Boolean.valueOf(false), paymentAmount, pluginProperty, inputOptions);
     }
 
-    public void payAllInvoices(final UUID accountId, final Boolean externalPayment, final BigDecimal paymentAmount, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void payAllInvoices(final UUID accountId, final Boolean externalPayment, final BigDecimal paymentAmount, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling payAllInvoices");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoicePayments"
@@ -799,7 +800,7 @@ public class AccountApi {
             queryParams.put("paymentAmount", String.valueOf(paymentAmount));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -813,7 +814,7 @@ public class AccountApi {
         httpClient.doPost(uri, null, requestOptions);
     }
 
-    public Payment processPayment(final PaymentTransaction body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment processPayment(final PaymentTransaction body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processPayment");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling processPayment");
 
@@ -828,7 +829,7 @@ public class AccountApi {
             queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -842,7 +843,7 @@ public class AccountApi {
         return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public Payment processPaymentByExternalKey(final PaymentTransaction body, final String externalKey, final UUID paymentMethodId, final List<String> controlPluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment processPaymentByExternalKey(final PaymentTransaction body, final String externalKey, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processPaymentByExternalKey");
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling processPaymentByExternalKey");
 
@@ -859,7 +860,7 @@ public class AccountApi {
             queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -888,7 +889,7 @@ public class AccountApi {
         httpClient.doPut(uri, null, requestOptions);
     }
 
-    public void refreshPaymentMethods(final UUID accountId, final String pluginName, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void refreshPaymentMethods(final UUID accountId, final String pluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling refreshPaymentMethods");
 
         final String uri = "/1.0/kb/accounts/{accountId}/paymentMethods/refresh"
@@ -899,7 +900,7 @@ public class AccountApi {
             queryParams.put("pluginName", String.valueOf(pluginName));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -961,11 +962,11 @@ public class AccountApi {
         return httpClient.doGet(uri, Accounts.class, requestOptions);
     }
 
-    public void setDefaultPaymentMethod(final UUID accountId, final UUID paymentMethodId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void setDefaultPaymentMethod(final UUID accountId, final UUID paymentMethodId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         setDefaultPaymentMethod(accountId, paymentMethodId, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public void setDefaultPaymentMethod(final UUID accountId, final UUID paymentMethodId, final Boolean payAllUnpaidInvoices, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void setDefaultPaymentMethod(final UUID accountId, final UUID paymentMethodId, final Boolean payAllUnpaidInvoices, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling setDefaultPaymentMethod");
         Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling setDefaultPaymentMethod");
 
@@ -978,7 +979,7 @@ public class AccountApi {
             queryParams.put("payAllUnpaidInvoices", String.valueOf(payAllUnpaidInvoices));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

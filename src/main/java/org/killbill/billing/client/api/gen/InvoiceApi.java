@@ -30,6 +30,7 @@ import java.util.UUID;
 import org.killbill.billing.client.model.CustomFields;
 import java.util.List;
 import org.killbill.billing.client.model.InvoiceItems;
+import java.util.Map;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Invoices;
@@ -121,11 +122,11 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final List<String> pluginProperty, final String paymentExternalKey, final String transactionExternalKey,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final Map<String, String> pluginProperty, final String paymentExternalKey, final String transactionExternalKey,  final RequestOptions inputOptions) throws KillBillClientException {
         return createExternalCharges(body, accountId, requestedDate, Boolean.valueOf(false), pluginProperty, Boolean.valueOf(false), paymentExternalKey, transactionExternalKey, inputOptions);
     }
 
-    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final Boolean payInvoice, final List<String> pluginProperty, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final Boolean payInvoice, final Map<String, String> pluginProperty, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createExternalCharges");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createExternalCharges");
 
@@ -140,7 +141,7 @@ public class InvoiceApi {
             queryParams.put("payInvoice", String.valueOf(payInvoice));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
         if (autoCommit != null) {
             queryParams.put("autoCommit", String.valueOf(autoCommit));
@@ -187,11 +188,11 @@ public class InvoiceApi {
         return httpClient.doPost(uri, null, Invoice.class, requestOptions);
     }
 
-    public InvoicePayment createInstantPayment(final InvoicePayment body, final UUID invoiceId, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment createInstantPayment(final InvoicePayment body, final UUID invoiceId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         return createInstantPayment(body, invoiceId, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public InvoicePayment createInstantPayment(final InvoicePayment body, final UUID invoiceId, final Boolean externalPayment, final List<String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment createInstantPayment(final InvoicePayment body, final UUID invoiceId, final Boolean externalPayment, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createInstantPayment");
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createInstantPayment");
 
@@ -203,7 +204,7 @@ public class InvoiceApi {
             queryParams.put("externalPayment", String.valueOf(externalPayment));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", pluginProperty);
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
