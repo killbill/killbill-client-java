@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.joda.time.LocalDate;
+import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
@@ -39,7 +40,7 @@ public class Credit extends KillBillObject {
 
     private BigDecimal creditAmount = null;
 
-    private String currency = null;
+    private Currency currency = null;
 
     private UUID invoiceId = null;
 
@@ -57,7 +58,7 @@ public class Credit extends KillBillObject {
     }
 
     public Credit(final BigDecimal creditAmount,
-                     final String currency,
+                     final Currency currency,
                      final UUID invoiceId,
                      final String invoiceNumber,
                      final LocalDate effectiveDate,
@@ -85,12 +86,12 @@ public class Credit extends KillBillObject {
         return creditAmount;
     }
 
-    public Credit setCurrency(final String currency) {
+    public Credit setCurrency(final Currency currency) {
         this.currency = currency;
         return this;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 

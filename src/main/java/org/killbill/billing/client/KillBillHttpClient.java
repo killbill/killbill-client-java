@@ -214,22 +214,6 @@ public class KillBillHttpClient implements Closeable {
     }
 
     // POST
-
-    @Deprecated
-    public Response doPost(final String uri, final Object body, final Multimap<String, String> options) throws KillBillClientException {
-        return doPost(uri, body, options, Response.class);
-    }
-
-    @Deprecated
-    public <T> T doPost(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doPost(uri, body, options, requestTimeoutSec, clazz);
-    }
-
-    @Deprecated
-    public <T> T doPost(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
-        return doPostAndMaybeFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, false);
-    }
-
     public Response doPost(final String uri, final Object body, final RequestOptions requestOptions) throws KillBillClientException {
         return doPost(uri, body, Response.class, requestOptions);
     }
@@ -244,18 +228,8 @@ public class KillBillHttpClient implements Closeable {
     }
 
     @Deprecated
-    public <T> T doPostAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doPostAndFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, clazz);
-    }
-
-    @Deprecated
     public <T> T doPostAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final Multimap<String, String> optionsForFollow, final Class<T> clazz) throws KillBillClientException {
         return doPostAndFollowLocation(uri, body, options, optionsForFollow, requestTimeoutSec, clazz);
-    }
-
-    @Deprecated
-    public <T> T doPostAndFollowLocation(final String uri, final Object body, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
-        return doPostAndFollowLocation(uri, body, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
     }
 
     @Deprecated
@@ -316,26 +290,14 @@ public class KillBillHttpClient implements Closeable {
     }
 
     // DELETE
-
-    @Deprecated
-    public Response doDelete(final String uri, final Multimap<String, String> options) throws KillBillClientException {
-        return doDelete(uri, options, Response.class);
-    }
-
-    @Deprecated
-    public <T> T doDelete(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doDeleteAndMaybeFollowLocation(uri, options, requestTimeoutSec, clazz, false);
-    }
-
-    @Deprecated
-    public <T> T doDeleteAndMaybeFollowLocation(final String uri, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
-        final String verb = "DELETE";
-        return doPrepareRequestAndMaybeFollowLocation(verb, uri, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz, followLocation);
-    }
-
     public Response doDelete(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
         return doDelete(uri, null, Response.class, requestOptions);
     }
+
+    public Response doDelete(final String uri, final Object body, final RequestOptions options) throws KillBillClientException {
+        return doDelete(uri, body, Response.class, options);
+    }
+
 
     public <T> T doDelete(final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions) throws KillBillClientException {
         return doDelete(uri, body, returnClass, requestOptions, this.requestTimeoutSec);
@@ -347,17 +309,6 @@ public class KillBillHttpClient implements Closeable {
     }
 
     // GET
-
-    @Deprecated
-    public Response doGet(final String uri, final Multimap<String, String> options) throws KillBillClientException {
-        return doGet(uri, options, Response.class);
-    }
-
-    @Deprecated
-    public <T> T doGet(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doGetWithUrl(uri, options, requestTimeoutSec, clazz);
-    }
-
     @Deprecated
     public <T> T doGetWithUrl(final String url, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
         final String verb = "GET";
@@ -378,23 +329,6 @@ public class KillBillHttpClient implements Closeable {
     }
 
     // HEAD
-
-    @Deprecated
-    public Response doHead(final String uri, final Multimap<String, String> options) throws KillBillClientException {
-        return doHead(uri, options, Response.class);
-    }
-
-    @Deprecated
-    public <T> T doHead(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doHeadWithUrl(uri, options, requestTimeoutSec, clazz);
-    }
-
-    @Deprecated
-    public <T> T doHeadWithUrl(final String url, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
-        final String verb = "HEAD";
-        return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
-    }
-
     public Response doHead(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
         return doHead(uri, requestOptions, this.requestTimeoutSec);
     }
@@ -405,23 +339,6 @@ public class KillBillHttpClient implements Closeable {
     }
 
     // OPTIONS
-
-    @Deprecated
-    public Response doOptions(final String uri, final Multimap<String, String> options) throws KillBillClientException {
-        return doOptions(uri, options, Response.class);
-    }
-
-    @Deprecated
-    public <T> T doOptions(final String uri, final Multimap<String, String> options, final Class<T> clazz) throws KillBillClientException {
-        return doOptionsWithUrl(uri, options, requestTimeoutSec, clazz);
-    }
-
-    @Deprecated
-    public <T> T doOptionsWithUrl(final String url, final Multimap<String, String> options, final int timeoutSec, final Class<T> clazz) throws KillBillClientException {
-        final String verb = "OPTIONS";
-        return doPrepareRequestAndMaybeFollowLocation(verb, url, options, DEFAULT_EMPTY_QUERY, timeoutSec, clazz);
-    }
-
     public Response doOptions(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
         return doOptions(uri, requestOptions, this.requestTimeoutSec);
     }
@@ -437,10 +354,6 @@ public class KillBillHttpClient implements Closeable {
         return doPrepareRequestAndMaybeFollowLocation(verb, uri, null, options, optionsForFollow, timeoutSec, clazz, false);
     }
 
-    @Deprecated
-    private <T> T doPrepareRequestAndMaybeFollowLocation(final String verb, final String uri, final Multimap<String, String> options, final Multimap<String, String> optionsForFollow, final int timeoutSec, final Class<T> clazz, final boolean followLocation) throws KillBillClientException {
-        return doPrepareRequestAndMaybeFollowLocation(verb, uri, null, options, optionsForFollow, timeoutSec, clazz, followLocation);
-    }
 
     private <T> T doPrepareRequest(final String verb, final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
         final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery(verb, getKBServerUrl(uri), requestOptions);

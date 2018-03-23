@@ -59,7 +59,7 @@ public class PaymentTransaction extends KillBillObject {
 
     private BigDecimal processedAmount = null;
 
-    private String processedCurrency = null;
+    private Currency processedCurrency = null;
 
     private TransactionStatus status = null;
 
@@ -87,7 +87,7 @@ public class PaymentTransaction extends KillBillObject {
                      final Currency currency,
                      final DateTime effectiveDate,
                      final BigDecimal processedAmount,
-                     final String processedCurrency,
+                     final Currency processedCurrency,
                      final TransactionStatus status,
                      final String gatewayErrorCode,
                      final String gatewayErrorMsg,
@@ -197,12 +197,12 @@ public class PaymentTransaction extends KillBillObject {
         return processedAmount;
     }
 
-    public PaymentTransaction setProcessedCurrency(final String processedCurrency) {
+    public PaymentTransaction setProcessedCurrency(final Currency processedCurrency) {
         this.processedCurrency = processedCurrency;
         return this;
     }
 
-    public String getProcessedCurrency() {
+    public Currency getProcessedCurrency() {
         return processedCurrency;
     }
 

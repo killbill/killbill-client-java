@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.killbill.billing.ObjectType;
 import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
@@ -43,7 +44,7 @@ public class TagDefinition extends KillBillObject {
 
     private String description = null;
 
-    private List<String> applicableObjectTypes = null;
+    private List<ObjectType> applicableObjectTypes = null;
 
 
 
@@ -54,7 +55,7 @@ public class TagDefinition extends KillBillObject {
                      final Boolean isControlTag,
                      final String name,
                      final String description,
-                     final List<String> applicableObjectTypes,
+                     final List<ObjectType> applicableObjectTypes,
                      final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.id = id;
@@ -102,20 +103,20 @@ public class TagDefinition extends KillBillObject {
         return description;
     }
 
-    public TagDefinition setApplicableObjectTypes(final List<String> applicableObjectTypes) {
+    public TagDefinition setApplicableObjectTypes(final List<ObjectType> applicableObjectTypes) {
         this.applicableObjectTypes = applicableObjectTypes;
         return this;
     }
 
-    public TagDefinition addApplicableObjectTypesItem(final String applicableObjectTypesItem) {
+    public TagDefinition addApplicableObjectTypesItem(final ObjectType applicableObjectTypesItem) {
         if (this.applicableObjectTypes == null) {
-            this.applicableObjectTypes = new ArrayList<String>();
+            this.applicableObjectTypes = new ArrayList<ObjectType>();
         }
         this.applicableObjectTypes.add(applicableObjectTypesItem);
         return this;
     }
 
-    public List<String> getApplicableObjectTypes() {
+    public List<ObjectType> getApplicableObjectTypes() {
         return applicableObjectTypes;
     }
 

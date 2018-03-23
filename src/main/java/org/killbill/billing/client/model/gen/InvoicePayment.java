@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.PaymentAttempt;
 import org.killbill.billing.client.model.gen.PaymentTransaction;
@@ -58,7 +59,7 @@ public class InvoicePayment extends KillBillObject {
 
     private BigDecimal creditedAmount = null;
 
-    private String currency = null;
+    private Currency currency = null;
 
     private UUID paymentMethodId = null;
 
@@ -81,7 +82,7 @@ public class InvoicePayment extends KillBillObject {
                      final BigDecimal purchasedAmount,
                      final BigDecimal refundedAmount,
                      final BigDecimal creditedAmount,
-                     final String currency,
+                     final Currency currency,
                      final UUID paymentMethodId,
                      final List<PaymentTransaction> transactions,
                      final List<PaymentAttempt> paymentAttempts,
@@ -195,12 +196,12 @@ public class InvoicePayment extends KillBillObject {
         return creditedAmount;
     }
 
-    public InvoicePayment setCurrency(final String currency) {
+    public InvoicePayment setCurrency(final Currency currency) {
         this.currency = currency;
         return this;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 

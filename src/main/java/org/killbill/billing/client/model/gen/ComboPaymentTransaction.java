@@ -49,8 +49,6 @@ public class ComboPaymentTransaction extends KillBillObject {
     private List<PluginProperty> transactionPluginProperties = null;
 
 
-    private String transactionType = null;
-
 
     public ComboPaymentTransaction() {
     }
@@ -60,15 +58,13 @@ public class ComboPaymentTransaction extends KillBillObject {
                      final PaymentTransaction transaction,
                      final List<PluginProperty> paymentMethodPluginProperties,
                      final List<PluginProperty> transactionPluginProperties,
-                     final List<AuditLog> auditLogs,
-                     final String transactionType) {
+                     final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.account = account;
         this.paymentMethod = paymentMethod;
         this.transaction = transaction;
         this.paymentMethodPluginProperties = paymentMethodPluginProperties;
         this.transactionPluginProperties = transactionPluginProperties;
-        this.transactionType = transactionType;
 
     }
 
@@ -134,15 +130,6 @@ public class ComboPaymentTransaction extends KillBillObject {
         return transactionPluginProperties;
     }
 
-    public ComboPaymentTransaction setTransactionType(final String transactionType) {
-        this.transactionType = transactionType;
-        return this;
-    }
-
-    public String getTransactionType() {
-        return transactionType;
-    }
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -157,8 +144,7 @@ public class ComboPaymentTransaction extends KillBillObject {
         Objects.equals(this.transaction, comboPaymentTransaction.transaction) &&
         Objects.equals(this.paymentMethodPluginProperties, comboPaymentTransaction.paymentMethodPluginProperties) &&
         Objects.equals(this.transactionPluginProperties, comboPaymentTransaction.transactionPluginProperties) &&
-        Objects.equals(this.auditLogs, comboPaymentTransaction.auditLogs) &&
-        Objects.equals(this.transactionType, comboPaymentTransaction.transactionType);
+        Objects.equals(this.auditLogs, comboPaymentTransaction.auditLogs);
 
     }
 
@@ -169,8 +155,7 @@ public class ComboPaymentTransaction extends KillBillObject {
                             transaction,
                             paymentMethodPluginProperties,
                             transactionPluginProperties,
-                            auditLogs,
-                            transactionType, super.hashCode());
+                            auditLogs, super.hashCode());
     }
 
 
@@ -185,7 +170,6 @@ public class ComboPaymentTransaction extends KillBillObject {
         sb.append("    paymentMethodPluginProperties: ").append(toIndentedString(paymentMethodPluginProperties)).append("\n");
         sb.append("    transactionPluginProperties: ").append(toIndentedString(transactionPluginProperties)).append("\n");
         sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
-        sb.append("    transactionType: ").append(toIndentedString(transactionType)).append("\n");
         sb.append("}");
         return sb.toString();
     }

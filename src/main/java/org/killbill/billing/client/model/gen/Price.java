@@ -21,6 +21,7 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.math.BigDecimal;
+import org.killbill.billing.catalog.api.Currency;
 
 /**
  *           DO NOT EDIT !!!
@@ -32,7 +33,7 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Price {
 
-    private String currency = null;
+    private Currency currency = null;
 
     private BigDecimal value = null;
 
@@ -40,7 +41,7 @@ public class Price {
     public Price() {
     }
 
-    public Price(final String currency,
+    public Price(final Currency currency,
                      final BigDecimal value) {
         this.currency = currency;
         this.value = value;
@@ -48,12 +49,12 @@ public class Price {
     }
 
 
-    public Price setCurrency(final String currency) {
+    public Price setCurrency(final Currency currency) {
         this.currency = currency;
         return this;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
