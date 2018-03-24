@@ -20,6 +20,7 @@ package org.killbill.billing.client.api.gen;
 
 
 import org.killbill.billing.client.model.gen.Tenant;
+import org.killbill.billing.client.model.gen.TenantKeyValue;
 import java.util.UUID;
 
 import com.google.common.collect.Multimap;
@@ -143,7 +144,7 @@ public class TenantApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public org.killbill.billing.tenant.api.TenantKV.TenantKey getAllPluginConfiguration(final String keyPrefix,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValue getAllPluginConfiguration(final String keyPrefix,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(keyPrefix, "Missing the required parameter 'keyPrefix' when calling getAllPluginConfiguration");
 
         final String uri = "/1.0/kb/tenants/uploadPerTenantConfig/{keyPrefix}/search"
@@ -154,10 +155,10 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, org.killbill.billing.tenant.api.TenantKV.TenantKey.class, requestOptions);
+        return httpClient.doGet(uri, TenantKeyValue.class, requestOptions);
     }
 
-    public org.killbill.billing.tenant.api.TenantKV.TenantKey getPerTenantConfiguration( final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValue getPerTenantConfiguration( final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/tenants/uploadPerTenantConfig";
 
@@ -166,10 +167,10 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, org.killbill.billing.tenant.api.TenantKV.TenantKey.class, requestOptions);
+        return httpClient.doGet(uri, TenantKeyValue.class, requestOptions);
     }
 
-    public org.killbill.billing.tenant.api.TenantKV.TenantKey getPluginConfiguration(final String pluginName,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValue getPluginConfiguration(final String pluginName,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling getPluginConfiguration");
 
         final String uri = "/1.0/kb/tenants/uploadPluginConfig/{pluginName}"
@@ -180,10 +181,10 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, org.killbill.billing.tenant.api.TenantKV.TenantKey.class, requestOptions);
+        return httpClient.doGet(uri, TenantKeyValue.class, requestOptions);
     }
 
-    public org.killbill.billing.tenant.api.TenantKV.TenantKey getPluginPaymentStateMachineConfig(final String pluginName,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValue getPluginPaymentStateMachineConfig(final String pluginName,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling getPluginPaymentStateMachineConfig");
 
         final String uri = "/1.0/kb/tenants/uploadPluginPaymentStateMachineConfig/{pluginName}"
@@ -194,10 +195,10 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, org.killbill.billing.tenant.api.TenantKV.TenantKey.class, requestOptions);
+        return httpClient.doGet(uri, TenantKeyValue.class, requestOptions);
     }
 
-    public org.killbill.billing.tenant.api.TenantKV.TenantKey getPushNotificationCallbacks( final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValue getPushNotificationCallbacks( final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/tenants/registerNotificationCallback";
 
@@ -206,7 +207,7 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, org.killbill.billing.tenant.api.TenantKV.TenantKey.class, requestOptions);
+        return httpClient.doGet(uri, TenantKeyValue.class, requestOptions);
     }
 
     public Tenant getTenant(final UUID tenantId,  final RequestOptions inputOptions) throws KillBillClientException {
@@ -240,7 +241,7 @@ public class TenantApi {
         return httpClient.doGet(uri, Tenant.class, requestOptions);
     }
 
-    public org.killbill.billing.tenant.api.TenantKV.TenantKey getUserKeyValue(final String keyName,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValue getUserKeyValue(final String keyName,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(keyName, "Missing the required parameter 'keyName' when calling getUserKeyValue");
 
         final String uri = "/1.0/kb/tenants/userKeyValue/{keyName}"
@@ -251,10 +252,10 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, org.killbill.billing.tenant.api.TenantKV.TenantKey.class, requestOptions);
+        return httpClient.doGet(uri, TenantKeyValue.class, requestOptions);
     }
 
-    public org.killbill.billing.tenant.api.TenantKV.TenantKey insertUserKeyValue(final String keyName, final String body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValue insertUserKeyValue(final String keyName, final String body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(keyName, "Missing the required parameter 'keyName' when calling insertUserKeyValue");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling insertUserKeyValue");
 
@@ -269,10 +270,10 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/plain");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, body, org.killbill.billing.tenant.api.TenantKV.TenantKey.class, requestOptions);
+        return httpClient.doPost(uri, body, TenantKeyValue.class, requestOptions);
     }
 
-    public org.killbill.billing.tenant.api.TenantKV.TenantKey registerPushNotificationCallback(final String cb,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValue registerPushNotificationCallback(final String cb,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/tenants/registerNotificationCallback";
 
@@ -289,10 +290,10 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, null, org.killbill.billing.tenant.api.TenantKV.TenantKey.class, requestOptions);
+        return httpClient.doPost(uri, null, TenantKeyValue.class, requestOptions);
     }
 
-    public org.killbill.billing.tenant.api.TenantKV.TenantKey uploadPerTenantConfiguration(final String body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValue uploadPerTenantConfiguration(final String body,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadPerTenantConfiguration");
 
         final String uri = "/1.0/kb/tenants/uploadPerTenantConfig";
@@ -305,10 +306,10 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/plain");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, body, org.killbill.billing.tenant.api.TenantKV.TenantKey.class, requestOptions);
+        return httpClient.doPost(uri, body, TenantKeyValue.class, requestOptions);
     }
 
-    public org.killbill.billing.tenant.api.TenantKV.TenantKey uploadPluginConfiguration(final String body, final String pluginName,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValue uploadPluginConfiguration(final String body, final String pluginName,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadPluginConfiguration");
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling uploadPluginConfiguration");
 
@@ -323,10 +324,10 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/plain");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, body, org.killbill.billing.tenant.api.TenantKV.TenantKey.class, requestOptions);
+        return httpClient.doPost(uri, body, TenantKeyValue.class, requestOptions);
     }
 
-    public org.killbill.billing.tenant.api.TenantKV.TenantKey uploadPluginPaymentStateMachineConfig(final String body, final String pluginName,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValue uploadPluginPaymentStateMachineConfig(final String body, final String pluginName,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadPluginPaymentStateMachineConfig");
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling uploadPluginPaymentStateMachineConfig");
 
@@ -341,7 +342,7 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/plain");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, body, org.killbill.billing.tenant.api.TenantKV.TenantKey.class, requestOptions);
+        return httpClient.doPost(uri, body, TenantKeyValue.class, requestOptions);
     }
 
 }

@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "InvoiceItem"
-- name: "Subscription"
-- name: "Bundle"
-- name: "Admin"
-- name: "Account"
-- name: "PaymentGateway"
-- name: "InvoicePayment"
-- name: "CustomField"
-- name: "Tenant"
+- name: "TagDefinition"
 - name: "Overdue"
-- name: "Tag"
+- name: "Tenant"
+- name: "PaymentMethod"
+- name: "PluginInfo"
+- name: "PaymentTransaction"
 - name: "Payment"
 - name: "Catalog"
-- name: "PaymentMethod"
-- name: "Usage"
-- name: "Export"
-- name: "Invoice"
-- name: "PluginInfo"
-- name: "Security"
-- name: "NodesInfo"
+- name: "Bundle"
 - name: "Credit"
-- name: "TagDefinition"
-- name: "PaymentTransaction"
+- name: "InvoicePayment"
+- name: "InvoiceItem"
+- name: "Admin"
+- name: "NodesInfo"
+- name: "Subscription"
+- name: "Account"
+- name: "Usage"
+- name: "CustomField"
+- name: "Invoice"
+- name: "PaymentGateway"
+- name: "Export"
+- name: "Tag"
+- name: "Security"
 paths:
   /1.0/kb/accounts:
     get:
@@ -11120,7 +11120,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/TenantKey"
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11164,7 +11164,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/TenantKey"
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11223,7 +11223,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/TenantKey"
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11268,7 +11268,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/TenantKey"
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11332,7 +11332,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/TenantKey"
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11364,7 +11364,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/TenantKey"
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11414,7 +11414,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/TenantKey"
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11483,7 +11483,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/TenantKey"
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11533,7 +11533,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/TenantKey"
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11602,7 +11602,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/TenantKey"
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11652,7 +11652,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/TenantKey"
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -12391,6 +12391,15 @@ definitions:
         type: "array"
         items:
           type: "string"
+  TenantKeyValue:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      values:
+        type: "array"
+        items:
+          type: "string"
   AdminPayment:
     type: "object"
     properties:
@@ -12468,6 +12477,13 @@ definitions:
         type: "string"
       userToken:
         type: "string"
+  NodeCommandProperty:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "object"
   OverdueState:
     type: "object"
     properties:
@@ -12492,13 +12508,6 @@ definitions:
       reevaluationIntervalDays:
         type: "integer"
         format: "int32"
-  NodeCommandProperty:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      value:
-        type: "object"
   ComboPaymentTransaction:
     type: "object"
     properties:
@@ -12542,6 +12551,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      isBlockChanges:
+        type: "boolean"
+        default: false
+      isDisableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -12944,33 +12980,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      isBlockChanges:
-        type: "boolean"
-        default: false
-      isDisableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -12978,6 +12987,27 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
+  PluginInfo:
+    type: "object"
+    properties:
+      bundleSymbolicName:
+        type: "string"
+      pluginKey:
+        type: "string"
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -13008,27 +13038,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  PluginInfo:
-    type: "object"
-    properties:
-      bundleSymbolicName:
-        type: "string"
-      pluginKey:
-        type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/PluginServiceInfo"
   Subscription:
     type: "object"
     required:
@@ -14383,15 +14392,6 @@ definitions:
         - "BTC"
       value:
         type: "number"
-  TenantKey:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      values:
-        type: "array"
-        items:
-          type: "string"
   PhasePriceOverride:
     type: "object"
     properties:
@@ -14608,6 +14608,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -14853,25 +14872,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -14944,6 +14944,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
+  Tenant:
+    type: "object"
+    required:
+    - "apiKey"
+    - "apiSecret"
+    properties:
+      tenantId:
+        type: "string"
+        format: "uuid"
+      externalKey:
+        type: "string"
+      apiKey:
+        type: "string"
+      apiSecret:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
   Credit:
     type: "object"
     required:
@@ -15132,25 +15151,6 @@ definitions:
         type: "string"
         format: "uuid"
       description:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
-  Tenant:
-    type: "object"
-    required:
-    - "apiKey"
-    - "apiSecret"
-    properties:
-      tenantId:
-        type: "string"
-        format: "uuid"
-      externalKey:
-        type: "string"
-      apiKey:
-        type: "string"
-      apiSecret:
         type: "string"
       auditLogs:
         type: "array"
