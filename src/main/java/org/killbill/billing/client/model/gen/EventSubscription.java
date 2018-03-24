@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.joda.time.LocalDate;
+import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.entitlement.api.SubscriptionEventType;
 
@@ -39,7 +40,7 @@ public class EventSubscription extends KillBillObject {
 
     private UUID eventId = null;
 
-    private String billingPeriod = null;
+    private BillingPeriod billingPeriod = null;
 
     private LocalDate effectiveDate = null;
 
@@ -67,7 +68,7 @@ public class EventSubscription extends KillBillObject {
     }
 
     public EventSubscription(final UUID eventId,
-                     final String billingPeriod,
+                     final BillingPeriod billingPeriod,
                      final LocalDate effectiveDate,
                      final String plan,
                      final String product,
@@ -105,12 +106,12 @@ public class EventSubscription extends KillBillObject {
         return eventId;
     }
 
-    public EventSubscription setBillingPeriod(final String billingPeriod) {
+    public EventSubscription setBillingPeriod(final BillingPeriod billingPeriod) {
         this.billingPeriod = billingPeriod;
         return this;
     }
 
-    public String getBillingPeriod() {
+    public BillingPeriod getBillingPeriod() {
         return billingPeriod;
     }
 

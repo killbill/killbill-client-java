@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "PaymentGateway"
 - name: "InvoiceItem"
-- name: "CustomField"
-- name: "Credit"
-- name: "Admin"
-- name: "TagDefinition"
-- name: "Tag"
-- name: "Catalog"
-- name: "Export"
-- name: "InvoicePayment"
-- name: "Payment"
-- name: "PluginInfo"
-- name: "Overdue"
-- name: "Bundle"
-- name: "Tenant"
-- name: "Account"
 - name: "Subscription"
+- name: "Bundle"
+- name: "Admin"
+- name: "Account"
+- name: "PaymentGateway"
+- name: "InvoicePayment"
+- name: "CustomField"
+- name: "Tenant"
+- name: "Overdue"
+- name: "Tag"
+- name: "Payment"
+- name: "Catalog"
+- name: "PaymentMethod"
+- name: "Usage"
+- name: "Export"
+- name: "Invoice"
+- name: "PluginInfo"
 - name: "Security"
 - name: "NodesInfo"
-- name: "Invoice"
-- name: "Usage"
+- name: "Credit"
+- name: "TagDefinition"
 - name: "PaymentTransaction"
-- name: "PaymentMethod"
 paths:
   /1.0/kb/accounts:
     get:
@@ -9734,9 +9734,9 @@ paths:
     post:
       tags:
       - "Subscription"
-      summary: "Create an entitlement"
+      summary: "Create an subscription"
       description: ""
-      operationId: "createEntitlement"
+      operationId: "createSubscription"
       consumes:
       - "application/json"
       produces:
@@ -9816,16 +9816,16 @@ paths:
           schema:
             $ref: "#/definitions/Subscription"
         400:
-          description: "Invalid entitlement supplied"
+          description: "Invalid subscription supplied"
       security:
       - basicAuth: []
-  /1.0/kb/subscriptions/createEntitlementWithAddOns:
+  /1.0/kb/subscriptions/createSubscriptionWithAddOns:
     post:
       tags:
       - "Subscription"
       summary: "Create an entitlement with addOn products"
       description: ""
-      operationId: "createEntitlementWithAddOns"
+      operationId: "createSubscriptionWithAddOns"
       consumes:
       - "application/json"
       produces:
@@ -9905,13 +9905,13 @@ paths:
           description: "Invalid entitlement supplied"
       security:
       - basicAuth: []
-  /1.0/kb/subscriptions/createEntitlementsWithAddOns:
+  /1.0/kb/subscriptions/createSubscriptionsWithAddOns:
     post:
       tags:
       - "Subscription"
       summary: "Create multiple entitlements with addOn products"
       description: ""
-      operationId: "createEntitlementsWithAddOns"
+      operationId: "createSubscriptionsWithAddOns"
       consumes:
       - "application/json"
       produces:
@@ -9999,7 +9999,7 @@ paths:
       - "Subscription"
       summary: "Retrieve a subscription by id"
       description: ""
-      operationId: "getEntitlement"
+      operationId: "getSubscription"
       produces:
       - "application/json"
       parameters:
@@ -10042,7 +10042,7 @@ paths:
       - "Subscription"
       summary: "Change entitlement plan"
       description: ""
-      operationId: "changeEntitlementPlan"
+      operationId: "changeSubscriptionPlan"
       consumes:
       - "application/json"
       produces:
@@ -10123,7 +10123,7 @@ paths:
       - "Subscription"
       summary: "Cancel an entitlement plan"
       description: ""
-      operationId: "cancelEntitlementPlan"
+      operationId: "cancelSubscriptionPlan"
       produces:
       - "application/json"
       parameters:
@@ -10675,7 +10675,7 @@ paths:
       - "Subscription"
       summary: "Un-cancel an entitlement"
       description: ""
-      operationId: "uncancelEntitlementPlan"
+      operationId: "uncancelSubscriptionPlan"
       produces:
       - "application/json"
       parameters:
@@ -10725,7 +10725,7 @@ paths:
       - "Subscription"
       summary: "Undo a pending change plan on an entitlement"
       description: ""
-      operationId: "undoChangeEntitlementPlan"
+      operationId: "undoChangeSubscriptionPlan"
       produces:
       - "application/json"
       parameters:
@@ -13035,7 +13035,6 @@ definitions:
     - "billingPeriod"
     - "planName"
     - "priceList"
-    - "productCategory"
     - "productName"
     properties:
       accountId:
@@ -14609,25 +14608,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -14873,6 +14853,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -15165,6 +15164,21 @@ definitions:
         format: "uuid"
       billingPeriod:
         type: "string"
+        enum:
+        - "DAILY"
+        - "WEEKLY"
+        - "BIWEEKLY"
+        - "THIRTY_DAYS"
+        - "SIXTY_DAYS"
+        - "NINETY_DAYS"
+        - "MONTHLY"
+        - "BIMESTRIAL"
+        - "QUARTERLY"
+        - "TRIANNUAL"
+        - "BIANNUAL"
+        - "ANNUAL"
+        - "BIENNIAL"
+        - "NO_BILLING_PERIOD"
       effectiveDate:
         type: "string"
         format: "date"

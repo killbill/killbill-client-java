@@ -122,7 +122,7 @@ public class AccountApiTest {
         //subscription.setExternalKey(bundleExternalKey);
         subscription.setAccountId(accountId);
         subscription.setPlanName("simple-monthly");
-        final Subscription subscription2 = subscriptionApi.createEntitlement(subscription, null, null, false, false, null, false, -1L, ImmutableMap.<String, String>of(), requestOptions);
+        final Subscription subscription2 = subscriptionApi.createSubscription(subscription, null, null, false, false, null, false, -1L, ImmutableMap.<String, String>of(), requestOptions);
         Assert.assertNotNull(subscription2);
 
 
