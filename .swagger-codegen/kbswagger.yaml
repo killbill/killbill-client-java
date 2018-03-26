@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "TagDefinition"
-- name: "Overdue"
-- name: "Tenant"
 - name: "PaymentMethod"
-- name: "PluginInfo"
-- name: "PaymentTransaction"
+- name: "TagDefinition"
+- name: "Export"
 - name: "Payment"
 - name: "Catalog"
-- name: "Bundle"
-- name: "Credit"
-- name: "InvoicePayment"
-- name: "InvoiceItem"
-- name: "Admin"
-- name: "NodesInfo"
-- name: "Subscription"
-- name: "Account"
-- name: "Usage"
-- name: "CustomField"
-- name: "Invoice"
-- name: "PaymentGateway"
-- name: "Export"
 - name: "Tag"
+- name: "InvoicePayment"
+- name: "CustomField"
+- name: "Tenant"
+- name: "Bundle"
+- name: "Invoice"
 - name: "Security"
+- name: "PaymentTransaction"
+- name: "Account"
+- name: "InvoiceItem"
+- name: "NodesInfo"
+- name: "Credit"
+- name: "Usage"
+- name: "Overdue"
+- name: "PaymentGateway"
+- name: "Admin"
+- name: "Subscription"
+- name: "PluginInfo"
 paths:
   /1.0/kb/accounts:
     get:
@@ -2478,7 +2478,9 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/Bundle"
+            type: "array"
+            items:
+              $ref: "#/definitions/Bundle"
         404:
           description: "Bundle not found"
       security:
@@ -8325,15 +8327,6 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
       - name: "withPluginInfo"
         in: "query"
         required: false
@@ -8344,6 +8337,15 @@ paths:
         required: false
         type: "boolean"
         default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -12477,13 +12479,6 @@ definitions:
         type: "string"
       userToken:
         type: "string"
-  NodeCommandProperty:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      value:
-        type: "object"
   OverdueState:
     type: "object"
     properties:
@@ -12508,6 +12503,13 @@ definitions:
       reevaluationIntervalDays:
         type: "integer"
         format: "int32"
+  NodeCommandProperty:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "object"
   ComboPaymentTransaction:
     type: "object"
     properties:
@@ -12551,33 +12553,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      isBlockChanges:
-        type: "boolean"
-        default: false
-      isDisableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -12980,6 +12955,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      isBlockChanges:
+        type: "boolean"
+        default: false
+      isDisableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -12987,27 +12989,6 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
-  PluginInfo:
-    type: "object"
-    properties:
-      bundleSymbolicName:
-        type: "string"
-      pluginKey:
-        type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -13038,6 +13019,27 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
+  PluginInfo:
+    type: "object"
+    properties:
+      bundleSymbolicName:
+        type: "string"
+      pluginKey:
+        type: "string"
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/PluginServiceInfo"
   Subscription:
     type: "object"
     required:
@@ -15717,6 +15719,21 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  UserRoles:
+    type: "object"
+    required:
+    - "password"
+    - "roles"
+    - "username"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+      roles:
+        type: "array"
+        items:
+          type: "string"
   GatewayNotification:
     type: "object"
     properties:
@@ -15742,18 +15759,15 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  UserRoles:
+  RoleDefinition:
     type: "object"
     required:
-    - "password"
-    - "roles"
-    - "username"
+    - "permissions"
+    - "role"
     properties:
-      username:
+      role:
         type: "string"
-      password:
-        type: "string"
-      roles:
+      permissions:
         type: "array"
         items:
           type: "string"
@@ -15771,18 +15785,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   Plan:
     type: "object"
     properties:
