@@ -74,7 +74,7 @@ public class PluginProperty {
         return this;
     }
 
-    public Boolean isIsUpdatable() {
+    public Boolean isUpdatable() {
         return isUpdatable;
     }
 

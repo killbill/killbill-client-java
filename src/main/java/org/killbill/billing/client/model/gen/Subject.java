@@ -70,7 +70,7 @@ public class Subject {
         return this;
     }
 
-    public Boolean isIsAuthenticated() {
+    public Boolean isAuthenticated() {
         return isAuthenticated;
     }
 
@@ -79,7 +79,7 @@ public class Subject {
         return this;
     }
 
-    public Boolean isIsRemembered() {
+    public Boolean isRemembered() {
         return isRemembered;
     }
 

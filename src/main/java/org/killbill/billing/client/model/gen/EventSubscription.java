@@ -165,7 +165,7 @@ public class EventSubscription extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsBlockedBilling() {
+    public Boolean isBlockedBilling() {
         return isBlockedBilling;
     }
 
@@ -174,7 +174,7 @@ public class EventSubscription extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsBlockedEntitlement() {
+    public Boolean isBlockedEntitlement() {
         return isBlockedEntitlement;
     }
 

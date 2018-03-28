@@ -103,7 +103,7 @@ public class PaymentMethod extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsDefault() {
+    public Boolean isDefault() {
         return isDefault;
     }
 

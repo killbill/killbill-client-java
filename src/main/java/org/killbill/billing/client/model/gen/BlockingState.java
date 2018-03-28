@@ -112,7 +112,7 @@ public class BlockingState extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsBlockChange() {
+    public Boolean isBlockChange() {
         return isBlockChange;
     }
 
@@ -121,7 +121,7 @@ public class BlockingState extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsBlockEntitlement() {
+    public Boolean isBlockEntitlement() {
         return isBlockEntitlement;
     }
 
@@ -130,7 +130,7 @@ public class BlockingState extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsBlockBilling() {
+    public Boolean isBlockBilling() {
         return isBlockBilling;
     }
 

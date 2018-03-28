@@ -282,7 +282,7 @@ public class InvoicePaymentTransaction extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsAdjusted() {
+    public Boolean isAdjusted() {
         return isAdjusted;
     }
 

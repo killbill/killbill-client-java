@@ -87,7 +87,7 @@ public class OverdueStateConfig {
         return this;
     }
 
-    public Boolean isIsClearState() {
+    public Boolean isClearState() {
         return isClearState;
     }
 
@@ -114,7 +114,7 @@ public class OverdueStateConfig {
         return this;
     }
 
-    public Boolean isIsBlockChanges() {
+    public Boolean isBlockChanges() {
         return isBlockChanges;
     }
 
@@ -123,7 +123,7 @@ public class OverdueStateConfig {
         return this;
     }
 
-    public Boolean isIsDisableEntitlement() {
+    public Boolean isDisableEntitlement() {
         return isDisableEntitlement;
     }
 

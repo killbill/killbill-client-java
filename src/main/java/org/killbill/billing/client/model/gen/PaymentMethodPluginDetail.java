@@ -68,7 +68,7 @@ public class PaymentMethodPluginDetail {
         return this;
     }
 
-    public Boolean isIsDefaultPaymentMethod() {
+    public Boolean isDefaultPaymentMethod() {
         return isDefaultPaymentMethod;
     }
 

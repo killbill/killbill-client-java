@@ -59,7 +59,7 @@ public class NodeCommand {
         return this;
     }
 
-    public Boolean isIsSystemCommandType() {
+    public Boolean isSystemCommandType() {
         return isSystemCommandType;
     }
 

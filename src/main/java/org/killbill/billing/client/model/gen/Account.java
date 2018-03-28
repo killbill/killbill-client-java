@@ -230,7 +230,7 @@ public class Account extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsPaymentDelegatedToParent() {
+    public Boolean isPaymentDelegatedToParent() {
         return isPaymentDelegatedToParent;
     }
 
@@ -356,7 +356,7 @@ public class Account extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsMigrated() {
+    public Boolean isMigrated() {
         return isMigrated;
     }
 
@@ -365,7 +365,7 @@ public class Account extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsNotifiedForInvoices() {
+    public Boolean isNotifiedForInvoices() {
         return isNotifiedForInvoices;
     }
 

@@ -267,7 +267,7 @@ public class Invoice extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsParentInvoice() {
+    public Boolean isParentInvoice() {
         return isParentInvoice;
     }
 

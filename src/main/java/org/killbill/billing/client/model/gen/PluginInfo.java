@@ -120,7 +120,7 @@ public class PluginInfo {
         return this;
     }
 
-    public Boolean isIsSelectedForStart() {
+    public Boolean isSelectedForStart() {
         return isSelectedForStart;
     }
 

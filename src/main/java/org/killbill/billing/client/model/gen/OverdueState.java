@@ -109,7 +109,7 @@ public class OverdueState {
         return this;
     }
 
-    public Boolean isIsDisableEntitlementAndChangesBlocked() {
+    public Boolean isDisableEntitlementAndChangesBlocked() {
         return isDisableEntitlementAndChangesBlocked;
     }
 
@@ -118,7 +118,7 @@ public class OverdueState {
         return this;
     }
 
-    public Boolean isIsBlockChanges() {
+    public Boolean isBlockChanges() {
         return isBlockChanges;
     }
 
@@ -127,7 +127,7 @@ public class OverdueState {
         return this;
     }
 
-    public Boolean isIsClearState() {
+    public Boolean isClearState() {
         return isClearState;
     }
 

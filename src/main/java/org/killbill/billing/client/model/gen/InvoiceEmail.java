@@ -68,7 +68,7 @@ public class InvoiceEmail extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsNotifiedForInvoices() {
+    public Boolean isNotifiedForInvoices() {
         return isNotifiedForInvoices;
     }
 

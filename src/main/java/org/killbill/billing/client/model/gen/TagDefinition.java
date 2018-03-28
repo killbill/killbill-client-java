@@ -81,7 +81,7 @@ public class TagDefinition extends KillBillObject {
         return this;
     }
 
-    public Boolean isIsControlTag() {
+    public Boolean isControlTag() {
         return isControlTag;
     }
 
