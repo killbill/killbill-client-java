@@ -60,7 +60,7 @@ public class PaymentTransactionApi {
         this.httpClient = httpClient;
     }
 
-    public CustomFields createCustomFields(final UUID transactionId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields createCustomFields(final UUID transactionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling createCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCustomFields");
 
@@ -78,7 +78,7 @@ public class PaymentTransactionApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public Tags createTags(final UUID transactionId, final List<String> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID transactionId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling createTags");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/tags"
@@ -101,7 +101,7 @@ public class PaymentTransactionApi {
     }
 
 
-    public void deleteCustomFields(final UUID transactionId, final List<UUID> customField,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID transactionId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/customFields"
@@ -122,7 +122,7 @@ public class PaymentTransactionApi {
     }
 
 
-    public void deleteTags(final UUID transactionId, final List<UUID> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID transactionId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling deleteTags");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/tags"
@@ -142,11 +142,11 @@ public class PaymentTransactionApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public CustomFields getCustomFields(final UUID transactionId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID transactionId, final RequestOptions inputOptions) throws KillBillClientException {
         return getCustomFields(transactionId, AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getCustomFields(final UUID transactionId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID transactionId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/customFields"
@@ -165,11 +165,11 @@ public class PaymentTransactionApi {
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
-    public Payment getPaymentByTransactionId(final UUID transactionId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment getPaymentByTransactionId(final UUID transactionId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return getPaymentByTransactionId(transactionId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public Payment getPaymentByTransactionId(final UUID transactionId, final Boolean withPluginInfo, final Boolean withAttempts, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment getPaymentByTransactionId(final UUID transactionId, final Boolean withPluginInfo, final Boolean withAttempts, final Map<String, String> pluginProperty, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getPaymentByTransactionId");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}"
@@ -197,11 +197,11 @@ public class PaymentTransactionApi {
         return httpClient.doGet(uri, Payment.class, requestOptions);
     }
 
-    public Tags getTags(final UUID transactionId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID transactionId, final RequestOptions inputOptions) throws KillBillClientException {
         return getTags(transactionId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID transactionId, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID transactionId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getTags");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/tags"
@@ -223,7 +223,7 @@ public class PaymentTransactionApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public void modifyCustomFields(final UUID transactionId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void modifyCustomFields(final UUID transactionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling modifyCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
 
@@ -239,7 +239,7 @@ public class PaymentTransactionApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public Payment notifyStateChanged(final PaymentTransaction body, final UUID transactionId, final List<String> controlPluginName,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payment notifyStateChanged(final PaymentTransaction body, final UUID transactionId, final List<String> controlPluginName, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling notifyStateChanged");
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling notifyStateChanged");
 

@@ -55,7 +55,7 @@ public class TagDefinitionApi {
         this.httpClient = httpClient;
     }
 
-    public TagDefinition createTagDefinition(final TagDefinition body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TagDefinition createTagDefinition(final TagDefinition body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createTagDefinition");
 
         final String uri = "/1.0/kb/tagDefinitions";
@@ -72,7 +72,7 @@ public class TagDefinitionApi {
     }
 
 
-    public void deleteTagDefinition(final UUID tagDefinitionId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTagDefinition(final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling deleteTagDefinition");
 
         final String uri = "/1.0/kb/tagDefinitions/{tagDefinitionId}"
@@ -86,11 +86,11 @@ public class TagDefinitionApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public TagDefinition getTagDefinition(final UUID tagDefinitionId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TagDefinition getTagDefinition(final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
         return getTagDefinition(tagDefinitionId, AuditLevel.NONE, inputOptions);
     }
 
-    public TagDefinition getTagDefinition(final UUID tagDefinitionId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TagDefinition getTagDefinition(final UUID tagDefinitionId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling getTagDefinition");
 
         final String uri = "/1.0/kb/tagDefinitions/{tagDefinitionId}"
@@ -109,11 +109,11 @@ public class TagDefinitionApi {
         return httpClient.doGet(uri, TagDefinition.class, requestOptions);
     }
 
-    public TagDefinitions getTagDefinitions( final RequestOptions inputOptions) throws KillBillClientException {
+    public TagDefinitions getTagDefinitions(final RequestOptions inputOptions) throws KillBillClientException {
         return getTagDefinitions(AuditLevel.NONE, inputOptions);
     }
 
-    public TagDefinitions getTagDefinitions(final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public TagDefinitions getTagDefinitions(final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/tagDefinitions";
 

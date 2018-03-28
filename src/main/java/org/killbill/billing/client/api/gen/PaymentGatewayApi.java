@@ -56,7 +56,7 @@ public class PaymentGatewayApi {
         this.httpClient = httpClient;
     }
 
-    public HostedPaymentPageFormDescriptor buildComboFormDescriptor(final ComboHostedPaymentPage body, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public HostedPaymentPageFormDescriptor buildComboFormDescriptor(final ComboHostedPaymentPage body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling buildComboFormDescriptor");
 
         final String uri = "/1.0/kb/paymentGateways/hosted/form";
@@ -80,7 +80,7 @@ public class PaymentGatewayApi {
         return httpClient.doPost(uri, body, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
 
-    public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling buildFormDescriptor");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling buildFormDescriptor");
 
@@ -109,7 +109,7 @@ public class PaymentGatewayApi {
         return httpClient.doPost(uri, body, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
 
-    public void processNotification(final String body, final String pluginName, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void processNotification(final String body, final String pluginName, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processNotification");
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling processNotification");
 

@@ -51,7 +51,7 @@ public class OverdueApi {
         this.httpClient = httpClient;
     }
 
-    public Overdue getOverdueConfigJson( final RequestOptions inputOptions) throws KillBillClientException {
+    public Overdue getOverdueConfigJson(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/overdue";
 
@@ -63,7 +63,7 @@ public class OverdueApi {
         return httpClient.doGet(uri, Overdue.class, requestOptions);
     }
 
-    public String getOverdueConfigXml( final RequestOptions inputOptions) throws KillBillClientException {
+    public String getOverdueConfigXml(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/overdue/xml";
 
@@ -75,7 +75,7 @@ public class OverdueApi {
         return httpClient.doGet(uri, String.class, requestOptions);
     }
 
-    public Overdue uploadOverdueConfigJson(final Overdue body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Overdue uploadOverdueConfigJson(final Overdue body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadOverdueConfigJson");
 
         final String uri = "/1.0/kb/overdue";
@@ -91,7 +91,7 @@ public class OverdueApi {
         return httpClient.doPost(uri, body, Overdue.class, requestOptions);
     }
 
-    public void uploadOverdueConfigXml(final String body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadOverdueConfigXml(final String body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadOverdueConfigXml");
 
         final String uri = "/1.0/kb/overdue/xml";

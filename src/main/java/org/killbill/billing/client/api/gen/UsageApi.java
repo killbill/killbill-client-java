@@ -54,7 +54,7 @@ public class UsageApi {
         this.httpClient = httpClient;
     }
 
-    public RolledUpUsage getAllUsage(final UUID subscriptionId, final LocalDate startDate, final LocalDate endDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public RolledUpUsage getAllUsage(final UUID subscriptionId, final LocalDate startDate, final LocalDate endDate, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getAllUsage");
 
         final String uri = "/1.0/kb/usages/{subscriptionId}"
@@ -76,7 +76,7 @@ public class UsageApi {
         return httpClient.doGet(uri, RolledUpUsage.class, requestOptions);
     }
 
-    public RolledUpUsage getUsage(final UUID subscriptionId, final String unitType, final LocalDate startDate, final LocalDate endDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public RolledUpUsage getUsage(final UUID subscriptionId, final String unitType, final LocalDate startDate, final LocalDate endDate, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getUsage");
         Preconditions.checkNotNull(unitType, "Missing the required parameter 'unitType' when calling getUsage");
 
@@ -100,7 +100,7 @@ public class UsageApi {
         return httpClient.doGet(uri, RolledUpUsage.class, requestOptions);
     }
 
-    public void recordUsage(final SubscriptionUsageRecord body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void recordUsage(final SubscriptionUsageRecord body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling recordUsage");
 
         final String uri = "/1.0/kb/usages";

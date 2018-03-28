@@ -52,6 +52,8 @@ public class Credit extends KillBillObject {
 
     private String description = null;
 
+    private String itemDetails = null;
+
 
 
     public Credit() {
@@ -64,6 +66,7 @@ public class Credit extends KillBillObject {
                      final LocalDate effectiveDate,
                      final UUID accountId,
                      final String description,
+                     final String itemDetails,
                      final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.creditAmount = creditAmount;
@@ -73,6 +76,7 @@ public class Credit extends KillBillObject {
         this.effectiveDate = effectiveDate;
         this.accountId = accountId;
         this.description = description;
+        this.itemDetails = itemDetails;
 
     }
 
@@ -140,6 +144,15 @@ public class Credit extends KillBillObject {
         return description;
     }
 
+    public Credit setItemDetails(final String itemDetails) {
+        this.itemDetails = itemDetails;
+        return this;
+    }
+
+    public String getItemDetails() {
+        return itemDetails;
+    }
+
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -156,6 +169,7 @@ public class Credit extends KillBillObject {
         Objects.equals(this.effectiveDate, credit.effectiveDate) &&
         Objects.equals(this.accountId, credit.accountId) &&
         Objects.equals(this.description, credit.description) &&
+        Objects.equals(this.itemDetails, credit.itemDetails) &&
         Objects.equals(this.auditLogs, credit.auditLogs);
 
     }
@@ -169,6 +183,7 @@ public class Credit extends KillBillObject {
                             effectiveDate,
                             accountId,
                             description,
+                            itemDetails,
                             auditLogs, super.hashCode());
     }
 
@@ -185,6 +200,7 @@ public class Credit extends KillBillObject {
         sb.append("    effectiveDate: ").append(toIndentedString(effectiveDate)).append("\n");
         sb.append("    accountId: ").append(toIndentedString(accountId)).append("\n");
         sb.append("    description: ").append(toIndentedString(description)).append("\n");
+        sb.append("    itemDetails: ").append(toIndentedString(itemDetails)).append("\n");
         sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();

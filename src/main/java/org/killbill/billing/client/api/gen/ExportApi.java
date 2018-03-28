@@ -51,7 +51,7 @@ public class ExportApi {
         this.httpClient = httpClient;
     }
 
-    public String exportDataForAccount(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public String exportDataForAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling exportDataForAccount");
 
         final String uri = "/1.0/kb/export/{accountId}"

@@ -53,7 +53,7 @@ public class PluginInfoApi {
         this.httpClient = httpClient;
     }
 
-    public PluginInfos getPluginsInfo( final RequestOptions inputOptions) throws KillBillClientException {
+    public PluginInfos getPluginsInfo(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/pluginsInfo";
 

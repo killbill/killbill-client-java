@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "CustomField"
-- name: "Subscription"
-- name: "Admin"
-- name: "Export"
-- name: "Tag"
 - name: "PaymentGateway"
-- name: "PaymentMethod"
-- name: "PluginInfo"
-- name: "TagDefinition"
-- name: "Tenant"
 - name: "Overdue"
+- name: "PluginInfo"
+- name: "Admin"
+- name: "CustomField"
+- name: "Tag"
+- name: "Catalog"
+- name: "TagDefinition"
+- name: "PaymentMethod"
+- name: "InvoiceItem"
 - name: "Bundle"
 - name: "Payment"
+- name: "Subscription"
 - name: "Account"
-- name: "NodesInfo"
 - name: "InvoicePayment"
-- name: "PaymentTransaction"
 - name: "Security"
-- name: "Usage"
+- name: "PaymentTransaction"
+- name: "Export"
 - name: "Credit"
-- name: "Catalog"
+- name: "NodesInfo"
+- name: "Usage"
+- name: "Tenant"
 - name: "Invoice"
-- name: "InvoiceItem"
 paths:
   /1.0/kb/accounts:
     get:
@@ -469,6 +469,11 @@ paths:
         required: false
         type: "boolean"
         default: false
+      - name: "removeFutureNotifications"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: true
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -3582,6 +3587,34 @@ paths:
           description: "successful operation"
       security:
       - basicAuth: []
+  /1.0/kb/catalog/versions:
+    get:
+      tags:
+      - "Catalog"
+      summary: "Retrieve a list of catalog versions"
+      description: ""
+      operationId: "getCatalogVersions"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              format: "date-time"
+      security:
+      - basicAuth: []
   /1.0/kb/catalog/xml:
     get:
       tags:
@@ -3592,6 +3625,11 @@ paths:
       produces:
       - "text/xml"
       parameters:
+      - name: "requestedDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -14609,6 +14647,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -14854,25 +14911,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -14945,25 +14983,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  Tenant:
-    type: "object"
-    required:
-    - "apiKey"
-    - "apiSecret"
-    properties:
-      tenantId:
-        type: "string"
-        format: "uuid"
-      externalKey:
-        type: "string"
-      apiKey:
-        type: "string"
-      apiSecret:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
   Credit:
     type: "object"
     required:
@@ -15152,6 +15171,27 @@ definitions:
         type: "string"
         format: "uuid"
       description:
+        type: "string"
+      itemDetails:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
+  Tenant:
+    type: "object"
+    required:
+    - "apiKey"
+    - "apiSecret"
+    properties:
+      tenantId:
+        type: "string"
+        format: "uuid"
+      externalKey:
+        type: "string"
+      apiKey:
+        type: "string"
+      apiSecret:
         type: "string"
       auditLogs:
         type: "array"

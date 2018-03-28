@@ -61,7 +61,7 @@ public class InvoicePaymentApi {
         this.httpClient = httpClient;
     }
 
-    public void completeInvoicePaymentTransaction(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void completeInvoicePaymentTransaction(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling completeInvoicePaymentTransaction");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling completeInvoicePaymentTransaction");
 
@@ -85,7 +85,7 @@ public class InvoicePaymentApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public InvoicePayment createChargeback(final InvoicePaymentTransaction body, final UUID paymentId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment createChargeback(final InvoicePaymentTransaction body, final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createChargeback");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createChargeback");
 
@@ -103,7 +103,7 @@ public class InvoicePaymentApi {
         return httpClient.doPost(uri, body, InvoicePayment.class, requestOptions);
     }
 
-    public InvoicePayment createChargebackReversal(final InvoicePaymentTransaction body, final UUID paymentId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment createChargebackReversal(final InvoicePaymentTransaction body, final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createChargebackReversal");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createChargebackReversal");
 
@@ -121,7 +121,7 @@ public class InvoicePaymentApi {
         return httpClient.doPost(uri, body, InvoicePayment.class, requestOptions);
     }
 
-    public CustomFields createCustomFields(final UUID paymentId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields createCustomFields(final UUID paymentId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCustomFields");
 
@@ -139,11 +139,11 @@ public class InvoicePaymentApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public InvoicePayment createRefundWithAdjustments(final InvoicePaymentTransaction body, final UUID paymentId, final UUID paymentMethodId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment createRefundWithAdjustments(final InvoicePaymentTransaction body, final UUID paymentId, final UUID paymentMethodId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return createRefundWithAdjustments(body, paymentId, Boolean.valueOf(false), paymentMethodId, pluginProperty, inputOptions);
     }
 
-    public InvoicePayment createRefundWithAdjustments(final InvoicePaymentTransaction body, final UUID paymentId, final Boolean externalPayment, final UUID paymentMethodId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment createRefundWithAdjustments(final InvoicePaymentTransaction body, final UUID paymentId, final Boolean externalPayment, final UUID paymentMethodId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createRefundWithAdjustments");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createRefundWithAdjustments");
 
@@ -172,7 +172,7 @@ public class InvoicePaymentApi {
         return httpClient.doPost(uri, body, InvoicePayment.class, requestOptions);
     }
 
-    public Tags createTags(final UUID paymentId, final List<String> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID paymentId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createTags");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/tags"
@@ -195,7 +195,7 @@ public class InvoicePaymentApi {
     }
 
 
-    public void deleteCustomFields(final UUID paymentId, final List<UUID> customField,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID paymentId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/customFields"
@@ -216,7 +216,7 @@ public class InvoicePaymentApi {
     }
 
 
-    public void deleteTags(final UUID paymentId, final List<UUID> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID paymentId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling deleteTags");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/tags"
@@ -236,11 +236,11 @@ public class InvoicePaymentApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public CustomFields getCustomFields(final UUID paymentId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
         return getCustomFields(paymentId, AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getCustomFields(final UUID paymentId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID paymentId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/customFields"
@@ -259,11 +259,11 @@ public class InvoicePaymentApi {
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
-    public InvoicePayment getInvoicePayment(final UUID paymentId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment getInvoicePayment(final UUID paymentId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return getInvoicePayment(paymentId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public InvoicePayment getInvoicePayment(final UUID paymentId, final Boolean withPluginInfo, final Boolean withAttempts, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment getInvoicePayment(final UUID paymentId, final Boolean withPluginInfo, final Boolean withAttempts, final Map<String, String> pluginProperty, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getInvoicePayment");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}"
@@ -291,11 +291,11 @@ public class InvoicePaymentApi {
         return httpClient.doGet(uri, InvoicePayment.class, requestOptions);
     }
 
-    public Tags getTags(final UUID paymentId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID paymentId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return getTags(paymentId, Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID paymentId, final Boolean includedDeleted, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID paymentId, final Boolean includedDeleted, final Map<String, String> pluginProperty, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getTags");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/tags"
@@ -320,7 +320,7 @@ public class InvoicePaymentApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public void modifyCustomFields(final UUID paymentId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void modifyCustomFields(final UUID paymentId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling modifyCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
 

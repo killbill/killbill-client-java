@@ -32,6 +32,7 @@ import java.util.UUID;
 import org.killbill.billing.client.model.PlanDetails;
 import java.util.List;
 import org.killbill.billing.client.model.Catalogs;
+import org.killbill.billing.client.model.DateTimes;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -63,7 +64,7 @@ public class CatalogApi {
         this.httpClient = httpClient;
     }
 
-    public void addSimplePlan(final SimplePlan body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void addSimplePlan(final SimplePlan body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addSimplePlan");
 
         final String uri = "/1.0/kb/catalog/simplePlan";
@@ -80,7 +81,7 @@ public class CatalogApi {
     }
 
 
-    public void deleteCatalog( final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCatalog(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog";
 
@@ -91,7 +92,7 @@ public class CatalogApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public PlanDetails getAvailableAddons(final String baseProductName, final String priceListName,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PlanDetails getAvailableAddons(final String baseProductName, final String priceListName, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/availableAddons";
 
@@ -111,7 +112,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, PlanDetails.class, requestOptions);
     }
 
-    public PlanDetails getAvailableBasePlans( final RequestOptions inputOptions) throws KillBillClientException {
+    public PlanDetails getAvailableBasePlans(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/availableBasePlans";
 
@@ -123,7 +124,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, PlanDetails.class, requestOptions);
     }
 
-    public Catalogs getCatalogJson(final DateTime requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Catalogs getCatalogJson(final DateTime requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog";
 
@@ -140,19 +141,36 @@ public class CatalogApi {
         return httpClient.doGet(uri, Catalogs.class, requestOptions);
     }
 
-    public String getCatalogXml( final RequestOptions inputOptions) throws KillBillClientException {
+    public DateTimes getCatalogVersions(final RequestOptions inputOptions) throws KillBillClientException {
 
-        final String uri = "/1.0/kb/catalog/xml";
+        final String uri = "/1.0/kb/catalog/versions";
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, DateTimes.class, requestOptions);
+    }
+
+    public String getCatalogXml(final LocalDate requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
+
+        final String uri = "/1.0/kb/catalog/xml";
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/xml");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, String.class, requestOptions);
     }
 
-    public Phase getPhaseForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Phase getPhaseForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/phase";
 
@@ -172,7 +190,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, Phase.class, requestOptions);
     }
 
-    public Plan getPlanForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Plan getPlanForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/plan";
 
@@ -192,7 +210,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, Plan.class, requestOptions);
     }
 
-    public PriceList getPriceListForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PriceList getPriceListForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/priceList";
 
@@ -212,7 +230,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, PriceList.class, requestOptions);
     }
 
-    public Product getProductForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Product getProductForSubscriptionAndDate(final UUID subscriptionId, final LocalDate requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/product";
 
@@ -232,7 +250,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, Product.class, requestOptions);
     }
 
-    public void uploadCatalogXml(final String body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadCatalogXml(final String body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadCatalogXml");
 
         final String uri = "/1.0/kb/catalog/xml";

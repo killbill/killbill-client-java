@@ -53,7 +53,7 @@ public class AdminApi {
     }
 
 
-    public void invalidatesCache(final String cacheName,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void invalidatesCache(final String cacheName, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/admin/cache";
 
@@ -71,7 +71,7 @@ public class AdminApi {
     }
 
 
-    public void invalidatesCacheByAccount(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void invalidatesCacheByAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling invalidatesCacheByAccount");
 
         final String uri = "/1.0/kb/admin/cache/accounts/{accountId}"
@@ -86,7 +86,7 @@ public class AdminApi {
     }
 
 
-    public void invalidatesCacheByTenant( final RequestOptions inputOptions) throws KillBillClientException {
+    public void invalidatesCacheByTenant(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/admin/cache/tenants";
 
@@ -98,7 +98,7 @@ public class AdminApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public void putInRotation( final RequestOptions inputOptions) throws KillBillClientException {
+    public void putInRotation(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/admin/healthcheck";
 
@@ -111,7 +111,7 @@ public class AdminApi {
     }
 
 
-    public void putOutOfRotation( final RequestOptions inputOptions) throws KillBillClientException {
+    public void putOutOfRotation(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/admin/healthcheck";
 
@@ -123,11 +123,11 @@ public class AdminApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public void triggerInvoiceGenerationForParkedAccounts( final RequestOptions inputOptions) throws KillBillClientException {
+    public void triggerInvoiceGenerationForParkedAccounts(final RequestOptions inputOptions) throws KillBillClientException {
         triggerInvoiceGenerationForParkedAccounts(Long.valueOf(0), Long.valueOf(100), inputOptions);
     }
 
-    public void triggerInvoiceGenerationForParkedAccounts(final Long offset, final Long limit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void triggerInvoiceGenerationForParkedAccounts(final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/admin/invoices";
 
@@ -150,7 +150,7 @@ public class AdminApi {
         httpClient.doPost(uri, null, requestOptions);
     }
 
-    public void updatePaymentTransactionState(final AdminPayment body, final UUID paymentId, final UUID paymentTransactionId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void updatePaymentTransactionState(final AdminPayment body, final UUID paymentId, final UUID paymentTransactionId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updatePaymentTransactionState");
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling updatePaymentTransactionState");
         Preconditions.checkNotNull(paymentTransactionId, "Missing the required parameter 'paymentTransactionId' when calling updatePaymentTransactionState");

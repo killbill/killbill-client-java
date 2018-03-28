@@ -57,7 +57,7 @@ public class InvoiceItemApi {
         this.httpClient = httpClient;
     }
 
-    public CustomFields createCustomFields(final UUID invoiceItemId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields createCustomFields(final UUID invoiceItemId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling createCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCustomFields");
 
@@ -75,7 +75,7 @@ public class InvoiceItemApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public Tags createTags(final UUID invoiceItemId, final List<String> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID invoiceItemId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling createTags");
 
         final String uri = "/1.0/kb/invoiceItems/{invoiceItemId}/tags"
@@ -98,7 +98,7 @@ public class InvoiceItemApi {
     }
 
 
-    public void deleteCustomFields(final UUID invoiceItemId, final List<UUID> customField,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID invoiceItemId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/invoiceItems/{invoiceItemId}/customFields"
@@ -119,7 +119,7 @@ public class InvoiceItemApi {
     }
 
 
-    public void deleteTags(final UUID invoiceItemId, final List<UUID> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID invoiceItemId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling deleteTags");
 
         final String uri = "/1.0/kb/invoiceItems/{invoiceItemId}/tags"
@@ -139,11 +139,11 @@ public class InvoiceItemApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public CustomFields getCustomFields(final UUID invoiceItemId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID invoiceItemId, final RequestOptions inputOptions) throws KillBillClientException {
         return getCustomFields(invoiceItemId, AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getCustomFields(final UUID invoiceItemId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID invoiceItemId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/invoiceItems/{invoiceItemId}/customFields"
@@ -162,11 +162,11 @@ public class InvoiceItemApi {
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
-    public Tags getTags(final UUID invoiceItemId, final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID invoiceItemId, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
         return getTags(invoiceItemId, accountId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID invoiceItemId, final UUID accountId, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID invoiceItemId, final UUID accountId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling getTags");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getTags");
 
@@ -192,7 +192,7 @@ public class InvoiceItemApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public void modifyCustomFields(final UUID invoiceItemId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void modifyCustomFields(final UUID invoiceItemId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling modifyCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
 

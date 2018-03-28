@@ -52,11 +52,11 @@ public class CreditApi {
         this.httpClient = httpClient;
     }
 
-    public Credit createCredit(final Credit body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Credit createCredit(final Credit body, final RequestOptions inputOptions) throws KillBillClientException {
         return createCredit(body, Boolean.valueOf(false), inputOptions);
     }
 
-    public Credit createCredit(final Credit body, final Boolean autoCommit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Credit createCredit(final Credit body, final Boolean autoCommit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCredit");
 
         final String uri = "/1.0/kb/credits";
@@ -77,7 +77,7 @@ public class CreditApi {
         return httpClient.doPost(uri, body, Credit.class, requestOptions);
     }
 
-    public Credit getCredit(final UUID creditId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Credit getCredit(final UUID creditId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(creditId, "Missing the required parameter 'creditId' when calling getCredit");
 
         final String uri = "/1.0/kb/credits/{creditId}"

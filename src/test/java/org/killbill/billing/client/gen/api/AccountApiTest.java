@@ -126,7 +126,7 @@ public class AccountApiTest {
         Assert.assertNotNull(subscription2);
 
 
-        accountApi.closeAccount(accountId, false, false, false, requestOptions);
+        accountApi.closeAccount(accountId, false, false, false, true, requestOptions);
 
         final Account result4 = accountApi.getAccount(accountId, false, false, AuditLevel.FULL, requestOptions);
         Assert.assertNotNull(result4);

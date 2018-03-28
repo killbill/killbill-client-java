@@ -66,7 +66,7 @@ public class InvoiceApi {
         this.httpClient = httpClient;
     }
 
-    public Invoice adjustInvoiceItem(final InvoiceItem body, final UUID invoiceId, final LocalDate requestedDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice adjustInvoiceItem(final InvoiceItem body, final UUID invoiceId, final LocalDate requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling adjustInvoiceItem");
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling adjustInvoiceItem");
 
@@ -89,7 +89,7 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, Invoice.class, requestOptions);
     }
 
-    public void commitInvoice(final UUID invoiceId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void commitInvoice(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling commitInvoice");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/commitInvoice"
@@ -104,7 +104,7 @@ public class InvoiceApi {
         httpClient.doPut(uri, null, requestOptions);
     }
 
-    public CustomFields createCustomFields(final UUID invoiceId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields createCustomFields(final UUID invoiceId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCustomFields");
 
@@ -122,11 +122,11 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final Map<String, String> pluginProperty, final String paymentExternalKey, final String transactionExternalKey,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final Map<String, String> pluginProperty, final String paymentExternalKey, final String transactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
         return createExternalCharges(body, accountId, requestedDate, Boolean.valueOf(false), pluginProperty, Boolean.valueOf(false), paymentExternalKey, transactionExternalKey, inputOptions);
     }
 
-    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final Boolean payInvoice, final Map<String, String> pluginProperty, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final Boolean payInvoice, final Map<String, String> pluginProperty, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createExternalCharges");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createExternalCharges");
 
@@ -164,7 +164,7 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, InvoiceItems.class, requestOptions);
     }
 
-    public Invoice createFutureInvoice(final UUID accountId, final LocalDate targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice createFutureInvoice(final UUID accountId, final LocalDate targetDate, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createFutureInvoice");
 
         final String uri = "/1.0/kb/invoices";
@@ -188,11 +188,11 @@ public class InvoiceApi {
         return httpClient.doPost(uri, null, Invoice.class, requestOptions);
     }
 
-    public InvoicePayment createInstantPayment(final InvoicePayment body, final UUID invoiceId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment createInstantPayment(final InvoicePayment body, final UUID invoiceId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return createInstantPayment(body, invoiceId, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public InvoicePayment createInstantPayment(final InvoicePayment body, final UUID invoiceId, final Boolean externalPayment, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment createInstantPayment(final InvoicePayment body, final UUID invoiceId, final Boolean externalPayment, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createInstantPayment");
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createInstantPayment");
 
@@ -218,7 +218,7 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, InvoicePayment.class, requestOptions);
     }
 
-    public Invoice createMigrationInvoice(final InvoiceItems body, final UUID accountId, final LocalDate targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice createMigrationInvoice(final InvoiceItems body, final UUID accountId, final LocalDate targetDate, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createMigrationInvoice");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createMigrationInvoice");
 
@@ -241,7 +241,7 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, Invoice.class, requestOptions);
     }
 
-    public Tags createTags(final UUID invoiceId, final List<String> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID invoiceId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createTags");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/tags"
@@ -264,7 +264,7 @@ public class InvoiceApi {
     }
 
 
-    public void deleteCBA(final UUID invoiceId, final UUID invoiceItemId, final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCBA(final UUID invoiceId, final UUID invoiceItemId, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling deleteCBA");
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling deleteCBA");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling deleteCBA");
@@ -288,7 +288,7 @@ public class InvoiceApi {
     }
 
 
-    public void deleteCustomFields(final UUID invoiceId, final List<UUID> customField,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID invoiceId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/customFields"
@@ -309,7 +309,7 @@ public class InvoiceApi {
     }
 
 
-    public void deleteTags(final UUID invoiceId, final List<UUID> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID invoiceId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling deleteTags");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/tags"
@@ -329,7 +329,7 @@ public class InvoiceApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public Invoice generateDryRunInvoice(final InvoiceDryRun body, final UUID accountId, final LocalDate targetDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice generateDryRunInvoice(final InvoiceDryRun body, final UUID accountId, final LocalDate targetDate, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling generateDryRunInvoice");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling generateDryRunInvoice");
 
@@ -354,7 +354,7 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, Invoice.class, requestOptions);
     }
 
-    public String getCatalogTranslation(final String locale,  final RequestOptions inputOptions) throws KillBillClientException {
+    public String getCatalogTranslation(final String locale, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling getCatalogTranslation");
 
         final String uri = "/1.0/kb/invoices/catalogTranslation/{locale}"
@@ -368,11 +368,11 @@ public class InvoiceApi {
         return httpClient.doGet(uri, String.class, requestOptions);
     }
 
-    public CustomFields getCustomFields(final UUID invoiceId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
         return getCustomFields(invoiceId, AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getCustomFields(final UUID invoiceId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID invoiceId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/customFields"
@@ -391,11 +391,11 @@ public class InvoiceApi {
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
-    public Invoice getInvoice(final UUID invoiceId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice getInvoice(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
         return getInvoice(invoiceId, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoice getInvoice(final UUID invoiceId, final Boolean withItems, final Boolean withChildrenItems, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice getInvoice(final UUID invoiceId, final Boolean withItems, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoice");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}"
@@ -420,7 +420,7 @@ public class InvoiceApi {
         return httpClient.doGet(uri, Invoice.class, requestOptions);
     }
 
-    public String getInvoiceAsHTML(final UUID invoiceId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public String getInvoiceAsHTML(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceAsHTML");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/html"
@@ -434,11 +434,11 @@ public class InvoiceApi {
         return httpClient.doGet(uri, String.class, requestOptions);
     }
 
-    public Invoice getInvoiceByNumber(final Integer invoiceNumber,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice getInvoiceByNumber(final Integer invoiceNumber, final RequestOptions inputOptions) throws KillBillClientException {
         return getInvoiceByNumber(invoiceNumber, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoice getInvoiceByNumber(final Integer invoiceNumber, final Boolean withItems, final Boolean withChildrenItems, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice getInvoiceByNumber(final Integer invoiceNumber, final Boolean withItems, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceNumber, "Missing the required parameter 'invoiceNumber' when calling getInvoiceByNumber");
 
         final String uri = "/1.0/kb/invoices/{invoiceNumber}"
@@ -463,7 +463,7 @@ public class InvoiceApi {
         return httpClient.doGet(uri, Invoice.class, requestOptions);
     }
 
-    public String getInvoiceMPTemplate(final String locale,  final RequestOptions inputOptions) throws KillBillClientException {
+    public String getInvoiceMPTemplate(final String locale, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling getInvoiceMPTemplate");
 
         final String uri = "/1.0/kb/invoices/manualPayTemplate"
@@ -477,7 +477,7 @@ public class InvoiceApi {
         return httpClient.doGet(uri, String.class, requestOptions);
     }
 
-    public String getInvoiceTemplate( final RequestOptions inputOptions) throws KillBillClientException {
+    public String getInvoiceTemplate(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/invoices/template";
 
@@ -489,7 +489,7 @@ public class InvoiceApi {
         return httpClient.doGet(uri, String.class, requestOptions);
     }
 
-    public String getInvoiceTranslation(final String locale,  final RequestOptions inputOptions) throws KillBillClientException {
+    public String getInvoiceTranslation(final String locale, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling getInvoiceTranslation");
 
         final String uri = "/1.0/kb/invoices/translation/{locale}"
@@ -503,11 +503,11 @@ public class InvoiceApi {
         return httpClient.doGet(uri, String.class, requestOptions);
     }
 
-    public Invoices getInvoices( final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices getInvoices(final RequestOptions inputOptions) throws KillBillClientException {
         return getInvoices(Long.valueOf(0), Long.valueOf(100), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoices getInvoices(final Long offset, final Long limit, final Boolean withItems, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices getInvoices(final Long offset, final Long limit, final Boolean withItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/invoices/pagination";
 
@@ -533,11 +533,11 @@ public class InvoiceApi {
         return httpClient.doGet(uri, Invoices.class, requestOptions);
     }
 
-    public InvoicePayments getPayments(final UUID invoiceId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayments getPayments(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
         return getPayments(invoiceId, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public InvoicePayments getPayments(final UUID invoiceId, final Boolean withPluginInfo, final Boolean withAttempts, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayments getPayments(final UUID invoiceId, final Boolean withPluginInfo, final Boolean withAttempts, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getPayments");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/payments"
@@ -562,11 +562,11 @@ public class InvoiceApi {
         return httpClient.doGet(uri, InvoicePayments.class, requestOptions);
     }
 
-    public Tags getTags(final UUID invoiceId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
         return getTags(invoiceId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID invoiceId, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID invoiceId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getTags");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/tags"
@@ -588,7 +588,7 @@ public class InvoiceApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public void modifyCustomFields(final UUID invoiceId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void modifyCustomFields(final UUID invoiceId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling modifyCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
 
@@ -604,11 +604,11 @@ public class InvoiceApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public Invoices searchInvoices(final String searchKey,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices searchInvoices(final String searchKey, final RequestOptions inputOptions) throws KillBillClientException {
         return searchInvoices(searchKey, Long.valueOf(0), Long.valueOf(100), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoices searchInvoices(final String searchKey, final Long offset, final Long limit, final Boolean withItems, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices searchInvoices(final String searchKey, final Long offset, final Long limit, final Boolean withItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchInvoices");
 
         final String uri = "/1.0/kb/invoices/search/{searchKey}"
@@ -636,11 +636,11 @@ public class InvoiceApi {
         return httpClient.doGet(uri, Invoices.class, requestOptions);
     }
 
-    public void uploadCatalogTranslation(final String body, final String locale,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadCatalogTranslation(final String body, final String locale, final RequestOptions inputOptions) throws KillBillClientException {
         uploadCatalogTranslation(body, locale, Boolean.valueOf(false), inputOptions);
     }
 
-    public void uploadCatalogTranslation(final String body, final String locale, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadCatalogTranslation(final String body, final String locale, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadCatalogTranslation");
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadCatalogTranslation");
 
@@ -663,11 +663,11 @@ public class InvoiceApi {
         httpClient.doPost(uri, body, requestOptions);
     }
 
-    public void uploadInvoiceMPTemplate(final String body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadInvoiceMPTemplate(final String body, final RequestOptions inputOptions) throws KillBillClientException {
         uploadInvoiceMPTemplate(body, Boolean.valueOf(false), inputOptions);
     }
 
-    public void uploadInvoiceMPTemplate(final String body, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadInvoiceMPTemplate(final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceMPTemplate");
 
         final String uri = "/1.0/kb/invoices/manualPayTemplate";
@@ -688,11 +688,11 @@ public class InvoiceApi {
         httpClient.doPost(uri, body, requestOptions);
     }
 
-    public void uploadInvoiceTemplate(final String body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadInvoiceTemplate(final String body, final RequestOptions inputOptions) throws KillBillClientException {
         uploadInvoiceTemplate(body, Boolean.valueOf(false), inputOptions);
     }
 
-    public void uploadInvoiceTemplate(final String body, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadInvoiceTemplate(final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTemplate");
 
         final String uri = "/1.0/kb/invoices/template";
@@ -713,11 +713,11 @@ public class InvoiceApi {
         httpClient.doPost(uri, body, requestOptions);
     }
 
-    public void uploadInvoiceTranslation(final String body, final String locale,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadInvoiceTranslation(final String body, final String locale, final RequestOptions inputOptions) throws KillBillClientException {
         uploadInvoiceTranslation(body, locale, Boolean.valueOf(false), inputOptions);
     }
 
-    public void uploadInvoiceTranslation(final String body, final String locale, final Boolean deleteIfExists,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uploadInvoiceTranslation(final String body, final String locale, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTranslation");
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadInvoiceTranslation");
 
@@ -740,7 +740,7 @@ public class InvoiceApi {
         httpClient.doPost(uri, body, requestOptions);
     }
 
-    public void voidInvoice(final UUID invoiceId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void voidInvoice(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling voidInvoice");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/voidInvoice"

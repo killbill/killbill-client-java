@@ -54,11 +54,11 @@ public class TagApi {
         this.httpClient = httpClient;
     }
 
-    public Tags getTags( final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final RequestOptions inputOptions) throws KillBillClientException {
         return getTags(Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final Long offset, final Long limit, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/tags/pagination";
 
@@ -81,11 +81,11 @@ public class TagApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public Tags searchTags(final String searchKey,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags searchTags(final String searchKey, final RequestOptions inputOptions) throws KillBillClientException {
         return searchTags(searchKey, Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags searchTags(final String searchKey, final Long offset, final Long limit, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags searchTags(final String searchKey, final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchTags");
 
         final String uri = "/1.0/kb/tags/search/{searchKey}"

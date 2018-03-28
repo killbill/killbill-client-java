@@ -68,7 +68,7 @@ public class SubscriptionApi {
         this.httpClient = httpClient;
     }
 
-    public void addSubscriptionBlockingState(final BlockingState body, final UUID subscriptionId, final LocalDate requestedDate, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void addSubscriptionBlockingState(final BlockingState body, final UUID subscriptionId, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addSubscriptionBlockingState");
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling addSubscriptionBlockingState");
 
@@ -91,12 +91,12 @@ public class SubscriptionApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void cancelSubscriptionPlan(final UUID subscriptionId, final LocalDate requestedDate, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void cancelSubscriptionPlan(final UUID subscriptionId, final LocalDate requestedDate, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         cancelSubscriptionPlan(subscriptionId, requestedDate, Boolean.valueOf(false), Long.valueOf(5), entitlementPolicy, billingPolicy, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
 
-    public void cancelSubscriptionPlan(final UUID subscriptionId, final LocalDate requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Boolean useRequestedDateForBilling, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void cancelSubscriptionPlan(final UUID subscriptionId, final LocalDate requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Boolean useRequestedDateForBilling, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling cancelSubscriptionPlan");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
@@ -133,11 +133,11 @@ public class SubscriptionApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public void changeSubscriptionPlan(final Subscription body, final UUID subscriptionId, final LocalDate requestedDate, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void changeSubscriptionPlan(final Subscription body, final UUID subscriptionId, final LocalDate requestedDate, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         changeSubscriptionPlan(body, subscriptionId, requestedDate, Boolean.valueOf(false), Long.valueOf(3), billingPolicy, pluginProperty, inputOptions);
     }
 
-    public void changeSubscriptionPlan(final Subscription body, final UUID subscriptionId, final LocalDate requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void changeSubscriptionPlan(final Subscription body, final UUID subscriptionId, final LocalDate requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling changeSubscriptionPlan");
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling changeSubscriptionPlan");
 
@@ -170,7 +170,7 @@ public class SubscriptionApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void createCustomFields(final UUID subscriptionId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void createCustomFields(final UUID subscriptionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCustomFields");
 
@@ -188,11 +188,11 @@ public class SubscriptionApi {
         httpClient.doPost(uri, body, requestOptions);
     }
 
-    public Subscription createSubscription(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Integer bcd, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Subscription createSubscription(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Integer bcd, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return createSubscription(body, entitlementDate, billingDate, Boolean.valueOf(true), Boolean.valueOf(false), bcd, Boolean.valueOf(false), Long.valueOf(3), pluginProperty, inputOptions);
     }
 
-    public Subscription createSubscription(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Integer bcd, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Subscription createSubscription(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Integer bcd, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscription");
 
         final String uri = "/1.0/kb/subscriptions";
@@ -234,11 +234,11 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Subscription.class, requestOptions);
     }
 
-    public Bundle createSubscriptionWithAddOns(final Subscriptions body, final LocalDate entitlementDate, final LocalDate billingDate, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle createSubscriptionWithAddOns(final Subscriptions body, final LocalDate entitlementDate, final LocalDate billingDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return createSubscriptionWithAddOns(body, entitlementDate, billingDate, Boolean.valueOf(false), Boolean.valueOf(true), Boolean.valueOf(false), Long.valueOf(3), pluginProperty, inputOptions);
     }
 
-    public Bundle createSubscriptionWithAddOns(final Subscriptions body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean migrated, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle createSubscriptionWithAddOns(final Subscriptions body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean migrated, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createSubscriptionWithAddOns";
@@ -277,11 +277,11 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Bundle.class, requestOptions);
     }
 
-    public Bundles createSubscriptionsWithAddOns(final BulkSubscriptionsBundles body, final LocalDate entitlementDate, final LocalDate billingDate, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundles createSubscriptionsWithAddOns(final BulkSubscriptionsBundles body, final LocalDate entitlementDate, final LocalDate billingDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return createSubscriptionsWithAddOns(body, entitlementDate, billingDate, Boolean.valueOf(true), Boolean.valueOf(false), Boolean.valueOf(false), Long.valueOf(3), pluginProperty, inputOptions);
     }
 
-    public Bundles createSubscriptionsWithAddOns(final BulkSubscriptionsBundles body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundles createSubscriptionsWithAddOns(final BulkSubscriptionsBundles body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionsWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createSubscriptionsWithAddOns";
@@ -320,7 +320,7 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Bundles.class, requestOptions);
     }
 
-    public Tags createTags(final UUID subscriptionId, final List<String> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createTags(final UUID subscriptionId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
@@ -343,7 +343,7 @@ public class SubscriptionApi {
     }
 
 
-    public void deleteCustomFields(final UUID subscriptionId, final List<UUID> customField,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID subscriptionId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
@@ -364,7 +364,7 @@ public class SubscriptionApi {
     }
 
 
-    public void deleteTags(final UUID subscriptionId, final List<UUID> tagDef,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteTags(final UUID subscriptionId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
@@ -384,11 +384,11 @@ public class SubscriptionApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public CustomFields getCustomFields(final UUID subscriptionId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
         return getCustomFields(subscriptionId, AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getCustomFields(final UUID subscriptionId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final UUID subscriptionId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getCustomFields");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
@@ -407,11 +407,11 @@ public class SubscriptionApi {
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
-    public Subscription getSubscription(final UUID subscriptionId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Subscription getSubscription(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
         return getSubscription(subscriptionId, AuditLevel.NONE, inputOptions);
     }
 
-    public Subscription getSubscription(final UUID subscriptionId, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Subscription getSubscription(final UUID subscriptionId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscription");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
@@ -430,11 +430,11 @@ public class SubscriptionApi {
         return httpClient.doGet(uri, Subscription.class, requestOptions);
     }
 
-    public Tags getTags(final UUID subscriptionId,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
         return getTags(subscriptionId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID subscriptionId, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags getTags(final UUID subscriptionId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
@@ -456,7 +456,7 @@ public class SubscriptionApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public void modifyCustomFields(final UUID subscriptionId, final CustomFields body,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void modifyCustomFields(final UUID subscriptionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling modifyCustomFields");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
 
@@ -472,7 +472,7 @@ public class SubscriptionApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void uncancelSubscriptionPlan(final UUID subscriptionId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void uncancelSubscriptionPlan(final UUID subscriptionId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling uncancelSubscriptionPlan");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/uncancel"
@@ -491,7 +491,7 @@ public class SubscriptionApi {
         httpClient.doPut(uri, null, requestOptions);
     }
 
-    public void undoChangeSubscriptionPlan(final UUID subscriptionId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void undoChangeSubscriptionPlan(final UUID subscriptionId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling undoChangeSubscriptionPlan");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/undoChangePlan"
@@ -510,11 +510,11 @@ public class SubscriptionApi {
         httpClient.doPut(uri, null, requestOptions);
     }
 
-    public void updateSubscriptionBCD(final Subscription body, final UUID subscriptionId, final LocalDate effectiveFromDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void updateSubscriptionBCD(final Subscription body, final UUID subscriptionId, final LocalDate effectiveFromDate, final RequestOptions inputOptions) throws KillBillClientException {
         updateSubscriptionBCD(body, subscriptionId, effectiveFromDate, Boolean.valueOf(false), inputOptions);
     }
 
-    public void updateSubscriptionBCD(final Subscription body, final UUID subscriptionId, final LocalDate effectiveFromDate, final Boolean forceNewBcdWithPastEffectiveDate,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void updateSubscriptionBCD(final Subscription body, final UUID subscriptionId, final LocalDate effectiveFromDate, final Boolean forceNewBcdWithPastEffectiveDate, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateSubscriptionBCD");
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling updateSubscriptionBCD");
 

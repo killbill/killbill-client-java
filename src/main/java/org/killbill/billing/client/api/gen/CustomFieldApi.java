@@ -54,11 +54,11 @@ public class CustomFieldApi {
         this.httpClient = httpClient;
     }
 
-    public CustomFields getCustomFields( final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final RequestOptions inputOptions) throws KillBillClientException {
         return getCustomFields(Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields getCustomFields(final Long offset, final Long limit, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields getCustomFields(final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/customFields/pagination";
 
@@ -81,11 +81,11 @@ public class CustomFieldApi {
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
-    public CustomFields searchCustomFields(final String searchKey,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields searchCustomFields(final String searchKey, final RequestOptions inputOptions) throws KillBillClientException {
         return searchCustomFields(searchKey, Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public CustomFields searchCustomFields(final String searchKey, final Long offset, final Long limit, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public CustomFields searchCustomFields(final String searchKey, final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchCustomFields");
 
         final String uri = "/1.0/kb/customFields/search/{searchKey}"
