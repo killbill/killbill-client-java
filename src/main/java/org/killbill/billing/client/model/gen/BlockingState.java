@@ -20,6 +20,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -112,6 +113,7 @@ public class BlockingState extends KillBillObject {
         return this;
     }
 
+    @JsonProperty(value="isBlockChange")
     public Boolean isBlockChange() {
         return isBlockChange;
     }
@@ -121,6 +123,7 @@ public class BlockingState extends KillBillObject {
         return this;
     }
 
+    @JsonProperty(value="isBlockEntitlement")
     public Boolean isBlockEntitlement() {
         return isBlockEntitlement;
     }
@@ -130,6 +133,7 @@ public class BlockingState extends KillBillObject {
         return this;
     }
 
+    @JsonProperty(value="isBlockBilling")
     public Boolean isBlockBilling() {
         return isBlockBilling;
     }

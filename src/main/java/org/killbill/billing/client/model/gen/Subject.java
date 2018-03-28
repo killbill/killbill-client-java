@@ -20,6 +20,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.killbill.billing.client.model.gen.Session;
 
 /**
@@ -70,6 +71,7 @@ public class Subject {
         return this;
     }
 
+    @JsonProperty(value="isAuthenticated")
     public Boolean isAuthenticated() {
         return isAuthenticated;
     }
@@ -79,6 +81,7 @@ public class Subject {
         return this;
     }
 
+    @JsonProperty(value="isRemembered")
     public Boolean isRemembered() {
         return isRemembered;
     }

@@ -534,24 +534,24 @@ public class InvoiceApi {
     }
 
     public InvoicePayments getPayments(final UUID invoiceId,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getPayments(invoiceId, AuditLevel.NONE, Boolean.valueOf(false), Boolean.valueOf(false), inputOptions);
+        return getPayments(invoiceId, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public InvoicePayments getPayments(final UUID invoiceId, final AuditLevel audit, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayments getPayments(final UUID invoiceId, final Boolean withPluginInfo, final Boolean withAttempts, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getPayments");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/payments"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         }
         if (withAttempts != null) {
             queryParams.put("withAttempts", String.valueOf(withAttempts));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

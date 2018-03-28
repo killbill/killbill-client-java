@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Security"
-- name: "InvoicePayment"
-- name: "InvoiceItem"
-- name: "Tag"
-- name: "PaymentMethod"
-- name: "Account"
-- name: "Invoice"
-- name: "TagDefinition"
 - name: "CustomField"
-- name: "Tenant"
-- name: "PluginInfo"
-- name: "Credit"
-- name: "PaymentTransaction"
+- name: "Subscription"
+- name: "Admin"
 - name: "Export"
-- name: "NodesInfo"
-- name: "Usage"
+- name: "Tag"
+- name: "PaymentGateway"
+- name: "PaymentMethod"
+- name: "PluginInfo"
+- name: "TagDefinition"
+- name: "Tenant"
 - name: "Overdue"
 - name: "Bundle"
 - name: "Payment"
-- name: "Subscription"
+- name: "Account"
+- name: "NodesInfo"
+- name: "InvoicePayment"
+- name: "PaymentTransaction"
+- name: "Security"
+- name: "Usage"
+- name: "Credit"
 - name: "Catalog"
-- name: "PaymentGateway"
-- name: "Admin"
+- name: "Invoice"
+- name: "InvoiceItem"
 paths:
   /1.0/kb/accounts:
     get:
@@ -1348,15 +1348,6 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
       - name: "withPluginInfo"
         in: "query"
         required: false
@@ -1374,6 +1365,15 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -1577,6 +1577,11 @@ paths:
         required: false
         type: "boolean"
         default: false
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -1584,11 +1589,6 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -1829,6 +1829,23 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "withAttempts"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "audit"
         in: "query"
         required: false
@@ -1838,23 +1855,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "withAttempts"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -2129,6 +2129,11 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "parallel"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -2138,11 +2143,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "parallel"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -4770,6 +4770,11 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -4777,11 +4782,6 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -6004,15 +6004,6 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
       - name: "withPluginInfo"
         in: "query"
         required: false
@@ -6023,6 +6014,15 @@ paths:
         required: false
         type: "boolean"
         default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -6815,6 +6815,16 @@ paths:
         in: "query"
         required: true
         type: "string"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -6822,11 +6832,6 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -6836,11 +6841,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -6884,6 +6884,11 @@ paths:
         in: "query"
         required: false
         type: "string"
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -6900,11 +6905,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -6953,6 +6953,11 @@ paths:
         in: "query"
         required: false
         type: "string"
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -6969,11 +6974,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -7007,6 +7007,16 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -7014,11 +7024,6 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -7028,11 +7033,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -8321,13 +8321,6 @@ paths:
         in: "query"
         required: false
         type: "string"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
       - name: "withPluginInfo"
         in: "query"
         required: false
@@ -8338,6 +8331,13 @@ paths:
         required: false
         type: "boolean"
         default: false
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "audit"
         in: "query"
         required: false
@@ -8463,6 +8463,16 @@ paths:
         type: "integer"
         default: 100
         format: "int64"
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withAttempts"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "pluginName"
         in: "query"
         required: false
@@ -8483,16 +8493,6 @@ paths:
         - "FULL"
         - "MINIMAL"
         - "NONE"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "withAttempts"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -12396,15 +12396,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  TenantKeyValue:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      values:
-        type: "array"
-        items:
-          type: "string"
   AdminPayment:
     type: "object"
     properties:
@@ -12414,6 +12405,15 @@ definitions:
         type: "string"
       transactionStatus:
         type: "string"
+  TenantKeyValue:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      values:
+        type: "array"
+        items:
+          type: "string"
   BlockingState:
     type: "object"
     properties:
@@ -12556,6 +12556,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      isBlockChanges:
+        type: "boolean"
+        default: false
+      isDisableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -12958,33 +12985,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      isBlockChanges:
-        type: "boolean"
-        default: false
-      isDisableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -14945,6 +14945,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
+  Tenant:
+    type: "object"
+    required:
+    - "apiKey"
+    - "apiSecret"
+    properties:
+      tenantId:
+        type: "string"
+        format: "uuid"
+      externalKey:
+        type: "string"
+      apiKey:
+        type: "string"
+      apiSecret:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
   Credit:
     type: "object"
     required:
@@ -15133,25 +15152,6 @@ definitions:
         type: "string"
         format: "uuid"
       description:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
-  Tenant:
-    type: "object"
-    required:
-    - "apiKey"
-    - "apiSecret"
-    properties:
-      tenantId:
-        type: "string"
-        format: "uuid"
-      externalKey:
-        type: "string"
-      apiKey:
-        type: "string"
-      apiSecret:
         type: "string"
       auditLogs:
         type: "array"
@@ -15733,18 +15733,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -15759,6 +15747,18 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   Plan:
     type: "object"
     properties:

@@ -20,6 +20,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -81,6 +82,7 @@ public class TagDefinition extends KillBillObject {
         return this;
     }
 
+    @JsonProperty(value="isControlTag")
     public Boolean isControlTag() {
         return isControlTag;
     }

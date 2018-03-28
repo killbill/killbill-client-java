@@ -376,21 +376,21 @@ public class AccountApi {
     }
 
     public AccountTimeline getAccountTimeline(final UUID accountId,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getAccountTimeline(accountId, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
+        return getAccountTimeline(accountId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public AccountTimeline getAccountTimeline(final UUID accountId, final AuditLevel audit, final Boolean parallel,  final RequestOptions inputOptions) throws KillBillClientException {
+    public AccountTimeline getAccountTimeline(final UUID accountId, final Boolean parallel, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccountTimeline");
 
         final String uri = "/1.0/kb/accounts/{accountId}/timeline"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
         if (parallel != null) {
             queryParams.put("parallel", String.valueOf(parallel));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -599,19 +599,16 @@ public class AccountApi {
     }
 
     public InvoicePayments getInvoicePayments(final UUID accountId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoicePayments(accountId, AuditLevel.NONE, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, inputOptions);
+        return getInvoicePayments(accountId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public InvoicePayments getInvoicePayments(final UUID accountId, final AuditLevel audit, final Boolean withPluginInfo, final Boolean withAttempts, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayments getInvoicePayments(final UUID accountId, final Boolean withPluginInfo, final Boolean withAttempts, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicePayments");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoicePayments"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         }
@@ -620,6 +617,9 @@ public class AccountApi {
         }
         if (pluginProperty != null) {
             queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -680,10 +680,10 @@ public class AccountApi {
     }
 
     public PaymentMethods getPaymentMethods(final UUID accountId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getPaymentMethods(accountId, Boolean.valueOf(false), pluginProperty, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+        return getPaymentMethods(accountId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public PaymentMethods getPaymentMethods(final UUID accountId, final Boolean withPluginInfo, final Map<String, String> pluginProperty, final Boolean includedDeleted, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PaymentMethods getPaymentMethods(final UUID accountId, final Boolean withPluginInfo, final Boolean includedDeleted, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getPaymentMethods");
 
         final String uri = "/1.0/kb/accounts/{accountId}/paymentMethods"
@@ -693,11 +693,11 @@ public class AccountApi {
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         }
-        if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
-        }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
@@ -712,27 +712,27 @@ public class AccountApi {
     }
 
     public Payments getPayments(final UUID accountId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getPayments(accountId, AuditLevel.NONE, pluginProperty, Boolean.valueOf(false), Boolean.valueOf(false), inputOptions);
+        return getPayments(accountId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public Payments getPayments(final UUID accountId, final AuditLevel audit, final Map<String, String> pluginProperty, final Boolean withPluginInfo, final Boolean withAttempts,  final RequestOptions inputOptions) throws KillBillClientException {
+    public Payments getPayments(final UUID accountId, final Boolean withAttempts, final Boolean withPluginInfo, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getPayments");
 
         final String uri = "/1.0/kb/accounts/{accountId}/payments"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
-        if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+        if (withAttempts != null) {
+            queryParams.put("withAttempts", String.valueOf(withAttempts));
         }
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         }
-        if (withAttempts != null) {
-            queryParams.put("withAttempts", String.valueOf(withAttempts));
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

@@ -20,6 +20,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import org.killbill.billing.client.model.gen.NodeCommandProperty;
@@ -59,6 +60,7 @@ public class NodeCommand {
         return this;
     }
 
+    @JsonProperty(value="isSystemCommandType")
     public Boolean isSystemCommandType() {
         return isSystemCommandType;
     }

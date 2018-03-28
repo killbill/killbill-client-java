@@ -20,6 +20,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -165,6 +166,7 @@ public class EventSubscription extends KillBillObject {
         return this;
     }
 
+    @JsonProperty(value="isBlockedBilling")
     public Boolean isBlockedBilling() {
         return isBlockedBilling;
     }
@@ -174,6 +176,7 @@ public class EventSubscription extends KillBillObject {
         return this;
     }
 
+    @JsonProperty(value="isBlockedEntitlement")
     public Boolean isBlockedEntitlement() {
         return isBlockedEntitlement;
     }

@@ -20,6 +20,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -282,6 +283,7 @@ public class InvoicePaymentTransaction extends KillBillObject {
         return this;
     }
 
+    @JsonProperty(value="isAdjusted")
     public Boolean isAdjusted() {
         return isAdjusted;
     }

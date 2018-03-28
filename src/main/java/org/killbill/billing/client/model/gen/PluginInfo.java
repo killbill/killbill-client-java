@@ -20,6 +20,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import org.killbill.billing.client.model.gen.PluginServiceInfo;
@@ -120,6 +121,7 @@ public class PluginInfo {
         return this;
     }
 
+    @JsonProperty(value="isSelectedForStart")
     public Boolean isSelectedForStart() {
         return isSelectedForStart;
     }

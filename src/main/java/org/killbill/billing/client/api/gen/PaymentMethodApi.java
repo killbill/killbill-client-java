@@ -151,27 +151,27 @@ public class PaymentMethodApi {
     }
 
     public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getPaymentMethod(paymentMethodId, pluginProperty, Boolean.valueOf(false), AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
+        return getPaymentMethod(paymentMethodId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final Map<String, String> pluginProperty, final Boolean includedDeleted, final AuditLevel audit, final Boolean withPluginInfo,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final Boolean includedDeleted, final Boolean withPluginInfo, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling getPaymentMethod");
 
         final String uri = "/1.0/kb/paymentMethods/{paymentMethodId}"
           .replaceAll("\\{" + "paymentMethodId" + "\\}", paymentMethodId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
-        }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
         }
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -183,10 +183,10 @@ public class PaymentMethodApi {
     }
 
     public PaymentMethod getPaymentMethodByKey(final String externalKey, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getPaymentMethodByKey(externalKey, pluginProperty, Boolean.valueOf(false), AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
+        return getPaymentMethodByKey(externalKey, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public PaymentMethod getPaymentMethodByKey(final String externalKey, final Map<String, String> pluginProperty, final Boolean includedDeleted, final AuditLevel audit, final Boolean withPluginInfo,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PaymentMethod getPaymentMethodByKey(final String externalKey, final Boolean includedDeleted, final Boolean withPluginInfo, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getPaymentMethodByKey");
 
         final String uri = "/1.0/kb/paymentMethods";
@@ -195,17 +195,17 @@ public class PaymentMethodApi {
         if (externalKey != null) {
             queryParams.put("externalKey", String.valueOf(externalKey));
         }
-        if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
-        }
         if (includedDeleted != null) {
             queryParams.put("includedDeleted", String.valueOf(includedDeleted));
         }
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
         if (withPluginInfo != null) {
             queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -217,10 +217,10 @@ public class PaymentMethodApi {
     }
 
     public PaymentMethods getPaymentMethods(final String pluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
-        return getPaymentMethods(Long.valueOf(0), Long.valueOf(100), pluginName, pluginProperty, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
+        return getPaymentMethods(Long.valueOf(0), Long.valueOf(100), pluginName, Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public PaymentMethods getPaymentMethods(final Long offset, final Long limit, final String pluginName, final Map<String, String> pluginProperty, final AuditLevel audit, final Boolean withPluginInfo,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PaymentMethods getPaymentMethods(final Long offset, final Long limit, final String pluginName, final Boolean withPluginInfo, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/paymentMethods/pagination";
 
@@ -234,14 +234,14 @@ public class PaymentMethodApi {
         if (pluginName != null) {
             queryParams.put("pluginName", String.valueOf(pluginName));
         }
+        if (withPluginInfo != null) {
+            queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
+        }
         if (pluginProperty != null) {
             queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
-        }
-        if (withPluginInfo != null) {
-            queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -269,10 +269,10 @@ public class PaymentMethodApi {
     }
 
     public PaymentMethods searchPaymentMethods(final String searchKey, final String pluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
-        return searchPaymentMethods(searchKey, Long.valueOf(0), Long.valueOf(100), pluginName, pluginProperty, AuditLevel.NONE, Boolean.valueOf(false), inputOptions);
+        return searchPaymentMethods(searchKey, Long.valueOf(0), Long.valueOf(100), pluginName, Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
 
-    public PaymentMethods searchPaymentMethods(final String searchKey, final Long offset, final Long limit, final String pluginName, final Map<String, String> pluginProperty, final AuditLevel audit, final Boolean withPluginInfo,  final RequestOptions inputOptions) throws KillBillClientException {
+    public PaymentMethods searchPaymentMethods(final String searchKey, final Long offset, final Long limit, final String pluginName, final Boolean withPluginInfo, final Map<String, String> pluginProperty, final AuditLevel audit,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchPaymentMethods");
 
         final String uri = "/1.0/kb/paymentMethods/search/{searchKey}"
@@ -288,14 +288,14 @@ public class PaymentMethodApi {
         if (pluginName != null) {
             queryParams.put("pluginName", String.valueOf(pluginName));
         }
+        if (withPluginInfo != null) {
+            queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
+        }
         if (pluginProperty != null) {
             queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
-        }
-        if (withPluginInfo != null) {
-            queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

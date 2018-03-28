@@ -20,6 +20,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +110,7 @@ public class OverdueState {
         return this;
     }
 
+    @JsonProperty(value="isDisableEntitlementAndChangesBlocked")
     public Boolean isDisableEntitlementAndChangesBlocked() {
         return isDisableEntitlementAndChangesBlocked;
     }
@@ -118,6 +120,7 @@ public class OverdueState {
         return this;
     }
 
+    @JsonProperty(value="isBlockChanges")
     public Boolean isBlockChanges() {
         return isBlockChanges;
     }
@@ -127,6 +130,7 @@ public class OverdueState {
         return this;
     }
 
+    @JsonProperty(value="isClearState")
     public Boolean isClearState() {
         return isClearState;
     }

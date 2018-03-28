@@ -20,6 +20,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *           DO NOT EDIT !!!
@@ -74,6 +75,7 @@ public class PluginProperty {
         return this;
     }
 
+    @JsonProperty(value="isUpdatable")
     public Boolean isUpdatable() {
         return isUpdatable;
     }

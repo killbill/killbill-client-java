@@ -20,6 +20,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -230,6 +231,7 @@ public class Account extends KillBillObject {
         return this;
     }
 
+    @JsonProperty(value="isPaymentDelegatedToParent")
     public Boolean isPaymentDelegatedToParent() {
         return isPaymentDelegatedToParent;
     }
@@ -356,6 +358,7 @@ public class Account extends KillBillObject {
         return this;
     }
 
+    @JsonProperty(value="isMigrated")
     public Boolean isMigrated() {
         return isMigrated;
     }
@@ -365,6 +368,7 @@ public class Account extends KillBillObject {
         return this;
     }
 
+    @JsonProperty(value="isNotifiedForInvoices")
     public Boolean isNotifiedForInvoices() {
         return isNotifiedForInvoices;
     }
