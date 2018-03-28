@@ -42,10 +42,10 @@ public class ComboHostedPaymentPage extends KillBillObject {
 
     private PaymentMethod paymentMethod = null;
 
+    private HostedPaymentPageFields hostedPaymentPageFields = null;
+
     private List<PluginProperty> paymentMethodPluginProperties = null;
 
-
-    private HostedPaymentPageFields hostedPaymentPageFieldsJson = null;
 
 
     public ComboHostedPaymentPage() {
@@ -53,14 +53,14 @@ public class ComboHostedPaymentPage extends KillBillObject {
 
     public ComboHostedPaymentPage(final Account account,
                      final PaymentMethod paymentMethod,
+                     final HostedPaymentPageFields hostedPaymentPageFields,
                      final List<PluginProperty> paymentMethodPluginProperties,
-                     final List<AuditLog> auditLogs,
-                     final HostedPaymentPageFields hostedPaymentPageFieldsJson) {
+                     final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.account = account;
         this.paymentMethod = paymentMethod;
+        this.hostedPaymentPageFields = hostedPaymentPageFields;
         this.paymentMethodPluginProperties = paymentMethodPluginProperties;
-        this.hostedPaymentPageFieldsJson = hostedPaymentPageFieldsJson;
 
     }
 
@@ -83,6 +83,15 @@ public class ComboHostedPaymentPage extends KillBillObject {
         return paymentMethod;
     }
 
+    public ComboHostedPaymentPage setHostedPaymentPageFields(final HostedPaymentPageFields hostedPaymentPageFields) {
+        this.hostedPaymentPageFields = hostedPaymentPageFields;
+        return this;
+    }
+
+    public HostedPaymentPageFields getHostedPaymentPageFields() {
+        return hostedPaymentPageFields;
+    }
+
     public ComboHostedPaymentPage setPaymentMethodPluginProperties(final List<PluginProperty> paymentMethodPluginProperties) {
         this.paymentMethodPluginProperties = paymentMethodPluginProperties;
         return this;
@@ -100,15 +109,6 @@ public class ComboHostedPaymentPage extends KillBillObject {
         return paymentMethodPluginProperties;
     }
 
-    public ComboHostedPaymentPage setHostedPaymentPageFieldsJson(final HostedPaymentPageFields hostedPaymentPageFieldsJson) {
-        this.hostedPaymentPageFieldsJson = hostedPaymentPageFieldsJson;
-        return this;
-    }
-
-    public HostedPaymentPageFields getHostedPaymentPageFieldsJson() {
-        return hostedPaymentPageFieldsJson;
-    }
-
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -120,9 +120,9 @@ public class ComboHostedPaymentPage extends KillBillObject {
         ComboHostedPaymentPage comboHostedPaymentPage = (ComboHostedPaymentPage) o;
         return Objects.equals(this.account, comboHostedPaymentPage.account) &&
         Objects.equals(this.paymentMethod, comboHostedPaymentPage.paymentMethod) &&
+        Objects.equals(this.hostedPaymentPageFields, comboHostedPaymentPage.hostedPaymentPageFields) &&
         Objects.equals(this.paymentMethodPluginProperties, comboHostedPaymentPage.paymentMethodPluginProperties) &&
-        Objects.equals(this.auditLogs, comboHostedPaymentPage.auditLogs) &&
-        Objects.equals(this.hostedPaymentPageFieldsJson, comboHostedPaymentPage.hostedPaymentPageFieldsJson);
+        Objects.equals(this.auditLogs, comboHostedPaymentPage.auditLogs);
 
     }
 
@@ -130,9 +130,9 @@ public class ComboHostedPaymentPage extends KillBillObject {
     public int hashCode() {
         return Objects.hash(account,
                             paymentMethod,
+                            hostedPaymentPageFields,
                             paymentMethodPluginProperties,
-                            auditLogs,
-                            hostedPaymentPageFieldsJson, super.hashCode());
+                            auditLogs, super.hashCode());
     }
 
 
@@ -143,9 +143,9 @@ public class ComboHostedPaymentPage extends KillBillObject {
         sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    account: ").append(toIndentedString(account)).append("\n");
         sb.append("    paymentMethod: ").append(toIndentedString(paymentMethod)).append("\n");
+        sb.append("    hostedPaymentPageFields: ").append(toIndentedString(hostedPaymentPageFields)).append("\n");
         sb.append("    paymentMethodPluginProperties: ").append(toIndentedString(paymentMethodPluginProperties)).append("\n");
         sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
-        sb.append("    hostedPaymentPageFieldsJson: ").append(toIndentedString(hostedPaymentPageFieldsJson)).append("\n");
         sb.append("}");
         return sb.toString();
     }

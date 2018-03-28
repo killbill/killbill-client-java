@@ -98,7 +98,7 @@ public class InvoiceItemApi {
     }
 
 
-    public void deleteCustomFields(final UUID invoiceItemId, final List<String> customField,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID invoiceItemId, final List<UUID> customField,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/invoiceItems/{invoiceItemId}/customFields"
@@ -106,7 +106,7 @@ public class InvoiceItemApi {
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (customField != null) {
-            queryParams.putAll("customField", customField);
+            queryParams.putAll("customField", Converter.convertUUIDListToStringList(customField));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

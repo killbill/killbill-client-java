@@ -20,7 +20,6 @@ package org.killbill.billing.client.api.gen;
 
 
 import org.killbill.billing.client.model.gen.ComboHostedPaymentPage;
-import org.killbill.billing.client.model.gen.GatewayNotification;
 import org.killbill.billing.client.model.gen.HostedPaymentPageFields;
 import org.killbill.billing.client.model.gen.HostedPaymentPageFormDescriptor;
 import java.util.UUID;
@@ -110,7 +109,7 @@ public class PaymentGatewayApi {
         return httpClient.doPost(uri, body, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
 
-    public GatewayNotification processNotification(final String body, final String pluginName, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void processNotification(final String body, final String pluginName, final List<String> controlPluginName, final Map<String, String> pluginProperty,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processNotification");
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling processNotification");
 
@@ -133,7 +132,7 @@ public class PaymentGatewayApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "*/*");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, body, GatewayNotification.class, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
 }

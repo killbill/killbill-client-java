@@ -101,7 +101,7 @@ public class PaymentTransactionApi {
     }
 
 
-    public void deleteCustomFields(final UUID transactionId, final List<String> customField,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID transactionId, final List<UUID> customField,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/customFields"
@@ -109,7 +109,7 @@ public class PaymentTransactionApi {
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (customField != null) {
-            queryParams.putAll("customField", customField);
+            queryParams.putAll("customField", Converter.convertUUIDListToStringList(customField));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

@@ -17,5 +17,9 @@
 
 package org.killbill.billing.client.model;
 
-public class Catalogs /* extends  TODO KillBillObjects<Catalog>  */ {
+import java.util.ArrayList;
+
+import org.killbill.billing.client.model.gen.Catalog;
+
+public class Catalogs extends ArrayList<Catalog> {
 }

@@ -86,17 +86,12 @@ public class AdminApi {
     }
 
 
-    public void invalidatesCacheByTenant(final String tenantApiKey,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void invalidatesCacheByTenant( final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/admin/cache/tenants";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tenantApiKey != null) {
-            queryParams.put("tenantApiKey", String.valueOf(tenantApiKey));
-        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 

@@ -343,7 +343,7 @@ public class SubscriptionApi {
     }
 
 
-    public void deleteCustomFields(final UUID subscriptionId, final List<String> customField,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID subscriptionId, final List<UUID> customField,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
@@ -351,7 +351,7 @@ public class SubscriptionApi {
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (customField != null) {
-            queryParams.putAll("customField", customField);
+            queryParams.putAll("customField", Converter.convertUUIDListToStringList(customField));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

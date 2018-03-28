@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "PaymentMethod"
-- name: "TagDefinition"
-- name: "Export"
-- name: "Payment"
-- name: "Catalog"
-- name: "Tag"
+- name: "Security"
 - name: "InvoicePayment"
+- name: "InvoiceItem"
+- name: "Tag"
+- name: "PaymentMethod"
+- name: "Account"
+- name: "Invoice"
+- name: "TagDefinition"
 - name: "CustomField"
 - name: "Tenant"
-- name: "Bundle"
-- name: "Invoice"
-- name: "Security"
-- name: "PaymentTransaction"
-- name: "Account"
-- name: "InvoiceItem"
-- name: "NodesInfo"
+- name: "PluginInfo"
 - name: "Credit"
+- name: "PaymentTransaction"
+- name: "Export"
+- name: "NodesInfo"
 - name: "Usage"
 - name: "Overdue"
+- name: "Bundle"
+- name: "Payment"
+- name: "Subscription"
+- name: "Catalog"
 - name: "PaymentGateway"
 - name: "Admin"
-- name: "Subscription"
-- name: "PluginInfo"
 paths:
   /1.0/kb/accounts:
     get:
@@ -1086,6 +1086,7 @@ paths:
         type: "array"
         items:
           type: "string"
+          format: "uuid"
         collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
@@ -2273,10 +2274,6 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - name: "tenantApiKey"
-        in: "query"
-        required: false
-        type: "string"
       - name: "X-Killbill-ApiKey"
         in: "header"
         required: true
@@ -2932,6 +2929,7 @@ paths:
         type: "array"
         items:
           type: "string"
+          format: "uuid"
         collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
@@ -4055,6 +4053,7 @@ paths:
         type: "array"
         items:
           type: "string"
+          format: "uuid"
         collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
@@ -4657,6 +4656,7 @@ paths:
         type: "array"
         items:
           type: "string"
+          format: "uuid"
         collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
@@ -5928,6 +5928,7 @@ paths:
         type: "array"
         items:
           type: "string"
+          format: "uuid"
         collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
@@ -6796,10 +6797,8 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
+        default:
           description: "successful operation"
-          schema:
-            $ref: "#/definitions/GatewayNotification"
       security:
       - basicAuth: []
   /1.0/kb/paymentMethods:
@@ -7283,6 +7282,7 @@ paths:
         type: "array"
         items:
           type: "string"
+          format: "uuid"
         collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
@@ -7599,6 +7599,7 @@ paths:
         type: "array"
         items:
           type: "string"
+          format: "uuid"
         collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
@@ -9130,6 +9131,7 @@ paths:
         type: "array"
         items:
           type: "string"
+          format: "uuid"
         collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
@@ -10489,6 +10491,7 @@ paths:
         type: "array"
         items:
           type: "string"
+          format: "uuid"
         collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
@@ -12989,6 +12992,27 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
+  PluginInfo:
+    type: "object"
+    properties:
+      bundleSymbolicName:
+        type: "string"
+      pluginKey:
+        type: "string"
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -13019,27 +13043,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  PluginInfo:
-    type: "object"
-    properties:
-      bundleSymbolicName:
-        type: "string"
-      pluginKey:
-        type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/PluginServiceInfo"
   Subscription:
     type: "object"
     required:
@@ -13175,11 +13178,7 @@ definitions:
   HostedPaymentPageFields:
     type: "object"
     properties:
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
-      customFields:
+      formFields:
         type: "array"
         items:
           $ref: "#/definitions/PluginProperty"
@@ -14610,25 +14609,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -14874,6 +14854,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -14946,25 +14945,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  Tenant:
-    type: "object"
-    required:
-    - "apiKey"
-    - "apiSecret"
-    properties:
-      tenantId:
-        type: "string"
-        format: "uuid"
-      externalKey:
-        type: "string"
-      apiKey:
-        type: "string"
-      apiSecret:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
   Credit:
     type: "object"
     required:
@@ -15158,6 +15138,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Tenant:
+    type: "object"
+    required:
+    - "apiKey"
+    - "apiSecret"
+    properties:
+      tenantId:
+        type: "string"
+        format: "uuid"
+      externalKey:
+        type: "string"
+      apiKey:
+        type: "string"
+      apiSecret:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
   EventSubscription:
     type: "object"
     properties:
@@ -15244,6 +15243,8 @@ definitions:
         $ref: "#/definitions/Account"
       paymentMethod:
         $ref: "#/definitions/PaymentMethod"
+      hostedPaymentPageFields:
+        $ref: "#/definitions/HostedPaymentPageFields"
       paymentMethodPluginProperties:
         type: "array"
         items:
@@ -15252,8 +15253,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-      hostedPaymentPageFieldsJson:
-        $ref: "#/definitions/HostedPaymentPageFields"
   PriceList:
     type: "object"
     properties:
@@ -15734,31 +15733,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  GatewayNotification:
-    type: "object"
-    properties:
-      kbPaymentId:
-        type: "string"
-        format: "uuid"
-      status:
-        type: "integer"
-        format: "int32"
-      entity:
-        type: "string"
-      headers:
-        type: "object"
-        additionalProperties:
-          type: "array"
-          items:
-            type: "string"
-      properties:
-        type: "object"
-        additionalProperties:
-          type: "object"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
   RoleDefinition:
     type: "object"
     required:

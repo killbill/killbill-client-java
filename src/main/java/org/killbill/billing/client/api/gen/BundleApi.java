@@ -127,7 +127,7 @@ public class BundleApi {
     }
 
 
-    public void deleteCustomFields(final UUID bundleId, final List<String> customField,  final RequestOptions inputOptions) throws KillBillClientException {
+    public void deleteCustomFields(final UUID bundleId, final List<UUID> customField,  final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteCustomFields");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
@@ -135,7 +135,7 @@ public class BundleApi {
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (customField != null) {
-            queryParams.putAll("customField", customField);
+            queryParams.putAll("customField", Converter.convertUUIDListToStringList(customField));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

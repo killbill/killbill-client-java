@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.PluginProperty;
 
 /**
@@ -33,38 +32,35 @@ import org.killbill.billing.client.model.gen.PluginProperty;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class HostedPaymentPageFields extends KillBillObject {
+public class HostedPaymentPageFields {
 
-
-    private List<PluginProperty> customFields = null;
+    private List<PluginProperty> formFields = null;
 
 
     public HostedPaymentPageFields() {
     }
 
-    public HostedPaymentPageFields(final List<AuditLog> auditLogs,
-                     final List<PluginProperty> customFields) {
-        super(auditLogs);
-        this.customFields = customFields;
+    public HostedPaymentPageFields(final List<PluginProperty> formFields) {
+        this.formFields = formFields;
 
     }
 
 
-    public HostedPaymentPageFields setCustomFields(final List<PluginProperty> customFields) {
-        this.customFields = customFields;
+    public HostedPaymentPageFields setFormFields(final List<PluginProperty> formFields) {
+        this.formFields = formFields;
         return this;
     }
 
-    public HostedPaymentPageFields addCustomFieldsItem(final PluginProperty customFieldsItem) {
-        if (this.customFields == null) {
-            this.customFields = new ArrayList<PluginProperty>();
+    public HostedPaymentPageFields addFormFieldsItem(final PluginProperty formFieldsItem) {
+        if (this.formFields == null) {
+            this.formFields = new ArrayList<PluginProperty>();
         }
-        this.customFields.add(customFieldsItem);
+        this.formFields.add(formFieldsItem);
         return this;
     }
 
-    public List<PluginProperty> getCustomFields() {
-        return customFields;
+    public List<PluginProperty> getFormFields() {
+        return formFields;
     }
 
     @Override
@@ -76,15 +72,13 @@ public class HostedPaymentPageFields extends KillBillObject {
             return false;
         }
         HostedPaymentPageFields hostedPaymentPageFields = (HostedPaymentPageFields) o;
-        return Objects.equals(this.auditLogs, hostedPaymentPageFields.auditLogs) &&
-        Objects.equals(this.customFields, hostedPaymentPageFields.customFields);
+        return Objects.equals(this.formFields, hostedPaymentPageFields.formFields);
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(auditLogs,
-                            customFields, super.hashCode());
+        return Objects.hash(formFields);
     }
 
 
@@ -92,9 +86,8 @@ public class HostedPaymentPageFields extends KillBillObject {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class HostedPaymentPageFields {\n");
-        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
-        sb.append("    customFields: ").append(toIndentedString(customFields)).append("\n");
+        
+        sb.append("    formFields: ").append(toIndentedString(formFields)).append("\n");
         sb.append("}");
         return sb.toString();
     }
