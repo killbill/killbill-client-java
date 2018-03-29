@@ -98,9 +98,9 @@ public class PaymentApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public Payment captureAuthorization(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling captureAuthorization");
+    public Payment captureAuthorization(final UUID paymentId, final PaymentTransaction body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling captureAuthorization");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling captureAuthorization");
 
         final String uri = "/1.0/kb/payments/{paymentId}"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -148,9 +148,9 @@ public class PaymentApi {
         return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public Payment chargebackPayment(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling chargebackPayment");
+    public Payment chargebackPayment(final UUID paymentId, final PaymentTransaction body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling chargebackPayment");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling chargebackPayment");
 
         final String uri = "/1.0/kb/payments/{paymentId}/chargebacks"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -198,9 +198,9 @@ public class PaymentApi {
         return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public Payment chargebackReversalPayment(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling chargebackReversalPayment");
+    public Payment chargebackReversalPayment(final UUID paymentId, final PaymentTransaction body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling chargebackReversalPayment");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling chargebackReversalPayment");
 
         final String uri = "/1.0/kb/payments/{paymentId}/chargebackReversals"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -248,9 +248,9 @@ public class PaymentApi {
         return httpClient.doPost(uri, body, Payment.class, requestOptions);
     }
 
-    public void completeTransaction(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling completeTransaction");
+    public void completeTransaction(final UUID paymentId, final PaymentTransaction body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling completeTransaction");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling completeTransaction");
 
         final String uri = "/1.0/kb/payments/{paymentId}"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -567,9 +567,9 @@ public class PaymentApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public Payment refundPayment(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling refundPayment");
+    public Payment refundPayment(final UUID paymentId, final PaymentTransaction body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling refundPayment");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling refundPayment");
 
         final String uri = "/1.0/kb/payments/{paymentId}/refunds"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -659,9 +659,9 @@ public class PaymentApi {
     }
 
 
-    public void voidPayment(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling voidPayment");
+    public void voidPayment(final UUID paymentId, final PaymentTransaction body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling voidPayment");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling voidPayment");
 
         final String uri = "/1.0/kb/payments/{paymentId}"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());

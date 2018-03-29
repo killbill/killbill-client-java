@@ -61,9 +61,9 @@ public class InvoicePaymentApi {
         this.httpClient = httpClient;
     }
 
-    public void completeInvoicePaymentTransaction(final PaymentTransaction body, final UUID paymentId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling completeInvoicePaymentTransaction");
+    public void completeInvoicePaymentTransaction(final UUID paymentId, final PaymentTransaction body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling completeInvoicePaymentTransaction");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling completeInvoicePaymentTransaction");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -85,9 +85,9 @@ public class InvoicePaymentApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public InvoicePayment createChargeback(final InvoicePaymentTransaction body, final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createChargeback");
+    public InvoicePayment createChargeback(final UUID paymentId, final InvoicePaymentTransaction body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createChargeback");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createChargeback");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/chargebacks"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -103,9 +103,9 @@ public class InvoicePaymentApi {
         return httpClient.doPost(uri, body, InvoicePayment.class, requestOptions);
     }
 
-    public InvoicePayment createChargebackReversal(final InvoicePaymentTransaction body, final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createChargebackReversal");
+    public InvoicePayment createChargebackReversal(final UUID paymentId, final InvoicePaymentTransaction body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createChargebackReversal");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createChargebackReversal");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/chargebackReversals"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -139,13 +139,13 @@ public class InvoicePaymentApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public InvoicePayment createRefundWithAdjustments(final InvoicePaymentTransaction body, final UUID paymentId, final UUID paymentMethodId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        return createRefundWithAdjustments(body, paymentId, Boolean.valueOf(false), paymentMethodId, pluginProperty, inputOptions);
+    public InvoicePayment createRefundWithAdjustments(final UUID paymentId, final InvoicePaymentTransaction body, final UUID paymentMethodId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return createRefundWithAdjustments(paymentId, body, Boolean.valueOf(false), paymentMethodId, pluginProperty, inputOptions);
     }
 
-    public InvoicePayment createRefundWithAdjustments(final InvoicePaymentTransaction body, final UUID paymentId, final Boolean externalPayment, final UUID paymentMethodId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createRefundWithAdjustments");
+    public InvoicePayment createRefundWithAdjustments(final UUID paymentId, final InvoicePaymentTransaction body, final Boolean externalPayment, final UUID paymentMethodId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createRefundWithAdjustments");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createRefundWithAdjustments");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/refunds"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());

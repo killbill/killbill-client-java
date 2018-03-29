@@ -155,9 +155,9 @@ public class SecurityApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void updateUserPassword(final UserRoles body, final String username, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateUserPassword");
+    public void updateUserPassword(final String username, final UserRoles body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(username, "Missing the required parameter 'username' when calling updateUserPassword");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateUserPassword");
 
         final String uri = "/1.0/kb/security/users/{username}/password"
           .replaceAll("\\{" + "username" + "\\}", username.toString());
@@ -171,9 +171,9 @@ public class SecurityApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void updateUserRoles(final UserRoles body, final String username, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateUserRoles");
+    public void updateUserRoles(final String username, final UserRoles body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(username, "Missing the required parameter 'username' when calling updateUserRoles");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateUserRoles");
 
         final String uri = "/1.0/kb/security/users/{username}/roles"
           .replaceAll("\\{" + "username" + "\\}", username.toString());

@@ -108,7 +108,7 @@ public class AccountApiTest {
 
         account.setEmail("somebody@something.org");
         account.setCurrency(Currency.USD);
-        accountApi.updateAccount(account, accountId, false, requestOptions);
+        accountApi.updateAccount(accountId, account, false, requestOptions);
 
         final Account result3 = accountApi.getAccount(accountId, false, false, AuditLevel.FULL, requestOptions);
         Assert.assertNotNull(result3);

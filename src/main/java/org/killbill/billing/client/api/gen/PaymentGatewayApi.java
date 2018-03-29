@@ -80,9 +80,9 @@ public class PaymentGatewayApi {
         return httpClient.doPost(uri, body, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
 
-    public HostedPaymentPageFormDescriptor buildFormDescriptor(final HostedPaymentPageFields body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling buildFormDescriptor");
+    public HostedPaymentPageFormDescriptor buildFormDescriptor(final UUID accountId, final HostedPaymentPageFields body, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling buildFormDescriptor");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling buildFormDescriptor");
 
         final String uri = "/1.0/kb/paymentGateways/hosted/form/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
@@ -109,9 +109,9 @@ public class PaymentGatewayApi {
         return httpClient.doPost(uri, body, HostedPaymentPageFormDescriptor.class, requestOptions);
     }
 
-    public void processNotification(final String body, final String pluginName, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processNotification");
+    public void processNotification(final String pluginName, final String body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling processNotification");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processNotification");
 
         final String uri = "/1.0/kb/paymentGateways/notification/{pluginName}"
           .replaceAll("\\{" + "pluginName" + "\\}", pluginName.toString());

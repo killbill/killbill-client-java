@@ -63,9 +63,9 @@ public class BundleApi {
         this.httpClient = httpClient;
     }
 
-    public void addBundleBlockingState(final BlockingState body, final UUID bundleId, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
+    public void addBundleBlockingState(final UUID bundleId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling addBundleBlockingState");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/block"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
@@ -334,9 +334,9 @@ public class BundleApi {
         httpClient.doPut(uri, null, requestOptions);
     }
 
-    public void renameExternalKey(final Bundle body, final UUID bundleId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling renameExternalKey");
+    public void renameExternalKey(final UUID bundleId, final Bundle body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling renameExternalKey");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling renameExternalKey");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/renameKey"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
@@ -401,13 +401,13 @@ public class BundleApi {
         return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
-    public void transferBundle(final Bundle body, final UUID bundleId, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        transferBundle(body, bundleId, requestedDate, BillingActionPolicy.END_OF_TERM, pluginProperty, inputOptions);
+    public void transferBundle(final UUID bundleId, final Bundle body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        transferBundle(bundleId, body, requestedDate, BillingActionPolicy.END_OF_TERM, pluginProperty, inputOptions);
     }
 
-    public void transferBundle(final Bundle body, final UUID bundleId, final LocalDate requestedDate, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling transferBundle");
+    public void transferBundle(final UUID bundleId, final Bundle body, final LocalDate requestedDate, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling transferBundle");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling transferBundle");
 
         final String uri = "/1.0/kb/bundles/{bundleId}"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());

@@ -82,9 +82,9 @@ public class AccountApi {
         this.httpClient = httpClient;
     }
 
-    public void addAccountBlockingState(final BlockingState body, final UUID accountId, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addAccountBlockingState");
+    public void addAccountBlockingState(final UUID accountId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling addAccountBlockingState");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addAccountBlockingState");
 
         final String uri = "/1.0/kb/accounts/{accountId}/block"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
@@ -105,9 +105,9 @@ public class AccountApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public AccountEmails addEmail(final AccountEmail body, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addEmail");
+    public AccountEmails addEmail(final UUID accountId, final AccountEmail body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling addEmail");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addEmail");
 
         final String uri = "/1.0/kb/accounts/{accountId}/emails"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
@@ -190,13 +190,13 @@ public class AccountApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public PaymentMethod createPaymentMethod(final PaymentMethod body, final UUID accountId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        return createPaymentMethod(body, accountId, Boolean.valueOf(false), Boolean.valueOf(false), controlPluginName, pluginProperty, inputOptions);
+    public PaymentMethod createPaymentMethod(final UUID accountId, final PaymentMethod body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return createPaymentMethod(accountId, body, Boolean.valueOf(false), Boolean.valueOf(false), controlPluginName, pluginProperty, inputOptions);
     }
 
-    public PaymentMethod createPaymentMethod(final PaymentMethod body, final UUID accountId, final Boolean isDefault, final Boolean payAllUnpaidInvoices, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createPaymentMethod");
+    public PaymentMethod createPaymentMethod(final UUID accountId, final PaymentMethod body, final Boolean isDefault, final Boolean payAllUnpaidInvoices, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createPaymentMethod");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createPaymentMethod");
 
         final String uri = "/1.0/kb/accounts/{accountId}/paymentMethods"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
@@ -820,9 +820,9 @@ public class AccountApi {
         httpClient.doPost(uri, null, requestOptions);
     }
 
-    public Payment processPayment(final PaymentTransaction body, final UUID accountId, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processPayment");
+    public Payment processPayment(final UUID accountId, final PaymentTransaction body, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling processPayment");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processPayment");
 
         final String uri = "/1.0/kb/accounts/{accountId}/payments"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
@@ -998,9 +998,9 @@ public class AccountApi {
         httpClient.doPut(uri, null, requestOptions);
     }
 
-    public void setEmailNotificationsForAccount(final InvoiceEmail body, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling setEmailNotificationsForAccount");
+    public void setEmailNotificationsForAccount(final UUID accountId, final InvoiceEmail body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling setEmailNotificationsForAccount");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling setEmailNotificationsForAccount");
 
         final String uri = "/1.0/kb/accounts/{accountId}/emailNotifications"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
@@ -1029,13 +1029,13 @@ public class AccountApi {
         httpClient.doPut(uri, null, requestOptions);
     }
 
-    public void updateAccount(final Account body, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
-        updateAccount(body, accountId, Boolean.valueOf(false), inputOptions);
+    public void updateAccount(final UUID accountId, final Account body, final RequestOptions inputOptions) throws KillBillClientException {
+        updateAccount(accountId, body, Boolean.valueOf(false), inputOptions);
     }
 
-    public void updateAccount(final Account body, final UUID accountId, final Boolean treatNullAsReset, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateAccount");
+    public void updateAccount(final UUID accountId, final Account body, final Boolean treatNullAsReset, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling updateAccount");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateAccount");
 
         final String uri = "/1.0/kb/accounts/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());

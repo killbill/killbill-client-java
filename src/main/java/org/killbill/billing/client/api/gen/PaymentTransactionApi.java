@@ -239,9 +239,9 @@ public class PaymentTransactionApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public Payment notifyStateChanged(final PaymentTransaction body, final UUID transactionId, final List<String> controlPluginName, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling notifyStateChanged");
+    public Payment notifyStateChanged(final UUID transactionId, final PaymentTransaction body, final List<String> controlPluginName, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling notifyStateChanged");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling notifyStateChanged");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}"
           .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());

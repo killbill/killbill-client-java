@@ -309,9 +309,9 @@ public class TenantApi {
         return httpClient.doPost(uri, body, TenantKeyValue.class, requestOptions);
     }
 
-    public TenantKeyValue uploadPluginConfiguration(final String body, final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadPluginConfiguration");
+    public TenantKeyValue uploadPluginConfiguration(final String pluginName, final String body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling uploadPluginConfiguration");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadPluginConfiguration");
 
         final String uri = "/1.0/kb/tenants/uploadPluginConfig/{pluginName}"
           .replaceAll("\\{" + "pluginName" + "\\}", pluginName.toString());
@@ -327,9 +327,9 @@ public class TenantApi {
         return httpClient.doPost(uri, body, TenantKeyValue.class, requestOptions);
     }
 
-    public TenantKeyValue uploadPluginPaymentStateMachineConfig(final String body, final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadPluginPaymentStateMachineConfig");
+    public TenantKeyValue uploadPluginPaymentStateMachineConfig(final String pluginName, final String body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling uploadPluginPaymentStateMachineConfig");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadPluginPaymentStateMachineConfig");
 
         final String uri = "/1.0/kb/tenants/uploadPluginPaymentStateMachineConfig/{pluginName}"
           .replaceAll("\\{" + "pluginName" + "\\}", pluginName.toString());

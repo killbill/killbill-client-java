@@ -150,10 +150,10 @@ public class AdminApi {
         httpClient.doPost(uri, null, requestOptions);
     }
 
-    public void updatePaymentTransactionState(final AdminPayment body, final UUID paymentId, final UUID paymentTransactionId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updatePaymentTransactionState");
+    public void updatePaymentTransactionState(final UUID paymentId, final UUID paymentTransactionId, final AdminPayment body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling updatePaymentTransactionState");
         Preconditions.checkNotNull(paymentTransactionId, "Missing the required parameter 'paymentTransactionId' when calling updatePaymentTransactionState");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updatePaymentTransactionState");
 
         final String uri = "/1.0/kb/admin/payments/{paymentId}/transactions/{paymentTransactionId}"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString())

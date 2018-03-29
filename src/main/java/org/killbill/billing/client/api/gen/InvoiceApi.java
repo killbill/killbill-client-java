@@ -66,9 +66,9 @@ public class InvoiceApi {
         this.httpClient = httpClient;
     }
 
-    public Invoice adjustInvoiceItem(final InvoiceItem body, final UUID invoiceId, final LocalDate requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling adjustInvoiceItem");
+    public Invoice adjustInvoiceItem(final UUID invoiceId, final InvoiceItem body, final LocalDate requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling adjustInvoiceItem");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling adjustInvoiceItem");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
@@ -122,13 +122,13 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final Map<String, String> pluginProperty, final String paymentExternalKey, final String transactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
-        return createExternalCharges(body, accountId, requestedDate, Boolean.valueOf(false), pluginProperty, Boolean.valueOf(false), paymentExternalKey, transactionExternalKey, inputOptions);
+    public InvoiceItems createExternalCharges(final UUID accountId, final InvoiceItems body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final String paymentExternalKey, final String transactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
+        return createExternalCharges(accountId, body, requestedDate, Boolean.valueOf(false), pluginProperty, Boolean.valueOf(false), paymentExternalKey, transactionExternalKey, inputOptions);
     }
 
-    public InvoiceItems createExternalCharges(final InvoiceItems body, final UUID accountId, final LocalDate requestedDate, final Boolean payInvoice, final Map<String, String> pluginProperty, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createExternalCharges");
+    public InvoiceItems createExternalCharges(final UUID accountId, final InvoiceItems body, final LocalDate requestedDate, final Boolean payInvoice, final Map<String, String> pluginProperty, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createExternalCharges");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createExternalCharges");
 
         final String uri = "/1.0/kb/invoices/charges/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
@@ -188,13 +188,13 @@ public class InvoiceApi {
         return httpClient.doPost(uri, null, Invoice.class, requestOptions);
     }
 
-    public InvoicePayment createInstantPayment(final InvoicePayment body, final UUID invoiceId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        return createInstantPayment(body, invoiceId, Boolean.valueOf(false), pluginProperty, inputOptions);
+    public InvoicePayment createInstantPayment(final UUID invoiceId, final InvoicePayment body, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return createInstantPayment(invoiceId, body, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public InvoicePayment createInstantPayment(final InvoicePayment body, final UUID invoiceId, final Boolean externalPayment, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createInstantPayment");
+    public InvoicePayment createInstantPayment(final UUID invoiceId, final InvoicePayment body, final Boolean externalPayment, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createInstantPayment");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createInstantPayment");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/payments"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
@@ -218,9 +218,9 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, InvoicePayment.class, requestOptions);
     }
 
-    public Invoice createMigrationInvoice(final InvoiceItems body, final UUID accountId, final LocalDate targetDate, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createMigrationInvoice");
+    public Invoice createMigrationInvoice(final UUID accountId, final InvoiceItems body, final LocalDate targetDate, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createMigrationInvoice");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createMigrationInvoice");
 
         final String uri = "/1.0/kb/invoices/migration/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
@@ -636,13 +636,13 @@ public class InvoiceApi {
         return httpClient.doGet(uri, Invoices.class, requestOptions);
     }
 
-    public void uploadCatalogTranslation(final String body, final String locale, final RequestOptions inputOptions) throws KillBillClientException {
-        uploadCatalogTranslation(body, locale, Boolean.valueOf(false), inputOptions);
+    public void uploadCatalogTranslation(final String locale, final String body, final RequestOptions inputOptions) throws KillBillClientException {
+        uploadCatalogTranslation(locale, body, Boolean.valueOf(false), inputOptions);
     }
 
-    public void uploadCatalogTranslation(final String body, final String locale, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadCatalogTranslation");
+    public void uploadCatalogTranslation(final String locale, final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadCatalogTranslation");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadCatalogTranslation");
 
         final String uri = "/1.0/kb/invoices/catalogTranslation/{locale}"
           .replaceAll("\\{" + "locale" + "\\}", locale.toString());
@@ -713,13 +713,13 @@ public class InvoiceApi {
         httpClient.doPost(uri, body, requestOptions);
     }
 
-    public void uploadInvoiceTranslation(final String body, final String locale, final RequestOptions inputOptions) throws KillBillClientException {
-        uploadInvoiceTranslation(body, locale, Boolean.valueOf(false), inputOptions);
+    public void uploadInvoiceTranslation(final String locale, final String body, final RequestOptions inputOptions) throws KillBillClientException {
+        uploadInvoiceTranslation(locale, body, Boolean.valueOf(false), inputOptions);
     }
 
-    public void uploadInvoiceTranslation(final String body, final String locale, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTranslation");
+    public void uploadInvoiceTranslation(final String locale, final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadInvoiceTranslation");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTranslation");
 
         final String uri = "/1.0/kb/invoices/translation/{locale}"
           .replaceAll("\\{" + "locale" + "\\}", locale.toString());
