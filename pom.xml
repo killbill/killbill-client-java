@@ -24,7 +24,7 @@
         <version>0.141.50</version>
     </parent>
     <artifactId>killbill-client-java-swagger-gen-exp</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
     <name>Kill Bill Client Java</name>
     <description>Kill Bill Java client library</description>
