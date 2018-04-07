@@ -27,8 +27,8 @@ import java.util.UUID;
 import org.killbill.billing.client.model.CustomFields;
 import java.util.List;
 import org.killbill.billing.client.model.Tags;
-import org.killbill.billing.util.api.AuditLevel;
 import java.util.Map;
+import org.killbill.billing.util.api.AuditLevel;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -60,9 +60,9 @@ public class PaymentTransactionApi {
         this.httpClient = httpClient;
     }
 
-    public CustomFields createCustomFields(final UUID transactionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling createCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCustomFields");
+    public CustomFields createTransactionCustomFields(final UUID transactionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling createTransactionCustomFields");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createTransactionCustomFields");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/customFields"
           .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());
@@ -78,8 +78,8 @@ public class PaymentTransactionApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public Tags createTags(final UUID transactionId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling createTags");
+    public Tags createTransactionTags(final UUID transactionId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling createTransactionTags");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/tags"
           .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());
@@ -101,8 +101,8 @@ public class PaymentTransactionApi {
     }
 
 
-    public void deleteCustomFields(final UUID transactionId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling deleteCustomFields");
+    public void deleteTransactionCustomFields(final UUID transactionId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling deleteTransactionCustomFields");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/customFields"
           .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());
@@ -122,8 +122,8 @@ public class PaymentTransactionApi {
     }
 
 
-    public void deleteTags(final UUID transactionId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling deleteTags");
+    public void deleteTransactionTags(final UUID transactionId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling deleteTransactionTags");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/tags"
           .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());
@@ -140,29 +140,6 @@ public class PaymentTransactionApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
-    }
-
-    public CustomFields getCustomFields(final UUID transactionId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getCustomFields(transactionId, AuditLevel.NONE, inputOptions);
-    }
-
-    public CustomFields getCustomFields(final UUID transactionId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getCustomFields");
-
-        final String uri = "/1.0/kb/paymentTransactions/{transactionId}/customFields"
-          .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());
-
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
     public Payment getPaymentByTransactionId(final UUID transactionId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
@@ -197,12 +174,35 @@ public class PaymentTransactionApi {
         return httpClient.doGet(uri, Payment.class, requestOptions);
     }
 
-    public Tags getTags(final UUID transactionId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getTags(transactionId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    public CustomFields getTransactionCustomFields(final UUID transactionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getTransactionCustomFields(transactionId, AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID transactionId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getTags");
+    public CustomFields getTransactionCustomFields(final UUID transactionId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getTransactionCustomFields");
+
+        final String uri = "/1.0/kb/paymentTransactions/{transactionId}/customFields"
+          .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public Tags getTransactionTags(final UUID transactionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getTransactionTags(transactionId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    }
+
+    public Tags getTransactionTags(final UUID transactionId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getTransactionTags");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/tags"
           .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());
@@ -223,9 +223,9 @@ public class PaymentTransactionApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public void modifyCustomFields(final UUID transactionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling modifyCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
+    public void modifyTransactionCustomFields(final UUID transactionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling modifyTransactionCustomFields");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyTransactionCustomFields");
 
         final String uri = "/1.0/kb/paymentTransactions/{transactionId}/customFields"
           .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());

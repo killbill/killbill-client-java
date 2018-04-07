@@ -58,9 +58,9 @@ public class PaymentMethodApi {
         this.httpClient = httpClient;
     }
 
-    public CustomFields createCustomFields(final UUID paymentMethodId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling createCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCustomFields");
+    public CustomFields createPaymentMethodCustomFields(final UUID paymentMethodId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling createPaymentMethodCustomFields");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createPaymentMethodCustomFields");
 
         final String uri = "/1.0/kb/paymentMethods/{paymentMethodId}/customFields"
           .replaceAll("\\{" + "paymentMethodId" + "\\}", paymentMethodId.toString());
@@ -74,27 +74,6 @@ public class PaymentMethodApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
-    }
-
-
-    public void deleteCustomFields(final UUID paymentMethodId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling deleteCustomFields");
-
-        final String uri = "/1.0/kb/paymentMethods/{paymentMethodId}/customFields"
-          .replaceAll("\\{" + "paymentMethodId" + "\\}", paymentMethodId.toString());
-
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (customField != null) {
-            queryParams.putAll("customField", Converter.convertUUIDListToStringList(customField));
-        }
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        httpClient.doDelete(uri, requestOptions);
     }
 
     public void deletePaymentMethod(final UUID paymentMethodId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
@@ -127,27 +106,25 @@ public class PaymentMethodApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public CustomFields getCustomFields(final UUID paymentMethodId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getCustomFields(paymentMethodId, AuditLevel.NONE, inputOptions);
-    }
 
-    public CustomFields getCustomFields(final UUID paymentMethodId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling getCustomFields");
+    public void deletePaymentMethodCustomFields(final UUID paymentMethodId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling deletePaymentMethodCustomFields");
 
         final String uri = "/1.0/kb/paymentMethods/{paymentMethodId}/customFields"
           .replaceAll("\\{" + "paymentMethodId" + "\\}", paymentMethodId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+        if (customField != null) {
+            queryParams.putAll("customField", Converter.convertUUIDListToStringList(customField));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+        httpClient.doDelete(uri, requestOptions);
     }
 
     public PaymentMethod getPaymentMethod(final UUID paymentMethodId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
@@ -216,6 +193,29 @@ public class PaymentMethodApi {
         return httpClient.doGet(uri, PaymentMethod.class, requestOptions);
     }
 
+    public CustomFields getPaymentMethodCustomFields(final UUID paymentMethodId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentMethodCustomFields(paymentMethodId, AuditLevel.NONE, inputOptions);
+    }
+
+    public CustomFields getPaymentMethodCustomFields(final UUID paymentMethodId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling getPaymentMethodCustomFields");
+
+        final String uri = "/1.0/kb/paymentMethods/{paymentMethodId}/customFields"
+          .replaceAll("\\{" + "paymentMethodId" + "\\}", paymentMethodId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
     public PaymentMethods getPaymentMethods(final String pluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return getPaymentMethods(Long.valueOf(0), Long.valueOf(100), pluginName, Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
@@ -252,9 +252,9 @@ public class PaymentMethodApi {
         return httpClient.doGet(uri, PaymentMethods.class, requestOptions);
     }
 
-    public void modifyCustomFields(final UUID paymentMethodId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling modifyCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
+    public void modifyPaymentMethodCustomFields(final UUID paymentMethodId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling modifyPaymentMethodCustomFields");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyPaymentMethodCustomFields");
 
         final String uri = "/1.0/kb/paymentMethods/{paymentMethodId}/customFields"
           .replaceAll("\\{" + "paymentMethodId" + "\\}", paymentMethodId.toString());

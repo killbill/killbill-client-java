@@ -32,10 +32,10 @@ import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
 import org.killbill.billing.client.model.CustomFields;
 import java.util.List;
+import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.client.model.Subscriptions;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.BulkSubscriptionsBundles;
-import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
 
 import com.google.common.collect.Multimap;
@@ -170,24 +170,6 @@ public class SubscriptionApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void createCustomFields(final UUID subscriptionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCustomFields");
-
-        final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
-          .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
-
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        httpClient.doPost(uri, body, requestOptions);
-    }
-
     public Subscription createSubscription(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Integer bcd, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return createSubscription(body, entitlementDate, billingDate, Boolean.valueOf(true), Boolean.valueOf(false), bcd, Boolean.valueOf(false), Long.valueOf(3), pluginProperty, inputOptions);
     }
@@ -232,6 +214,46 @@ public class SubscriptionApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, Subscription.class, requestOptions);
+    }
+
+    public void createSubscriptionCustomFields(final UUID subscriptionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createSubscriptionCustomFields");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionCustomFields");
+
+        final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
+          .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        httpClient.doPost(uri, body, requestOptions);
+    }
+
+    public Tags createSubscriptionTags(final UUID subscriptionId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createSubscriptionTags");
+
+        final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
+          .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", tagDef);
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doPost(uri, null, Tags.class, requestOptions);
     }
 
     public Bundle createSubscriptionWithAddOns(final Subscriptions body, final LocalDate entitlementDate, final LocalDate billingDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
@@ -320,31 +342,9 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Bundles.class, requestOptions);
     }
 
-    public Tags createTags(final UUID subscriptionId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createTags");
 
-        final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
-          .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
-
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tagDef != null) {
-            queryParams.putAll("tagDef", tagDef);
-        }
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        return httpClient.doPost(uri, null, Tags.class, requestOptions);
-    }
-
-
-    public void deleteCustomFields(final UUID subscriptionId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteCustomFields");
+    public void deleteSubscriptionCustomFields(final UUID subscriptionId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteSubscriptionCustomFields");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
@@ -364,8 +364,8 @@ public class SubscriptionApi {
     }
 
 
-    public void deleteTags(final UUID subscriptionId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteTags");
+    public void deleteSubscriptionTags(final UUID subscriptionId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteSubscriptionTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
@@ -382,29 +382,6 @@ public class SubscriptionApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
-    }
-
-    public CustomFields getCustomFields(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getCustomFields(subscriptionId, AuditLevel.NONE, inputOptions);
-    }
-
-    public CustomFields getCustomFields(final UUID subscriptionId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getCustomFields");
-
-        final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
-          .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
-
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
     public Subscription getSubscription(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
@@ -430,12 +407,35 @@ public class SubscriptionApi {
         return httpClient.doGet(uri, Subscription.class, requestOptions);
     }
 
-    public Tags getTags(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getTags(subscriptionId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    public CustomFields getSubscriptionCustomFields(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getSubscriptionCustomFields(subscriptionId, AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID subscriptionId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getTags");
+    public CustomFields getSubscriptionCustomFields(final UUID subscriptionId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscriptionCustomFields");
+
+        final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
+          .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public Tags getSubscriptionTags(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getSubscriptionTags(subscriptionId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    }
+
+    public Tags getSubscriptionTags(final UUID subscriptionId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscriptionTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
@@ -456,9 +456,9 @@ public class SubscriptionApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public void modifyCustomFields(final UUID subscriptionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling modifyCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
+    public void modifySubscriptionCustomFields(final UUID subscriptionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling modifySubscriptionCustomFields");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifySubscriptionCustomFields");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());

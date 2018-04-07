@@ -121,9 +121,9 @@ public class InvoicePaymentApi {
         return httpClient.doPost(uri, body, InvoicePayment.class, requestOptions);
     }
 
-    public CustomFields createCustomFields(final UUID paymentId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCustomFields");
+    public CustomFields createInvoicePaymentCustomFields(final UUID paymentId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createInvoicePaymentCustomFields");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createInvoicePaymentCustomFields");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/customFields"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -137,6 +137,28 @@ public class InvoicePaymentApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
+    }
+
+    public Tags createInvoicePaymentTags(final UUID paymentId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createInvoicePaymentTags");
+
+        final String uri = "/1.0/kb/invoicePayments/{paymentId}/tags"
+          .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (tagDef != null) {
+            queryParams.putAll("tagDef", tagDef);
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doPost(uri, null, Tags.class, requestOptions);
     }
 
     public InvoicePayment createRefundWithAdjustments(final UUID paymentId, final InvoicePaymentTransaction body, final UUID paymentMethodId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
@@ -172,31 +194,9 @@ public class InvoicePaymentApi {
         return httpClient.doPost(uri, body, InvoicePayment.class, requestOptions);
     }
 
-    public Tags createTags(final UUID paymentId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createTags");
 
-        final String uri = "/1.0/kb/invoicePayments/{paymentId}/tags"
-          .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
-
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tagDef != null) {
-            queryParams.putAll("tagDef", tagDef);
-        }
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
-        inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        return httpClient.doPost(uri, null, Tags.class, requestOptions);
-    }
-
-
-    public void deleteCustomFields(final UUID paymentId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling deleteCustomFields");
+    public void deleteInvoicePaymentCustomFields(final UUID paymentId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling deleteInvoicePaymentCustomFields");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/customFields"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -216,8 +216,8 @@ public class InvoicePaymentApi {
     }
 
 
-    public void deleteTags(final UUID paymentId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling deleteTags");
+    public void deleteInvoicePaymentTags(final UUID paymentId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling deleteInvoicePaymentTags");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/tags"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -234,29 +234,6 @@ public class InvoicePaymentApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doDelete(uri, requestOptions);
-    }
-
-    public CustomFields getCustomFields(final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getCustomFields(paymentId, AuditLevel.NONE, inputOptions);
-    }
-
-    public CustomFields getCustomFields(final UUID paymentId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getCustomFields");
-
-        final String uri = "/1.0/kb/invoicePayments/{paymentId}/customFields"
-          .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
-
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
     public InvoicePayment getInvoicePayment(final UUID paymentId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
@@ -291,12 +268,35 @@ public class InvoicePaymentApi {
         return httpClient.doGet(uri, InvoicePayment.class, requestOptions);
     }
 
-    public Tags getTags(final UUID paymentId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        return getTags(paymentId, Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
+    public CustomFields getInvoicePaymentCustomFields(final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoicePaymentCustomFields(paymentId, AuditLevel.NONE, inputOptions);
     }
 
-    public Tags getTags(final UUID paymentId, final Boolean includedDeleted, final Map<String, String> pluginProperty, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getTags");
+    public CustomFields getInvoicePaymentCustomFields(final UUID paymentId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getInvoicePaymentCustomFields");
+
+        final String uri = "/1.0/kb/invoicePayments/{paymentId}/customFields"
+          .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public Tags getInvoicePaymentTags(final UUID paymentId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoicePaymentTags(paymentId, Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
+    }
+
+    public Tags getInvoicePaymentTags(final UUID paymentId, final Boolean includedDeleted, final Map<String, String> pluginProperty, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getInvoicePaymentTags");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/tags"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
@@ -320,9 +320,9 @@ public class InvoicePaymentApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
-    public void modifyCustomFields(final UUID paymentId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling modifyCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
+    public void modifyInvoicePaymentCustomFields(final UUID paymentId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling modifyInvoicePaymentCustomFields");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyInvoicePaymentCustomFields");
 
         final String uri = "/1.0/kb/invoicePayments/{paymentId}/customFields"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());

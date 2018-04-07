@@ -86,9 +86,9 @@ public class BundleApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public CustomFields createCustomFields(final UUID bundleId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling createCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCustomFields");
+    public CustomFields createBundleCustomFields(final UUID bundleId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling createBundleCustomFields");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createBundleCustomFields");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
@@ -104,8 +104,8 @@ public class BundleApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public Tags createTags(final UUID bundleId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling createTags");
+    public Tags createBundleTags(final UUID bundleId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling createBundleTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
@@ -127,8 +127,8 @@ public class BundleApi {
     }
 
 
-    public void deleteCustomFields(final UUID bundleId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteCustomFields");
+    public void deleteBundleCustomFields(final UUID bundleId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteBundleCustomFields");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
@@ -148,8 +148,8 @@ public class BundleApi {
     }
 
 
-    public void deleteTags(final UUID bundleId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteTags");
+    public void deleteBundleTags(final UUID bundleId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteBundleTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
@@ -219,6 +219,55 @@ public class BundleApi {
         return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
+    public CustomFields getBundleCustomFields(final UUID bundleId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getBundleCustomFields(bundleId, AuditLevel.NONE, inputOptions);
+    }
+
+    public CustomFields getBundleCustomFields(final UUID bundleId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundleCustomFields");
+
+        final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
+          .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public Tags getBundleTags(final UUID bundleId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getBundleTags(bundleId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    }
+
+    public Tags getBundleTags(final UUID bundleId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundleTags");
+
+        final String uri = "/1.0/kb/bundles/{bundleId}/tags"
+          .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (includedDeleted != null) {
+            queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, Tags.class, requestOptions);
+    }
+
     public Bundles getBundles(final RequestOptions inputOptions) throws KillBillClientException {
         return getBundles(Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
@@ -246,58 +295,9 @@ public class BundleApi {
         return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
-    public CustomFields getCustomFields(final UUID bundleId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getCustomFields(bundleId, AuditLevel.NONE, inputOptions);
-    }
-
-    public CustomFields getCustomFields(final UUID bundleId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getCustomFields");
-
-        final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
-          .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
-
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        return httpClient.doGet(uri, CustomFields.class, requestOptions);
-    }
-
-    public Tags getTags(final UUID bundleId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getTags(bundleId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
-    }
-
-    public Tags getTags(final UUID bundleId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getTags");
-
-        final String uri = "/1.0/kb/bundles/{bundleId}/tags"
-          .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
-
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (includedDeleted != null) {
-            queryParams.put("includedDeleted", String.valueOf(includedDeleted));
-        }
-        if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
-        }
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        return httpClient.doGet(uri, Tags.class, requestOptions);
-    }
-
-    public void modifyCustomFields(final UUID bundleId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling modifyCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyCustomFields");
+    public void modifyBundleCustomFields(final UUID bundleId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling modifyBundleCustomFields");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyBundleCustomFields");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());

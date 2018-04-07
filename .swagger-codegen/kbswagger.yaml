@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "PaymentGateway"
-- name: "Overdue"
 - name: "PluginInfo"
-- name: "Admin"
-- name: "CustomField"
-- name: "Tag"
-- name: "Catalog"
-- name: "TagDefinition"
-- name: "PaymentMethod"
-- name: "InvoiceItem"
-- name: "Bundle"
 - name: "Payment"
-- name: "Subscription"
-- name: "Account"
-- name: "InvoicePayment"
-- name: "Security"
-- name: "PaymentTransaction"
-- name: "Export"
 - name: "Credit"
-- name: "NodesInfo"
 - name: "Usage"
-- name: "Tenant"
+- name: "TagDefinition"
+- name: "Catalog"
+- name: "Tag"
+- name: "Overdue"
+- name: "PaymentTransaction"
+- name: "NodesInfo"
+- name: "InvoiceItem"
+- name: "PaymentGateway"
+- name: "Account"
+- name: "Security"
 - name: "Invoice"
+- name: "CustomField"
+- name: "Export"
+- name: "Admin"
+- name: "InvoicePayment"
+- name: "Tenant"
+- name: "PaymentMethod"
+- name: "Subscription"
+- name: "Bundle"
 paths:
   /1.0/kb/accounts:
     get:
@@ -398,17 +398,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/Account"
       - name: "accountId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Account"
       - name: "treatNullAsReset"
         in: "query"
         required: false
@@ -717,17 +717,17 @@ paths:
       consumes:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/BlockingState"
       - name: "accountId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/BlockingState"
       - name: "requestedDate"
         in: "query"
         required: false
@@ -926,7 +926,7 @@ paths:
       - "Account"
       summary: "Retrieve account custom fields"
       description: ""
-      operationId: "getCustomFields"
+      operationId: "getAccountCustomFields"
       produces:
       - "application/json"
       parameters:
@@ -969,7 +969,7 @@ paths:
       - "Account"
       summary: "Add custom fields to account"
       description: ""
-      operationId: "createCustomFields"
+      operationId: "createAccountCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -1024,7 +1024,7 @@ paths:
       - "Account"
       summary: "Modify custom fields to account"
       description: ""
-      operationId: "modifyCustomFields"
+      operationId: "modifyAccountCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -1073,7 +1073,7 @@ paths:
       - "Account"
       summary: "Remove custom fields from account"
       description: ""
-      operationId: "deleteCustomFields"
+      operationId: "deleteAccountCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -1164,17 +1164,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/InvoiceEmail"
       - name: "accountId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/InvoiceEmail"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -1248,17 +1248,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/AccountEmail"
       - name: "accountId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/AccountEmail"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -1466,7 +1466,7 @@ paths:
       - "Account"
       summary: "Retrieve account invoices"
       description: ""
-      operationId: "getInvoices"
+      operationId: "getInvoicesForAccount"
       produces:
       - "application/json"
       parameters:
@@ -1567,7 +1567,7 @@ paths:
       - "Account"
       summary: "Retrieve account payment methods"
       description: ""
-      operationId: "getPaymentMethods"
+      operationId: "getPaymentMethodsForAccount"
       produces:
       - "application/json"
       parameters:
@@ -1635,17 +1635,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentMethod"
       - name: "accountId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentMethod"
       - name: "isDefault"
         in: "query"
         required: false
@@ -1824,7 +1824,7 @@ paths:
       - "Account"
       summary: "Retrieve account payments"
       description: ""
-      operationId: "getPayments"
+      operationId: "getPaymentsForAccount"
       produces:
       - "application/json"
       parameters:
@@ -1890,17 +1890,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
       - name: "accountId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
       - name: "paymentMethodId"
         in: "query"
         required: false
@@ -1969,7 +1969,7 @@ paths:
       - "Account"
       summary: "Retrieve account tags"
       description: ""
-      operationId: "getTags"
+      operationId: "getAccountTags"
       produces:
       - "application/json"
       parameters:
@@ -2019,7 +2019,7 @@ paths:
       - "Account"
       summary: "Add tags to account"
       description: ""
-      operationId: "createTags"
+      operationId: "createAccountTags"
       produces:
       - "application/json"
       parameters:
@@ -2072,7 +2072,7 @@ paths:
       - "Account"
       summary: "Remove tags from account"
       description: ""
-      operationId: "deleteTags"
+      operationId: "deleteAccountTags"
       consumes:
       - "application/json"
       produces:
@@ -2398,11 +2398,6 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/AdminPayment"
       - name: "paymentId"
         in: "path"
         required: true
@@ -2415,6 +2410,11 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/AdminPayment"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -2643,17 +2643,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/Bundle"
       - name: "bundleId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Bundle"
       - name: "requestedDate"
         in: "query"
         required: false
@@ -2713,17 +2713,17 @@ paths:
       consumes:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/BlockingState"
       - name: "bundleId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/BlockingState"
       - name: "requestedDate"
         in: "query"
         required: false
@@ -2769,7 +2769,7 @@ paths:
       - "Bundle"
       summary: "Retrieve bundle custom fields"
       description: ""
-      operationId: "getCustomFields"
+      operationId: "getBundleCustomFields"
       produces:
       - "application/json"
       parameters:
@@ -2812,7 +2812,7 @@ paths:
       - "Bundle"
       summary: "Add custom fields to bundle"
       description: ""
-      operationId: "createCustomFields"
+      operationId: "createBundleCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -2867,7 +2867,7 @@ paths:
       - "Bundle"
       summary: "Modify custom fields to bundle"
       description: ""
-      operationId: "modifyCustomFields"
+      operationId: "modifyBundleCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -2916,7 +2916,7 @@ paths:
       - "Bundle"
       summary: "Remove custom fields from bundle"
       description: ""
-      operationId: "deleteCustomFields"
+      operationId: "deleteBundleCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -3028,17 +3028,17 @@ paths:
       consumes:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/Bundle"
       - name: "bundleId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Bundle"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -3129,7 +3129,7 @@ paths:
       - "Bundle"
       summary: "Retrieve bundle tags"
       description: ""
-      operationId: "getTags"
+      operationId: "getBundleTags"
       produces:
       - "application/json"
       parameters:
@@ -3179,7 +3179,7 @@ paths:
       - "Bundle"
       summary: "Add tags to bundle"
       description: ""
-      operationId: "createTags"
+      operationId: "createBundleTags"
       consumes:
       - "application/json"
       produces:
@@ -3234,7 +3234,7 @@ paths:
       - "Bundle"
       summary: "Remove tags from bundle"
       description: ""
-      operationId: "deleteTags"
+      operationId: "deleteBundleTags"
       consumes:
       - "application/json"
       produces:
@@ -3926,7 +3926,7 @@ paths:
       - "InvoiceItem"
       summary: "Retrieve invoice item custom fields"
       description: ""
-      operationId: "getCustomFields"
+      operationId: "getInvoiceItemCustomFields"
       produces:
       - "application/json"
       parameters:
@@ -3969,7 +3969,7 @@ paths:
       - "InvoiceItem"
       summary: "Add custom fields to invoice item"
       description: ""
-      operationId: "createCustomFields"
+      operationId: "createInvoiceItemCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -4024,7 +4024,7 @@ paths:
       - "InvoiceItem"
       summary: "Modify custom fields to invoice item"
       description: ""
-      operationId: "modifyCustomFields"
+      operationId: "modifyInvoiceItemCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -4073,7 +4073,7 @@ paths:
       - "InvoiceItem"
       summary: "Remove custom fields from invoice item"
       description: ""
-      operationId: "deleteCustomFields"
+      operationId: "deleteInvoiceItemCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -4124,7 +4124,7 @@ paths:
       - "InvoiceItem"
       summary: "Retrieve invoice item tags"
       description: ""
-      operationId: "getTags"
+      operationId: "getInvoiceItemTags"
       produces:
       - "application/json"
       parameters:
@@ -4179,7 +4179,7 @@ paths:
       - "InvoiceItem"
       summary: "Add tags to invoice item"
       description: ""
-      operationId: "createTags"
+      operationId: "createInvoiceItemTags"
       consumes:
       - "application/json"
       produces:
@@ -4234,7 +4234,7 @@ paths:
       - "InvoiceItem"
       summary: "Remove tags from invoice item"
       description: ""
-      operationId: "deleteTags"
+      operationId: "deleteInvoiceItemTags"
       consumes:
       - "application/json"
       produces:
@@ -4351,17 +4351,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
       - name: "paymentId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
       - name: "controlPluginName"
         in: "query"
         required: false
@@ -4427,17 +4427,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/InvoicePaymentTransaction"
       - name: "paymentId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/InvoicePaymentTransaction"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -4481,17 +4481,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/InvoicePaymentTransaction"
       - name: "paymentId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/InvoicePaymentTransaction"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -4529,7 +4529,7 @@ paths:
       - "InvoicePayment"
       summary: "Retrieve payment custom fields"
       description: ""
-      operationId: "getCustomFields"
+      operationId: "getInvoicePaymentCustomFields"
       produces:
       - "application/json"
       parameters:
@@ -4572,7 +4572,7 @@ paths:
       - "InvoicePayment"
       summary: "Add custom fields to payment"
       description: ""
-      operationId: "createCustomFields"
+      operationId: "createInvoicePaymentCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -4627,7 +4627,7 @@ paths:
       - "InvoicePayment"
       summary: "Modify custom fields to payment"
       description: ""
-      operationId: "modifyCustomFields"
+      operationId: "modifyInvoicePaymentCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -4676,7 +4676,7 @@ paths:
       - "InvoicePayment"
       summary: "Remove custom fields from payment"
       description: ""
-      operationId: "deleteCustomFields"
+      operationId: "deleteInvoicePaymentCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -4733,17 +4733,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/InvoicePaymentTransaction"
       - name: "paymentId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/InvoicePaymentTransaction"
       - name: "externalPayment"
         in: "query"
         required: false
@@ -4798,7 +4798,7 @@ paths:
       - "InvoicePayment"
       summary: "Retrieve payment tags"
       description: ""
-      operationId: "getTags"
+      operationId: "getInvoicePaymentTags"
       produces:
       - "application/json"
       parameters:
@@ -4855,7 +4855,7 @@ paths:
       - "InvoicePayment"
       summary: "Add tags to payment"
       description: ""
-      operationId: "createTags"
+      operationId: "createInvoicePaymentTags"
       consumes:
       - "application/json"
       produces:
@@ -4910,7 +4910,7 @@ paths:
       - "InvoicePayment"
       summary: "Remove tags from payment"
       description: ""
-      operationId: "deleteTags"
+      operationId: "deleteInvoicePaymentTags"
       consumes:
       - "application/json"
       produces:
@@ -5051,16 +5051,16 @@ paths:
       produces:
       - "text/plain"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "string"
       - name: "locale"
         in: "path"
         required: true
         type: "string"
         pattern: ".*"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "string"
       - name: "deleteIfExists"
         in: "query"
         required: false
@@ -5103,6 +5103,12 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
       - in: "body"
         name: "body"
         required: true
@@ -5110,12 +5116,6 @@ paths:
           type: "array"
           items:
             $ref: "#/definitions/InvoiceItem"
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
       - name: "requestedDate"
         in: "query"
         required: false
@@ -5324,6 +5324,12 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
       - in: "body"
         name: "body"
         required: true
@@ -5331,12 +5337,6 @@ paths:
           type: "array"
           items:
             $ref: "#/definitions/InvoiceItem"
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
       - name: "targetDate"
         in: "query"
         required: false
@@ -5600,16 +5600,16 @@ paths:
       produces:
       - "text/plain"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "string"
       - name: "locale"
         in: "path"
         required: true
         type: "string"
         pattern: ".*"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "string"
       - name: "deleteIfExists"
         in: "query"
         required: false
@@ -5705,17 +5705,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/InvoiceItem"
       - name: "invoiceId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/InvoiceItem"
       - name: "requestedDate"
         in: "query"
         required: false
@@ -5801,7 +5801,7 @@ paths:
       - "Invoice"
       summary: "Retrieve invoice custom fields"
       description: ""
-      operationId: "getCustomFields"
+      operationId: "getInvoiceCustomFields"
       produces:
       - "application/json"
       parameters:
@@ -5844,7 +5844,7 @@ paths:
       - "Invoice"
       summary: "Add custom fields to invoice"
       description: ""
-      operationId: "createCustomFields"
+      operationId: "createInvoiceCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -5899,7 +5899,7 @@ paths:
       - "Invoice"
       summary: "Modify custom fields to invoice"
       description: ""
-      operationId: "modifyCustomFields"
+      operationId: "modifyInvoiceCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -5948,7 +5948,7 @@ paths:
       - "Invoice"
       summary: "Remove custom fields from invoice"
       description: ""
-      operationId: "deleteCustomFields"
+      operationId: "deleteInvoiceCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -6032,7 +6032,7 @@ paths:
       - "Invoice"
       summary: "Retrieve payments associated with an invoice"
       description: ""
-      operationId: "getPayments"
+      operationId: "getPaymentsForInvoice"
       produces:
       - "application/json"
       parameters:
@@ -6093,17 +6093,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/InvoicePayment"
       - name: "invoiceId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/InvoicePayment"
       - name: "externalPayment"
         in: "query"
         required: false
@@ -6153,7 +6153,7 @@ paths:
       - "Invoice"
       summary: "Retrieve invoice tags"
       description: ""
-      operationId: "getTags"
+      operationId: "getInvoiceTags"
       produces:
       - "application/json"
       parameters:
@@ -6203,7 +6203,7 @@ paths:
       - "Invoice"
       summary: "Add tags to invoice"
       description: ""
-      operationId: "createTags"
+      operationId: "createInvoiceTags"
       consumes:
       - "application/json"
       produces:
@@ -6258,7 +6258,7 @@ paths:
       - "Invoice"
       summary: "Remove tags from invoice"
       description: ""
-      operationId: "deleteTags"
+      operationId: "deleteInvoiceTags"
       consumes:
       - "application/json"
       produces:
@@ -6717,17 +6717,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/HostedPaymentPageFields"
       - name: "accountId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/HostedPaymentPageFields"
       - name: "paymentMethodId"
         in: "query"
         required: false
@@ -6790,16 +6790,16 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "string"
       - name: "pluginName"
         in: "path"
         required: true
         type: "string"
         pattern: ".*"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "string"
       - name: "controlPluginName"
         in: "query"
         required: false
@@ -7155,7 +7155,7 @@ paths:
       - "PaymentMethod"
       summary: "Retrieve payment method custom fields"
       description: ""
-      operationId: "getCustomFields"
+      operationId: "getPaymentMethodCustomFields"
       produces:
       - "application/json"
       parameters:
@@ -7198,7 +7198,7 @@ paths:
       - "PaymentMethod"
       summary: "Add custom fields to payment method"
       description: ""
-      operationId: "createCustomFields"
+      operationId: "createPaymentMethodCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -7253,7 +7253,7 @@ paths:
       - "PaymentMethod"
       summary: "Modify custom fields to payment method"
       description: ""
-      operationId: "modifyCustomFields"
+      operationId: "modifyPaymentMethodCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -7302,7 +7302,7 @@ paths:
       - "PaymentMethod"
       summary: "Remove custom fields from payment method"
       description: ""
-      operationId: "deleteCustomFields"
+      operationId: "deletePaymentMethodCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -7417,17 +7417,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
       - name: "transactionId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
       - name: "controlPluginName"
         in: "query"
         required: false
@@ -7472,7 +7472,7 @@ paths:
       - "PaymentTransaction"
       summary: "Retrieve payment transaction custom fields"
       description: ""
-      operationId: "getCustomFields"
+      operationId: "getTransactionCustomFields"
       produces:
       - "application/json"
       parameters:
@@ -7515,7 +7515,7 @@ paths:
       - "PaymentTransaction"
       summary: "Add custom fields to payment transaction"
       description: ""
-      operationId: "createCustomFields"
+      operationId: "createTransactionCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -7570,7 +7570,7 @@ paths:
       - "PaymentTransaction"
       summary: "Modify custom fields to payment transaction"
       description: ""
-      operationId: "modifyCustomFields"
+      operationId: "modifyTransactionCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -7619,7 +7619,7 @@ paths:
       - "PaymentTransaction"
       summary: "Remove custom fields from payment transaction"
       description: ""
-      operationId: "deleteCustomFields"
+      operationId: "deleteTransactionCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -7670,7 +7670,7 @@ paths:
       - "PaymentTransaction"
       summary: "Retrieve payment transaction tags"
       description: ""
-      operationId: "getTags"
+      operationId: "getTransactionTags"
       produces:
       - "application/json"
       parameters:
@@ -7720,7 +7720,7 @@ paths:
       - "PaymentTransaction"
       summary: "Add tags to payment transaction"
       description: ""
-      operationId: "createTags"
+      operationId: "createTransactionTags"
       consumes:
       - "application/json"
       produces:
@@ -7775,7 +7775,7 @@ paths:
       - "PaymentTransaction"
       summary: "Remove tags from payment transaction"
       description: ""
-      operationId: "deleteTags"
+      operationId: "deleteTransactionTags"
       consumes:
       - "application/json"
       produces:
@@ -8620,17 +8620,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
       - name: "paymentId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
       - name: "controlPluginName"
         in: "query"
         required: false
@@ -8699,17 +8699,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
       - name: "paymentId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
       - name: "controlPluginName"
         in: "query"
         required: false
@@ -8774,17 +8774,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
       - name: "paymentId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
       - name: "controlPluginName"
         in: "query"
         required: false
@@ -8850,17 +8850,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
       - name: "paymentId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
       - name: "controlPluginName"
         in: "query"
         required: false
@@ -8930,17 +8930,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
       - name: "paymentId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
       - name: "controlPluginName"
         in: "query"
         required: false
@@ -9004,7 +9004,7 @@ paths:
       - "Payment"
       summary: "Retrieve payment custom fields"
       description: ""
-      operationId: "getCustomFields"
+      operationId: "getPaymentCustomFields"
       produces:
       - "application/json"
       parameters:
@@ -9047,7 +9047,7 @@ paths:
       - "Payment"
       summary: "Add custom fields to payment"
       description: ""
-      operationId: "createCustomFields"
+      operationId: "createPaymentCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -9102,7 +9102,7 @@ paths:
       - "Payment"
       summary: "Modify custom fields to payment"
       description: ""
-      operationId: "modifyCustomFields"
+      operationId: "modifyPaymentCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -9151,7 +9151,7 @@ paths:
       - "Payment"
       summary: "Remove custom fields from payment payment"
       description: ""
-      operationId: "deleteCustomFields"
+      operationId: "deletePaymentCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -9208,17 +9208,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
       - name: "paymentId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
       - name: "controlPluginName"
         in: "query"
         required: false
@@ -9282,7 +9282,7 @@ paths:
       - "Payment"
       summary: "Retrieve payment payment tags"
       description: ""
-      operationId: "getTags"
+      operationId: "getPaymentTags"
       produces:
       - "application/json"
       parameters:
@@ -9332,7 +9332,7 @@ paths:
       - "Payment"
       summary: "Add tags to payment payment"
       description: ""
-      operationId: "createTags"
+      operationId: "createPaymentTags"
       consumes:
       - "application/json"
       produces:
@@ -9387,7 +9387,7 @@ paths:
       - "Payment"
       summary: "Remove tags from payment payment"
       description: ""
-      operationId: "deleteTags"
+      operationId: "deletePaymentTags"
       consumes:
       - "application/json"
       produces:
@@ -9685,16 +9685,16 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/UserRoles"
       - name: "username"
         in: "path"
         required: true
         type: "string"
         pattern: ".*"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/UserRoles"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -9745,16 +9745,16 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/UserRoles"
       - name: "username"
         in: "path"
         required: true
         type: "string"
         pattern: ".*"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/UserRoles"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -10090,17 +10090,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/Subscription"
       - name: "subscriptionId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Subscription"
       - name: "requestedDate"
         in: "query"
         required: false
@@ -10258,17 +10258,17 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/Subscription"
       - name: "subscriptionId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Subscription"
       - name: "effectiveFromDate"
         in: "query"
         required: false
@@ -10314,17 +10314,17 @@ paths:
       consumes:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/BlockingState"
       - name: "subscriptionId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/BlockingState"
       - name: "requestedDate"
         in: "query"
         required: false
@@ -10370,7 +10370,7 @@ paths:
       - "Subscription"
       summary: "Retrieve subscription custom fields"
       description: ""
-      operationId: "getCustomFields"
+      operationId: "getSubscriptionCustomFields"
       produces:
       - "application/json"
       parameters:
@@ -10413,7 +10413,7 @@ paths:
       - "Subscription"
       summary: "Add custom fields to subscription"
       description: ""
-      operationId: "createCustomFields"
+      operationId: "createSubscriptionCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -10462,7 +10462,7 @@ paths:
       - "Subscription"
       summary: "Modify custom fields to subscription"
       description: ""
-      operationId: "modifyCustomFields"
+      operationId: "modifySubscriptionCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -10511,7 +10511,7 @@ paths:
       - "Subscription"
       summary: "Remove custom fields from subscription"
       description: ""
-      operationId: "deleteCustomFields"
+      operationId: "deleteSubscriptionCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -10562,7 +10562,7 @@ paths:
       - "Subscription"
       summary: "Retrieve subscription tags"
       description: ""
-      operationId: "getTags"
+      operationId: "getSubscriptionTags"
       produces:
       - "application/json"
       parameters:
@@ -10612,7 +10612,7 @@ paths:
       - "Subscription"
       summary: "Add tags to subscription"
       description: ""
-      operationId: "createTags"
+      operationId: "createSubscriptionTags"
       consumes:
       - "application/json"
       produces:
@@ -10667,7 +10667,7 @@ paths:
       - "Subscription"
       summary: "Remove tags from subscription"
       description: ""
-      operationId: "deleteTags"
+      operationId: "deleteSubscriptionTags"
       consumes:
       - "application/json"
       produces:
@@ -11423,16 +11423,16 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "string"
       - name: "pluginName"
         in: "path"
         required: true
         type: "string"
         pattern: ".*"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "string"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -11542,16 +11542,16 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "string"
       - name: "pluginName"
         in: "path"
         required: true
         type: "string"
         pattern: ".*"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "string"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -12520,6 +12520,13 @@ definitions:
         type: "string"
       userToken:
         type: "string"
+  NodeCommandProperty:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "object"
   OverdueState:
     type: "object"
     properties:
@@ -12544,13 +12551,6 @@ definitions:
       reevaluationIntervalDays:
         type: "integer"
         format: "int32"
-  NodeCommandProperty:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      value:
-        type: "object"
   ComboPaymentTransaction:
     type: "object"
     properties:
@@ -13081,6 +13081,21 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
+  SubscriptionUsageRecord:
+    type: "object"
+    required:
+    - "subscriptionId"
+    - "unitUsageRecords"
+    properties:
+      subscriptionId:
+        type: "string"
+        format: "uuid"
+      trackingId:
+        type: "string"
+      unitUsageRecords:
+        type: "array"
+        items:
+          $ref: "#/definitions/UnitUsageRecord"
   Subscription:
     type: "object"
     required:
@@ -13179,21 +13194,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  SubscriptionUsageRecord:
-    type: "object"
-    required:
-    - "subscriptionId"
-    - "unitUsageRecords"
-    properties:
-      subscriptionId:
-        type: "string"
-        format: "uuid"
-      trackingId:
-        type: "string"
-      unitUsageRecords:
-        type: "array"
-        items:
-          $ref: "#/definitions/UnitUsageRecord"
   Tier:
     type: "object"
     properties:
@@ -15197,6 +15197,14 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RolledUpUnit:
+    type: "object"
+    properties:
+      unitType:
+        type: "string"
+      amount:
+        type: "integer"
+        format: "int64"
   EventSubscription:
     type: "object"
     properties:
@@ -15259,14 +15267,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RolledUpUnit:
-    type: "object"
-    properties:
-      unitType:
-        type: "string"
-      amount:
-        type: "integer"
-        format: "int64"
   UnitUsageRecord:
     type: "object"
     properties:
