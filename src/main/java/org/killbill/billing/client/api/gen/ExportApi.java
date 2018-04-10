@@ -20,6 +20,8 @@ package org.killbill.billing.client.api.gen;
 
 
 import java.util.UUID;
+import java.io.OutputStream;
+import com.ning.http.client.Response;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -51,7 +53,7 @@ public class ExportApi {
         this.httpClient = httpClient;
     }
 
-    public String exportDataForAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+    public int exportDataForAccount(final UUID accountId, final OutputStream outputStream, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling exportDataForAccount");
 
         final String uri = "/1.0/kb/export/{accountId}"
@@ -59,10 +61,11 @@ public class ExportApi {
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/plain");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/octet-stream");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, String.class, requestOptions);
+        final Response response = httpClient.doGet(uri, outputStream, requestOptions);
+        return response.getStatusCode();
     }
 
 }

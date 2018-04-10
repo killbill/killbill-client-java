@@ -21,6 +21,8 @@ package org.killbill.billing.client.api.gen;
 
 import org.killbill.billing.client.model.gen.AdminPayment;
 import java.util.UUID;
+import java.io.OutputStream;
+import com.ning.http.client.Response;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -50,6 +52,52 @@ public class AdminApi {
 
     public AdminApi(final KillBillHttpClient httpClient) {
         this.httpClient = httpClient;
+    }
+
+    public int getQueueEntries(final UUID accountId, final String queueName, final String serviceName, final String minDate, final String maxDate, final OutputStream outputStream, final RequestOptions inputOptions) throws KillBillClientException {
+        return getQueueEntries(accountId, queueName, serviceName, Boolean.valueOf(true), minDate, maxDate, Boolean.valueOf(true), Boolean.valueOf(true), Boolean.valueOf(true), outputStream, inputOptions);
+    }
+
+    public int getQueueEntries(final UUID accountId, final String queueName, final String serviceName, final Boolean withHistory, final String minDate, final String maxDate, final Boolean withInProcessing, final Boolean withBusEvents, final Boolean withNotifications, final OutputStream outputStream, final RequestOptions inputOptions) throws KillBillClientException {
+
+        final String uri = "/1.0/kb/admin/queues";
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (accountId != null) {
+            queryParams.put("accountId", String.valueOf(accountId));
+        }
+        if (queueName != null) {
+            queryParams.put("queueName", String.valueOf(queueName));
+        }
+        if (serviceName != null) {
+            queryParams.put("serviceName", String.valueOf(serviceName));
+        }
+        if (withHistory != null) {
+            queryParams.put("withHistory", String.valueOf(withHistory));
+        }
+        if (minDate != null) {
+            queryParams.put("minDate", String.valueOf(minDate));
+        }
+        if (maxDate != null) {
+            queryParams.put("maxDate", String.valueOf(maxDate));
+        }
+        if (withInProcessing != null) {
+            queryParams.put("withInProcessing", String.valueOf(withInProcessing));
+        }
+        if (withBusEvents != null) {
+            queryParams.put("withBusEvents", String.valueOf(withBusEvents));
+        }
+        if (withNotifications != null) {
+            queryParams.put("withNotifications", String.valueOf(withNotifications));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/octet-stream");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        final Response response = httpClient.doGet(uri, outputStream, requestOptions);
+        return response.getStatusCode();
     }
 
 

@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "PluginInfo"
-- name: "Payment"
-- name: "Credit"
-- name: "Usage"
-- name: "TagDefinition"
-- name: "Catalog"
 - name: "Tag"
+- name: "PaymentMethod"
 - name: "Overdue"
-- name: "PaymentTransaction"
-- name: "NodesInfo"
-- name: "InvoiceItem"
-- name: "PaymentGateway"
-- name: "Account"
-- name: "Security"
-- name: "Invoice"
+- name: "Subscription"
+- name: "Payment"
+- name: "Usage"
 - name: "CustomField"
 - name: "Export"
-- name: "Admin"
+- name: "Bundle"
+- name: "NodesInfo"
+- name: "InvoiceItem"
+- name: "PaymentTransaction"
+- name: "Security"
+- name: "Catalog"
+- name: "Account"
 - name: "InvoicePayment"
 - name: "Tenant"
-- name: "PaymentMethod"
-- name: "Subscription"
-- name: "Bundle"
+- name: "Admin"
+- name: "TagDefinition"
+- name: "PluginInfo"
+- name: "Credit"
+- name: "Invoice"
+- name: "PaymentGateway"
 paths:
   /1.0/kb/accounts:
     get:
@@ -2440,6 +2440,70 @@ paths:
           description: "Invalid account data supplied"
       security:
       - basicAuth: []
+  /1.0/kb/admin/queues:
+    get:
+      tags:
+      - "Admin"
+      summary: "Get queues entries"
+      description: ""
+      operationId: "getQueueEntries"
+      produces:
+      - "application/octet-stream"
+      parameters:
+      - name: "accountId"
+        in: "query"
+        required: false
+        type: "string"
+        format: "uuid"
+      - name: "queueName"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "serviceName"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "withHistory"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: true
+      - name: "minDate"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "maxDate"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "withInProcessing"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: true
+      - name: "withBusEvents"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: true
+      - name: "withNotifications"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: true
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - basicAuth: []
   /1.0/kb/bundles:
     get:
       tags:
@@ -3881,7 +3945,7 @@ paths:
       description: ""
       operationId: "exportDataForAccount"
       produces:
-      - "text/plain"
+      - "application/octet-stream"
       parameters:
       - name: "accountId"
         in: "path"
@@ -3910,10 +3974,6 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "string"
         400:
           description: "Invalid account id supplied"
         404:
@@ -12434,15 +12494,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  AdminPayment:
-    type: "object"
-    properties:
-      lastSuccessPaymentState:
-        type: "string"
-      currentPaymentStateName:
-        type: "string"
-      transactionStatus:
-        type: "string"
   TenantKeyValue:
     type: "object"
     properties:
@@ -12452,6 +12503,15 @@ definitions:
         type: "array"
         items:
           type: "string"
+  AdminPayment:
+    type: "object"
+    properties:
+      lastSuccessPaymentState:
+        type: "string"
+      currentPaymentStateName:
+        type: "string"
+      transactionStatus:
+        type: "string"
   BlockingState:
     type: "object"
     properties:
@@ -13081,21 +13141,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  SubscriptionUsageRecord:
-    type: "object"
-    required:
-    - "subscriptionId"
-    - "unitUsageRecords"
-    properties:
-      subscriptionId:
-        type: "string"
-        format: "uuid"
-      trackingId:
-        type: "string"
-      unitUsageRecords:
-        type: "array"
-        items:
-          $ref: "#/definitions/UnitUsageRecord"
   Subscription:
     type: "object"
     required:
@@ -13194,6 +13239,21 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  SubscriptionUsageRecord:
+    type: "object"
+    required:
+    - "subscriptionId"
+    - "unitUsageRecords"
+    properties:
+      subscriptionId:
+        type: "string"
+        format: "uuid"
+      trackingId:
+        type: "string"
+      unitUsageRecords:
+        type: "array"
+        items:
+          $ref: "#/definitions/UnitUsageRecord"
   Tier:
     type: "object"
     properties:
@@ -15197,14 +15257,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RolledUpUnit:
-    type: "object"
-    properties:
-      unitType:
-        type: "string"
-      amount:
-        type: "integer"
-        format: "int64"
   EventSubscription:
     type: "object"
     properties:
@@ -15267,6 +15319,14 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RolledUpUnit:
+    type: "object"
+    properties:
+      unitType:
+        type: "string"
+      amount:
+        type: "integer"
+        format: "int64"
   UnitUsageRecord:
     type: "object"
     properties:
@@ -15773,6 +15833,18 @@ definitions:
         type: "array"
         items:
           type: "string"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -15787,18 +15859,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   Plan:
     type: "object"
     properties:
