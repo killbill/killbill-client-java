@@ -234,26 +234,22 @@ public class SubscriptionApi {
         httpClient.doPost(uri, body, requestOptions);
     }
 
-    public Tags createSubscriptionTags(final UUID subscriptionId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createSubscriptionTags(final UUID subscriptionId, final List<UUID> body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createSubscriptionTags");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tagDef != null) {
-            queryParams.putAll("tagDef", tagDef);
-        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, null, Tags.class, requestOptions);
+        return httpClient.doPost(uri, body, Tags.class, requestOptions);
     }
 
     public Bundle createSubscriptionWithAddOns(final Subscriptions body, final LocalDate entitlementDate, final LocalDate billingDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {

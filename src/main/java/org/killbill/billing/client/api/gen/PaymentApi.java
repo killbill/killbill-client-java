@@ -333,26 +333,22 @@ public class PaymentApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public Tags createPaymentTags(final UUID paymentId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createPaymentTags(final UUID paymentId, final List<UUID> body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling createPaymentTags");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createPaymentTags");
 
         final String uri = "/1.0/kb/payments/{paymentId}/tags"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tagDef != null) {
-            queryParams.putAll("tagDef", tagDef);
-        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, null, Tags.class, requestOptions);
+        return httpClient.doPost(uri, body, Tags.class, requestOptions);
     }
 
 

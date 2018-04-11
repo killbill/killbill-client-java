@@ -10,28 +10,28 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
 - name: "Tag"
-- name: "PaymentMethod"
-- name: "Overdue"
-- name: "Subscription"
-- name: "Payment"
-- name: "Usage"
 - name: "CustomField"
-- name: "Export"
-- name: "Bundle"
-- name: "NodesInfo"
+- name: "Admin"
 - name: "InvoiceItem"
-- name: "PaymentTransaction"
+- name: "Bundle"
+- name: "Export"
+- name: "Payment"
+- name: "PluginInfo"
+- name: "PaymentMethod"
+- name: "Usage"
 - name: "Security"
+- name: "PaymentTransaction"
+- name: "Credit"
+- name: "NodesInfo"
+- name: "Subscription"
+- name: "Invoice"
+- name: "TagDefinition"
+- name: "Tenant"
+- name: "Overdue"
 - name: "Catalog"
+- name: "PaymentGateway"
 - name: "Account"
 - name: "InvoicePayment"
-- name: "Tenant"
-- name: "Admin"
-- name: "TagDefinition"
-- name: "PluginInfo"
-- name: "Credit"
-- name: "Invoice"
-- name: "PaymentGateway"
 paths:
   /1.0/kb/accounts:
     get:
@@ -2029,13 +2029,14 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagDef"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+            format: "uuid"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -12494,15 +12495,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  TenantKeyValue:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      values:
-        type: "array"
-        items:
-          type: "string"
   AdminPayment:
     type: "object"
     properties:
@@ -12512,6 +12504,15 @@ definitions:
         type: "string"
       transactionStatus:
         type: "string"
+  TenantKeyValue:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      values:
+        type: "array"
+        items:
+          type: "string"
   BlockingState:
     type: "object"
     properties:
@@ -14707,25 +14708,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -14971,6 +14953,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:

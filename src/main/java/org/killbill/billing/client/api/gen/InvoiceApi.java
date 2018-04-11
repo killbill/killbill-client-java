@@ -218,26 +218,22 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, CustomFields.class, requestOptions);
     }
 
-    public Tags createInvoiceTags(final UUID invoiceId, final List<String> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
+    public Tags createInvoiceTags(final UUID invoiceId, final List<UUID> body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createInvoiceTags");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createInvoiceTags");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/tags"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (tagDef != null) {
-            queryParams.putAll("tagDef", tagDef);
-        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, null, Tags.class, requestOptions);
+        return httpClient.doPost(uri, body, Tags.class, requestOptions);
     }
 
     public Invoice createMigrationInvoice(final UUID accountId, final InvoiceItems body, final LocalDate targetDate, final RequestOptions inputOptions) throws KillBillClientException {
