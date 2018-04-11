@@ -1,3 +1,6 @@
+0.0.3
+    Change jaxrs tag creation to take a body of tagDefinitionId
+
 0.0.2
     Extension and cleanup in KillBillHttpClient
     Regenerate apis
