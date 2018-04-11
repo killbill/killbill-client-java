@@ -84,11 +84,13 @@ public class SubscriptionApi {
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPut(uri, body, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
     public void cancelSubscriptionPlan(final UUID subscriptionId, final LocalDate requestedDate, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {

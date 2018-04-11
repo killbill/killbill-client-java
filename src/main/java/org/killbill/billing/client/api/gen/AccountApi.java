@@ -98,11 +98,13 @@ public class AccountApi {
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPut(uri, body, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
     public AccountEmails addEmail(final UUID accountId, final AccountEmail body, final RequestOptions inputOptions) throws KillBillClientException {

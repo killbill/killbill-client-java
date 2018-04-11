@@ -9,28 +9,28 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Tag"
-- name: "CustomField"
-- name: "Admin"
-- name: "InvoiceItem"
-- name: "Bundle"
-- name: "Export"
-- name: "Payment"
-- name: "PluginInfo"
-- name: "PaymentMethod"
-- name: "Usage"
-- name: "Security"
-- name: "PaymentTransaction"
-- name: "Credit"
-- name: "NodesInfo"
-- name: "Subscription"
-- name: "Invoice"
-- name: "TagDefinition"
-- name: "Tenant"
 - name: "Overdue"
-- name: "Catalog"
+- name: "Payment"
 - name: "PaymentGateway"
+- name: "Usage"
+- name: "CustomField"
+- name: "Catalog"
+- name: "Security"
+- name: "Export"
+- name: "Tag"
+- name: "TagDefinition"
+- name: "InvoiceItem"
 - name: "Account"
+- name: "Invoice"
+- name: "Admin"
+- name: "PaymentMethod"
+- name: "Tenant"
+- name: "Subscription"
+- name: "NodesInfo"
+- name: "PaymentTransaction"
+- name: "Bundle"
+- name: "Credit"
+- name: "PluginInfo"
 - name: "InvoicePayment"
 paths:
   /1.0/kb/accounts:
@@ -708,7 +708,7 @@ paths:
           description: "Invalid account id supplied"
       security:
       - basicAuth: []
-    put:
+    post:
       tags:
       - "Account"
       summary: "Block an account"
@@ -2020,6 +2020,8 @@ paths:
       summary: "Add tags to account"
       description: ""
       operationId: "createAccountTags"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
@@ -2697,7 +2699,7 @@ paths:
           description: "Bundle not found"
       security:
       - basicAuth: []
-    put:
+    post:
       tags:
       - "Bundle"
       summary: "Transfer a bundle to another account"
@@ -2769,7 +2771,7 @@ paths:
       security:
       - basicAuth: []
   /1.0/kb/bundles/{bundleId}/block:
-    put:
+    post:
       tags:
       - "Bundle"
       summary: "Block a bundle"
@@ -3256,13 +3258,14 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagDef"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+            format: "uuid"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -4252,13 +4255,14 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagDef"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+            format: "uuid"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -4458,7 +4462,7 @@ paths:
         required: true
         type: "string"
       responses:
-        201:
+        200:
           description: "Payment transaction created successfully"
         400:
           description: "Invalid paymentId supplied"
@@ -4928,13 +4932,14 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagDef"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+            format: "uuid"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -6276,13 +6281,14 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagDef"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+            format: "uuid"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -7793,13 +7799,14 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagDef"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+            format: "uuid"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -9405,13 +9412,14 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagDef"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+            format: "uuid"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -10366,7 +10374,7 @@ paths:
       security:
       - basicAuth: []
   /1.0/kb/subscriptions/{subscriptionId}/block:
-    put:
+    post:
       tags:
       - "Subscription"
       summary: "Block a subscription"
@@ -10685,13 +10693,14 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagDef"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+            format: "uuid"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -12581,13 +12590,6 @@ definitions:
         type: "string"
       userToken:
         type: "string"
-  NodeCommandProperty:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      value:
-        type: "object"
   OverdueState:
     type: "object"
     properties:
@@ -12612,6 +12614,13 @@ definitions:
       reevaluationIntervalDays:
         type: "integer"
         format: "int32"
+  NodeCommandProperty:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "object"
   ComboPaymentTransaction:
     type: "object"
     properties:
@@ -13091,27 +13100,6 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
-  PluginInfo:
-    type: "object"
-    properties:
-      bundleSymbolicName:
-        type: "string"
-      pluginKey:
-        type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -13142,6 +13130,42 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
+  PluginInfo:
+    type: "object"
+    properties:
+      bundleSymbolicName:
+        type: "string"
+      pluginKey:
+        type: "string"
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/PluginServiceInfo"
+  SubscriptionUsageRecord:
+    type: "object"
+    required:
+    - "subscriptionId"
+    - "unitUsageRecords"
+    properties:
+      subscriptionId:
+        type: "string"
+        format: "uuid"
+      trackingId:
+        type: "string"
+      unitUsageRecords:
+        type: "array"
+        items:
+          $ref: "#/definitions/UnitUsageRecord"
   Subscription:
     type: "object"
     required:
@@ -13240,21 +13264,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  SubscriptionUsageRecord:
-    type: "object"
-    required:
-    - "subscriptionId"
-    - "unitUsageRecords"
-    properties:
-      subscriptionId:
-        type: "string"
-        format: "uuid"
-      trackingId:
-        type: "string"
-      unitUsageRecords:
-        type: "array"
-        items:
-          $ref: "#/definitions/UnitUsageRecord"
   Tier:
     type: "object"
     properties:
@@ -14708,6 +14717,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -14953,25 +14981,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -15258,6 +15267,14 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RolledUpUnit:
+    type: "object"
+    properties:
+      unitType:
+        type: "string"
+      amount:
+        type: "integer"
+        format: "int64"
   EventSubscription:
     type: "object"
     properties:
@@ -15320,14 +15337,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RolledUpUnit:
-    type: "object"
-    properties:
-      unitType:
-        type: "string"
-      amount:
-        type: "integer"
-        format: "int64"
   UnitUsageRecord:
     type: "object"
     properties:
