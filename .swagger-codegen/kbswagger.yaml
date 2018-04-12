@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "InvoiceItem"
-- name: "Credit"
-- name: "PaymentMethod"
-- name: "InvoicePayment"
-- name: "Tag"
-- name: "TagDefinition"
-- name: "Admin"
-- name: "Subscription"
-- name: "Tenant"
-- name: "Payment"
-- name: "Bundle"
-- name: "Export"
-- name: "Account"
-- name: "NodesInfo"
-- name: "Overdue"
-- name: "PluginInfo"
-- name: "Invoice"
-- name: "PaymentTransaction"
-- name: "PaymentGateway"
 - name: "Catalog"
-- name: "Usage"
-- name: "CustomField"
+- name: "Account"
+- name: "Admin"
+- name: "Tag"
 - name: "Security"
+- name: "TagDefinition"
+- name: "CustomField"
+- name: "Bundle"
+- name: "PaymentTransaction"
+- name: "InvoicePayment"
+- name: "PluginInfo"
+- name: "Subscription"
+- name: "PaymentMethod"
+- name: "Usage"
+- name: "Invoice"
+- name: "InvoiceItem"
+- name: "Export"
+- name: "Payment"
+- name: "Credit"
+- name: "Overdue"
+- name: "NodesInfo"
+- name: "Tenant"
+- name: "PaymentGateway"
 paths:
   /1.0/kb/accounts:
     get:
@@ -120,12 +120,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Account"
         201:
           description: "Account created successfully"
+          schema:
+            $ref: "#/definitions/Account"
         400:
           description: "Invalid account data supplied"
       security:
@@ -250,12 +248,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         400:
           description: "Invalid account external key supplied"
         422:
@@ -767,14 +763,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Blocking state created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/BlockingState"
-        201:
-          description: "Blocking state created successfully"
         400:
           description: "Invalid account id supplied"
         404:
@@ -1025,14 +1019,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Custom field created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
-        201:
-          description: "Custom field created successfully"
         400:
           description: "Invalid account id supplied"
       security:
@@ -1306,14 +1298,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Email created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/AccountEmail"
-        201:
-          description: "Email created successfully"
         400:
           description: "Invalid account id supplied"
         404:
@@ -1721,12 +1711,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/PaymentMethod"
         201:
           description: "Payment method created"
+          schema:
+            $ref: "#/definitions/PaymentMethod"
         400:
           description: "Invalid account id supplied"
         404:
@@ -1977,12 +1965,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         400:
           description: "Invalid account id supplied"
         422:
@@ -2096,14 +2082,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Tag created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
-        201:
-          description: "Tag created successfully"
         400:
           description: "Invalid account id supplied"
       security:
@@ -2432,8 +2416,6 @@ paths:
         type: "string"
       responses:
         200:
-          description: "Successful operation"
-        204:
           description: "Successful operation"
       security:
       - basicAuth: []
@@ -2818,12 +2800,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Bundle"
         201:
           description: "Bundle transferred successfully"
+          schema:
+            $ref: "#/definitions/Bundle"
         400:
           description: "Invalid bundle id, requested date or policy supplied"
         404:
@@ -2884,14 +2864,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Blocking state created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/BlockingState"
-        201:
-          description: "Blocking state created successfully"
         400:
           description: "Invalid bundle id supplied"
         404:
@@ -2987,14 +2965,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Custom field created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
-        201:
-          description: "Custom field created successfully"
         400:
           description: "Invalid bundle id supplied"
       security:
@@ -3367,14 +3343,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Tag created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
-        201:
-          description: "Tag created successfully"
         400:
           description: "Invalid bundle id supplied"
       security:
@@ -3735,12 +3709,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "string"
         201:
           description: "Created new plan successfully"
+          schema:
+            type: "string"
       security:
       - basicAuth: []
   /1.0/kb/catalog/versions:
@@ -3836,12 +3808,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "string"
         201:
           description: "Catalog XML created successfully"
+          schema:
+            type: "string"
       security:
       - basicAuth: []
   /1.0/kb/credits:
@@ -3887,12 +3857,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Credit"
         201:
           description: "Created credit successfully"
+          schema:
+            $ref: "#/definitions/Credit"
         400:
           description: "Invalid account id supplied"
         404:
@@ -4169,14 +4137,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Custom field created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
-        201:
-          description: "Custom field created successfully"
         400:
           description: "Invalid invoice item id supplied"
       security:
@@ -4386,14 +4352,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Tag created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
-        201:
-          description: "Tag created successfully"
         400:
           description: "Invalid invoice item id supplied"
       security:
@@ -4568,12 +4532,12 @@ paths:
         required: true
         type: "string"
       responses:
-        201:
-          description: "Payment transaction created successfully"
         400:
           description: "Invalid paymentId supplied"
         422:
           description: "Payment is aborted by a control plugin"
+        204:
+          description: "Successful operation"
         402:
           description: "Transaction declined by gateway"
         502:
@@ -4630,12 +4594,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/InvoicePayment"
         201:
           description: "Created chargeback reversal successfully"
+          schema:
+            $ref: "#/definitions/InvoicePayment"
         400:
           description: "Invalid payment id supplied"
         404:
@@ -4686,12 +4648,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/InvoicePayment"
         201:
           description: "Created chargeback successfully"
+          schema:
+            $ref: "#/definitions/InvoicePayment"
         400:
           description: "Invalid payment id supplied"
         404:
@@ -4787,14 +4747,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Custom field created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
-        201:
-          description: "Custom field created successfully"
         400:
           description: "Invalid payment id supplied"
       security:
@@ -4963,12 +4921,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/InvoicePayment"
         201:
           description: "Created refund successfully"
+          schema:
+            $ref: "#/definitions/InvoicePayment"
         400:
           description: "Invalid payment id supplied"
         404:
@@ -5079,14 +5035,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Tag created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
-        201:
-          description: "Tag created successfully"
         400:
           description: "Invalid payment id supplied"
       security:
@@ -5186,12 +5140,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Invoice"
         201:
           description: "Created invoice successfully"
+          schema:
+            $ref: "#/definitions/Invoice"
         400:
           description: "Invalid account id or target datetime supplied"
       security:
@@ -5277,12 +5229,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "string"
         201:
           description: "Uploaded catalog translation Successfully"
+          schema:
+            type: "string"
       security:
       - basicAuth: []
   /1.0/kb/invoices/charges/{accountId}:
@@ -5361,14 +5311,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Created external charge Successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/InvoiceItem"
-        201:
-          description: "Created external charge Successfully"
         400:
           description: "Invalid account id supplied"
         404:
@@ -5561,12 +5509,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Invoice"
         201:
           description: "Created migration invoice successfully"
+          schema:
+            $ref: "#/definitions/Invoice"
         400:
           description: "Invalid account id or target datetime supplied"
       security:
@@ -5751,12 +5697,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "string"
         201:
           description: "Uploaded invoice template Successfully"
+          schema:
+            type: "string"
       security:
       - basicAuth: []
   /1.0/kb/invoices/translation/{locale}:
@@ -5840,12 +5784,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "string"
         201:
           description: "Uploaded invoice translation Successfully"
+          schema:
+            type: "string"
       security:
       - basicAuth: []
   /1.0/kb/invoices/{invoiceId}:
@@ -5950,12 +5892,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Invoice"
         201:
           description: "Created adjustment Successfully"
+          schema:
+            $ref: "#/definitions/Invoice"
         400:
           description: "Invalid account id, invoice id or invoice item id supplied"
         404:
@@ -6096,14 +6036,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Custom field created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
-        201:
-          description: "Custom field created successfully"
         400:
           description: "Invalid invoice id supplied"
       security:
@@ -6355,12 +6293,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/InvoicePayment"
         201:
           description: "Created payment Successfully"
+          schema:
+            $ref: "#/definitions/InvoicePayment"
         400:
           description: "Invalid account id or invoice id supplied"
         204:
@@ -6466,14 +6402,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Tag created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
-        201:
-          description: "Tag created successfully"
         400:
           description: "Invalid invoice id supplied"
       security:
@@ -6740,10 +6674,10 @@ paths:
         required: false
         type: "string"
       responses:
+        202:
+          description: "Successful operation"
         400:
           description: "Invalid node command supplied"
-        204:
-          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/overdue:
@@ -6808,12 +6742,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Overdue"
         201:
           description: "Successfully uploaded overdue config"
+          schema:
+            $ref: "#/definitions/Overdue"
         400:
           description: "Invalid node command supplied"
       security:
@@ -6878,12 +6810,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "string"
         201:
           description: "Successfully uploaded overdue config"
+          schema:
+            type: "string"
         400:
           description: "Invalid node command supplied"
       security:
@@ -7481,14 +7411,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Custom field created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
-        201:
-          description: "Custom field created successfully"
         400:
           description: "Invalid payment method id supplied"
       security:
@@ -7705,12 +7633,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Successfully notifiy state change"
+          schema:
+            $ref: "#/definitions/Payment"
         400:
           description: "Invalid paymentId supplied"
         404:
@@ -7806,14 +7732,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Custom field created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
-        201:
-          description: "Custom field created successfully"
         400:
           description: "Invalid transaction id supplied"
       security:
@@ -8018,14 +7942,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Tag created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
-        201:
-          description: "Tag created successfully"
         400:
           description: "Invalid transaction id supplied"
       security:
@@ -8190,12 +8112,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         422:
           description: "Payment is aborted by a control plugin"
         402:
@@ -8261,10 +8181,10 @@ paths:
         required: true
         type: "string"
       responses:
-        201:
-          description: "Payment transaction created successfully"
         422:
           description: "Payment is aborted by a control plugin"
+        204:
+          description: "Successful operation"
         402:
           description: "Transaction declined by gateway"
         502:
@@ -8328,10 +8248,10 @@ paths:
         required: true
         type: "string"
       responses:
-        201:
-          description: "Payment transaction created successfully"
         422:
           description: "Payment is aborted by a control plugin"
+        204:
+          description: "Successful operation"
         402:
           description: "Transaction declined by gateway"
         502:
@@ -8439,12 +8359,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         422:
           description: "Payment is aborted by a control plugin"
         402:
@@ -8511,12 +8429,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         422:
           description: "Payment is aborted by a control plugin"
         402:
@@ -8577,12 +8493,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         400:
           description: "Invalid data for Account or PaymentMethod"
         422:
@@ -8718,12 +8632,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         422:
           description: "Payment is aborted by a control plugin"
         402:
@@ -8930,12 +8842,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         400:
           description: "Invalid paymentId supplied"
         422:
@@ -9009,12 +8919,12 @@ paths:
         required: true
         type: "string"
       responses:
-        201:
-          description: "Payment transaction created successfully"
         400:
           description: "Invalid paymentId supplied"
         422:
           description: "Payment is aborted by a control plugin"
+        204:
+          description: "Successful operation"
         402:
           description: "Transaction declined by gateway"
         502:
@@ -9084,12 +8994,12 @@ paths:
         required: true
         type: "string"
       responses:
-        201:
-          description: "Payment transaction created successfully"
         400:
           description: "Invalid paymentId supplied"
         422:
           description: "Payment is aborted by a control plugin"
+        204:
+          description: "Successful operation"
         402:
           description: "Transaction declined by gateway"
         502:
@@ -9160,12 +9070,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         400:
           description: "Invalid paymentId supplied"
         422:
@@ -9240,12 +9148,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         400:
           description: "Invalid paymentId supplied"
         422:
@@ -9351,14 +9257,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Custom field created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
-        201:
-          description: "Custom field created successfully"
         400:
           description: "Invalid payment id supplied"
       security:
@@ -9524,12 +9428,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
         201:
           description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         400:
           description: "Invalid paymentId supplied"
         422:
@@ -9643,14 +9545,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Tag created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
-        201:
-          description: "Tag created successfully"
         400:
           description: "Invalid payment id supplied"
       security:
@@ -9828,12 +9728,10 @@ paths:
         required: false
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/RoleDefinition"
         201:
           description: "Role definition created successfully"
+          schema:
+            $ref: "#/definitions/RoleDefinition"
       security:
       - basicAuth: []
     put:
@@ -9938,12 +9836,10 @@ paths:
         required: false
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/UserRoles"
         201:
           description: "User role created successfully"
+          schema:
+            $ref: "#/definitions/UserRoles"
       security:
       - basicAuth: []
   /1.0/kb/security/users/{username}:
@@ -10160,12 +10056,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Subscription"
         201:
           description: "Subscription created successfully"
+          schema:
+            $ref: "#/definitions/Subscription"
       security:
       - basicAuth: []
   /1.0/kb/subscriptions/createSubscriptionWithAddOns:
@@ -10246,12 +10140,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Bundle"
         201:
           description: "Subscriptions created successfully"
+          schema:
+            $ref: "#/definitions/Bundle"
       security:
       - basicAuth: []
   /1.0/kb/subscriptions/createSubscriptionsWithAddOns:
@@ -10332,14 +10224,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Subscriptions created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Bundle"
-        201:
-          description: "Subscriptions created successfully"
       security:
       - basicAuth: []
   /1.0/kb/subscriptions/{subscriptionId}:
@@ -10671,14 +10561,12 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Blocking state created successfully"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/BlockingState"
-        201:
-          description: "Blocking state created successfully"
         400:
           description: "Invalid subscription id supplied"
         404:
@@ -11213,12 +11101,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/TagDefinition"
         201:
           description: "Tag definition created successfully"
+          schema:
+            $ref: "#/definitions/TagDefinition"
         400:
           description: "Invalid name or description supplied"
       security:
@@ -11465,13 +11351,11 @@ paths:
         required: false
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Tenant"
         201:
           description: "Tenant created successfully"
-        500:
+          schema:
+            $ref: "#/definitions/Tenant"
+        409:
           description: "Tenant already exists"
       security:
       - basicAuth: []
@@ -11538,12 +11422,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/TenantKeyValue"
         201:
           description: "Push notification registered successfully"
+          schema:
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11646,12 +11528,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/TenantKeyValue"
         201:
           description: "Per tenant configuration uploaded successfully"
+          schema:
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11796,12 +11676,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/TenantKeyValue"
         201:
           description: "Plugin configuration uploaded successfully"
+          schema:
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11919,12 +11797,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/TenantKeyValue"
         201:
           description: "Per tenant state machine uploaded successfully"
+          schema:
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -12042,12 +11918,10 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/TenantKeyValue"
         201:
           description: "Per tenant config uploaded successfully"
+          schema:
+            $ref: "#/definitions/TenantKeyValue"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -13386,27 +13260,6 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
-  PluginInfo:
-    type: "object"
-    properties:
-      bundleSymbolicName:
-        type: "string"
-      pluginKey:
-        type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -13437,6 +13290,27 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
+  PluginInfo:
+    type: "object"
+    properties:
+      bundleSymbolicName:
+        type: "string"
+      pluginKey:
+        type: "string"
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/PluginServiceInfo"
   Subscription:
     type: "object"
     required:
@@ -15003,6 +14877,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -15248,25 +15141,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -16264,6 +16138,15 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Subscription"
+  Limit:
+    type: "object"
+    properties:
+      unit:
+        type: "string"
+      max:
+        type: "string"
+      min:
+        type: "string"
   Tag:
     type: "object"
     properties:
@@ -16305,15 +16188,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Limit:
-    type: "object"
-    properties:
-      unit:
-        type: "string"
-      max:
-        type: "string"
-      min:
-        type: "string"
   Session:
     type: "object"
     properties:
