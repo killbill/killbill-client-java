@@ -1,3 +1,6 @@
+0.0.4
+    Api changes #935, #941, #912, #917
+
 0.0.3
     Change jaxrs tag creation to take a body of tagDefinitionId
 
