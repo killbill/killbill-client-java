@@ -9,29 +9,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Overdue"
-- name: "Payment"
-- name: "PaymentGateway"
-- name: "Usage"
-- name: "CustomField"
-- name: "Catalog"
-- name: "Security"
-- name: "Export"
+- name: "InvoiceItem"
+- name: "Credit"
+- name: "PaymentMethod"
+- name: "InvoicePayment"
 - name: "Tag"
 - name: "TagDefinition"
-- name: "InvoiceItem"
-- name: "Account"
-- name: "Invoice"
 - name: "Admin"
-- name: "PaymentMethod"
-- name: "Tenant"
 - name: "Subscription"
-- name: "NodesInfo"
-- name: "PaymentTransaction"
+- name: "Tenant"
+- name: "Payment"
 - name: "Bundle"
-- name: "Credit"
+- name: "Export"
+- name: "Account"
+- name: "NodesInfo"
+- name: "Overdue"
 - name: "PluginInfo"
-- name: "InvoicePayment"
+- name: "Invoice"
+- name: "PaymentTransaction"
+- name: "PaymentGateway"
+- name: "Catalog"
+- name: "Usage"
+- name: "CustomField"
+- name: "Security"
 paths:
   /1.0/kb/accounts:
     get:
@@ -124,6 +124,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Account"
+        201:
+          description: "Account created successfully"
         400:
           description: "Invalid account data supplied"
       security:
@@ -437,6 +439,8 @@ paths:
       responses:
         400:
           description: "Invalid account data supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
     delete:
@@ -497,6 +501,8 @@ paths:
       responses:
         400:
           description: "Invalid account id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/accounts/{accountId}/allCustomFields:
@@ -761,6 +767,14 @@ paths:
         required: true
         type: "string"
       responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/BlockingState"
+        201:
+          description: "Blocking state created successfully"
         400:
           description: "Invalid account id supplied"
         404:
@@ -862,6 +876,8 @@ paths:
       responses:
         400:
           description: "Invalid account id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/accounts/{accountId}/children:
@@ -1015,6 +1031,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
+        201:
+          description: "Custom field created successfully"
         400:
           description: "Invalid account id supplied"
       security:
@@ -1066,6 +1084,8 @@ paths:
       responses:
         400:
           description: "Invalid account id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
     delete:
@@ -1116,6 +1136,8 @@ paths:
       responses:
         400:
           description: "Invalid account id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/accounts/{accountId}/emailNotifications:
@@ -1149,6 +1171,8 @@ paths:
             $ref: "#/definitions/InvoiceEmail"
         400:
           description: "Invalid account id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Account not found"
       security:
@@ -1198,6 +1222,8 @@ paths:
       responses:
         400:
           description: "Invalid account id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Account not found"
       security:
@@ -1286,6 +1312,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/AccountEmail"
+        201:
+          description: "Email created successfully"
         400:
           description: "Invalid account id supplied"
         404:
@@ -1335,6 +1363,8 @@ paths:
       responses:
         400:
           description: "Invalid account id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/accounts/{accountId}/invoicePayments:
@@ -1454,10 +1484,10 @@ paths:
         required: true
         type: "string"
       responses:
-        400:
-          description: "Invalid account id supplied"
+        204:
+          description: "Successful operation"
         404:
-          description: "Account not found"
+          description: "Invalid account id supplied"
       security:
       - basicAuth: []
   /1.0/kb/accounts/{accountId}/invoices:
@@ -1695,6 +1725,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/PaymentMethod"
+        201:
+          description: "Payment method created"
         400:
           description: "Invalid account id supplied"
         404:
@@ -1751,6 +1783,8 @@ paths:
       responses:
         400:
           description: "Invalid account id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Account not found"
       security:
@@ -1814,6 +1848,8 @@ paths:
       responses:
         400:
           description: "Invalid account id or payment method id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Account not found"
       security:
@@ -2066,6 +2102,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
+        201:
+          description: "Tag created successfully"
         400:
           description: "Invalid account id supplied"
       security:
@@ -2119,6 +2157,8 @@ paths:
         400:
           description: "Invalid account id supplied or account does not have a default\
             \ payment method (AUTO_PAY_OFF tag only)"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/accounts/{accountId}/timeline:
@@ -2211,6 +2251,8 @@ paths:
       responses:
         400:
           description: "Account does not have credit"
+        204:
+          description: "Successful operation"
         404:
           description: "Account not found"
       security:
@@ -2241,6 +2283,8 @@ paths:
       responses:
         400:
           description: "Cache name does not exist or is not alive"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/admin/cache/accounts/{accountId}:
@@ -2268,8 +2312,10 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
-          description: "successful operation"
+        400:
+          description: "Invalid account id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/admin/cache/tenants:
@@ -2291,8 +2337,8 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
-          description: "successful operation"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/admin/healthcheck:
@@ -2314,8 +2360,8 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
-          description: "successful operation"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
     delete:
@@ -2336,8 +2382,8 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
-          description: "successful operation"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/admin/invoices:
@@ -2385,8 +2431,10 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
-          description: "successful operation"
+        200:
+          description: "Successful operation"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/admin/payments/{paymentId}/transactions/{paymentTransactionId}:
@@ -2441,6 +2489,8 @@ paths:
       responses:
         400:
           description: "Invalid account data supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/admin/queues:
@@ -2503,8 +2553,12 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
-          description: "successful operation"
+        200:
+          description: "Success"
+        400:
+          description: "Invalid account id supplied"
+        404:
+          description: "Account not found"
       security:
       - basicAuth: []
   /1.0/kb/bundles:
@@ -2764,6 +2818,12 @@ paths:
         required: true
         type: "string"
       responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Bundle"
+        201:
+          description: "Bundle transferred successfully"
         400:
           description: "Invalid bundle id, requested date or policy supplied"
         404:
@@ -2824,6 +2884,14 @@ paths:
         required: true
         type: "string"
       responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/BlockingState"
+        201:
+          description: "Blocking state created successfully"
         400:
           description: "Invalid bundle id supplied"
         404:
@@ -2925,6 +2993,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
+        201:
+          description: "Custom field created successfully"
         400:
           description: "Invalid bundle id supplied"
       security:
@@ -2976,6 +3046,8 @@ paths:
       responses:
         400:
           description: "Invalid bundle id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
     delete:
@@ -3026,6 +3098,8 @@ paths:
       responses:
         400:
           description: "Invalid bundle id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/bundles/{bundleId}/pause:
@@ -3081,6 +3155,8 @@ paths:
       responses:
         400:
           description: "Invalid bundle id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Bundle not found"
       security:
@@ -3129,6 +3205,8 @@ paths:
       responses:
         400:
           description: "Invalid argumnent supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Bundle not found"
       security:
@@ -3186,6 +3264,8 @@ paths:
       responses:
         400:
           description: "Invalid bundle id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Bundle not found"
       security:
@@ -3293,6 +3373,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
+        201:
+          description: "Tag created successfully"
         400:
           description: "Invalid bundle id supplied"
       security:
@@ -3345,6 +3427,8 @@ paths:
       responses:
         400:
           description: "Invalid bundle id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/catalog:
@@ -3407,8 +3491,8 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
-          description: "successful operation"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/catalog/availableAddons:
@@ -3651,8 +3735,12 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
+        200:
           description: "successful operation"
+          schema:
+            type: "string"
+        201:
+          description: "Created new plan successfully"
       security:
       - basicAuth: []
   /1.0/kb/catalog/versions:
@@ -3748,8 +3836,12 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
+        200:
           description: "successful operation"
+          schema:
+            type: "string"
+        201:
+          description: "Catalog XML created successfully"
       security:
       - basicAuth: []
   /1.0/kb/credits:
@@ -3799,6 +3891,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Credit"
+        201:
+          description: "Created credit successfully"
         400:
           description: "Invalid account id supplied"
         404:
@@ -3978,6 +4072,8 @@ paths:
         required: true
         type: "string"
       responses:
+        200:
+          description: "Success"
         400:
           description: "Invalid account id supplied"
         404:
@@ -4079,6 +4175,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
+        201:
+          description: "Custom field created successfully"
         400:
           description: "Invalid invoice item id supplied"
       security:
@@ -4130,6 +4228,8 @@ paths:
       responses:
         400:
           description: "Invalid invoice item id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
     delete:
@@ -4180,6 +4280,8 @@ paths:
       responses:
         400:
           description: "Invalid invoice item id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/invoiceItems/{invoiceItemId}/tags:
@@ -4290,6 +4392,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
+        201:
+          description: "Tag created successfully"
         400:
           description: "Invalid invoice item id supplied"
       security:
@@ -4342,6 +4446,8 @@ paths:
       responses:
         400:
           description: "Invalid invoice item id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/invoicePayments/{paymentId}:
@@ -4462,7 +4568,7 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
+        201:
           description: "Payment transaction created successfully"
         400:
           description: "Invalid paymentId supplied"
@@ -4528,6 +4634,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/InvoicePayment"
+        201:
+          description: "Created chargeback reversal successfully"
         400:
           description: "Invalid payment id supplied"
         404:
@@ -4582,6 +4690,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/InvoicePayment"
+        201:
+          description: "Created chargeback successfully"
         400:
           description: "Invalid payment id supplied"
         404:
@@ -4683,6 +4793,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
+        201:
+          description: "Custom field created successfully"
         400:
           description: "Invalid payment id supplied"
       security:
@@ -4734,6 +4846,8 @@ paths:
       responses:
         400:
           description: "Invalid payment id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
     delete:
@@ -4784,6 +4898,8 @@ paths:
       responses:
         400:
           description: "Invalid payment id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/invoicePayments/{paymentId}/refunds:
@@ -4851,6 +4967,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/InvoicePayment"
+        201:
+          description: "Created refund successfully"
         400:
           description: "Invalid payment id supplied"
         404:
@@ -4967,6 +5085,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
+        201:
+          description: "Tag created successfully"
         400:
           description: "Invalid payment id supplied"
       security:
@@ -5019,6 +5139,8 @@ paths:
       responses:
         400:
           description: "Invalid payment id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/invoices:
@@ -5068,6 +5190,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Invoice"
+        201:
+          description: "Created invoice successfully"
         400:
           description: "Invalid account id or target datetime supplied"
       security:
@@ -5153,8 +5277,12 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
+        200:
           description: "successful operation"
+          schema:
+            type: "string"
+        201:
+          description: "Uploaded catalog translation Successfully"
       security:
       - basicAuth: []
   /1.0/kb/invoices/charges/{accountId}:
@@ -5239,6 +5367,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/InvoiceItem"
+        201:
+          description: "Created external charge Successfully"
         400:
           description: "Invalid account id supplied"
         404:
@@ -5374,8 +5504,10 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
+        200:
           description: "successful operation"
+          schema:
+            type: "string"
       security:
       - basicAuth: []
   /1.0/kb/invoices/migration/{accountId}:
@@ -5433,6 +5565,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Invoice"
+        201:
+          description: "Created migration invoice successfully"
         400:
           description: "Invalid account id or target datetime supplied"
       security:
@@ -5617,8 +5751,12 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
+        200:
           description: "successful operation"
+          schema:
+            type: "string"
+        201:
+          description: "Uploaded invoice template Successfully"
       security:
       - basicAuth: []
   /1.0/kb/invoices/translation/{locale}:
@@ -5702,8 +5840,12 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
+        200:
           description: "successful operation"
+          schema:
+            type: "string"
+        201:
+          description: "Uploaded invoice translation Successfully"
       security:
       - basicAuth: []
   /1.0/kb/invoices/{invoiceId}:
@@ -5812,6 +5954,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Invoice"
+        201:
+          description: "Created adjustment Successfully"
         400:
           description: "Invalid account id, invoice id or invoice item id supplied"
         404:
@@ -5857,6 +6001,8 @@ paths:
         required: true
         type: "string"
       responses:
+        204:
+          description: "Successful operation"
         404:
           description: "Invoice not found"
       security:
@@ -5956,6 +6102,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
+        201:
+          description: "Custom field created successfully"
         400:
           description: "Invalid invoice id supplied"
       security:
@@ -6007,6 +6155,8 @@ paths:
       responses:
         400:
           description: "Invalid invoice id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
     delete:
@@ -6057,6 +6207,8 @@ paths:
       responses:
         400:
           description: "Invalid invoice id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/invoices/{invoiceId}/html:
@@ -6207,8 +6359,12 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/InvoicePayment"
+        201:
+          description: "Created payment Successfully"
         400:
           description: "Invalid account id or invoice id supplied"
+        204:
+          description: "Nothing to pay for"
         404:
           description: "Account not found"
       security:
@@ -6316,6 +6472,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
+        201:
+          description: "Tag created successfully"
         400:
           description: "Invalid invoice id supplied"
       security:
@@ -6368,6 +6526,8 @@ paths:
       responses:
         400:
           description: "Invalid invoice id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/invoices/{invoiceId}/voidInvoice:
@@ -6411,6 +6571,8 @@ paths:
       responses:
         400:
           description: "Invalid invoice id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Invoice not found"
       security:
@@ -6467,6 +6629,8 @@ paths:
       responses:
         400:
           description: "Invalid account id, invoice id or invoice item id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Account or invoice not found"
       security:
@@ -6578,6 +6742,8 @@ paths:
       responses:
         400:
           description: "Invalid node command supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/overdue:
@@ -6646,6 +6812,10 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Overdue"
+        201:
+          description: "Successfully uploaded overdue config"
+        400:
+          description: "Invalid node command supplied"
       security:
       - basicAuth: []
   /1.0/kb/overdue/xml:
@@ -6708,8 +6878,14 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
+        200:
           description: "successful operation"
+          schema:
+            type: "string"
+        201:
+          description: "Successfully uploaded overdue config"
+        400:
+          description: "Invalid node command supplied"
       security:
       - basicAuth: []
   /1.0/kb/paymentGateways/hosted/form:
@@ -6839,8 +7015,6 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/HostedPaymentPageFormDescriptor"
-        400:
-          description: "Invalid accountId supplied"
         404:
           description: "Account not found"
       security:
@@ -6902,8 +7076,8 @@ paths:
         required: true
         type: "string"
       responses:
-        default:
-          description: "successful operation"
+        200:
+          description: "Successful"
       security:
       - basicAuth: []
   /1.0/kb/paymentMethods:
@@ -7212,6 +7386,8 @@ paths:
       responses:
         400:
           description: "Invalid paymentMethodId supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Account or payment method not found"
       security:
@@ -7311,6 +7487,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
+        201:
+          description: "Custom field created successfully"
         400:
           description: "Invalid payment method id supplied"
       security:
@@ -7362,6 +7540,8 @@ paths:
       responses:
         400:
           description: "Invalid payment method id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
     delete:
@@ -7412,6 +7592,8 @@ paths:
       responses:
         400:
           description: "Invalid payment method id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/paymentTransactions/{transactionId}:
@@ -7527,6 +7709,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Payment"
+        201:
+          description: "Successfully notifiy state change"
         400:
           description: "Invalid paymentId supplied"
         404:
@@ -7628,6 +7812,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
+        201:
+          description: "Custom field created successfully"
         400:
           description: "Invalid transaction id supplied"
       security:
@@ -7679,6 +7865,8 @@ paths:
       responses:
         400:
           description: "Invalid transaction id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
     delete:
@@ -7729,6 +7917,8 @@ paths:
       responses:
         400:
           description: "Invalid transaction id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/paymentTransactions/{transactionId}/tags:
@@ -7834,6 +8024,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
+        201:
+          description: "Tag created successfully"
         400:
           description: "Invalid transaction id supplied"
       security:
@@ -7886,6 +8078,8 @@ paths:
       responses:
         400:
           description: "Invalid transaction id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/payments:
@@ -8189,6 +8383,8 @@ paths:
       responses:
         400:
           description: "Invalid paymentTransactionExternalKey supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/payments/chargebackReversals:
@@ -9161,6 +9357,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
+        201:
+          description: "Custom field created successfully"
         400:
           description: "Invalid payment id supplied"
       security:
@@ -9212,6 +9410,8 @@ paths:
       responses:
         400:
           description: "Invalid payment id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
     delete:
@@ -9262,6 +9462,8 @@ paths:
       responses:
         400:
           description: "Invalid payment id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/payments/{paymentId}/refunds:
@@ -9447,6 +9649,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
+        201:
+          description: "Tag created successfully"
         400:
           description: "Invalid payment id supplied"
       security:
@@ -9499,6 +9703,8 @@ paths:
       responses:
         400:
           description: "Invalid payment id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/payments/{paymentTransactionId}/cancelScheduledPaymentTransaction:
@@ -9542,6 +9748,8 @@ paths:
       responses:
         400:
           description: "Invalid paymentTransactionId supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/pluginsInfo:
@@ -9620,8 +9828,12 @@ paths:
         required: false
         type: "string"
       responses:
-        default:
+        200:
           description: "successful operation"
+          schema:
+            $ref: "#/definitions/RoleDefinition"
+        201:
+          description: "Role definition created successfully"
       security:
       - basicAuth: []
     put:
@@ -9653,8 +9865,30 @@ paths:
         required: false
         type: "string"
       responses:
-        default:
+        204:
+          description: "Successful operation"
+      security:
+      - basicAuth: []
+  /1.0/kb/security/roles/{role}:
+    get:
+      tags:
+      - "Security"
+      summary: "Get role definition"
+      description: ""
+      operationId: "getRoleDefinition"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "role"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: ".*"
+      responses:
+        200:
           description: "successful operation"
+          schema:
+            $ref: "#/definitions/RoleDefinition"
       security:
       - basicAuth: []
   /1.0/kb/security/subject:
@@ -9704,8 +9938,12 @@ paths:
         required: false
         type: "string"
       responses:
-        default:
+        200:
           description: "successful operation"
+          schema:
+            $ref: "#/definitions/UserRoles"
+        201:
+          description: "User role created successfully"
       security:
       - basicAuth: []
   /1.0/kb/security/users/{username}:
@@ -9738,8 +9976,8 @@ paths:
         required: false
         type: "string"
       responses:
-        default:
-          description: "successful operation"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/security/users/{username}/password:
@@ -9777,8 +10015,8 @@ paths:
         required: false
         type: "string"
       responses:
-        default:
-          description: "successful operation"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/security/users/{username}/roles:
@@ -9837,8 +10075,8 @@ paths:
         required: false
         type: "string"
       responses:
-        default:
-          description: "successful operation"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/subscriptions:
@@ -9926,8 +10164,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Subscription"
-        400:
-          description: "Invalid subscription supplied"
+        201:
+          description: "Subscription created successfully"
       security:
       - basicAuth: []
   /1.0/kb/subscriptions/createSubscriptionWithAddOns:
@@ -10012,8 +10250,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Bundle"
-        400:
-          description: "Invalid entitlement supplied"
+        201:
+          description: "Subscriptions created successfully"
       security:
       - basicAuth: []
   /1.0/kb/subscriptions/createSubscriptionsWithAddOns:
@@ -10100,8 +10338,8 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Bundle"
-        400:
-          description: "Invalid entitlements supplied"
+        201:
+          description: "Subscriptions created successfully"
       security:
       - basicAuth: []
   /1.0/kb/subscriptions/{subscriptionId}:
@@ -10225,6 +10463,8 @@ paths:
       responses:
         400:
           description: "Invalid subscription id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Entitlement not found"
       security:
@@ -10311,6 +10551,8 @@ paths:
       responses:
         400:
           description: "Invalid subscription id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Entitlement not found"
       security:
@@ -10371,6 +10613,8 @@ paths:
       responses:
         400:
           description: "Invalid entitlement supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/subscriptions/{subscriptionId}/block:
@@ -10427,6 +10671,14 @@ paths:
         required: true
         type: "string"
       responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/BlockingState"
+        201:
+          description: "Blocking state created successfully"
         400:
           description: "Invalid subscription id supplied"
         404:
@@ -10522,6 +10774,8 @@ paths:
         required: true
         type: "string"
       responses:
+        201:
+          description: "Custom field created successfully"
         400:
           description: "Invalid subscription id supplied"
       security:
@@ -10573,6 +10827,8 @@ paths:
       responses:
         400:
           description: "Invalid subscription id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
     delete:
@@ -10623,6 +10879,8 @@ paths:
       responses:
         400:
           description: "Invalid subscription id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/subscriptions/{subscriptionId}/tags:
@@ -10679,8 +10937,6 @@ paths:
     post:
       tags:
       - "Subscription"
-      summary: "Add tags to subscription"
-      description: ""
       operationId: "createSubscriptionTags"
       consumes:
       - "application/json"
@@ -10722,12 +10978,8 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Tag"
+        201:
+          description: "Tag created successfully"
         400:
           description: "Invalid subscription id supplied"
       security:
@@ -10780,6 +11032,8 @@ paths:
       responses:
         400:
           description: "Invalid subscription id supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/subscriptions/{subscriptionId}/uncancel:
@@ -10828,6 +11082,8 @@ paths:
       responses:
         400:
           description: "Invalid subscription id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Entitlement not found"
       security:
@@ -10878,6 +11134,8 @@ paths:
       responses:
         400:
           description: "Invalid subscription id supplied"
+        204:
+          description: "Successful operation"
         404:
           description: "Entitlement not found"
       security:
@@ -10959,6 +11217,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/TagDefinition"
+        201:
+          description: "Tag definition created successfully"
         400:
           description: "Invalid name or description supplied"
       security:
@@ -11043,6 +11303,8 @@ paths:
       responses:
         400:
           description: "Invalid tagDefinitionId supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/tags/pagination:
@@ -11207,6 +11469,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Tenant"
+        201:
+          description: "Tenant created successfully"
         500:
           description: "Tenant already exists"
       security:
@@ -11278,6 +11542,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/TenantKeyValue"
+        201:
+          description: "Push notification registered successfully"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11312,6 +11578,8 @@ paths:
       responses:
         400:
           description: "Invalid tenantId supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/tenants/uploadPerTenantConfig:
@@ -11382,6 +11650,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/TenantKeyValue"
+        201:
+          description: "Per tenant configuration uploaded successfully"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11416,6 +11686,8 @@ paths:
       responses:
         400:
           description: "Invalid tenantId supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/tenants/uploadPerTenantConfig/{keyPrefix}/search:
@@ -11528,6 +11800,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/TenantKeyValue"
+        201:
+          description: "Plugin configuration uploaded successfully"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11567,6 +11841,8 @@ paths:
       responses:
         400:
           description: "Invalid tenantId supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/tenants/uploadPluginPaymentStateMachineConfig/{pluginName}:
@@ -11647,6 +11923,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/TenantKeyValue"
+        201:
+          description: "Per tenant state machine uploaded successfully"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11686,6 +11964,8 @@ paths:
       responses:
         400:
           description: "Invalid tenantId supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/tenants/userKeyValue/{keyName}:
@@ -11766,6 +12046,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/TenantKeyValue"
+        201:
+          description: "Per tenant config uploaded successfully"
         400:
           description: "Invalid tenantId supplied"
       security:
@@ -11805,6 +12087,8 @@ paths:
       responses:
         400:
           description: "Invalid tenantId supplied"
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
   /1.0/kb/tenants/{tenantId}:
@@ -11880,6 +12164,8 @@ paths:
         required: true
         type: "string"
       responses:
+        200:
+          description: "Successfully recorded usage data change"
         400:
           description: "Invalid subscription (e.g. inactive)"
       security:
@@ -12664,33 +12950,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      isBlockChanges:
-        type: "boolean"
-        default: false
-      isDisableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -13093,6 +13352,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      isBlockChanges:
+        type: "boolean"
+        default: false
+      isDisableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -13100,6 +13386,27 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
+  PluginInfo:
+    type: "object"
+    properties:
+      bundleSymbolicName:
+        type: "string"
+      pluginKey:
+        type: "string"
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -13130,42 +13437,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  PluginInfo:
-    type: "object"
-    properties:
-      bundleSymbolicName:
-        type: "string"
-      pluginKey:
-        type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/PluginServiceInfo"
-  SubscriptionUsageRecord:
-    type: "object"
-    required:
-    - "subscriptionId"
-    - "unitUsageRecords"
-    properties:
-      subscriptionId:
-        type: "string"
-        format: "uuid"
-      trackingId:
-        type: "string"
-      unitUsageRecords:
-        type: "array"
-        items:
-          $ref: "#/definitions/UnitUsageRecord"
   Subscription:
     type: "object"
     required:
@@ -13264,6 +13535,21 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  SubscriptionUsageRecord:
+    type: "object"
+    required:
+    - "subscriptionId"
+    - "unitUsageRecords"
+    properties:
+      subscriptionId:
+        type: "string"
+        format: "uuid"
+      trackingId:
+        type: "string"
+      unitUsageRecords:
+        type: "array"
+        items:
+          $ref: "#/definitions/UnitUsageRecord"
   Tier:
     type: "object"
     properties:
@@ -14717,25 +15003,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -14981,6 +15248,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -15267,14 +15553,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RolledUpUnit:
-    type: "object"
-    properties:
-      unitType:
-        type: "string"
-      amount:
-        type: "integer"
-        format: "int64"
   EventSubscription:
     type: "object"
     properties:
@@ -15337,6 +15615,14 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RolledUpUnit:
+    type: "object"
+    properties:
+      unitType:
+        type: "string"
+      amount:
+        type: "integer"
+        format: "int64"
   UnitUsageRecord:
     type: "object"
     properties:
@@ -15843,18 +16129,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -15869,6 +16143,18 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   Plan:
     type: "object"
     properties:

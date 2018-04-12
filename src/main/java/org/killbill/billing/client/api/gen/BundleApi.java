@@ -25,9 +25,10 @@ import org.killbill.billing.client.model.gen.CustomField;
 import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
+import org.killbill.billing.client.model.BlockingStates;
+import java.util.List;
 import java.util.Map;
 import org.killbill.billing.client.model.CustomFields;
-import java.util.List;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Bundles;
@@ -63,7 +64,7 @@ public class BundleApi {
         this.httpClient = httpClient;
     }
 
-    public void addBundleBlockingState(final UUID bundleId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public BlockingStates addBundleBlockingState(final UUID bundleId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling addBundleBlockingState");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
 
@@ -85,7 +86,7 @@ public class BundleApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, BlockingStates.class, requestOptions);
     }
 
     public CustomFields createBundleCustomFields(final UUID bundleId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
@@ -399,11 +400,11 @@ public class BundleApi {
         return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
-    public void transferBundle(final UUID bundleId, final Bundle body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        transferBundle(bundleId, body, requestedDate, BillingActionPolicy.END_OF_TERM, pluginProperty, inputOptions);
+    public Bundle transferBundle(final UUID bundleId, final Bundle body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return transferBundle(bundleId, body, requestedDate, BillingActionPolicy.END_OF_TERM, pluginProperty, inputOptions);
     }
 
-    public void transferBundle(final UUID bundleId, final Bundle body, final LocalDate requestedDate, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle transferBundle(final UUID bundleId, final Bundle body, final LocalDate requestedDate, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling transferBundle");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling transferBundle");
 
@@ -429,7 +430,7 @@ public class BundleApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, Bundle.class, requestOptions);
     }
 
 }

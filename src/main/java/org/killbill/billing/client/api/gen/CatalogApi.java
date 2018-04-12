@@ -64,7 +64,7 @@ public class CatalogApi {
         this.httpClient = httpClient;
     }
 
-    public void addSimplePlan(final SimplePlan body, final RequestOptions inputOptions) throws KillBillClientException {
+    public String addSimplePlan(final SimplePlan body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addSimplePlan");
 
         final String uri = "/1.0/kb/catalog/simplePlan";
@@ -77,7 +77,7 @@ public class CatalogApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
 
@@ -250,7 +250,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, Product.class, requestOptions);
     }
 
-    public void uploadCatalogXml(final String body, final RequestOptions inputOptions) throws KillBillClientException {
+    public String uploadCatalogXml(final String body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadCatalogXml");
 
         final String uri = "/1.0/kb/catalog/xml";
@@ -262,7 +262,7 @@ public class CatalogApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/xml");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
 }

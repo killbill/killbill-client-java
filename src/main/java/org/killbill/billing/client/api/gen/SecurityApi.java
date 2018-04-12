@@ -55,7 +55,7 @@ public class SecurityApi {
         this.httpClient = httpClient;
     }
 
-    public void addRoleDefinition(final RoleDefinition body, final RequestOptions inputOptions) throws KillBillClientException {
+    public RoleDefinition addRoleDefinition(final RoleDefinition body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addRoleDefinition");
 
         final String uri = "/1.0/kb/security/roles";
@@ -68,10 +68,10 @@ public class SecurityApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, RoleDefinition.class, requestOptions);
     }
 
-    public void addUserRoles(final UserRoles body, final RequestOptions inputOptions) throws KillBillClientException {
+    public UserRoles addUserRoles(final UserRoles body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addUserRoles");
 
         final String uri = "/1.0/kb/security/users";
@@ -84,7 +84,7 @@ public class SecurityApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, UserRoles.class, requestOptions);
     }
 
     public Strings getCurrentUserPermissions(final RequestOptions inputOptions) throws KillBillClientException {
@@ -109,6 +109,20 @@ public class SecurityApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Subject.class, requestOptions);
+    }
+
+    public RoleDefinition getRoleDefinition(final String role, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(role, "Missing the required parameter 'role' when calling getRoleDefinition");
+
+        final String uri = "/1.0/kb/security/roles/{role}"
+          .replaceAll("\\{" + "role" + "\\}", role.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, RoleDefinition.class, requestOptions);
     }
 
     public UserRoles getUserRoles(final String username, final RequestOptions inputOptions) throws KillBillClientException {

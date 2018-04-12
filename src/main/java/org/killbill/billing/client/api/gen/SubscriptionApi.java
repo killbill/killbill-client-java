@@ -27,16 +27,17 @@ import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.Subscription;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
+import org.killbill.billing.client.model.BlockingStates;
+import java.util.List;
 import java.util.Map;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
 import org.killbill.billing.client.model.CustomFields;
-import java.util.List;
-import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.client.model.Subscriptions;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.BulkSubscriptionsBundles;
 import org.killbill.billing.util.api.AuditLevel;
+import org.killbill.billing.client.model.Tags;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -68,7 +69,7 @@ public class SubscriptionApi {
         this.httpClient = httpClient;
     }
 
-    public void addSubscriptionBlockingState(final UUID subscriptionId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public BlockingStates addSubscriptionBlockingState(final UUID subscriptionId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling addSubscriptionBlockingState");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addSubscriptionBlockingState");
 
@@ -90,7 +91,7 @@ public class SubscriptionApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, BlockingStates.class, requestOptions);
     }
 
     public void cancelSubscriptionPlan(final UUID subscriptionId, final LocalDate requestedDate, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
@@ -236,7 +237,7 @@ public class SubscriptionApi {
         httpClient.doPost(uri, body, requestOptions);
     }
 
-    public Tags createSubscriptionTags(final UUID subscriptionId, final List<UUID> body, final RequestOptions inputOptions) throws KillBillClientException {
+    public void createSubscriptionTags(final UUID subscriptionId, final List<UUID> body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createSubscriptionTags");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionTags");
 
@@ -251,7 +252,7 @@ public class SubscriptionApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, body, Tags.class, requestOptions);
+        httpClient.doPost(uri, body, requestOptions);
     }
 
     public Bundle createSubscriptionWithAddOns(final Subscriptions body, final LocalDate entitlementDate, final LocalDate billingDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {

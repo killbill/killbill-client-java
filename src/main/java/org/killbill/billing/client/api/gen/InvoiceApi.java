@@ -632,11 +632,11 @@ public class InvoiceApi {
         return httpClient.doGet(uri, Invoices.class, requestOptions);
     }
 
-    public void uploadCatalogTranslation(final String locale, final String body, final RequestOptions inputOptions) throws KillBillClientException {
-        uploadCatalogTranslation(locale, body, Boolean.valueOf(false), inputOptions);
+    public String uploadCatalogTranslation(final String locale, final String body, final RequestOptions inputOptions) throws KillBillClientException {
+        return uploadCatalogTranslation(locale, body, Boolean.valueOf(false), inputOptions);
     }
 
-    public void uploadCatalogTranslation(final String locale, final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
+    public String uploadCatalogTranslation(final String locale, final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadCatalogTranslation");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadCatalogTranslation");
 
@@ -656,14 +656,14 @@ public class InvoiceApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
-    public void uploadInvoiceMPTemplate(final String body, final RequestOptions inputOptions) throws KillBillClientException {
-        uploadInvoiceMPTemplate(body, Boolean.valueOf(false), inputOptions);
+    public String uploadInvoiceMPTemplate(final String body, final RequestOptions inputOptions) throws KillBillClientException {
+        return uploadInvoiceMPTemplate(body, Boolean.valueOf(false), inputOptions);
     }
 
-    public void uploadInvoiceMPTemplate(final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
+    public String uploadInvoiceMPTemplate(final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceMPTemplate");
 
         final String uri = "/1.0/kb/invoices/manualPayTemplate";
@@ -681,14 +681,14 @@ public class InvoiceApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/html");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
-    public void uploadInvoiceTemplate(final String body, final RequestOptions inputOptions) throws KillBillClientException {
-        uploadInvoiceTemplate(body, Boolean.valueOf(false), inputOptions);
+    public String uploadInvoiceTemplate(final String body, final RequestOptions inputOptions) throws KillBillClientException {
+        return uploadInvoiceTemplate(body, Boolean.valueOf(false), inputOptions);
     }
 
-    public void uploadInvoiceTemplate(final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
+    public String uploadInvoiceTemplate(final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTemplate");
 
         final String uri = "/1.0/kb/invoices/template";
@@ -706,14 +706,14 @@ public class InvoiceApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/html");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
-    public void uploadInvoiceTranslation(final String locale, final String body, final RequestOptions inputOptions) throws KillBillClientException {
-        uploadInvoiceTranslation(locale, body, Boolean.valueOf(false), inputOptions);
+    public String uploadInvoiceTranslation(final String locale, final String body, final RequestOptions inputOptions) throws KillBillClientException {
+        return uploadInvoiceTranslation(locale, body, Boolean.valueOf(false), inputOptions);
     }
 
-    public void uploadInvoiceTranslation(final String locale, final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
+    public String uploadInvoiceTranslation(final String locale, final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadInvoiceTranslation");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTranslation");
 
@@ -733,7 +733,7 @@ public class InvoiceApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/plain");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
     public void voidInvoice(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {

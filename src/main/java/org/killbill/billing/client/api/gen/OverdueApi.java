@@ -91,7 +91,7 @@ public class OverdueApi {
         return httpClient.doPost(uri, body, Overdue.class, requestOptions);
     }
 
-    public void uploadOverdueConfigXml(final String body, final RequestOptions inputOptions) throws KillBillClientException {
+    public String uploadOverdueConfigXml(final String body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadOverdueConfigXml");
 
         final String uri = "/1.0/kb/overdue/xml";
@@ -103,7 +103,7 @@ public class OverdueApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/xml");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
 }

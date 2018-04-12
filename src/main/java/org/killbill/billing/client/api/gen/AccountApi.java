@@ -36,16 +36,16 @@ import org.killbill.billing.client.model.gen.PaymentMethod;
 import org.killbill.billing.client.model.gen.PaymentTransaction;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
+import org.killbill.billing.client.model.BlockingStates;
+import java.util.List;
 import java.util.Map;
 import org.killbill.billing.client.model.AccountEmails;
-import java.util.List;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.ObjectType;
-import org.killbill.billing.client.model.BlockingStates;
 import org.killbill.billing.entitlement.api.BlockingStateType;
 import org.killbill.billing.client.model.InvoicePayments;
 import org.killbill.billing.client.model.Invoices;
@@ -82,7 +82,7 @@ public class AccountApi {
         this.httpClient = httpClient;
     }
 
-    public void addAccountBlockingState(final UUID accountId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public BlockingStates addAccountBlockingState(final UUID accountId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling addAccountBlockingState");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addAccountBlockingState");
 
@@ -104,7 +104,7 @@ public class AccountApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, BlockingStates.class, requestOptions);
     }
 
     public AccountEmails addEmail(final UUID accountId, final AccountEmail body, final RequestOptions inputOptions) throws KillBillClientException {
