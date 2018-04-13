@@ -462,7 +462,7 @@ public class InvoiceApi {
     public String getInvoiceMPTemplate(final String locale, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling getInvoiceMPTemplate");
 
-        final String uri = "/1.0/kb/invoices/manualPayTemplate"
+        final String uri = "/1.0/kb/invoices/manualPayTemplate/{locale}"
           .replaceAll("\\{" + "locale" + "\\}", locale.toString());
 
 

@@ -2,6 +2,7 @@
 swagger: "2.0"
 info:
   description: "Kill Bill is an open-source billing and payments platform"
+  version: "0.19.10-SNAPSHOT"
   title: "Kill Bill"
   contact:
     name: "killbilling-users@googlegroups.com"
@@ -9,29 +10,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Catalog"
+- name: "InvoicePayment"
 - name: "Account"
 - name: "Admin"
-- name: "Tag"
-- name: "Security"
-- name: "TagDefinition"
-- name: "CustomField"
-- name: "Bundle"
-- name: "PaymentTransaction"
-- name: "InvoicePayment"
-- name: "PluginInfo"
-- name: "Subscription"
-- name: "PaymentMethod"
 - name: "Usage"
-- name: "Invoice"
-- name: "InvoiceItem"
-- name: "Export"
-- name: "Payment"
-- name: "Credit"
-- name: "Overdue"
 - name: "NodesInfo"
-- name: "Tenant"
+- name: "Tag"
+- name: "PluginInfo"
+- name: "Credit"
+- name: "Export"
+- name: "TagDefinition"
+- name: "InvoiceItem"
+- name: "Security"
+- name: "Subscription"
+- name: "Invoice"
+- name: "PaymentMethod"
+- name: "PaymentTransaction"
 - name: "PaymentGateway"
+- name: "CustomField"
+- name: "Payment"
+- name: "Overdue"
+- name: "Catalog"
+- name: "Tenant"
+- name: "Bundle"
 paths:
   /1.0/kb/accounts:
     get:
@@ -5380,36 +5381,6 @@ paths:
       security:
       - basicAuth: []
   /1.0/kb/invoices/manualPayTemplate:
-    get:
-      tags:
-      - "Invoice"
-      summary: "Retrieves the manualPay invoice template for the tenant"
-      description: ""
-      operationId: "getInvoiceMPTemplate"
-      produces:
-      - "text/html"
-      parameters:
-      - name: "locale"
-        in: "path"
-        required: true
-        type: "string"
-      - name: "X-Killbill-ApiKey"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-ApiSecret"
-        in: "header"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "string"
-        404:
-          description: "Template not found"
-      security:
-      - basicAuth: []
     post:
       tags:
       - "Invoice"
@@ -5456,6 +5427,38 @@ paths:
           description: "successful operation"
           schema:
             type: "string"
+      security:
+      - basicAuth: []
+  /1.0/kb/invoices/manualPayTemplate/{locale}:
+    get:
+      tags:
+      - "Invoice"
+      summary: "Retrieves the manualPay invoice template for the tenant"
+      description: ""
+      operationId: "getInvoiceMPTemplate"
+      produces:
+      - "text/html"
+      parameters:
+      - name: "locale"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: ".*"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+        404:
+          description: "Template not found"
       security:
       - basicAuth: []
   /1.0/kb/invoices/migration/{accountId}:
@@ -13260,6 +13263,27 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
+  PluginInfo:
+    type: "object"
+    properties:
+      bundleSymbolicName:
+        type: "string"
+      pluginKey:
+        type: "string"
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -13290,27 +13314,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  PluginInfo:
-    type: "object"
-    properties:
-      bundleSymbolicName:
-        type: "string"
-      pluginKey:
-        type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/PluginServiceInfo"
   Subscription:
     type: "object"
     required:
@@ -14877,25 +14880,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -15141,6 +15125,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -16138,15 +16141,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Subscription"
-  Limit:
-    type: "object"
-    properties:
-      unit:
-        type: "string"
-      max:
-        type: "string"
-      min:
-        type: "string"
   Tag:
     type: "object"
     properties:
@@ -16188,6 +16182,15 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Limit:
+    type: "object"
+    properties:
+      unit:
+        type: "string"
+      max:
+        type: "string"
+      min:
+        type: "string"
   Session:
     type: "object"
     properties:
