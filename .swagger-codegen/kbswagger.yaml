@@ -10,29 +10,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "InvoicePayment"
-- name: "Account"
+- name: "Payment"
+- name: "PluginInfo"
+- name: "Invoice"
+- name: "TagDefinition"
+- name: "Catalog"
+- name: "Export"
+- name: "Credit"
+- name: "Bundle"
+- name: "Tag"
 - name: "Admin"
 - name: "Usage"
-- name: "NodesInfo"
-- name: "Tag"
-- name: "PluginInfo"
-- name: "Credit"
-- name: "Export"
-- name: "TagDefinition"
-- name: "InvoiceItem"
-- name: "Security"
+- name: "InvoicePayment"
+- name: "Account"
+- name: "Tenant"
 - name: "Subscription"
-- name: "Invoice"
-- name: "PaymentMethod"
-- name: "PaymentTransaction"
 - name: "PaymentGateway"
 - name: "CustomField"
-- name: "Payment"
+- name: "NodesInfo"
+- name: "PaymentTransaction"
+- name: "Security"
+- name: "PaymentMethod"
 - name: "Overdue"
-- name: "Catalog"
-- name: "Tenant"
-- name: "Bundle"
+- name: "InvoiceItem"
 paths:
   /1.0/kb/accounts:
     get:
@@ -5378,6 +5378,8 @@ paths:
             $ref: "#/definitions/Invoice"
         400:
           description: "Invalid account id or target datetime supplied"
+        204:
+          description: "Nothing to generate"
       security:
       - basicAuth: []
   /1.0/kb/invoices/manualPayTemplate:
