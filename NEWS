@@ -1,3 +1,6 @@
+0.41.10
+    New call to endpoint /auditLogs
+
 0.41.9
     New API call to get a list of catalog versions
 
