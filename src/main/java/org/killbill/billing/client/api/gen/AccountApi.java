@@ -22,6 +22,7 @@ package org.killbill.billing.client.api.gen;
 import org.killbill.billing.client.model.gen.Account;
 import org.killbill.billing.client.model.gen.AccountEmail;
 import org.killbill.billing.client.model.gen.AccountTimeline;
+import org.killbill.billing.client.model.gen.AuditLog;
 import java.math.BigDecimal;
 import org.killbill.billing.client.model.gen.BlockingState;
 import org.killbill.billing.client.model.gen.Bundle;
@@ -43,6 +44,7 @@ import org.killbill.billing.client.model.AccountEmails;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
+import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.ObjectType;
@@ -315,6 +317,20 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Account.class, requestOptions);
+    }
+
+    public AuditLogs getAccountAuditLogs(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccountAuditLogs");
+
+        final String uri = "/1.0/kb/accounts/{accountId}/auditLogs"
+          .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
     public Bundles getAccountBundles(final UUID accountId, final String externalKey, final String bundlesFilter, final RequestOptions inputOptions) throws KillBillClientException {

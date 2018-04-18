@@ -20,7 +20,9 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.UUID;
 import org.joda.time.DateTime;
+import org.killbill.billing.ObjectType;
 
 /**
  *           DO NOT EDIT !!!
@@ -36,6 +38,10 @@ public class AuditLog {
 
     private DateTime changeDate = null;
 
+    private ObjectType objectType = null;
+
+    private UUID objectId = null;
+
     private String changedBy = null;
 
     private String reasonCode = null;
@@ -50,12 +56,16 @@ public class AuditLog {
 
     public AuditLog(final String changeType,
                      final DateTime changeDate,
+                     final ObjectType objectType,
+                     final UUID objectId,
                      final String changedBy,
                      final String reasonCode,
                      final String comments,
                      final String userToken) {
         this.changeType = changeType;
         this.changeDate = changeDate;
+        this.objectType = objectType;
+        this.objectId = objectId;
         this.changedBy = changedBy;
         this.reasonCode = reasonCode;
         this.comments = comments;
@@ -80,6 +90,24 @@ public class AuditLog {
 
     public DateTime getChangeDate() {
         return changeDate;
+    }
+
+    public AuditLog setObjectType(final ObjectType objectType) {
+        this.objectType = objectType;
+        return this;
+    }
+
+    public ObjectType getObjectType() {
+        return objectType;
+    }
+
+    public AuditLog setObjectId(final UUID objectId) {
+        this.objectId = objectId;
+        return this;
+    }
+
+    public UUID getObjectId() {
+        return objectId;
     }
 
     public AuditLog setChangedBy(final String changedBy) {
@@ -129,6 +157,8 @@ public class AuditLog {
         AuditLog auditLog = (AuditLog) o;
         return Objects.equals(this.changeType, auditLog.changeType) &&
         Objects.equals(this.changeDate, auditLog.changeDate) &&
+        Objects.equals(this.objectType, auditLog.objectType) &&
+        Objects.equals(this.objectId, auditLog.objectId) &&
         Objects.equals(this.changedBy, auditLog.changedBy) &&
         Objects.equals(this.reasonCode, auditLog.reasonCode) &&
         Objects.equals(this.comments, auditLog.comments) &&
@@ -140,6 +170,8 @@ public class AuditLog {
     public int hashCode() {
         return Objects.hash(changeType,
                             changeDate,
+                            objectType,
+                            objectId,
                             changedBy,
                             reasonCode,
                             comments,
@@ -154,6 +186,8 @@ public class AuditLog {
         
         sb.append("    changeType: ").append(toIndentedString(changeType)).append("\n");
         sb.append("    changeDate: ").append(toIndentedString(changeDate)).append("\n");
+        sb.append("    objectType: ").append(toIndentedString(objectType)).append("\n");
+        sb.append("    objectId: ").append(toIndentedString(objectId)).append("\n");
         sb.append("    changedBy: ").append(toIndentedString(changedBy)).append("\n");
         sb.append("    reasonCode: ").append(toIndentedString(reasonCode)).append("\n");
         sb.append("    comments: ").append(toIndentedString(comments)).append("\n");
