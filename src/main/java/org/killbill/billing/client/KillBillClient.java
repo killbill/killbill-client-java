@@ -44,6 +44,7 @@ import org.killbill.billing.client.model.AccountEmail;
 import org.killbill.billing.client.model.AccountEmails;
 import org.killbill.billing.client.model.AccountTimeline;
 import org.killbill.billing.client.model.Accounts;
+import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.BlockingState;
 import org.killbill.billing.client.model.BlockingStates;
 import org.killbill.billing.client.model.BulkBaseSubscriptionAndAddOns;
@@ -417,6 +418,14 @@ public class KillBillClient implements Closeable {
 
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + childAccountId + "/" + JaxrsResource.TRANSFER_CREDIT;
         httpClient.doPost(uri, null, inputOptions);
+    }
+
+    // Account audit logs
+
+    public AuditLogs getAccountAuditLogs(final UUID accountId) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.AUDIT_LOGS;
+
+        return httpClient.doGet(uri, AuditLogs.class , RequestOptions.empty());
     }
 
     // Bundles

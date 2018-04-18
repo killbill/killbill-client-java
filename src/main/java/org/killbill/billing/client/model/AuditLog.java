@@ -16,7 +16,10 @@
 
 package org.killbill.billing.client.model;
 
+import java.util.UUID;
+
 import org.joda.time.DateTime;
+import org.killbill.billing.ObjectType;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,6 +33,9 @@ public class AuditLog {
     private String comments;
     private String userToken;
 
+    private ObjectType objectType;
+    private UUID objectId;
+
     public AuditLog() {}
 
     @JsonCreator
@@ -38,13 +44,17 @@ public class AuditLog {
                     @JsonProperty("changedBy") final String changedBy,
                     @JsonProperty("reasonCode") final String reasonCode,
                     @JsonProperty("comments") final String comments,
-                    @JsonProperty("userToken") final String userToken) {
+                    @JsonProperty("userToken") final String userToken,
+                    @JsonProperty("objectType") final ObjectType objectType,
+                    @JsonProperty("objectId") final UUID objectId) {
         this.changeType = changeType;
         this.changeDate = changeDate;
         this.changedBy = changedBy;
         this.reasonCode = reasonCode;
         this.comments = comments;
         this.userToken = userToken;
+        this.objectType = objectType;
+        this.objectId = objectId;
     }
 
     public String getChangeType() {
@@ -95,6 +105,22 @@ public class AuditLog {
         this.userToken = userToken;
     }
 
+    public ObjectType getObjectType() {
+        return objectType;
+    }
+
+    public void setObjectType(final ObjectType objectType) {
+        this.objectType = objectType;
+    }
+
+    public UUID getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(final UUID objectId) {
+        this.objectId = objectId;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("AuditLog{");
@@ -104,6 +130,8 @@ public class AuditLog {
         sb.append(", reasonCode='").append(reasonCode).append('\'');
         sb.append(", comments='").append(comments).append('\'');
         sb.append(", userToken='").append(userToken).append('\'');
+        sb.append(", objectType='").append(objectType).append('\'');
+        sb.append(", objectId='").append(objectId).append('\'');
         sb.append('}');
         return sb.toString();
     }
@@ -137,6 +165,12 @@ public class AuditLog {
         if (userToken != null ? !userToken.equals(auditLog.userToken) : auditLog.userToken != null) {
             return false;
         }
+        if (objectType != auditLog.objectType) {
+            return false;
+        }
+        if (objectId != null ? !objectId.equals(auditLog.objectId) : auditLog.objectId != null) {
+            return false;
+        }
 
         return true;
     }
@@ -149,6 +183,8 @@ public class AuditLog {
         result = 31 * result + (reasonCode != null ? reasonCode.hashCode() : 0);
         result = 31 * result + (comments != null ? comments.hashCode() : 0);
         result = 31 * result + (userToken != null ? userToken.hashCode() : 0);
+        result = 31 * result + (objectType != null ? objectType.hashCode() : 0);
+        result = 31 * result + (objectId != null ? objectId.hashCode() : 0);
         return result;
     }
 }
