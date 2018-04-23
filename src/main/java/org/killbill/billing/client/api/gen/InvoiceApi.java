@@ -414,7 +414,7 @@ public class InvoiceApi {
     public Invoice getInvoiceByNumber(final Integer invoiceNumber, final Boolean withItems, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceNumber, "Missing the required parameter 'invoiceNumber' when calling getInvoiceByNumber");
 
-        final String uri = "/1.0/kb/invoices/{invoiceNumber}"
+        final String uri = "/1.0/kb/invoices/byNumber/{invoiceNumber}"
           .replaceAll("\\{" + "invoiceNumber" + "\\}", invoiceNumber.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());

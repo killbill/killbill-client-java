@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Kill Bill is an open-source billing and payments platform"
-  version: "0.19.10-SNAPSHOT"
+  version: "0.19.11-SNAPSHOT"
   title: "Kill Bill"
   contact:
     name: "killbilling-users@googlegroups.com"
@@ -10,29 +10,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Overdue"
-- name: "Bundle"
-- name: "InvoicePayment"
-- name: "PaymentMethod"
-- name: "Tag"
+- name: "PluginInfo"
 - name: "Export"
+- name: "Account"
+- name: "Admin"
 - name: "TagDefinition"
-- name: "NodesInfo"
+- name: "Payment"
+- name: "InvoiceItem"
 - name: "CustomField"
-- name: "PaymentGateway"
 - name: "Credit"
+- name: "NodesInfo"
+- name: "Tenant"
+- name: "PaymentGateway"
+- name: "Bundle"
+- name: "Overdue"
+- name: "Subscription"
+- name: "Usage"
+- name: "Catalog"
 - name: "Security"
 - name: "PaymentTransaction"
+- name: "InvoicePayment"
+- name: "Tag"
+- name: "PaymentMethod"
 - name: "Invoice"
-- name: "Admin"
-- name: "Payment"
-- name: "Tenant"
-- name: "Account"
-- name: "Catalog"
-- name: "Usage"
-- name: "Subscription"
-- name: "InvoiceItem"
-- name: "PluginInfo"
 paths:
   /1.0/kb/accounts:
     get:
@@ -5184,6 +5184,58 @@ paths:
           description: "Invalid account id or target datetime supplied"
       security:
       - basicAuth: []
+  /1.0/kb/invoices/byNumber/{invoiceNumber}:
+    get:
+      tags:
+      - "Invoice"
+      summary: "Retrieve an invoice by number"
+      description: ""
+      operationId: "getInvoiceByNumber"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "invoiceNumber"
+        in: "path"
+        required: true
+        type: "integer"
+        pattern: "[0-9]+"
+        format: "int32"
+      - name: "withItems"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withChildrenItems"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Invoice"
+        404:
+          description: "Invoice not found"
+      security:
+      - basicAuth: []
   /1.0/kb/invoices/catalogTranslation/{locale}:
     get:
       tags:
@@ -6607,58 +6659,6 @@ paths:
           description: "Successful operation"
         404:
           description: "Account or invoice not found"
-      security:
-      - basicAuth: []
-  /1.0/kb/invoices/{invoiceNumber}:
-    get:
-      tags:
-      - "Invoice"
-      summary: "Retrieve an invoice by number"
-      description: ""
-      operationId: "getInvoiceByNumber"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "invoiceNumber"
-        in: "path"
-        required: true
-        type: "integer"
-        pattern: "[0-9]+"
-        format: "int32"
-      - name: "withItems"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "withChildrenItems"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      - name: "X-Killbill-ApiKey"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-ApiSecret"
-        in: "header"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Invoice"
-        404:
-          description: "Invoice not found"
       security:
       - basicAuth: []
   /1.0/kb/nodesInfo:
@@ -12816,13 +12816,6 @@ definitions:
         type: "string"
       userToken:
         type: "string"
-  NodeCommandProperty:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      value:
-        type: "object"
   OverdueState:
     type: "object"
     properties:
@@ -12847,6 +12840,13 @@ definitions:
       reevaluationIntervalDays:
         type: "integer"
         format: "int32"
+  NodeCommandProperty:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "object"
   ComboPaymentTransaction:
     type: "object"
     properties:
@@ -16069,18 +16069,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -16095,6 +16083,18 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   Plan:
     type: "object"
     properties:
