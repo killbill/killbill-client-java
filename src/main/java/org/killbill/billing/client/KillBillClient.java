@@ -732,27 +732,6 @@ public class KillBillClient implements Closeable {
     }
 
     public Bundles createSubscriptionsWithAddOns(final Iterable<BulkBaseSubscriptionAndAddOns> subscriptionsBulk, final LocalDate requestedDate, final int timeoutSec, final RequestOptions inputOptions) throws KillBillClientException {
-
-        for (final BulkBaseSubscriptionAndAddOns bulk : subscriptionsBulk) {
-
-            boolean first = true;
-            for (final Subscription subscription : bulk.getBaseEntitlementAndAddOns()) {
-                if (first) {
-                    Preconditions.checkState(subscription.getProductCategory() == ProductCategory.BASE, "First subscription must be a reference to the Base");
-                    Preconditions.checkNotNull(subscription.getAccountId(), "Account#accountId cannot be null for base subscription");
-                    //Preconditions.checkNotNull(subscription.getExternalKey(), "Bundle#externalKey cannot be null for base subscription");
-                    first = false;
-                } else {
-                    Preconditions.checkState(subscription.getPlanName() != null ||
-                                             ((subscription.getProductName() != null) &&
-                                              (subscription.getProductCategory() != null) &&
-                                              (subscription.getBillingPeriod() != null) &&
-                                              (subscription.getPriceList() != null)),
-                                             "A valid subscription descriptor must be provided (planName or {productName, productCategory, billingPeriod, priceList}");
-                }
-            }
-        }
-
         final Multimap<String, String> queryParams = HashMultimap.<String, String>create(inputOptions.getQueryParams());
         queryParams.put(JaxrsResource.QUERY_CALL_COMPLETION, timeoutSec > 0 ? "true" : "false");
         queryParams.put(JaxrsResource.QUERY_CALL_TIMEOUT, String.valueOf(timeoutSec));
