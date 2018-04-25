@@ -428,6 +428,12 @@ public class KillBillClient implements Closeable {
         return httpClient.doGet(uri, AuditLogs.class , RequestOptions.empty());
     }
 
+    public AuditLogs getAccountAuditLogsWithHistory(final UUID accountId) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.AUDIT_LOG_WITH_HISTORY;
+
+        return httpClient.doGet(uri, AuditLogs.class , RequestOptions.empty());
+    }
+
     // Bundles
 
     @Deprecated
