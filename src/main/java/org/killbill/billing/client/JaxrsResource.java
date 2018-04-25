@@ -33,6 +33,7 @@ public interface JaxrsResource {
     public static final String ACCOUNTS = "accounts";
     public static final String ACCOUNTS_PATH = PREFIX + "/" + ACCOUNTS;
     public static final String AUDIT_LOGS = "auditLogs";
+    public static final String AUDIT_LOG_WITH_HISTORY = "auditLogsWithHistory";
     public static final String BUNDLES = "bundles";
     public static final String BUNDLES_PATH = PREFIX + "/" + BUNDLES;
     public static final String CATALOG = "catalog";

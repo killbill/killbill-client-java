@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import org.joda.time.DateTime;
 import org.killbill.billing.ObjectType;
+import org.killbill.billing.util.entity.Entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,17 +37,20 @@ public class AuditLog {
     private ObjectType objectType;
     private UUID objectId;
 
+    private Entity history;
+
     public AuditLog() {}
 
     @JsonCreator
     public AuditLog(@JsonProperty("changeType") final String changeType,
                     @JsonProperty("changeDate") final DateTime changeDate,
+                    @JsonProperty("objectType") final ObjectType objectType,
+                    @JsonProperty("objectId") final UUID objectId,
                     @JsonProperty("changedBy") final String changedBy,
                     @JsonProperty("reasonCode") final String reasonCode,
                     @JsonProperty("comments") final String comments,
                     @JsonProperty("userToken") final String userToken,
-                    @JsonProperty("objectType") final ObjectType objectType,
-                    @JsonProperty("objectId") final UUID objectId) {
+                    @JsonProperty("history") final Entity history) {
         this.changeType = changeType;
         this.changeDate = changeDate;
         this.changedBy = changedBy;
@@ -55,6 +59,7 @@ public class AuditLog {
         this.userToken = userToken;
         this.objectType = objectType;
         this.objectId = objectId;
+        this.history = history;
     }
 
     public String getChangeType() {
@@ -121,17 +126,26 @@ public class AuditLog {
         this.objectId = objectId;
     }
 
+    public Entity getHistory() {
+        return history;
+    }
+
+    public void setHistory(final Entity history) {
+        this.history = history;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("AuditLog{");
         sb.append("changeType='").append(changeType).append('\'');
         sb.append(", changeDate=").append(changeDate);
+        sb.append(", objectType='").append(objectType).append('\'');
+        sb.append(", objectId='").append(objectId).append('\'');
         sb.append(", changedBy='").append(changedBy).append('\'');
         sb.append(", reasonCode='").append(reasonCode).append('\'');
         sb.append(", comments='").append(comments).append('\'');
         sb.append(", userToken='").append(userToken).append('\'');
-        sb.append(", objectType='").append(objectType).append('\'');
-        sb.append(", objectId='").append(objectId).append('\'');
+        sb.append(", history='").append(history).append('\'');
         sb.append('}');
         return sb.toString();
     }
@@ -179,12 +193,13 @@ public class AuditLog {
     public int hashCode() {
         int result = changeType != null ? changeType.hashCode() : 0;
         result = 31 * result + (changeDate != null ? changeDate.hashCode() : 0);
+        result = 31 * result + (objectType != null ? objectType.hashCode() : 0);
+        result = 31 * result + (objectId != null ? objectId.hashCode() : 0);
         result = 31 * result + (changedBy != null ? changedBy.hashCode() : 0);
         result = 31 * result + (reasonCode != null ? reasonCode.hashCode() : 0);
         result = 31 * result + (comments != null ? comments.hashCode() : 0);
         result = 31 * result + (userToken != null ? userToken.hashCode() : 0);
-        result = 31 * result + (objectType != null ? objectType.hashCode() : 0);
-        result = 31 * result + (objectId != null ? objectId.hashCode() : 0);
+        result = 31 * result + (history != null ? history.hashCode() : 0);
         return result;
     }
 }
