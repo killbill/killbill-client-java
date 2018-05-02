@@ -1,3 +1,11 @@
+0.41.12
+     Add missing InvoiceItem#productName and InvoiceItem#prettyProductName
+
+0.41.11
+    Adding history into audit log
+    Fix validations issues for createSubscriptionsWithAddOns
+    âˆ
+
 0.41.10
     New call to endpoint /auditLogs
 
