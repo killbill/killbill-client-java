@@ -36,10 +36,12 @@ public class InvoiceItem extends KillBillObject {
     private UUID childAccountId;
     private UUID bundleId;
     private UUID subscriptionId;
+    private String productName;
     private String planName;
     private String phaseName;
     private String usageName;
 
+    private String prettyProductName;
     private String prettyPlanName;
     private String prettyPhaseName;
     private String prettyUsageName;
@@ -66,9 +68,11 @@ public class InvoiceItem extends KillBillObject {
                        @JsonProperty("childAccountId") final UUID childAccountId,
                        @JsonProperty("bundleId") final UUID bundleId,
                        @JsonProperty("subscriptionId") final UUID subscriptionId,
+                       @JsonProperty("productName") final String productName,
                        @JsonProperty("planName") final String planName,
                        @JsonProperty("phaseName") final String phaseName,
                        @JsonProperty("usageName") final String usageName,
+                       @JsonProperty("prettyProductName") final String prettyProductName,
                        @JsonProperty("prettyPlanName") final String prettyPlanName,
                        @JsonProperty("prettyPhaseName") final String prettyPhaseName,
                        @JsonProperty("prettyUsageName") final String prettyUsageName,
@@ -91,9 +95,11 @@ public class InvoiceItem extends KillBillObject {
         this.childAccountId = childAccountId;
         this.bundleId = bundleId;
         this.subscriptionId = subscriptionId;
+        this.productName = productName;
         this.planName = planName;
         this.phaseName = phaseName;
         this.usageName = usageName;
+        this.prettyProductName = prettyProductName;
         this.prettyPlanName = prettyPlanName;
         this.prettyPhaseName = prettyPhaseName;
         this.prettyUsageName = prettyUsageName;
@@ -165,12 +171,20 @@ public class InvoiceItem extends KillBillObject {
         this.subscriptionId = subscriptionId;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
     public String getPlanName() {
         return planName;
     }
 
     public String getUsageName() {
         return usageName;
+    }
+
+    public void setProductName(final String productName) {
+        this.productName = productName;
     }
 
     public void setPlanName(final String planName) {
@@ -187,6 +201,14 @@ public class InvoiceItem extends KillBillObject {
 
     public void setUsageName(final String usageName) {
         this.usageName = usageName;
+    }
+
+    public String getPrettyProductName() {
+        return prettyProductName;
+    }
+
+    public void setPrettyProductName(final String prettyProductName) {
+        this.prettyProductName = prettyProductName;
     }
 
     public String getPrettyPlanName() {
@@ -340,6 +362,9 @@ public class InvoiceItem extends KillBillObject {
         if (phaseName != null ? !phaseName.equals(that.phaseName) : that.phaseName != null) {
             return false;
         }
+        if (productName != null ? !productName.equals(that.productName) : that.productName != null) {
+            return false;
+        }
         if (planName != null ? !planName.equals(that.planName) : that.planName != null) {
             return false;
         }
@@ -377,6 +402,7 @@ public class InvoiceItem extends KillBillObject {
         result = 31 * result + (childAccountId != null ? childAccountId.hashCode() : 0);
         result = 31 * result + (bundleId != null ? bundleId.hashCode() : 0);
         result = 31 * result + (subscriptionId != null ? subscriptionId.hashCode() : 0);
+        result = 31 * result + (productName != null ? productName.hashCode() : 0);
         result = 31 * result + (planName != null ? planName.hashCode() : 0);
         result = 31 * result + (phaseName != null ? phaseName.hashCode() : 0);
         result = 31 * result + (usageName != null ? usageName.hashCode() : 0);
