@@ -54,11 +54,15 @@ public class InvoiceItem extends KillBillObject {
 
     private UUID subscriptionId = null;
 
+    private String productName = null;
+
     private String planName = null;
 
     private String phaseName = null;
 
     private String usageName = null;
+
+    private String prettyProductName = null;
 
     private String prettyPlanName = null;
 
@@ -98,9 +102,11 @@ public class InvoiceItem extends KillBillObject {
                      final UUID childAccountId,
                      final UUID bundleId,
                      final UUID subscriptionId,
+                     final String productName,
                      final String planName,
                      final String phaseName,
                      final String usageName,
+                     final String prettyProductName,
                      final String prettyPlanName,
                      final String prettyPhaseName,
                      final String prettyUsageName,
@@ -123,9 +129,11 @@ public class InvoiceItem extends KillBillObject {
         this.childAccountId = childAccountId;
         this.bundleId = bundleId;
         this.subscriptionId = subscriptionId;
+        this.productName = productName;
         this.planName = planName;
         this.phaseName = phaseName;
         this.usageName = usageName;
+        this.prettyProductName = prettyProductName;
         this.prettyPlanName = prettyPlanName;
         this.prettyPhaseName = prettyPhaseName;
         this.prettyUsageName = prettyUsageName;
@@ -206,6 +214,15 @@ public class InvoiceItem extends KillBillObject {
         return subscriptionId;
     }
 
+    public InvoiceItem setProductName(final String productName) {
+        this.productName = productName;
+        return this;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
     public InvoiceItem setPlanName(final String planName) {
         this.planName = planName;
         return this;
@@ -231,6 +248,15 @@ public class InvoiceItem extends KillBillObject {
 
     public String getUsageName() {
         return usageName;
+    }
+
+    public InvoiceItem setPrettyProductName(final String prettyProductName) {
+        this.prettyProductName = prettyProductName;
+        return this;
+    }
+
+    public String getPrettyProductName() {
+        return prettyProductName;
     }
 
     public InvoiceItem setPrettyPlanName(final String prettyPlanName) {
@@ -374,9 +400,11 @@ public class InvoiceItem extends KillBillObject {
         Objects.equals(this.childAccountId, invoiceItem.childAccountId) &&
         Objects.equals(this.bundleId, invoiceItem.bundleId) &&
         Objects.equals(this.subscriptionId, invoiceItem.subscriptionId) &&
+        Objects.equals(this.productName, invoiceItem.productName) &&
         Objects.equals(this.planName, invoiceItem.planName) &&
         Objects.equals(this.phaseName, invoiceItem.phaseName) &&
         Objects.equals(this.usageName, invoiceItem.usageName) &&
+        Objects.equals(this.prettyProductName, invoiceItem.prettyProductName) &&
         Objects.equals(this.prettyPlanName, invoiceItem.prettyPlanName) &&
         Objects.equals(this.prettyPhaseName, invoiceItem.prettyPhaseName) &&
         Objects.equals(this.prettyUsageName, invoiceItem.prettyUsageName) &&
@@ -403,9 +431,11 @@ public class InvoiceItem extends KillBillObject {
                             childAccountId,
                             bundleId,
                             subscriptionId,
+                            productName,
                             planName,
                             phaseName,
                             usageName,
+                            prettyProductName,
                             prettyPlanName,
                             prettyPhaseName,
                             prettyUsageName,
@@ -435,9 +465,11 @@ public class InvoiceItem extends KillBillObject {
         sb.append("    childAccountId: ").append(toIndentedString(childAccountId)).append("\n");
         sb.append("    bundleId: ").append(toIndentedString(bundleId)).append("\n");
         sb.append("    subscriptionId: ").append(toIndentedString(subscriptionId)).append("\n");
+        sb.append("    productName: ").append(toIndentedString(productName)).append("\n");
         sb.append("    planName: ").append(toIndentedString(planName)).append("\n");
         sb.append("    phaseName: ").append(toIndentedString(phaseName)).append("\n");
         sb.append("    usageName: ").append(toIndentedString(usageName)).append("\n");
+        sb.append("    prettyProductName: ").append(toIndentedString(prettyProductName)).append("\n");
         sb.append("    prettyPlanName: ").append(toIndentedString(prettyPlanName)).append("\n");
         sb.append("    prettyPhaseName: ").append(toIndentedString(prettyPhaseName)).append("\n");
         sb.append("    prettyUsageName: ").append(toIndentedString(prettyUsageName)).append("\n");

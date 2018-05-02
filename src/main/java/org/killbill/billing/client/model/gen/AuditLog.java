@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.UUID;
 import org.joda.time.DateTime;
 import org.killbill.billing.ObjectType;
+import org.killbill.billing.client.model.gen.Entity;
 
 /**
  *           DO NOT EDIT !!!
@@ -50,6 +51,8 @@ public class AuditLog {
 
     private String userToken = null;
 
+    private Entity history = null;
+
 
     public AuditLog() {
     }
@@ -61,7 +64,8 @@ public class AuditLog {
                      final String changedBy,
                      final String reasonCode,
                      final String comments,
-                     final String userToken) {
+                     final String userToken,
+                     final Entity history) {
         this.changeType = changeType;
         this.changeDate = changeDate;
         this.objectType = objectType;
@@ -70,6 +74,7 @@ public class AuditLog {
         this.reasonCode = reasonCode;
         this.comments = comments;
         this.userToken = userToken;
+        this.history = history;
 
     }
 
@@ -146,6 +151,15 @@ public class AuditLog {
         return userToken;
     }
 
+    public AuditLog setHistory(final Entity history) {
+        this.history = history;
+        return this;
+    }
+
+    public Entity getHistory() {
+        return history;
+    }
+
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -162,7 +176,8 @@ public class AuditLog {
         Objects.equals(this.changedBy, auditLog.changedBy) &&
         Objects.equals(this.reasonCode, auditLog.reasonCode) &&
         Objects.equals(this.comments, auditLog.comments) &&
-        Objects.equals(this.userToken, auditLog.userToken);
+        Objects.equals(this.userToken, auditLog.userToken) &&
+        Objects.equals(this.history, auditLog.history);
 
     }
 
@@ -175,7 +190,8 @@ public class AuditLog {
                             changedBy,
                             reasonCode,
                             comments,
-                            userToken);
+                            userToken,
+                            history);
     }
 
 
@@ -192,6 +208,7 @@ public class AuditLog {
         sb.append("    reasonCode: ").append(toIndentedString(reasonCode)).append("\n");
         sb.append("    comments: ").append(toIndentedString(comments)).append("\n");
         sb.append("    userToken: ").append(toIndentedString(userToken)).append("\n");
+        sb.append("    history: ").append(toIndentedString(history)).append("\n");
         sb.append("}");
         return sb.toString();
     }

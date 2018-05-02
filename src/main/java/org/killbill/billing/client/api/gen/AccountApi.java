@@ -333,6 +333,20 @@ public class AccountApi {
         return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
+    public AuditLogs getAccountAuditLogsWithHistory(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccountAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/accounts/{accountId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
+    }
+
     public Bundles getAccountBundles(final UUID accountId, final String externalKey, final String bundlesFilter, final RequestOptions inputOptions) throws KillBillClientException {
         return getAccountBundles(accountId, externalKey, bundlesFilter, AuditLevel.NONE, inputOptions);
     }
