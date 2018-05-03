@@ -403,6 +403,12 @@ public class KillBillClient implements Closeable {
         httpClient.doPut(uri, invoiceEmail, inputOptions);
     }
 
+    public AuditLogs getAccountEmailAuditLogsWithHistory(final UUID accountId, final UUID accountEmailId) throws KillBillClientException {
+        final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.EMAILS + "/" + accountEmailId + "/" + JaxrsResource.AUDIT_LOG_WITH_HISTORY;
+
+        return getAuditLogsWithHistory(uri, null);
+    }
+
     public Accounts getChildrenAccounts(final UUID parentAccountId, final boolean withBalance, final boolean withCBA, final RequestOptions inputOptions) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + parentAccountId + "/" + JaxrsResource.CHILDREN;
 
@@ -431,7 +437,7 @@ public class KillBillClient implements Closeable {
     public AuditLogs getAccountAuditLogsWithHistory(final UUID accountId) throws KillBillClientException {
         final String uri = JaxrsResource.ACCOUNTS_PATH + "/" + accountId + "/" + JaxrsResource.AUDIT_LOG_WITH_HISTORY;
 
-        return httpClient.doGet(uri, AuditLogs.class , RequestOptions.empty());
+        return getAuditLogsWithHistory(uri, null);
     }
 
     // Bundles
@@ -1910,6 +1916,21 @@ public class KillBillClient implements Closeable {
         return httpClient.doGet(uri, Payment.class, requestOptions);
     }
 
+    public AuditLogs getPaymentAuditLogsWithHistory(final UUID accountId, final UUID paymentId) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + paymentId + "/" + JaxrsResource.AUDIT_LOG_WITH_HISTORY;
+        return getAuditLogsWithHistory(uri, accountId);
+    }
+
+    public AuditLogs getPaymentAttemptAuditLogsWithHistory(final UUID accountId, final UUID paymentAttemptId) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENTS_PATH + "/" + JaxrsResource.ATTEMPTS + "/" + paymentAttemptId + "/" + JaxrsResource.AUDIT_LOG_WITH_HISTORY;
+        return getAuditLogsWithHistory(uri, accountId);
+    }
+
+    public AuditLogs getTransactionAuditLogsWithHistory(final UUID accountId, final UUID paymentTransactionId) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_TRANSACTIONS_PATH + "/" + paymentTransactionId + "/" + JaxrsResource.AUDIT_LOG_WITH_HISTORY;
+        return getAuditLogsWithHistory(uri, accountId);
+    }
+
     @Deprecated
     public Payment getPaymentByExternalKey(final String externalKey) throws KillBillClientException {
         return getPaymentByExternalKey(externalKey, RequestOptions.empty());
@@ -2840,6 +2861,11 @@ public class KillBillClient implements Closeable {
         refreshPaymentMethods(accountId, null, pluginProperties, inputOptions);
     }
 
+    public AuditLogs getPaymentMethodAuditLogsWithHistory(final UUID accountId, final UUID paymentMethodId) throws KillBillClientException {
+        final String uri = JaxrsResource.PAYMENT_METHODS_PATH + "/" + paymentMethodId + "/" + JaxrsResource.AUDIT_LOG_WITH_HISTORY;
+        return getAuditLogsWithHistory(uri, accountId);
+    }
+
     // Overdue
 
     @Deprecated
@@ -2942,6 +2968,11 @@ public class KillBillClient implements Closeable {
         final String uri = JaxrsResource.TAG_DEFINITIONS_PATH + "/" + tagDefinitionId;
 
         httpClient.doDelete(uri, inputOptions);
+    }
+
+    public AuditLogs getTagDefinitionAuditLogsWithHistory(final UUID accountId, final UUID tagDefinitionId) throws KillBillClientException {
+        final String uri = JaxrsResource.TAG_DEFINITIONS_PATH + "/" + tagDefinitionId + "/" + JaxrsResource.AUDIT_LOG_WITH_HISTORY;
+        return getAuditLogsWithHistory(uri, accountId);
     }
 
     // Tags
@@ -3322,6 +3353,11 @@ public class KillBillClient implements Closeable {
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
         httpClient.doDelete(uri, requestOptions);
+    }
+
+    public AuditLogs getTagAuditLogsWithHistory(final UUID accountId, final UUID tagId) throws KillBillClientException {
+        final String uri = JaxrsResource.TAGS_PATH + "/" + tagId + "/" + JaxrsResource.AUDIT_LOG_WITH_HISTORY;
+        return getAuditLogsWithHistory(uri, accountId);
     }
 
     // Custom fields
@@ -3721,6 +3757,11 @@ public class KillBillClient implements Closeable {
         final RequestOptions requestOptions = inputOptions.extend().withQueryParams(queryParams).build();
 
         httpClient.doDelete(uri, requestOptions);
+    }
+
+    public AuditLogs getCustomFieldsAuditLogsWithHistory(final UUID accountId, final UUID customFieldId) throws KillBillClientException {
+        final String uri = JaxrsResource.CUSTOM_FIELDS_PATH + "/" + customFieldId + "/" + JaxrsResource.AUDIT_LOG_WITH_HISTORY;
+        return getAuditLogsWithHistory(uri, accountId);
     }
 
     // Catalog
@@ -4265,6 +4306,19 @@ public class KillBillClient implements Closeable {
             httpClient.doPost(uri, body, requestOptions);
             return null;
         }
+    }
+
+    private AuditLogs getAuditLogsWithHistory(final String uri, @Nullable final UUID accountId) throws KillBillClientException {
+        final RequestOptions requestOptions;
+        if (accountId == null) {
+            requestOptions = RequestOptions.empty();
+        } else {
+            final Multimap<String, String> queryParams =  HashMultimap.<String, String>create();
+            queryParams.put(JaxrsResource.QUERY_ACCOUNT_ID, String.valueOf(accountId));
+            requestOptions = RequestOptions.builder().withQueryParams(queryParams).build();
+        }
+
+        return httpClient.doGet(uri, AuditLogs.class , requestOptions);
     }
 
     @VisibleForTesting

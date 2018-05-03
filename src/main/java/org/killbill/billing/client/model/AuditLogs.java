@@ -19,6 +19,6 @@ package org.killbill.billing.client.model;
 
 import java.util.ArrayList;
 
-public class AuditLogs extends ArrayList<AuditLog> {
+public class AuditLogs<E> extends ArrayList<AuditLog<E>> {
 
 }
