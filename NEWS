@@ -1,3 +1,6 @@
+0.41.13
+    Calls to new APIs to retrieve history info from any objects
+
 0.41.12
      Add missing InvoiceItem#productName and InvoiceItem#prettyProductName
 
