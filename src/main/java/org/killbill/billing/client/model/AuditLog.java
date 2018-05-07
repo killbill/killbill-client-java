@@ -25,7 +25,7 @@ import org.killbill.billing.util.entity.Entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class AuditLog {
+public class AuditLog<E> {
 
     private String changeType;
     private DateTime changeDate;
@@ -37,7 +37,7 @@ public class AuditLog {
     private ObjectType objectType;
     private UUID objectId;
 
-    private Entity history;
+    private E history;
 
     public AuditLog() {}
 
@@ -50,7 +50,7 @@ public class AuditLog {
                     @JsonProperty("reasonCode") final String reasonCode,
                     @JsonProperty("comments") final String comments,
                     @JsonProperty("userToken") final String userToken,
-                    @JsonProperty("history") final Entity history) {
+                    @JsonProperty("history") final E history) {
         this.changeType = changeType;
         this.changeDate = changeDate;
         this.changedBy = changedBy;
@@ -126,11 +126,11 @@ public class AuditLog {
         this.objectId = objectId;
     }
 
-    public Entity getHistory() {
+    public E getHistory() {
         return history;
     }
 
-    public void setHistory(final Entity history) {
+    public void setHistory(final E history) {
         this.history = history;
     }
 
