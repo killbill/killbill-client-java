@@ -19,6 +19,7 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.ComboPaymentTransaction;
 import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.Payment;
@@ -30,6 +31,7 @@ import java.util.Map;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
+import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.Payments;
 
 import com.google.common.collect.Multimap;
@@ -423,6 +425,34 @@ public class PaymentApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Payment.class, requestOptions);
+    }
+
+    public AuditLogs getPaymentAttemptAuditLogsWithHistory(final UUID paymentAttemptId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentAttemptId, "Missing the required parameter 'paymentAttemptId' when calling getPaymentAttemptAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/payments/attempts/{paymentAttemptId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "paymentAttemptId" + "\\}", paymentAttemptId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
+    }
+
+    public AuditLogs getPaymentAuditLogsWithHistory(final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling getPaymentAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/payments/{paymentId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
     public Payment getPaymentByExternalKey(final String externalKey, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {

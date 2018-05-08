@@ -19,6 +19,7 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.PaymentMethod;
 import java.util.UUID;
@@ -26,6 +27,7 @@ import org.killbill.billing.client.model.CustomFields;
 import java.util.List;
 import java.util.Map;
 import org.killbill.billing.util.api.AuditLevel;
+import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.PaymentMethods;
 
 import com.google.common.collect.Multimap;
@@ -157,6 +159,20 @@ public class PaymentMethodApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, PaymentMethod.class, requestOptions);
+    }
+
+    public AuditLogs getPaymentMethodAuditLogsWithHistory(final UUID paymentMethodId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(paymentMethodId, "Missing the required parameter 'paymentMethodId' when calling getPaymentMethodAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/paymentMethods/{paymentMethodId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "paymentMethodId" + "\\}", paymentMethodId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
     public PaymentMethod getPaymentMethodByKey(final String externalKey, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {

@@ -19,6 +19,7 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.Payment;
 import org.killbill.billing.client.model.gen.PaymentTransaction;
@@ -29,6 +30,7 @@ import java.util.List;
 import org.killbill.billing.client.model.Tags;
 import java.util.Map;
 import org.killbill.billing.util.api.AuditLevel;
+import org.killbill.billing.client.model.AuditLogs;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -168,6 +170,20 @@ public class PaymentTransactionApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Payment.class, requestOptions);
+    }
+
+    public AuditLogs getTransactionAuditLogsWithHistory(final UUID transactionId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(transactionId, "Missing the required parameter 'transactionId' when calling getTransactionAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/paymentTransactions/{transactionId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "transactionId" + "\\}", transactionId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
     public CustomFields getTransactionCustomFields(final UUID transactionId, final RequestOptions inputOptions) throws KillBillClientException {

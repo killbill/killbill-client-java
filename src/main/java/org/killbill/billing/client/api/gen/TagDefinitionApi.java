@@ -19,11 +19,13 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.TagDefinition;
 import java.util.UUID;
 import org.killbill.billing.util.api.AuditLevel;
-import org.killbill.billing.client.model.TagDefinitions;
+import org.killbill.billing.client.model.AuditLogs;
 import java.util.List;
+import org.killbill.billing.client.model.TagDefinitions;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -107,6 +109,20 @@ public class TagDefinitionApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, TagDefinition.class, requestOptions);
+    }
+
+    public AuditLogs getTagDefinitionAuditLogsWithHistory(final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling getTagDefinitionAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/tagDefinitions/{tagDefinitionId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "tagDefinitionId" + "\\}", tagDefinitionId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
     public TagDefinitions getTagDefinitions(final RequestOptions inputOptions) throws KillBillClientException {

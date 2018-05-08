@@ -19,9 +19,12 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.Tag;
-import org.killbill.billing.client.model.Tags;
+import java.util.UUID;
+import org.killbill.billing.client.model.AuditLogs;
 import java.util.List;
+import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
 
 import com.google.common.collect.Multimap;
@@ -52,6 +55,20 @@ public class TagApi {
 
     public TagApi(final KillBillHttpClient httpClient) {
         this.httpClient = httpClient;
+    }
+
+    public AuditLogs getTagAuditLogsWithHistory(final UUID tagId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(tagId, "Missing the required parameter 'tagId' when calling getTagAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/tags/{tagId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "tagId" + "\\}", tagId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
     public Tags getTags(final RequestOptions inputOptions) throws KillBillClientException {

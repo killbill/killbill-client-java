@@ -430,6 +430,22 @@ public class AccountApi {
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
+    public AuditLogs getAccountEmailAuditLogsWithHistory(final UUID accountId, final UUID accountEmailId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccountEmailAuditLogsWithHistory");
+        Preconditions.checkNotNull(accountEmailId, "Missing the required parameter 'accountEmailId' when calling getAccountEmailAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/accounts/{accountId}/emails/{accountEmailId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "accountId" + "\\}", accountId.toString())
+          .replaceAll("\\{" + "accountEmailId" + "\\}", accountEmailId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
+    }
+
     public Tags getAccountTags(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
         return getAccountTags(accountId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }

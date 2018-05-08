@@ -10,29 +10,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Subscription"
-- name: "Admin"
-- name: "CustomField"
-- name: "Export"
-- name: "TagDefinition"
-- name: "PaymentGateway"
-- name: "Invoice"
-- name: "Bundle"
-- name: "Catalog"
-- name: "PaymentTransaction"
-- name: "NodesInfo"
-- name: "Tenant"
 - name: "Security"
 - name: "InvoicePayment"
+- name: "Invoice"
+- name: "Tag"
+- name: "Account"
+- name: "Payment"
+- name: "Bundle"
+- name: "Catalog"
+- name: "PluginInfo"
+- name: "Tenant"
+- name: "PaymentGateway"
 - name: "Credit"
+- name: "Subscription"
+- name: "NodesInfo"
 - name: "PaymentMethod"
 - name: "Overdue"
-- name: "Account"
-- name: "Usage"
-- name: "PluginInfo"
-- name: "Payment"
-- name: "Tag"
+- name: "Export"
+- name: "TagDefinition"
+- name: "Admin"
 - name: "InvoiceItem"
+- name: "Usage"
+- name: "PaymentTransaction"
+- name: "CustomField"
 paths:
   /1.0/kb/accounts:
     get:
@@ -538,7 +538,6 @@ paths:
         - "SERVICE_BROADCAST"
         - "PAYMENT_ATTEMPT"
         - "PAYMENT_METHOD"
-        - "REFUND"
         - "TAG"
         - "TAG_DEFINITION"
         - "TENANT"
@@ -609,7 +608,6 @@ paths:
         - "SERVICE_BROADCAST"
         - "PAYMENT_ATTEMPT"
         - "PAYMENT_METHOD"
-        - "REFUND"
         - "TAG"
         - "TAG_DEFINITION"
         - "TENANT"
@@ -1377,6 +1375,47 @@ paths:
               $ref: "#/definitions/AccountEmail"
         400:
           description: "Invalid account id supplied"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
+  /1.0/kb/accounts/{accountId}/emails/{accountEmailId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "Account"
+      summary: "Retrieve account email audit logs with history by id"
+      description: ""
+      operationId: "getAccountEmailAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "accountEmailId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
         404:
           description: "Account not found"
       security:
@@ -4072,6 +4111,41 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CustomField"
+      security:
+      - basicAuth: []
+  /1.0/kb/customFields/{customFieldId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "CustomField"
+      summary: "Retrieve custom field audit logs with history by id"
+      description: ""
+      operationId: "getCustomFieldAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "customFieldId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        404:
+          description: "Account not found"
       security:
       - basicAuth: []
   /1.0/kb/export/{accountId}:
@@ -7397,6 +7471,41 @@ paths:
           description: "Account or payment method not found"
       security:
       - basicAuth: []
+  /1.0/kb/paymentMethods/{paymentMethodId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "PaymentMethod"
+      summary: "Retrieve payment method audit logs with history by id"
+      description: ""
+      operationId: "getPaymentMethodAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentMethodId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
   /1.0/kb/paymentMethods/{paymentMethodId}/customFields:
     get:
       tags:
@@ -7716,6 +7825,41 @@ paths:
           description: "Invalid paymentId supplied"
         404:
           description: "Account or Payment not found"
+      security:
+      - basicAuth: []
+  /1.0/kb/paymentTransactions/{transactionId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "PaymentTransaction"
+      summary: "Retrieve payment transaction audit logs with history by id"
+      description: ""
+      operationId: "getTransactionAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "transactionId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        404:
+          description: "Account not found"
       security:
       - basicAuth: []
   /1.0/kb/paymentTransactions/{transactionId}/customFields:
@@ -8337,6 +8481,41 @@ paths:
           description: "Payment in unknown status, failed to receive gateway response"
         504:
           description: "Payment operation timeout"
+      security:
+      - basicAuth: []
+  /1.0/kb/payments/attempts/{paymentAttemptId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "Payment"
+      summary: "Retrieve payment attempt audit logs with history by id"
+      description: ""
+      operationId: "getPaymentAttemptAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentAttemptId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        404:
+          description: "Account not found"
       security:
       - basicAuth: []
   /1.0/kb/payments/cancelScheduledPaymentTransaction:
@@ -9085,6 +9264,41 @@ paths:
           description: "Payment in unknown status, failed to receive gateway response"
         504:
           description: "Payment operation timeout"
+      security:
+      - basicAuth: []
+  /1.0/kb/payments/{paymentId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "Payment"
+      summary: "Retrieve payment audit logs with history by id"
+      description: ""
+      operationId: "getPaymentAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        404:
+          description: "Account not found"
       security:
       - basicAuth: []
   /1.0/kb/payments/{paymentId}/chargebackReversals:
@@ -11268,6 +11482,41 @@ paths:
           description: "Successful operation"
       security:
       - basicAuth: []
+  /1.0/kb/tagDefinitions/{tagDefinitionId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "TagDefinition"
+      summary: "Retrieve tag definition audit logs with history by id"
+      description: ""
+      operationId: "getTagDefinitionAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tagDefinitionId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
   /1.0/kb/tags/pagination:
     get:
       tags:
@@ -11367,6 +11616,41 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
+      security:
+      - basicAuth: []
+  /1.0/kb/tags/{tagId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "Tag"
+      summary: "Retrieve tag audit logs with history by id"
+      description: ""
+      operationId: "getTagAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tagId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        404:
+          description: "Account not found"
       security:
       - basicAuth: []
   /1.0/kb/tenants:
@@ -12219,10 +12503,10 @@ definitions:
       id:
         type: "string"
         format: "uuid"
-      createdDate:
+      updatedDate:
         type: "string"
         format: "date-time"
-      updatedDate:
+      createdDate:
         type: "string"
         format: "date-time"
   Account:
@@ -12751,15 +13035,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  AdminPayment:
-    type: "object"
-    properties:
-      lastSuccessPaymentState:
-        type: "string"
-      currentPaymentStateName:
-        type: "string"
-      transactionStatus:
-        type: "string"
   TenantKeyValue:
     type: "object"
     properties:
@@ -12769,6 +13044,15 @@ definitions:
         type: "array"
         items:
           type: "string"
+  AdminPayment:
+    type: "object"
+    properties:
+      lastSuccessPaymentState:
+        type: "string"
+      currentPaymentStateName:
+        type: "string"
+      transactionStatus:
+        type: "string"
   BlockingState:
     type: "object"
     properties:
@@ -12847,7 +13131,6 @@ definitions:
         - "SERVICE_BROADCAST"
         - "PAYMENT_ATTEMPT"
         - "PAYMENT_METHOD"
-        - "REFUND"
         - "TAG"
         - "TAG_DEFINITION"
         - "TENANT"
@@ -12865,13 +13148,6 @@ definitions:
         type: "string"
       history:
         $ref: "#/definitions/Entity"
-  NodeCommandProperty:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      value:
-        type: "object"
   OverdueState:
     type: "object"
     properties:
@@ -12896,6 +13172,13 @@ definitions:
       reevaluationIntervalDays:
         type: "integer"
         format: "int32"
+  NodeCommandProperty:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "object"
   ComboPaymentTransaction:
     type: "object"
     properties:
@@ -14983,7 +15266,6 @@ definitions:
           - "SERVICE_BROADCAST"
           - "PAYMENT_ATTEMPT"
           - "PAYMENT_METHOD"
-          - "REFUND"
           - "TAG"
           - "TAG_DEFINITION"
           - "TENANT"
@@ -16235,7 +16517,6 @@ definitions:
         - "SERVICE_BROADCAST"
         - "PAYMENT_ATTEMPT"
         - "PAYMENT_METHOD"
-        - "REFUND"
         - "TAG"
         - "TAG_DEFINITION"
         - "TENANT"
@@ -16281,7 +16562,6 @@ definitions:
         - "SERVICE_BROADCAST"
         - "PAYMENT_ATTEMPT"
         - "PAYMENT_METHOD"
-        - "REFUND"
         - "TAG"
         - "TAG_DEFINITION"
         - "TENANT"

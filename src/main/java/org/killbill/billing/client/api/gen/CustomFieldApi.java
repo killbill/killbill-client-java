@@ -19,9 +19,12 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.CustomField;
-import org.killbill.billing.client.model.CustomFields;
+import java.util.UUID;
+import org.killbill.billing.client.model.AuditLogs;
 import java.util.List;
+import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.util.api.AuditLevel;
 
 import com.google.common.collect.Multimap;
@@ -52,6 +55,20 @@ public class CustomFieldApi {
 
     public CustomFieldApi(final KillBillHttpClient httpClient) {
         this.httpClient = httpClient;
+    }
+
+    public AuditLogs getCustomFieldAuditLogsWithHistory(final UUID customFieldId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(customFieldId, "Missing the required parameter 'customFieldId' when calling getCustomFieldAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/customFields/{customFieldId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "customFieldId" + "\\}", customFieldId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
     public CustomFields getCustomFields(final RequestOptions inputOptions) throws KillBillClientException {
