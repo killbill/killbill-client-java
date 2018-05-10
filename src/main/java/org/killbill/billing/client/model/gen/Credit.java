@@ -38,6 +38,8 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class Credit extends KillBillObject {
 
+    private UUID creditId = null;
+
     private BigDecimal creditAmount = null;
 
     private Currency currency = null;
@@ -59,7 +61,8 @@ public class Credit extends KillBillObject {
     public Credit() {
     }
 
-    public Credit(final BigDecimal creditAmount,
+    public Credit(final UUID creditId,
+                     final BigDecimal creditAmount,
                      final Currency currency,
                      final UUID invoiceId,
                      final String invoiceNumber,
@@ -69,6 +72,7 @@ public class Credit extends KillBillObject {
                      final String itemDetails,
                      final List<AuditLog> auditLogs) {
         super(auditLogs);
+        this.creditId = creditId;
         this.creditAmount = creditAmount;
         this.currency = currency;
         this.invoiceId = invoiceId;
@@ -80,6 +84,15 @@ public class Credit extends KillBillObject {
 
     }
 
+
+    public Credit setCreditId(final UUID creditId) {
+        this.creditId = creditId;
+        return this;
+    }
+
+    public UUID getCreditId() {
+        return creditId;
+    }
 
     public Credit setCreditAmount(final BigDecimal creditAmount) {
         this.creditAmount = creditAmount;
@@ -162,7 +175,8 @@ public class Credit extends KillBillObject {
             return false;
         }
         Credit credit = (Credit) o;
-        return Objects.equals(this.creditAmount, credit.creditAmount) &&
+        return Objects.equals(this.creditId, credit.creditId) &&
+        Objects.equals(this.creditAmount, credit.creditAmount) &&
         Objects.equals(this.currency, credit.currency) &&
         Objects.equals(this.invoiceId, credit.invoiceId) &&
         Objects.equals(this.invoiceNumber, credit.invoiceNumber) &&
@@ -176,7 +190,8 @@ public class Credit extends KillBillObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(creditAmount,
+        return Objects.hash(creditId,
+                            creditAmount,
                             currency,
                             invoiceId,
                             invoiceNumber,
@@ -193,6 +208,7 @@ public class Credit extends KillBillObject {
         StringBuilder sb = new StringBuilder();
         sb.append("class Credit {\n");
         sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+        sb.append("    creditId: ").append(toIndentedString(creditId)).append("\n");
         sb.append("    creditAmount: ").append(toIndentedString(creditAmount)).append("\n");
         sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
         sb.append("    invoiceId: ").append(toIndentedString(invoiceId)).append("\n");

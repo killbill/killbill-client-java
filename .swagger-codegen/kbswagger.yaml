@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Kill Bill is an open-source billing and payments platform"
-  version: "0.19.14-SNAPSHOT"
+  version: "0.19.15-SNAPSHOT"
   title: "Kill Bill"
   contact:
     name: "killbilling-users@googlegroups.com"
@@ -10,29 +10,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Security"
-- name: "InvoicePayment"
-- name: "Invoice"
-- name: "Tag"
-- name: "Account"
-- name: "Payment"
-- name: "Bundle"
-- name: "Catalog"
-- name: "PluginInfo"
-- name: "Tenant"
-- name: "PaymentGateway"
-- name: "Credit"
-- name: "Subscription"
-- name: "NodesInfo"
 - name: "PaymentMethod"
 - name: "Overdue"
-- name: "Export"
+- name: "Credit"
+- name: "Catalog"
 - name: "TagDefinition"
-- name: "Admin"
-- name: "InvoiceItem"
-- name: "Usage"
-- name: "PaymentTransaction"
+- name: "Export"
 - name: "CustomField"
+- name: "Bundle"
+- name: "Payment"
+- name: "Usage"
+- name: "NodesInfo"
+- name: "PaymentTransaction"
+- name: "InvoiceItem"
+- name: "Tag"
+- name: "PluginInfo"
+- name: "Security"
+- name: "Admin"
+- name: "Account"
+- name: "Invoice"
+- name: "Subscription"
+- name: "PaymentGateway"
+- name: "Tenant"
+- name: "InvoicePayment"
 paths:
   /1.0/kb/accounts:
     get:
@@ -13035,15 +13035,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  TenantKeyValue:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      values:
-        type: "array"
-        items:
-          type: "string"
   AdminPayment:
     type: "object"
     properties:
@@ -13053,6 +13044,15 @@ definitions:
         type: "string"
       transactionStatus:
         type: "string"
+  TenantKeyValue:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      values:
+        type: "array"
+        items:
+          type: "string"
   BlockingState:
     type: "object"
     properties:
@@ -13148,6 +13148,13 @@ definitions:
         type: "string"
       history:
         $ref: "#/definitions/Entity"
+  NodeCommandProperty:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "object"
   OverdueState:
     type: "object"
     properties:
@@ -13172,13 +13179,6 @@ definitions:
       reevaluationIntervalDays:
         type: "integer"
         format: "int32"
-  NodeCommandProperty:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      value:
-        type: "object"
   ComboPaymentTransaction:
     type: "object"
     properties:
@@ -13222,6 +13222,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      isBlockChanges:
+        type: "boolean"
+        default: false
+      isDisableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -13624,33 +13651,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      isBlockChanges:
-        type: "boolean"
-        default: false
-      isDisableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -15274,6 +15274,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -15523,25 +15542,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -15620,6 +15620,9 @@ definitions:
     - "accountId"
     - "creditAmount"
     properties:
+      creditId:
+        type: "string"
+        format: "uuid"
       creditAmount:
         type: "number"
       currency:
@@ -16538,6 +16541,15 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Subscription"
+  Limit:
+    type: "object"
+    properties:
+      unit:
+        type: "string"
+      max:
+        type: "string"
+      min:
+        type: "string"
   Tag:
     type: "object"
     properties:
@@ -16578,15 +16590,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Limit:
-    type: "object"
-    properties:
-      unit:
-        type: "string"
-      max:
-        type: "string"
-      min:
-        type: "string"
   Session:
     type: "object"
     properties:
