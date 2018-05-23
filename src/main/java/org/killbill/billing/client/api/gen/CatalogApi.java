@@ -92,7 +92,7 @@ public class CatalogApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public PlanDetails getAvailableAddons(final String baseProductName, final String priceListName, final RequestOptions inputOptions) throws KillBillClientException {
+    public PlanDetails getAvailableAddons(final String baseProductName, final String priceListName, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/availableAddons";
 
@@ -103,6 +103,9 @@ public class CatalogApi {
         if (priceListName != null) {
             queryParams.put("priceListName", String.valueOf(priceListName));
         }
+        if (accountId != null) {
+            queryParams.put("accountId", String.valueOf(accountId));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -112,25 +115,33 @@ public class CatalogApi {
         return httpClient.doGet(uri, PlanDetails.class, requestOptions);
     }
 
-    public PlanDetails getAvailableBasePlans(final RequestOptions inputOptions) throws KillBillClientException {
+    public PlanDetails getAvailableBasePlans(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/availableBasePlans";
 
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (accountId != null) {
+            queryParams.put("accountId", String.valueOf(accountId));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, PlanDetails.class, requestOptions);
     }
 
-    public Catalogs getCatalogJson(final DateTime requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
+    public Catalogs getCatalogJson(final DateTime requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog";
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (accountId != null) {
+            queryParams.put("accountId", String.valueOf(accountId));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -141,25 +152,33 @@ public class CatalogApi {
         return httpClient.doGet(uri, Catalogs.class, requestOptions);
     }
 
-    public DateTimes getCatalogVersions(final RequestOptions inputOptions) throws KillBillClientException {
+    public DateTimes getCatalogVersions(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/versions";
 
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (accountId != null) {
+            queryParams.put("accountId", String.valueOf(accountId));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, DateTimes.class, requestOptions);
     }
 
-    public String getCatalogXml(final LocalDate requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
+    public String getCatalogXml(final LocalDate requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/xml";
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (accountId != null) {
+            queryParams.put("accountId", String.valueOf(accountId));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

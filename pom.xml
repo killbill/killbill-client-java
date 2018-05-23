@@ -23,8 +23,9 @@
         <groupId>org.kill-bill.billing</groupId>
         <version>0.141.50</version>
     </parent>
-    <artifactId>killbill-client-java-swagger-gen-exp</artifactId>
-    <version>0.0.10-SNAPSHOT</version>
+
+    <artifactId>killbill-client-java</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Kill Bill Client Java</name>
     <description>Kill Bill Java client library</description>
