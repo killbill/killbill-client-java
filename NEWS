@@ -1,23 +1,30 @@
-0.41.13
-    Calls to new APIs to retrieve history info from any objects
+0.0.9
+    Regen to add missing creditId
 
-0.41.12
-     Add missing InvoiceItem#productName and InvoiceItem#prettyProductName
+0.0.8
+    Implement/generate new apis for audit logs
 
-0.41.11
-    Adding history into audit log
-    Fix validations issues for createSubscriptionsWithAddOns
-    âˆ
+0.0.7
+    Regenerate client for new apis
 
-0.41.10
-    New call to endpoint /auditLogs
+0.0.6
+    Fix path for getInvoiceByNumber
 
-0.41.9
-    New API call to get a list of catalog versions
+0.0.5
+    Add new api to retrieve all audit logs
 
-0.41.8
-    Fix for JsonMappingException when creating an object with followLocation=false
-    Add itemDetails to Credit model
+0.0.4
+    Api changes #935, #941, #912, #917
+
+0.0.3
+    Change jaxrs tag creation to take a body of tagDefinitionId
+
+0.0.2
+    Extension and cleanup in KillBillHttpClient
+    Regenerate apis
+
+0.0.1
+    Initial version for swagger gen java client
 
 0.41.7
     Add support for new voidInvoice endpoint

@@ -16,5 +16,7 @@
 
 package org.killbill.billing.client.model;
 
+import org.killbill.billing.client.model.gen.AccountEmail;
+
 public class AccountEmails extends KillBillObjects<AccountEmail> {
 }

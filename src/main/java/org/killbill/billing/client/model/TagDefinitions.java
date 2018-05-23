@@ -16,5 +16,7 @@
 
 package org.killbill.billing.client.model;
 
+import org.killbill.billing.client.model.gen.TagDefinition;
+
 public class TagDefinitions extends KillBillObjects<TagDefinition> {
 }

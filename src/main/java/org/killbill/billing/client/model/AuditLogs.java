@@ -18,7 +18,13 @@
 package org.killbill.billing.client.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class AuditLogs<E> extends ArrayList<AuditLog<E>> {
+import org.killbill.billing.client.KillBillClientException;
+import org.killbill.billing.client.model.gen.Account;
+import org.killbill.billing.client.model.gen.AuditLog;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+public class AuditLogs extends ArrayList<AuditLog> {
 }
