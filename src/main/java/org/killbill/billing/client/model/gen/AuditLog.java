@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.UUID;
 import org.joda.time.DateTime;
 import org.killbill.billing.ObjectType;
+import org.killbill.billing.client.model.gen.Entity;
 
 /**
  *           DO NOT EDIT !!!
@@ -32,7 +33,7 @@ import org.killbill.billing.ObjectType;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class AuditLog<E> {
+public class AuditLog {
 
     private String changeType = null;
 
@@ -50,7 +51,7 @@ public class AuditLog<E> {
 
     private String userToken = null;
 
-    private E history = null;
+    private Entity history = null;
 
 
     public AuditLog() {
@@ -64,7 +65,7 @@ public class AuditLog<E> {
                      final String reasonCode,
                      final String comments,
                      final String userToken,
-                     final E history) {
+                     final Entity history) {
         this.changeType = changeType;
         this.changeDate = changeDate;
         this.objectType = objectType;
@@ -150,12 +151,12 @@ public class AuditLog<E> {
         return userToken;
     }
 
-    public AuditLog setHistory(final E history) {
+    public AuditLog setHistory(final Entity history) {
         this.history = history;
         return this;
     }
 
-    public E getHistory() {
+    public Entity getHistory() {
         return history;
     }
 

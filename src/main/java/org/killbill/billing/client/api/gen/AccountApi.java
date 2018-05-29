@@ -833,22 +833,28 @@ public class AccountApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void payAllInvoices(final UUID accountId, final BigDecimal paymentAmount, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        payAllInvoices(accountId, Boolean.valueOf(false), paymentAmount, pluginProperty, inputOptions);
+    public void payAllInvoices(final UUID accountId, final UUID paymentMethodId, final BigDecimal paymentAmount, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        payAllInvoices(accountId, paymentMethodId, Boolean.valueOf(false), paymentAmount, targetDate, pluginProperty, inputOptions);
     }
 
-    public void payAllInvoices(final UUID accountId, final Boolean externalPayment, final BigDecimal paymentAmount, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public void payAllInvoices(final UUID accountId, final UUID paymentMethodId, final Boolean externalPayment, final BigDecimal paymentAmount, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling payAllInvoices");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoicePayments"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (paymentMethodId != null) {
+            queryParams.put("paymentMethodId", String.valueOf(paymentMethodId));
+        }
         if (externalPayment != null) {
             queryParams.put("externalPayment", String.valueOf(externalPayment));
         }
         if (paymentAmount != null) {
             queryParams.put("paymentAmount", String.valueOf(paymentAmount));
+        }
+        if (targetDate != null) {
+            queryParams.put("targetDate", String.valueOf(targetDate));
         }
         if (pluginProperty != null) {
             queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
