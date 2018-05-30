@@ -1,3 +1,6 @@
+1.0.1
+    Enhance api AccountApi#payAllInvoices to take additional flags
+
 1.0.0
     Initial version for the swagger generated java client
 
