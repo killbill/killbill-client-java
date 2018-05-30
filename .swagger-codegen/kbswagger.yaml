@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Kill Bill is an open-source billing and payments platform"
-  version: "0.19.16-SNAPSHOT"
+  version: "0.19.17-SNAPSHOT"
   title: "Kill Bill"
   contact:
     name: "killbilling-users@googlegroups.com"
@@ -1547,6 +1547,11 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "paymentMethodId"
+        in: "query"
+        required: false
+        type: "string"
+        format: "uuid"
       - name: "externalPayment"
         in: "query"
         required: false
@@ -1556,6 +1561,11 @@ paths:
         in: "query"
         required: false
         type: "number"
+      - name: "targetDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -12522,6 +12532,18 @@ securityDefinitions:
   basicAuth:
     type: "basic"
 definitions:
+  Entity:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      updatedDate:
+        type: "string"
+        format: "date-time"
+      createdDate:
+        type: "string"
+        format: "date-time"
   Account:
     type: "object"
     properties:
@@ -12756,18 +12778,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Entity:
-    type: "object"
-    properties:
-      id:
-        type: "string"
-        format: "uuid"
-      updatedDate:
-        type: "string"
-        format: "date-time"
-      createdDate:
-        type: "string"
-        format: "date-time"
   Invoice:
     type: "object"
     properties:
