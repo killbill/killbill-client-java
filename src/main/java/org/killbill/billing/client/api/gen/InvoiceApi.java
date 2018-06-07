@@ -104,11 +104,11 @@ public class InvoiceApi {
         httpClient.doPut(uri, null, requestOptions);
     }
 
-    public InvoiceItems createExternalCharges(final UUID accountId, final InvoiceItems body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final String paymentExternalKey, final String transactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
-        return createExternalCharges(accountId, body, requestedDate, Boolean.valueOf(false), pluginProperty, Boolean.valueOf(false), paymentExternalKey, transactionExternalKey, inputOptions);
+    public InvoiceItems createExternalCharges(final UUID accountId, final InvoiceItems body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return createExternalCharges(accountId, body, requestedDate, pluginProperty, Boolean.valueOf(false), inputOptions);
     }
 
-    public InvoiceItems createExternalCharges(final UUID accountId, final InvoiceItems body, final LocalDate requestedDate, final Boolean payInvoice, final Map<String, String> pluginProperty, final Boolean autoCommit, final String paymentExternalKey, final String transactionExternalKey, final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItems createExternalCharges(final UUID accountId, final InvoiceItems body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final Boolean autoCommit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createExternalCharges");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createExternalCharges");
 
@@ -119,20 +119,11 @@ public class InvoiceApi {
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
-        if (payInvoice != null) {
-            queryParams.put("payInvoice", String.valueOf(payInvoice));
-        }
         if (pluginProperty != null) {
             queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
         if (autoCommit != null) {
             queryParams.put("autoCommit", String.valueOf(autoCommit));
-        }
-        if (paymentExternalKey != null) {
-            queryParams.put("paymentExternalKey", String.valueOf(paymentExternalKey));
-        }
-        if (transactionExternalKey != null) {
-            queryParams.put("transactionExternalKey", String.valueOf(transactionExternalKey));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
