@@ -1,3 +1,6 @@
+1.0.2
+    Remove ability to make payment when creating external charges.
+
 1.0.1
     Enhance api AccountApi#payAllInvoices to take additional flags
 
