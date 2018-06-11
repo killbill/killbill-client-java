@@ -10,29 +10,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Security"
+- name: "Usage"
+- name: "InvoicePayment"
+- name: "Overdue"
+- name: "Credit"
 - name: "Account"
 - name: "Tenant"
-- name: "Overdue"
-- name: "InvoiceItem"
-- name: "PaymentTransaction"
-- name: "InvoicePayment"
-- name: "Admin"
-- name: "Bundle"
-- name: "Subscription"
-- name: "Usage"
-- name: "Catalog"
-- name: "Credit"
-- name: "PluginInfo"
-- name: "Invoice"
-- name: "Export"
-- name: "Payment"
 - name: "Tag"
-- name: "CustomField"
-- name: "TagDefinition"
-- name: "PaymentMethod"
-- name: "NodesInfo"
 - name: "PaymentGateway"
+- name: "CustomField"
+- name: "PaymentTransaction"
+- name: "NodesInfo"
+- name: "Invoice"
+- name: "Payment"
+- name: "InvoiceItem"
+- name: "Bundle"
+- name: "Admin"
+- name: "Catalog"
+- name: "Export"
+- name: "PaymentMethod"
+- name: "Subscription"
+- name: "PluginInfo"
+- name: "TagDefinition"
+- name: "Security"
 paths:
   /1.0/kb/accounts:
     get:
@@ -3981,6 +3981,13 @@ paths:
         required: false
         type: "boolean"
         default: false
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -5497,6 +5504,11 @@ paths:
         required: false
         type: "string"
         format: "date"
+      - name: "autoCommit"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -5504,11 +5516,6 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "autoCommit"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -5851,6 +5858,81 @@ paths:
               $ref: "#/definitions/Invoice"
       security:
       - basicAuth: []
+  /1.0/kb/invoices/taxes/{accountId}:
+    post:
+      tags:
+      - "Invoice"
+      summary: "Create tax items"
+      description: ""
+      operationId: "createTaxItems"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/InvoiceItem"
+      - name: "autoCommit"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "requestedDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: "Create tax items successfully"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/InvoiceItem"
+        400:
+          description: "Invalid account id supplied"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
   /1.0/kb/invoices/template:
     get:
       tags:
@@ -6094,6 +6176,13 @@ paths:
         required: false
         type: "string"
         format: "date"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -12519,6 +12608,18 @@ securityDefinitions:
   basicAuth:
     type: "basic"
 definitions:
+  Entity:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      createdDate:
+        type: "string"
+        format: "date-time"
+      updatedDate:
+        type: "string"
+        format: "date-time"
   Account:
     type: "object"
     properties:
@@ -12753,18 +12854,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Entity:
-    type: "object"
-    properties:
-      id:
-        type: "string"
-        format: "uuid"
-      createdDate:
-        type: "string"
-        format: "date-time"
-      updatedDate:
-        type: "string"
-        format: "date-time"
   Invoice:
     type: "object"
     properties:
@@ -13244,33 +13333,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      isBlockChanges:
-        type: "boolean"
-        default: false
-      isDisableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -13673,6 +13735,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      isBlockChanges:
+        type: "boolean"
+        default: false
+      isDisableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -13680,6 +13769,27 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
+  PluginInfo:
+    type: "object"
+    properties:
+      bundleSymbolicName:
+        type: "string"
+      pluginKey:
+        type: "string"
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -13710,27 +13820,21 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  PluginInfo:
+  SubscriptionUsageRecord:
     type: "object"
+    required:
+    - "subscriptionId"
+    - "unitUsageRecords"
     properties:
-      bundleSymbolicName:
+      subscriptionId:
         type: "string"
-      pluginKey:
+        format: "uuid"
+      trackingId:
         type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
+      unitUsageRecords:
         type: "array"
-        uniqueItems: true
         items:
-          $ref: "#/definitions/PluginServiceInfo"
+          $ref: "#/definitions/UnitUsageRecord"
   Subscription:
     type: "object"
     required:
@@ -13829,21 +13933,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  SubscriptionUsageRecord:
-    type: "object"
-    required:
-    - "subscriptionId"
-    - "unitUsageRecords"
-    properties:
-      subscriptionId:
-        type: "string"
-        format: "uuid"
-      trackingId:
-        type: "string"
-      unitUsageRecords:
-        type: "array"
-        items:
-          $ref: "#/definitions/UnitUsageRecord"
   Tier:
     type: "object"
     properties:
@@ -15081,23 +15170,6 @@ definitions:
         - "BTC"
       value:
         type: "number"
-  PhasePriceOverride:
-    type: "object"
-    properties:
-      planName:
-        type: "string"
-      phaseName:
-        type: "string"
-      phaseType:
-        type: "string"
-      fixedPrice:
-        type: "number"
-      recurringPrice:
-        type: "number"
-      usagePriceOverrides:
-        type: "array"
-        items:
-          $ref: "#/definitions/UsagePriceOverride"
   AccountTimeline:
     type: "object"
     properties:
@@ -15115,6 +15187,23 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/InvoicePayment"
+  PhasePriceOverride:
+    type: "object"
+    properties:
+      planName:
+        type: "string"
+      phaseName:
+        type: "string"
+      phaseType:
+        type: "string"
+      fixedPrice:
+        type: "number"
+      recurringPrice:
+        type: "number"
+      usagePriceOverrides:
+        type: "array"
+        items:
+          $ref: "#/definitions/UsagePriceOverride"
   PaymentMethod:
     type: "object"
     properties:
@@ -15853,6 +15942,14 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RolledUpUnit:
+    type: "object"
+    properties:
+      unitType:
+        type: "string"
+      amount:
+        type: "integer"
+        format: "int64"
   EventSubscription:
     type: "object"
     properties:
@@ -15915,14 +16012,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RolledUpUnit:
-    type: "object"
-    properties:
-      unitType:
-        type: "string"
-      amount:
-        type: "integer"
-        format: "int64"
   UnitUsageRecord:
     type: "object"
     properties:
@@ -16429,18 +16518,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -16455,6 +16532,18 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   Plan:
     type: "object"
     properties:

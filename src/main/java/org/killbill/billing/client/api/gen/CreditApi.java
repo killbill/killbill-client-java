@@ -21,6 +21,7 @@ package org.killbill.billing.client.api.gen;
 
 import org.killbill.billing.client.model.gen.Credit;
 import java.util.UUID;
+import java.util.Map;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -52,11 +53,11 @@ public class CreditApi {
         this.httpClient = httpClient;
     }
 
-    public Credit createCredit(final Credit body, final RequestOptions inputOptions) throws KillBillClientException {
-        return createCredit(body, Boolean.valueOf(false), inputOptions);
+    public Credit createCredit(final Credit body, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return createCredit(body, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public Credit createCredit(final Credit body, final Boolean autoCommit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Credit createCredit(final Credit body, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCredit");
 
         final String uri = "/1.0/kb/credits";
@@ -64,6 +65,9 @@ public class CreditApi {
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (autoCommit != null) {
             queryParams.put("autoCommit", String.valueOf(autoCommit));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

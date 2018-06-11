@@ -27,9 +27,9 @@ import org.killbill.billing.client.model.gen.InvoicePayment;
 import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
+import java.util.Map;
 import org.killbill.billing.client.model.InvoiceItems;
 import java.util.List;
-import java.util.Map;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
@@ -66,7 +66,7 @@ public class InvoiceApi {
         this.httpClient = httpClient;
     }
 
-    public Invoice adjustInvoiceItem(final UUID invoiceId, final InvoiceItem body, final LocalDate requestedDate, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice adjustInvoiceItem(final UUID invoiceId, final InvoiceItem body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling adjustInvoiceItem");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling adjustInvoiceItem");
 
@@ -76,6 +76,9 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -105,10 +108,10 @@ public class InvoiceApi {
     }
 
     public InvoiceItems createExternalCharges(final UUID accountId, final InvoiceItems body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        return createExternalCharges(accountId, body, requestedDate, pluginProperty, Boolean.valueOf(false), inputOptions);
+        return createExternalCharges(accountId, body, requestedDate, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public InvoiceItems createExternalCharges(final UUID accountId, final InvoiceItems body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final Boolean autoCommit, final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItems createExternalCharges(final UUID accountId, final InvoiceItems body, final LocalDate requestedDate, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createExternalCharges");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createExternalCharges");
 
@@ -119,11 +122,11 @@ public class InvoiceApi {
         if (requestedDate != null) {
             queryParams.put("requestedDate", String.valueOf(requestedDate));
         }
-        if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
-        }
         if (autoCommit != null) {
             queryParams.put("autoCommit", String.valueOf(autoCommit));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -248,6 +251,39 @@ public class InvoiceApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, Invoice.class, requestOptions);
+    }
+
+    public InvoiceItems createTaxItems(final UUID accountId, final InvoiceItems body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return createTaxItems(accountId, body, Boolean.valueOf(false), requestedDate, pluginProperty, inputOptions);
+    }
+
+    public InvoiceItems createTaxItems(final UUID accountId, final InvoiceItems body, final Boolean autoCommit, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createTaxItems");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createTaxItems");
+
+        final String uri = "/1.0/kb/invoices/taxes/{accountId}"
+          .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (autoCommit != null) {
+            queryParams.put("autoCommit", String.valueOf(autoCommit));
+        }
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doPost(uri, body, InvoiceItems.class, requestOptions);
     }
 
 
