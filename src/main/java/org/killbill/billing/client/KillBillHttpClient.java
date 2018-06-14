@@ -33,6 +33,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.killbill.billing.client.model.KillBillObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -392,7 +393,8 @@ public class KillBillHttpClient implements Closeable {
         }
     }
 
-    private void throwExceptionOnResponseError(final Response response) throws KillBillClientException {
+    @VisibleForTesting
+    void throwExceptionOnResponseError(final Response response) throws KillBillClientException {
         if (response.getStatusCode() == 401) {
             throw new KillBillClientException(
                     new IllegalArgumentException("Unauthorized - did you configure your RBAC and/or tenant credentials?"), response);
@@ -401,14 +403,16 @@ public class KillBillHttpClient implements Closeable {
             final BillingException exception = deserializeResponse(response, BillingException.class);
             if (exception != null) {
                 log.warn("Error " + response.getStatusCode() + " from Kill Bill: " + exception.getMessage());
+                throw new KillBillClientException(exception, response);
             } else {
                 log.warn("Error " + response.getStatusCode() + " from Kill Bill");
+                throw new KillBillClientException(response);
             }
-            throw new KillBillClientException(exception, response);
         }
     }
 
-    private <T> T deserializeResponse(final Response response, final Class<T> clazz) throws KillBillClientException {
+    @VisibleForTesting
+    <T> T deserializeResponse(final Response response, final Class<T> clazz) throws KillBillClientException {
         // No deserialization required
         if (Response.class.isAssignableFrom(clazz)) {
             return clazz.cast(response);

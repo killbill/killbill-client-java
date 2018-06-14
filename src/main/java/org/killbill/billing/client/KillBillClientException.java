@@ -31,6 +31,12 @@ public class KillBillClientException extends Exception {
         billingException = null;
     }
 
+    public KillBillClientException(final Response response) {
+        super();
+        this.response = response;
+        this.billingException = null;
+    }
+
     public KillBillClientException(final Exception cause, final Response response) {
         super(cause);
         this.response = response;
