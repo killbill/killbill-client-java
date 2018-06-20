@@ -15,17 +15,12 @@
  * under the License.
  */
 
-
 package org.killbill.billing.client.gen.api;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.UUID;
 
 import org.killbill.billing.catalog.api.Currency;
-import org.killbill.billing.catalog.api.PriceListSet;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
@@ -35,7 +30,6 @@ import org.killbill.billing.client.api.gen.SubscriptionApi;
 import org.killbill.billing.client.api.gen.TenantApi;
 import org.killbill.billing.client.model.Accounts;
 import org.killbill.billing.client.model.gen.Account;
-import org.killbill.billing.client.model.gen.StaticCatalog;
 import org.killbill.billing.client.model.gen.Subscription;
 import org.killbill.billing.client.model.gen.Tenant;
 import org.killbill.billing.util.api.AuditLevel;
@@ -43,11 +37,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.io.CharStreams;
-import com.google.common.io.Resources;
 
 /**
  * API tests for AccountApi
@@ -57,10 +47,8 @@ public class AccountApiTest {
     private final static String SERVER_HOST = "127.0.0.1";
     private final static int SERVER_PORT = 8080;
 
-
     private final static String TENANT_API_KEY = "swagger";
     private final static String TENANT_API_SECRET = "swagger$ecr$t";
-
 
     private Tenant tenant;
 
@@ -94,10 +82,8 @@ public class AccountApiTest {
                                        .withComment("No Comment")
                                        .build();
 
-
-        tenant =  setupTenant();
+        tenant = setupTenant();
     }
-
 
     @Test
     public void basicTest() throws Exception {
@@ -121,7 +107,6 @@ public class AccountApiTest {
         Assert.assertEquals(result3.getExternalKey(), externalKey);
         Assert.assertEquals(result3.getEmail(), "somebody@something.org");
 
-
         final Subscription subscription = new Subscription();
         subscription.setAccountId(accountId);
         //subscription.setExternalKey(bundleExternalKey);
@@ -129,7 +114,6 @@ public class AccountApiTest {
         subscription.setPlanName("simple-monthly");
         final Subscription subscription2 = subscriptionApi.createSubscription(subscription, null, null, false, false, null, false, -1L, ImmutableMap.<String, String>of(), requestOptions);
         Assert.assertNotNull(subscription2);
-
 
         accountApi.closeAccount(accountId, false, false, false, true, requestOptions);
 
@@ -168,7 +152,6 @@ public class AccountApiTest {
         Assert.assertNotNull(accounts);
         Assert.assertEquals(accounts.size(), 1);
     }
-
 
     private Tenant setupTenant() throws KillBillClientException, IOException {
         Tenant tenant = null;

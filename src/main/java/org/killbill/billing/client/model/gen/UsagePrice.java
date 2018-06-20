@@ -25,7 +25,7 @@ import java.util.List;
 import org.killbill.billing.catalog.api.BillingMode;
 import org.killbill.billing.catalog.api.TierBlockPolicy;
 import org.killbill.billing.catalog.api.UsageType;
-import org.killbill.billing.client.model.gen.TierPriceOverride;
+import org.killbill.billing.client.model.gen.TierPrice;
 
 /**
  *           DO NOT EDIT !!!
@@ -35,7 +35,7 @@ import org.killbill.billing.client.model.gen.TierPriceOverride;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class UsagePriceOverride {
+public class UsagePrice {
 
     private String usageName = null;
 
@@ -45,27 +45,27 @@ public class UsagePriceOverride {
 
     private TierBlockPolicy tierBlockPolicy = null;
 
-    private List<TierPriceOverride> tierPriceOverrides = null;
+    private List<TierPrice> tierPrices = null;
 
 
-    public UsagePriceOverride() {
+    public UsagePrice() {
     }
 
-    public UsagePriceOverride(final String usageName,
+    public UsagePrice(final String usageName,
                      final UsageType usageType,
                      final BillingMode billingMode,
                      final TierBlockPolicy tierBlockPolicy,
-                     final List<TierPriceOverride> tierPriceOverrides) {
+                     final List<TierPrice> tierPrices) {
         this.usageName = usageName;
         this.usageType = usageType;
         this.billingMode = billingMode;
         this.tierBlockPolicy = tierBlockPolicy;
-        this.tierPriceOverrides = tierPriceOverrides;
+        this.tierPrices = tierPrices;
 
     }
 
 
-    public UsagePriceOverride setUsageName(final String usageName) {
+    public UsagePrice setUsageName(final String usageName) {
         this.usageName = usageName;
         return this;
     }
@@ -74,7 +74,7 @@ public class UsagePriceOverride {
         return usageName;
     }
 
-    public UsagePriceOverride setUsageType(final UsageType usageType) {
+    public UsagePrice setUsageType(final UsageType usageType) {
         this.usageType = usageType;
         return this;
     }
@@ -83,7 +83,7 @@ public class UsagePriceOverride {
         return usageType;
     }
 
-    public UsagePriceOverride setBillingMode(final BillingMode billingMode) {
+    public UsagePrice setBillingMode(final BillingMode billingMode) {
         this.billingMode = billingMode;
         return this;
     }
@@ -92,7 +92,7 @@ public class UsagePriceOverride {
         return billingMode;
     }
 
-    public UsagePriceOverride setTierBlockPolicy(final TierBlockPolicy tierBlockPolicy) {
+    public UsagePrice setTierBlockPolicy(final TierBlockPolicy tierBlockPolicy) {
         this.tierBlockPolicy = tierBlockPolicy;
         return this;
     }
@@ -101,21 +101,21 @@ public class UsagePriceOverride {
         return tierBlockPolicy;
     }
 
-    public UsagePriceOverride setTierPriceOverrides(final List<TierPriceOverride> tierPriceOverrides) {
-        this.tierPriceOverrides = tierPriceOverrides;
+    public UsagePrice setTierPrices(final List<TierPrice> tierPrices) {
+        this.tierPrices = tierPrices;
         return this;
     }
 
-    public UsagePriceOverride addTierPriceOverridesItem(final TierPriceOverride tierPriceOverridesItem) {
-        if (this.tierPriceOverrides == null) {
-            this.tierPriceOverrides = new ArrayList<TierPriceOverride>();
+    public UsagePrice addTierPricesItem(final TierPrice tierPricesItem) {
+        if (this.tierPrices == null) {
+            this.tierPrices = new ArrayList<TierPrice>();
         }
-        this.tierPriceOverrides.add(tierPriceOverridesItem);
+        this.tierPrices.add(tierPricesItem);
         return this;
     }
 
-    public List<TierPriceOverride> getTierPriceOverrides() {
-        return tierPriceOverrides;
+    public List<TierPrice> getTierPrices() {
+        return tierPrices;
     }
 
     @Override
@@ -126,12 +126,12 @@ public class UsagePriceOverride {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        UsagePriceOverride usagePriceOverride = (UsagePriceOverride) o;
-        return Objects.equals(this.usageName, usagePriceOverride.usageName) &&
-        Objects.equals(this.usageType, usagePriceOverride.usageType) &&
-        Objects.equals(this.billingMode, usagePriceOverride.billingMode) &&
-        Objects.equals(this.tierBlockPolicy, usagePriceOverride.tierBlockPolicy) &&
-        Objects.equals(this.tierPriceOverrides, usagePriceOverride.tierPriceOverrides);
+        UsagePrice usagePrice = (UsagePrice) o;
+        return Objects.equals(this.usageName, usagePrice.usageName) &&
+        Objects.equals(this.usageType, usagePrice.usageType) &&
+        Objects.equals(this.billingMode, usagePrice.billingMode) &&
+        Objects.equals(this.tierBlockPolicy, usagePrice.tierBlockPolicy) &&
+        Objects.equals(this.tierPrices, usagePrice.tierPrices);
 
     }
 
@@ -141,20 +141,20 @@ public class UsagePriceOverride {
                             usageType,
                             billingMode,
                             tierBlockPolicy,
-                            tierPriceOverrides);
+                            tierPrices);
     }
 
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class UsagePriceOverride {\n");
+        sb.append("class UsagePrice {\n");
         
         sb.append("    usageName: ").append(toIndentedString(usageName)).append("\n");
         sb.append("    usageType: ").append(toIndentedString(usageType)).append("\n");
         sb.append("    billingMode: ").append(toIndentedString(billingMode)).append("\n");
         sb.append("    tierBlockPolicy: ").append(toIndentedString(tierBlockPolicy)).append("\n");
-        sb.append("    tierPriceOverrides: ").append(toIndentedString(tierPriceOverrides)).append("\n");
+        sb.append("    tierPrices: ").append(toIndentedString(tierPrices)).append("\n");
         sb.append("}");
         return sb.toString();
     }

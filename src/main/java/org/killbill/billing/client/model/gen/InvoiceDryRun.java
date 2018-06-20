@@ -28,7 +28,7 @@ import org.killbill.billing.catalog.api.BillingActionPolicy;
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.catalog.api.PhaseType;
 import org.killbill.billing.catalog.api.ProductCategory;
-import org.killbill.billing.client.model.gen.PhasePriceOverride;
+import org.killbill.billing.client.model.gen.PhasePrice;
 import org.killbill.billing.entitlement.api.SubscriptionEventType;
 import org.killbill.billing.invoice.api.DryRunType;
 
@@ -64,7 +64,7 @@ public class InvoiceDryRun {
 
     private BillingActionPolicy billingPolicy = null;
 
-    private List<PhasePriceOverride> priceOverrides = null;
+    private List<PhasePrice> priceOverrides = null;
 
 
     public InvoiceDryRun() {
@@ -81,7 +81,7 @@ public class InvoiceDryRun {
                      final UUID bundleId,
                      final LocalDate effectiveDate,
                      final BillingActionPolicy billingPolicy,
-                     final List<PhasePriceOverride> priceOverrides) {
+                     final List<PhasePrice> priceOverrides) {
         this.dryRunType = dryRunType;
         this.dryRunAction = dryRunAction;
         this.phaseType = phaseType;
@@ -197,20 +197,20 @@ public class InvoiceDryRun {
         return billingPolicy;
     }
 
-    public InvoiceDryRun setPriceOverrides(final List<PhasePriceOverride> priceOverrides) {
+    public InvoiceDryRun setPriceOverrides(final List<PhasePrice> priceOverrides) {
         this.priceOverrides = priceOverrides;
         return this;
     }
 
-    public InvoiceDryRun addPriceOverridesItem(final PhasePriceOverride priceOverridesItem) {
+    public InvoiceDryRun addPriceOverridesItem(final PhasePrice priceOverridesItem) {
         if (this.priceOverrides == null) {
-            this.priceOverrides = new ArrayList<PhasePriceOverride>();
+            this.priceOverrides = new ArrayList<PhasePrice>();
         }
         this.priceOverrides.add(priceOverridesItem);
         return this;
     }
 
-    public List<PhasePriceOverride> getPriceOverrides() {
+    public List<PhasePrice> getPriceOverrides() {
         return priceOverrides;
     }
 

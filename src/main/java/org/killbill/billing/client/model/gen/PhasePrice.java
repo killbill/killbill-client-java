@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import org.killbill.billing.client.model.gen.UsagePriceOverride;
+import org.killbill.billing.client.model.gen.UsagePrice;
 
 /**
  *           DO NOT EDIT !!!
@@ -33,7 +33,7 @@ import org.killbill.billing.client.model.gen.UsagePriceOverride;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class PhasePriceOverride {
+public class PhasePrice {
 
     private String planName = null;
 
@@ -45,29 +45,29 @@ public class PhasePriceOverride {
 
     private BigDecimal recurringPrice = null;
 
-    private List<UsagePriceOverride> usagePriceOverrides = null;
+    private List<UsagePrice> usagePrices = null;
 
 
-    public PhasePriceOverride() {
+    public PhasePrice() {
     }
 
-    public PhasePriceOverride(final String planName,
+    public PhasePrice(final String planName,
                      final String phaseName,
                      final String phaseType,
                      final BigDecimal fixedPrice,
                      final BigDecimal recurringPrice,
-                     final List<UsagePriceOverride> usagePriceOverrides) {
+                     final List<UsagePrice> usagePrices) {
         this.planName = planName;
         this.phaseName = phaseName;
         this.phaseType = phaseType;
         this.fixedPrice = fixedPrice;
         this.recurringPrice = recurringPrice;
-        this.usagePriceOverrides = usagePriceOverrides;
+        this.usagePrices = usagePrices;
 
     }
 
 
-    public PhasePriceOverride setPlanName(final String planName) {
+    public PhasePrice setPlanName(final String planName) {
         this.planName = planName;
         return this;
     }
@@ -76,7 +76,7 @@ public class PhasePriceOverride {
         return planName;
     }
 
-    public PhasePriceOverride setPhaseName(final String phaseName) {
+    public PhasePrice setPhaseName(final String phaseName) {
         this.phaseName = phaseName;
         return this;
     }
@@ -85,7 +85,7 @@ public class PhasePriceOverride {
         return phaseName;
     }
 
-    public PhasePriceOverride setPhaseType(final String phaseType) {
+    public PhasePrice setPhaseType(final String phaseType) {
         this.phaseType = phaseType;
         return this;
     }
@@ -94,7 +94,7 @@ public class PhasePriceOverride {
         return phaseType;
     }
 
-    public PhasePriceOverride setFixedPrice(final BigDecimal fixedPrice) {
+    public PhasePrice setFixedPrice(final BigDecimal fixedPrice) {
         this.fixedPrice = fixedPrice;
         return this;
     }
@@ -103,7 +103,7 @@ public class PhasePriceOverride {
         return fixedPrice;
     }
 
-    public PhasePriceOverride setRecurringPrice(final BigDecimal recurringPrice) {
+    public PhasePrice setRecurringPrice(final BigDecimal recurringPrice) {
         this.recurringPrice = recurringPrice;
         return this;
     }
@@ -112,21 +112,21 @@ public class PhasePriceOverride {
         return recurringPrice;
     }
 
-    public PhasePriceOverride setUsagePriceOverrides(final List<UsagePriceOverride> usagePriceOverrides) {
-        this.usagePriceOverrides = usagePriceOverrides;
+    public PhasePrice setUsagePrices(final List<UsagePrice> usagePrices) {
+        this.usagePrices = usagePrices;
         return this;
     }
 
-    public PhasePriceOverride addUsagePriceOverridesItem(final UsagePriceOverride usagePriceOverridesItem) {
-        if (this.usagePriceOverrides == null) {
-            this.usagePriceOverrides = new ArrayList<UsagePriceOverride>();
+    public PhasePrice addUsagePricesItem(final UsagePrice usagePricesItem) {
+        if (this.usagePrices == null) {
+            this.usagePrices = new ArrayList<UsagePrice>();
         }
-        this.usagePriceOverrides.add(usagePriceOverridesItem);
+        this.usagePrices.add(usagePricesItem);
         return this;
     }
 
-    public List<UsagePriceOverride> getUsagePriceOverrides() {
-        return usagePriceOverrides;
+    public List<UsagePrice> getUsagePrices() {
+        return usagePrices;
     }
 
     @Override
@@ -137,13 +137,13 @@ public class PhasePriceOverride {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        PhasePriceOverride phasePriceOverride = (PhasePriceOverride) o;
-        return Objects.equals(this.planName, phasePriceOverride.planName) &&
-        Objects.equals(this.phaseName, phasePriceOverride.phaseName) &&
-        Objects.equals(this.phaseType, phasePriceOverride.phaseType) &&
-        Objects.equals(this.fixedPrice, phasePriceOverride.fixedPrice) &&
-        Objects.equals(this.recurringPrice, phasePriceOverride.recurringPrice) &&
-        Objects.equals(this.usagePriceOverrides, phasePriceOverride.usagePriceOverrides);
+        PhasePrice phasePrice = (PhasePrice) o;
+        return Objects.equals(this.planName, phasePrice.planName) &&
+        Objects.equals(this.phaseName, phasePrice.phaseName) &&
+        Objects.equals(this.phaseType, phasePrice.phaseType) &&
+        Objects.equals(this.fixedPrice, phasePrice.fixedPrice) &&
+        Objects.equals(this.recurringPrice, phasePrice.recurringPrice) &&
+        Objects.equals(this.usagePrices, phasePrice.usagePrices);
 
     }
 
@@ -154,21 +154,21 @@ public class PhasePriceOverride {
                             phaseType,
                             fixedPrice,
                             recurringPrice,
-                            usagePriceOverrides);
+                            usagePrices);
     }
 
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class PhasePriceOverride {\n");
+        sb.append("class PhasePrice {\n");
         
         sb.append("    planName: ").append(toIndentedString(planName)).append("\n");
         sb.append("    phaseName: ").append(toIndentedString(phaseName)).append("\n");
         sb.append("    phaseType: ").append(toIndentedString(phaseType)).append("\n");
         sb.append("    fixedPrice: ").append(toIndentedString(fixedPrice)).append("\n");
         sb.append("    recurringPrice: ").append(toIndentedString(recurringPrice)).append("\n");
-        sb.append("    usagePriceOverrides: ").append(toIndentedString(usagePriceOverrides)).append("\n");
+        sb.append("    usagePrices: ").append(toIndentedString(usagePrices)).append("\n");
         sb.append("}");
         return sb.toString();
     }

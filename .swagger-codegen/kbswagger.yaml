@@ -10,29 +10,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "Tenant"
-- name: "CustomField"
-- name: "TagDefinition"
-- name: "PluginInfo"
-- name: "Usage"
-- name: "PaymentTransaction"
-- name: "Invoice"
-- name: "Security"
-- name: "Overdue"
-- name: "Export"
-- name: "InvoiceItem"
-- name: "Catalog"
-- name: "Subscription"
 - name: "InvoicePayment"
-- name: "PaymentGateway"
-- name: "PaymentMethod"
-- name: "Bundle"
-- name: "Tag"
-- name: "Credit"
-- name: "Account"
 - name: "Payment"
+- name: "CustomField"
+- name: "Account"
+- name: "Catalog"
+- name: "Credit"
+- name: "Tag"
+- name: "Tenant"
+- name: "Bundle"
+- name: "Usage"
 - name: "Admin"
+- name: "Export"
+- name: "PaymentGateway"
+- name: "Subscription"
+- name: "PluginInfo"
+- name: "PaymentMethod"
+- name: "Overdue"
 - name: "NodesInfo"
+- name: "TagDefinition"
+- name: "Invoice"
+- name: "InvoiceItem"
+- name: "Security"
+- name: "PaymentTransaction"
 paths:
   /1.0/kb/accounts:
     get:
@@ -13267,19 +13267,6 @@ definitions:
         type: "string"
       prettyName:
         type: "string"
-  BlockPriceOverride:
-    type: "object"
-    properties:
-      unitName:
-        type: "string"
-      size:
-        type: "number"
-        format: "double"
-      price:
-        type: "number"
-      max:
-        type: "number"
-        format: "double"
   AuditLog:
     type: "object"
     properties:
@@ -13397,33 +13384,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      isBlockChanges:
-        type: "boolean"
-        default: false
-      isDisableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -13826,6 +13786,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      isBlockChanges:
+        type: "boolean"
+        default: false
+      isDisableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -13833,27 +13820,6 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
-  PluginInfo:
-    type: "object"
-    properties:
-      bundleSymbolicName:
-        type: "string"
-      pluginKey:
-        type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -13884,21 +13850,27 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  SubscriptionUsageRecord:
+  PluginInfo:
     type: "object"
-    required:
-    - "subscriptionId"
-    - "unitUsageRecords"
     properties:
-      subscriptionId:
+      bundleSymbolicName:
         type: "string"
-        format: "uuid"
-      trackingId:
+      pluginKey:
         type: "string"
-      unitUsageRecords:
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
         type: "array"
+        uniqueItems: true
         items:
-          $ref: "#/definitions/UnitUsageRecord"
+          $ref: "#/definitions/PluginServiceInfo"
   Subscription:
     type: "object"
     required:
@@ -13993,11 +13965,30 @@ definitions:
       priceOverrides:
         type: "array"
         items:
-          $ref: "#/definitions/PhasePriceOverride"
+          $ref: "#/definitions/PhasePrice"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/PhasePrice"
       auditLogs:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  SubscriptionUsageRecord:
+    type: "object"
+    required:
+    - "subscriptionId"
+    - "unitUsageRecords"
+    properties:
+      subscriptionId:
+        type: "string"
+        format: "uuid"
+      trackingId:
+        type: "string"
+      unitUsageRecords:
+        type: "array"
+        items:
+          $ref: "#/definitions/UnitUsageRecord"
   Tier:
     type: "object"
     properties:
@@ -14261,6 +14252,13 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/OverdueStateConfig"
+  TierPrice:
+    type: "object"
+    properties:
+      blockPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/BlockPrice"
   Catalog:
     type: "object"
     properties:
@@ -15235,23 +15233,6 @@ definitions:
         - "BTC"
       value:
         type: "number"
-  PhasePriceOverride:
-    type: "object"
-    properties:
-      planName:
-        type: "string"
-      phaseName:
-        type: "string"
-      phaseType:
-        type: "string"
-      fixedPrice:
-        type: "number"
-      recurringPrice:
-        type: "number"
-      usagePriceOverrides:
-        type: "array"
-        items:
-          $ref: "#/definitions/UsagePriceOverride"
   AccountTimeline:
     type: "object"
     properties:
@@ -15379,7 +15360,7 @@ definitions:
       priceOverrides:
         type: "array"
         items:
-          $ref: "#/definitions/PhasePriceOverride"
+          $ref: "#/definitions/PhasePrice"
   NodeCommand:
     type: "object"
     properties:
@@ -15450,6 +15431,30 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  UsagePrice:
+    type: "object"
+    properties:
+      usageName:
+        type: "string"
+      usageType:
+        type: "string"
+        enum:
+        - "CAPACITY"
+        - "CONSUMABLE"
+      billingMode:
+        type: "string"
+        enum:
+        - "IN_ADVANCE"
+        - "IN_ARREAR"
+      tierBlockPolicy:
+        type: "string"
+        enum:
+        - "ALL_TIERS"
+        - "TOP_TIER"
+      tierPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/TierPrice"
   InvoiceItem:
     type: "object"
     required:
@@ -15746,37 +15751,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  TierPriceOverride:
-    type: "object"
-    properties:
-      blockPriceOverrides:
-        type: "array"
-        items:
-          $ref: "#/definitions/BlockPriceOverride"
-  UsagePriceOverride:
-    type: "object"
-    properties:
-      usageName:
-        type: "string"
-      usageType:
-        type: "string"
-        enum:
-        - "CAPACITY"
-        - "CONSUMABLE"
-      billingMode:
-        type: "string"
-        enum:
-        - "IN_ADVANCE"
-        - "IN_ARREAR"
-      tierBlockPolicy:
-        type: "string"
-        enum:
-        - "ALL_TIERS"
-        - "TOP_TIER"
-      tierPriceOverrides:
-        type: "array"
-        items:
-          $ref: "#/definitions/TierPriceOverride"
   TieredBlock:
     type: "object"
     properties:
@@ -15790,25 +15764,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  Tenant:
-    type: "object"
-    required:
-    - "apiKey"
-    - "apiSecret"
-    properties:
-      tenantId:
-        type: "string"
-        format: "uuid"
-      externalKey:
-        type: "string"
-      apiKey:
-        type: "string"
-      apiSecret:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
   Credit:
     type: "object"
     required:
@@ -16007,14 +15962,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RolledUpUnit:
+  Tenant:
     type: "object"
+    required:
+    - "apiKey"
+    - "apiSecret"
     properties:
-      unitType:
+      tenantId:
         type: "string"
-      amount:
-        type: "integer"
-        format: "int64"
+        format: "uuid"
+      externalKey:
+        type: "string"
+      apiKey:
+        type: "string"
+      apiSecret:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
   EventSubscription:
     type: "object"
     properties:
@@ -16077,6 +16043,14 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RolledUpUnit:
+    type: "object"
+    properties:
+      unitType:
+        type: "string"
+      amount:
+        type: "integer"
+        format: "int64"
   UnitUsageRecord:
     type: "object"
     properties:
@@ -16103,6 +16077,23 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  PhasePrice:
+    type: "object"
+    properties:
+      planName:
+        type: "string"
+      phaseName:
+        type: "string"
+      phaseType:
+        type: "string"
+      fixedPrice:
+        type: "number"
+      recurringPrice:
+        type: "number"
+      usagePrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/UsagePrice"
   PriceList:
     type: "object"
     properties:
@@ -16583,18 +16574,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -16609,6 +16588,18 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   Plan:
     type: "object"
     properties:
@@ -16650,6 +16641,19 @@ definitions:
         default: false
       session:
         $ref: "#/definitions/Session"
+  BlockPrice:
+    type: "object"
+    properties:
+      unitName:
+        type: "string"
+      size:
+        type: "number"
+        format: "double"
+      price:
+        type: "number"
+      max:
+        type: "number"
+        format: "double"
   RolledUpUsage:
     type: "object"
     properties:

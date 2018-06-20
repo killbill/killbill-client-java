@@ -20,9 +20,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
-import org.killbill.billing.client.model.gen.Price;
+import java.math.BigDecimal;
 
 /**
  *           DO NOT EDIT !!!
@@ -32,48 +30,66 @@ import org.killbill.billing.client.model.gen.Price;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class InternationalPrice {
+public class BlockPrice {
 
-    private Boolean zero = false;
+    private String unitName = null;
 
-    private List<Price> prices = null;
+    private Double size = null;
+
+    private BigDecimal price = null;
+
+    private Double max = null;
 
 
-    public InternationalPrice() {
+    public BlockPrice() {
     }
 
-    public InternationalPrice(final Boolean zero,
-                     final List<Price> prices) {
-        this.zero = zero;
-        this.prices = prices;
+    public BlockPrice(final String unitName,
+                     final Double size,
+                     final BigDecimal price,
+                     final Double max) {
+        this.unitName = unitName;
+        this.size = size;
+        this.price = price;
+        this.max = max;
 
     }
 
 
-    public InternationalPrice setZero(final Boolean zero) {
-        this.zero = zero;
+    public BlockPrice setUnitName(final String unitName) {
+        this.unitName = unitName;
         return this;
     }
 
-    public Boolean isZero() {
-        return zero;
+    public String getUnitName() {
+        return unitName;
     }
 
-    public InternationalPrice setPrices(final List<Price> prices) {
-        this.prices = prices;
+    public BlockPrice setSize(final Double size) {
+        this.size = size;
         return this;
     }
 
-    public InternationalPrice addPricesItem(final Price pricesItem) {
-        if (this.prices == null) {
-            this.prices = new ArrayList<Price>();
-        }
-        this.prices.add(pricesItem);
+    public Double getSize() {
+        return size;
+    }
+
+    public BlockPrice setPrice(final BigDecimal price) {
+        this.price = price;
         return this;
     }
 
-    public List<Price> getPrices() {
-        return prices;
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public BlockPrice setMax(final Double max) {
+        this.max = max;
+        return this;
+    }
+
+    public Double getMax() {
+        return max;
     }
 
     @Override
@@ -84,26 +100,32 @@ public class InternationalPrice {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        InternationalPrice internationalPrice = (InternationalPrice) o;
-        return Objects.equals(this.zero, internationalPrice.zero) &&
-        Objects.equals(this.prices, internationalPrice.prices);
+        BlockPrice blockPrice = (BlockPrice) o;
+        return Objects.equals(this.unitName, blockPrice.unitName) &&
+        Objects.equals(this.size, blockPrice.size) &&
+        Objects.equals(this.price, blockPrice.price) &&
+        Objects.equals(this.max, blockPrice.max);
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(zero,
-                            prices);
+        return Objects.hash(unitName,
+                            size,
+                            price,
+                            max);
     }
 
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class InternationalPrice {\n");
+        sb.append("class BlockPrice {\n");
         
-        sb.append("    zero: ").append(toIndentedString(zero)).append("\n");
-        sb.append("    prices: ").append(toIndentedString(prices)).append("\n");
+        sb.append("    unitName: ").append(toIndentedString(unitName)).append("\n");
+        sb.append("    size: ").append(toIndentedString(size)).append("\n");
+        sb.append("    price: ").append(toIndentedString(price)).append("\n");
+        sb.append("    max: ").append(toIndentedString(max)).append("\n");
         sb.append("}");
         return sb.toString();
     }

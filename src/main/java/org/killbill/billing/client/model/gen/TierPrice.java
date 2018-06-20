@@ -20,6 +20,9 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import org.killbill.billing.client.model.gen.BlockPrice;
 
 /**
  *           DO NOT EDIT !!!
@@ -29,13 +32,36 @@ import java.util.Arrays;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class IteratorPlanPhase {
+public class TierPrice {
+
+    private List<BlockPrice> blockPrices = null;
 
 
-    public IteratorPlanPhase() {
+    public TierPrice() {
+    }
+
+    public TierPrice(final List<BlockPrice> blockPrices) {
+        this.blockPrices = blockPrices;
+
     }
 
 
+    public TierPrice setBlockPrices(final List<BlockPrice> blockPrices) {
+        this.blockPrices = blockPrices;
+        return this;
+    }
+
+    public TierPrice addBlockPricesItem(final BlockPrice blockPricesItem) {
+        if (this.blockPrices == null) {
+            this.blockPrices = new ArrayList<BlockPrice>();
+        }
+        this.blockPrices.add(blockPricesItem);
+        return this;
+    }
+
+    public List<BlockPrice> getBlockPrices() {
+        return blockPrices;
+    }
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -45,21 +71,23 @@ public class IteratorPlanPhase {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        return true;
+        TierPrice tierPrice = (TierPrice) o;
+        return Objects.equals(this.blockPrices, tierPrice.blockPrices);
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash();
+        return Objects.hash(blockPrices);
     }
 
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class IteratorPlanPhase {\n");
+        sb.append("class TierPrice {\n");
         
+        sb.append("    blockPrices: ").append(toIndentedString(blockPrices)).append("\n");
         sb.append("}");
         return sb.toString();
     }

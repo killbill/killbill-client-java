@@ -29,7 +29,7 @@ import org.killbill.billing.catalog.api.PhaseType;
 import org.killbill.billing.catalog.api.ProductCategory;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.EventSubscription;
-import org.killbill.billing.client.model.gen.PhasePriceOverride;
+import org.killbill.billing.client.model.gen.PhasePrice;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementSourceType;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementState;
 
@@ -81,7 +81,9 @@ public class Subscription extends KillBillObject {
 
     private List<EventSubscription> events = null;
 
-    private List<PhasePriceOverride> priceOverrides = null;
+    private List<PhasePrice> priceOverrides = null;
+
+    private List<PhasePrice> prices = null;
 
 
 
@@ -107,7 +109,8 @@ public class Subscription extends KillBillObject {
                      final LocalDate billingEndDate,
                      final Integer billCycleDayLocal,
                      final List<EventSubscription> events,
-                     final List<PhasePriceOverride> priceOverrides,
+                     final List<PhasePrice> priceOverrides,
+                     final List<PhasePrice> prices,
                      final List<AuditLog> auditLogs) {
         super(auditLogs);
         this.accountId = accountId;
@@ -130,6 +133,7 @@ public class Subscription extends KillBillObject {
         this.billCycleDayLocal = billCycleDayLocal;
         this.events = events;
         this.priceOverrides = priceOverrides;
+        this.prices = prices;
 
     }
 
@@ -313,21 +317,38 @@ public class Subscription extends KillBillObject {
         return events;
     }
 
-    public Subscription setPriceOverrides(final List<PhasePriceOverride> priceOverrides) {
+    public Subscription setPriceOverrides(final List<PhasePrice> priceOverrides) {
         this.priceOverrides = priceOverrides;
         return this;
     }
 
-    public Subscription addPriceOverridesItem(final PhasePriceOverride priceOverridesItem) {
+    public Subscription addPriceOverridesItem(final PhasePrice priceOverridesItem) {
         if (this.priceOverrides == null) {
-            this.priceOverrides = new ArrayList<PhasePriceOverride>();
+            this.priceOverrides = new ArrayList<PhasePrice>();
         }
         this.priceOverrides.add(priceOverridesItem);
         return this;
     }
 
-    public List<PhasePriceOverride> getPriceOverrides() {
+    public List<PhasePrice> getPriceOverrides() {
         return priceOverrides;
+    }
+
+    public Subscription setPrices(final List<PhasePrice> prices) {
+        this.prices = prices;
+        return this;
+    }
+
+    public Subscription addPricesItem(final PhasePrice pricesItem) {
+        if (this.prices == null) {
+            this.prices = new ArrayList<PhasePrice>();
+        }
+        this.prices.add(pricesItem);
+        return this;
+    }
+
+    public List<PhasePrice> getPrices() {
+        return prices;
     }
 
     @Override
@@ -359,6 +380,7 @@ public class Subscription extends KillBillObject {
         Objects.equals(this.billCycleDayLocal, subscription.billCycleDayLocal) &&
         Objects.equals(this.events, subscription.events) &&
         Objects.equals(this.priceOverrides, subscription.priceOverrides) &&
+        Objects.equals(this.prices, subscription.prices) &&
         Objects.equals(this.auditLogs, subscription.auditLogs);
 
     }
@@ -385,6 +407,7 @@ public class Subscription extends KillBillObject {
                             billCycleDayLocal,
                             events,
                             priceOverrides,
+                            prices,
                             auditLogs, super.hashCode());
     }
 
@@ -414,6 +437,7 @@ public class Subscription extends KillBillObject {
         sb.append("    billCycleDayLocal: ").append(toIndentedString(billCycleDayLocal)).append("\n");
         sb.append("    events: ").append(toIndentedString(events)).append("\n");
         sb.append("    priceOverrides: ").append(toIndentedString(priceOverrides)).append("\n");
+        sb.append("    prices: ").append(toIndentedString(prices)).append("\n");
         sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
