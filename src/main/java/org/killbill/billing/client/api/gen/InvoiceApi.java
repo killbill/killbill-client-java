@@ -434,6 +434,35 @@ public class InvoiceApi {
         return httpClient.doGet(uri, String.class, requestOptions);
     }
 
+    public Invoice getInvoiceByItemId(final UUID itemId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoiceByItemId(itemId, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    }
+
+    public Invoice getInvoiceByItemId(final UUID itemId, final Boolean withItems, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(itemId, "Missing the required parameter 'itemId' when calling getInvoiceByItemId");
+
+        final String uri = "/1.0/kb/invoices/byItemId/{itemId}"
+          .replaceAll("\\{" + "itemId" + "\\}", itemId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (withItems != null) {
+            queryParams.put("withItems", String.valueOf(withItems));
+        }
+        if (withChildrenItems != null) {
+            queryParams.put("withChildrenItems", String.valueOf(withChildrenItems));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, Invoice.class, requestOptions);
+    }
+
     public Invoice getInvoiceByNumber(final Integer invoiceNumber, final RequestOptions inputOptions) throws KillBillClientException {
         return getInvoiceByNumber(invoiceNumber, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }

@@ -10,29 +10,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "InvoicePayment"
-- name: "Payment"
 - name: "CustomField"
-- name: "Account"
-- name: "Catalog"
-- name: "Credit"
-- name: "Tag"
-- name: "Tenant"
-- name: "Bundle"
-- name: "Usage"
-- name: "Admin"
-- name: "Export"
-- name: "PaymentGateway"
-- name: "Subscription"
-- name: "PluginInfo"
 - name: "PaymentMethod"
 - name: "Overdue"
+- name: "Credit"
+- name: "Tenant"
 - name: "NodesInfo"
-- name: "TagDefinition"
-- name: "Invoice"
-- name: "InvoiceItem"
+- name: "Account"
 - name: "Security"
+- name: "Export"
+- name: "Tag"
+- name: "TagDefinition"
+- name: "Catalog"
+- name: "PluginInfo"
+- name: "InvoiceItem"
+- name: "InvoicePayment"
+- name: "PaymentGateway"
+- name: "Subscription"
+- name: "Admin"
 - name: "PaymentTransaction"
+- name: "Usage"
+- name: "Payment"
+- name: "Bundle"
+- name: "Invoice"
 paths:
   /1.0/kb/accounts:
     get:
@@ -5338,6 +5338,58 @@ paths:
             $ref: "#/definitions/Invoice"
         400:
           description: "Invalid account id or target datetime supplied"
+      security:
+      - basicAuth: []
+  /1.0/kb/invoices/byItemId/{itemId}:
+    get:
+      tags:
+      - "Invoice"
+      summary: "Retrieve an invoice by invoice item id"
+      description: ""
+      operationId: "getInvoiceByItemId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "itemId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "withItems"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withChildrenItems"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      - name: "X-Killbill-ApiKey"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-ApiSecret"
+        in: "header"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Invoice"
+        404:
+          description: "Invoice not found"
       security:
       - basicAuth: []
   /1.0/kb/invoices/byNumber/{invoiceNumber}:
@@ -13310,6 +13362,13 @@ definitions:
         type: "string"
       history:
         $ref: "#/definitions/Entity"
+  NodeCommandProperty:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      value:
+        type: "object"
   OverdueState:
     type: "object"
     properties:
@@ -13334,13 +13393,6 @@ definitions:
       reevaluationIntervalDays:
         type: "integer"
         format: "int32"
-  NodeCommandProperty:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      value:
-        type: "object"
   ComboPaymentTransaction:
     type: "object"
     properties:
@@ -13384,6 +13436,33 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  OverdueStateConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      isClearState:
+        type: "boolean"
+        default: false
+      condition:
+        $ref: "#/definitions/OverdueCondition"
+      externalMessage:
+        type: "string"
+      isBlockChanges:
+        type: "boolean"
+        default: false
+      isDisableEntitlement:
+        type: "boolean"
+        default: false
+      subscriptionCancellationPolicy:
+        type: "string"
+        enum:
+        - "END_OF_TERM"
+        - "IMMEDIATE"
+        - "NONE"
+      autoReevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
   InvoicePaymentTransaction:
     type: "object"
     properties:
@@ -13786,33 +13865,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  OverdueStateConfig:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      isClearState:
-        type: "boolean"
-        default: false
-      condition:
-        $ref: "#/definitions/OverdueCondition"
-      externalMessage:
-        type: "string"
-      isBlockChanges:
-        type: "boolean"
-        default: false
-      isDisableEntitlement:
-        type: "boolean"
-        default: false
-      subscriptionCancellationPolicy:
-        type: "string"
-        enum:
-        - "END_OF_TERM"
-        - "IMMEDIATE"
-        - "NONE"
-      autoReevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   PluginServiceInfo:
     type: "object"
     properties:
@@ -13820,6 +13872,27 @@ definitions:
         type: "string"
       registrationName:
         type: "string"
+  PluginInfo:
+    type: "object"
+    properties:
+      bundleSymbolicName:
+        type: "string"
+      pluginKey:
+        type: "string"
+      pluginName:
+        type: "string"
+      version:
+        type: "string"
+      state:
+        type: "string"
+      isSelectedForStart:
+        type: "boolean"
+        default: false
+      services:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/PluginServiceInfo"
   PlanDetail:
     type: "object"
     properties:
@@ -13850,27 +13923,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
-  PluginInfo:
-    type: "object"
-    properties:
-      bundleSymbolicName:
-        type: "string"
-      pluginKey:
-        type: "string"
-      pluginName:
-        type: "string"
-      version:
-        type: "string"
-      state:
-        type: "string"
-      isSelectedForStart:
-        type: "boolean"
-        default: false
-      services:
-        type: "array"
-        uniqueItems: true
-        items:
-          $ref: "#/definitions/PluginServiceInfo"
   Subscription:
     type: "object"
     required:
