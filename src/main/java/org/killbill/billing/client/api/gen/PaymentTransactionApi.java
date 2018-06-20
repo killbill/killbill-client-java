@@ -140,6 +140,40 @@ public class PaymentTransactionApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
+    public Payment getPaymentByTransactionExternalKey(final String transactionExternalKey, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return getPaymentByTransactionExternalKey(transactionExternalKey, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
+    }
+
+    public Payment getPaymentByTransactionExternalKey(final String transactionExternalKey, final Boolean withPluginInfo, final Boolean withAttempts, final Map<String, String> pluginProperty, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(transactionExternalKey, "Missing the required parameter 'transactionExternalKey' when calling getPaymentByTransactionExternalKey");
+
+        final String uri = "/1.0/kb/paymentTransactions";
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (transactionExternalKey != null) {
+            queryParams.put("transactionExternalKey", String.valueOf(transactionExternalKey));
+        }
+        if (withPluginInfo != null) {
+            queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
+        }
+        if (withAttempts != null) {
+            queryParams.put("withAttempts", String.valueOf(withAttempts));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, Payment.class, requestOptions);
+    }
+
     public Payment getPaymentByTransactionId(final UUID transactionId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return getPaymentByTransactionId(transactionId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
