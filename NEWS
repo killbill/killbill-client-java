@@ -1,3 +1,6 @@
+1.0.4
+    Regenerate java client. See killbill/killbill#93
+
 1.0.3
     Add new api for tax support
 
