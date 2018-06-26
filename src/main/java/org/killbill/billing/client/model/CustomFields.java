@@ -17,6 +17,7 @@
 package org.killbill.billing.client.model;
 
 import org.killbill.billing.client.KillBillClientException;
+import org.killbill.billing.client.model.gen.CustomField;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

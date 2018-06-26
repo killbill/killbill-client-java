@@ -16,5 +16,9 @@
 
 package org.killbill.billing.client.model;
 
-public class PlanDetails extends KillBillObjects<PlanDetail> {
+import java.util.ArrayList;
+
+import org.killbill.billing.client.model.gen.PlanDetail;
+
+public class PlanDetails extends ArrayList<PlanDetail> {
 }
