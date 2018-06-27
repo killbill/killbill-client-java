@@ -10,29 +10,29 @@ info:
     name: "Apache License, Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
-- name: "CustomField"
 - name: "PaymentMethod"
-- name: "Overdue"
-- name: "Credit"
-- name: "Tenant"
-- name: "NodesInfo"
-- name: "Account"
-- name: "Security"
-- name: "Export"
-- name: "Tag"
 - name: "TagDefinition"
-- name: "Catalog"
-- name: "PluginInfo"
-- name: "InvoiceItem"
-- name: "InvoicePayment"
-- name: "PaymentGateway"
-- name: "Subscription"
-- name: "Admin"
 - name: "PaymentTransaction"
 - name: "Usage"
 - name: "Payment"
+- name: "Overdue"
+- name: "PluginInfo"
+- name: "InvoiceItem"
+- name: "Credit"
+- name: "Catalog"
+- name: "NodesInfo"
+- name: "Subscription"
+- name: "Security"
+- name: "Account"
+- name: "PaymentGateway"
+- name: "Export"
 - name: "Bundle"
+- name: "Admin"
+- name: "CustomField"
+- name: "Tenant"
+- name: "Tag"
 - name: "Invoice"
+- name: "InvoicePayment"
 paths:
   /1.0/kb/accounts:
     get:
@@ -1199,94 +1199,6 @@ paths:
           description: "Invalid account id supplied"
         204:
           description: "Successful operation"
-      security:
-      - basicAuth: []
-  /1.0/kb/accounts/{accountId}/emailNotifications:
-    get:
-      tags:
-      - "Account"
-      summary: "Retrieve account email notification"
-      description: ""
-      operationId: "getEmailNotificationsForAccount"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "X-Killbill-ApiKey"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-ApiSecret"
-        in: "header"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/InvoiceEmail"
-        400:
-          description: "Invalid account id supplied"
-        204:
-          description: "Successful operation"
-        404:
-          description: "Account not found"
-      security:
-      - basicAuth: []
-    put:
-      tags:
-      - "Account"
-      summary: "Set account email notification"
-      description: ""
-      operationId: "setEmailNotificationsForAccount"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/InvoiceEmail"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-ApiKey"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-ApiSecret"
-        in: "header"
-        required: true
-        type: "string"
-      responses:
-        400:
-          description: "Invalid account id supplied"
-        204:
-          description: "Successful operation"
-        404:
-          description: "Account not found"
       security:
       - basicAuth: []
   /1.0/kb/accounts/{accountId}/emails:
@@ -12727,15 +12639,15 @@ definitions:
   Entity:
     type: "object"
     properties:
-      id:
-        type: "string"
-        format: "uuid"
       createdDate:
         type: "string"
         format: "date-time"
       updatedDate:
         type: "string"
         format: "date-time"
+      id:
+        type: "string"
+        format: "uuid"
   Account:
     type: "object"
     properties:
@@ -12957,9 +12869,6 @@ definitions:
       notes:
         type: "string"
       isMigrated:
-        type: "boolean"
-        default: false
-      isNotifiedForInvoices:
         type: "boolean"
         default: false
       accountBalance:
@@ -13262,15 +13171,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-  TenantKeyValue:
-    type: "object"
-    properties:
-      key:
-        type: "string"
-      values:
-        type: "array"
-        items:
-          type: "string"
   AdminPayment:
     type: "object"
     properties:
@@ -13280,6 +13180,15 @@ definitions:
         type: "string"
       transactionStatus:
         type: "string"
+  TenantKeyValue:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      values:
+        type: "array"
+        items:
+          type: "string"
   BlockingState:
     type: "object"
     properties:
@@ -13923,6 +13832,21 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Price"
+  SubscriptionUsageRecord:
+    type: "object"
+    required:
+    - "subscriptionId"
+    - "unitUsageRecords"
+    properties:
+      subscriptionId:
+        type: "string"
+        format: "uuid"
+      trackingId:
+        type: "string"
+      unitUsageRecords:
+        type: "array"
+        items:
+          $ref: "#/definitions/UnitUsageRecord"
   Subscription:
     type: "object"
     required:
@@ -14026,21 +13950,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  SubscriptionUsageRecord:
-    type: "object"
-    required:
-    - "subscriptionId"
-    - "unitUsageRecords"
-    properties:
-      subscriptionId:
-        type: "string"
-        format: "uuid"
-      trackingId:
-        type: "string"
-      unitUsageRecords:
-        type: "array"
-        items:
-          $ref: "#/definitions/UnitUsageRecord"
   Tier:
     type: "object"
     properties:
@@ -15425,19 +15334,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/NodeCommandProperty"
-  InvoiceEmail:
-    type: "object"
-    properties:
-      accountId:
-        type: "string"
-        format: "uuid"
-      isNotifiedForInvoices:
-        type: "boolean"
-        default: false
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
   TagDefinition:
     type: "object"
     required:
@@ -15507,6 +15403,25 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/TierPrice"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
   InvoiceItem:
     type: "object"
     required:
@@ -15756,25 +15671,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
   UsageRecord:
     type: "object"
     properties:
@@ -16033,6 +15929,14 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  RolledUpUnit:
+    type: "object"
+    properties:
+      unitType:
+        type: "string"
+      amount:
+        type: "integer"
+        format: "int64"
   EventSubscription:
     type: "object"
     properties:
@@ -16095,14 +15999,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RolledUpUnit:
-    type: "object"
-    properties:
-      unitType:
-        type: "string"
-      amount:
-        type: "integer"
-        format: "int64"
   UnitUsageRecord:
     type: "object"
     properties:
@@ -16626,6 +16522,18 @@ definitions:
         type: "array"
         items:
           type: "string"
+  RoleDefinition:
+    type: "object"
+    required:
+    - "permissions"
+    - "role"
+    properties:
+      role:
+        type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
   AccountEmail:
     type: "object"
     required:
@@ -16640,18 +16548,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  RoleDefinition:
-    type: "object"
-    required:
-    - "permissions"
-    - "role"
-    properties:
-      role:
-        type: "string"
-      permissions:
-        type: "array"
-        items:
-          type: "string"
   Plan:
     type: "object"
     properties:

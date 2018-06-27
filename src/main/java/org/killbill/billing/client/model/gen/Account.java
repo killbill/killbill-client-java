@@ -85,8 +85,6 @@ public class Account extends KillBillObject {
 
     private Boolean isMigrated = false;
 
-    private Boolean isNotifiedForInvoices = false;
-
     private BigDecimal accountBalance = null;
 
     private BigDecimal accountCBA = null;
@@ -119,7 +117,6 @@ public class Account extends KillBillObject {
                      final String phone,
                      final String notes,
                      final Boolean isMigrated,
-                     final Boolean isNotifiedForInvoices,
                      final BigDecimal accountBalance,
                      final BigDecimal accountCBA,
                      final List<AuditLog> auditLogs) {
@@ -147,7 +144,6 @@ public class Account extends KillBillObject {
         this.phone = phone;
         this.notes = notes;
         this.isMigrated = isMigrated;
-        this.isNotifiedForInvoices = isNotifiedForInvoices;
         this.accountBalance = accountBalance;
         this.accountCBA = accountCBA;
 
@@ -363,16 +359,6 @@ public class Account extends KillBillObject {
         return isMigrated;
     }
 
-    public Account setIsNotifiedForInvoices(final Boolean isNotifiedForInvoices) {
-        this.isNotifiedForInvoices = isNotifiedForInvoices;
-        return this;
-    }
-
-    @JsonProperty(value="isNotifiedForInvoices")
-    public Boolean isNotifiedForInvoices() {
-        return isNotifiedForInvoices;
-    }
-
     public Account setAccountBalance(final BigDecimal accountBalance) {
         this.accountBalance = accountBalance;
         return this;
@@ -423,7 +409,6 @@ public class Account extends KillBillObject {
         Objects.equals(this.phone, account.phone) &&
         Objects.equals(this.notes, account.notes) &&
         Objects.equals(this.isMigrated, account.isMigrated) &&
-        Objects.equals(this.isNotifiedForInvoices, account.isNotifiedForInvoices) &&
         Objects.equals(this.accountBalance, account.accountBalance) &&
         Objects.equals(this.accountCBA, account.accountCBA) &&
         Objects.equals(this.auditLogs, account.auditLogs);
@@ -455,7 +440,6 @@ public class Account extends KillBillObject {
                             phone,
                             notes,
                             isMigrated,
-                            isNotifiedForInvoices,
                             accountBalance,
                             accountCBA,
                             auditLogs, super.hashCode());
@@ -490,7 +474,6 @@ public class Account extends KillBillObject {
         sb.append("    phone: ").append(toIndentedString(phone)).append("\n");
         sb.append("    notes: ").append(toIndentedString(notes)).append("\n");
         sb.append("    isMigrated: ").append(toIndentedString(isMigrated)).append("\n");
-        sb.append("    isNotifiedForInvoices: ").append(toIndentedString(isNotifiedForInvoices)).append("\n");
         sb.append("    accountBalance: ").append(toIndentedString(accountBalance)).append("\n");
         sb.append("    accountCBA: ").append(toIndentedString(accountCBA)).append("\n");
         sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");

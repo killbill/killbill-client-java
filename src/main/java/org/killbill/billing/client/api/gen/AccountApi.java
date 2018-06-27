@@ -28,7 +28,6 @@ import org.killbill.billing.client.model.gen.BlockingState;
 import org.killbill.billing.client.model.gen.Bundle;
 import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.Invoice;
-import org.killbill.billing.client.model.gen.InvoiceEmail;
 import org.killbill.billing.client.model.gen.InvoicePayment;
 import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.OverdueState;
@@ -644,20 +643,6 @@ public class AccountApi {
         return httpClient.doGet(uri, Accounts.class, requestOptions);
     }
 
-    public InvoiceEmail getEmailNotificationsForAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getEmailNotificationsForAccount");
-
-        final String uri = "/1.0/kb/accounts/{accountId}/emailNotifications"
-          .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
-
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        return httpClient.doGet(uri, InvoiceEmail.class, requestOptions);
-    }
-
     public AccountEmails getEmails(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getEmails");
 
@@ -1050,22 +1035,6 @@ public class AccountApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         httpClient.doPut(uri, null, requestOptions);
-    }
-
-    public void setEmailNotificationsForAccount(final UUID accountId, final InvoiceEmail body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling setEmailNotificationsForAccount");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling setEmailNotificationsForAccount");
-
-        final String uri = "/1.0/kb/accounts/{accountId}/emailNotifications"
-          .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
-
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        httpClient.doPut(uri, body, requestOptions);
     }
 
     public void transferChildCreditToParent(final UUID childAccountId, final RequestOptions inputOptions) throws KillBillClientException {
