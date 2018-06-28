@@ -1,5 +1,8 @@
+1.0.6
+    Regenerate client
+
 1.0.5
-     Regenerate client. See killbill/killbill#7
+    Regenerate client. See killbill/killbill#7
 
 1.0.4
     Regenerate java client. See killbill/killbill#93
