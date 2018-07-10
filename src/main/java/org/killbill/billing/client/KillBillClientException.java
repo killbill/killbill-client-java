@@ -16,7 +16,6 @@
 
 package org.killbill.billing.client;
 
-import org.killbill.billing.client.model.BillingException;
 
 import com.ning.http.client.Response;
 
@@ -30,6 +29,12 @@ public class KillBillClientException extends Exception {
         super(cause);
         response = null;
         billingException = null;
+    }
+
+    public KillBillClientException(final Response response) {
+        super();
+        this.response = response;
+        this.billingException = null;
     }
 
     public KillBillClientException(final Exception cause, final Response response) {

@@ -1,3 +1,74 @@
+1.0.6
+    Regenerate client
+
+1.0.5
+    Regenerate client. See killbill/killbill#7
+
+1.0.4
+    Regenerate java client. See killbill/killbill#93
+
+1.0.3
+    Add new api for tax support
+
+1.0.2
+    Remove ability to make payment when creating external charges.
+
+1.0.1
+    Enhance api AccountApi#payAllInvoices to take additional flags
+
+1.0.0
+    Initial version for the swagger generated java client
+
+0.0.9
+    Regen to add missing creditId
+
+0.0.8
+    Implement/generate new apis for audit logs
+
+0.0.7
+    Regenerate client for new apis
+
+0.0.6
+    Fix path for getInvoiceByNumber
+
+0.0.5
+    Add new api to retrieve all audit logs
+
+0.0.4
+    Api changes #935, #941, #912, #917
+
+0.0.3
+    Change jaxrs tag creation to take a body of tagDefinitionId
+
+0.0.2
+    Extension and cleanup in KillBillHttpClient
+    Regenerate apis
+
+0.0.1
+    Initial version for swagger gen java client
+
+0.41.7
+    Add support for new voidInvoice endpoint
+
+0.41.6
+    Add rate, quantity and itemDetails to InvoiceItem model
+
+0.41.5
+    CRUD for invoice items tags and custom fields
+
+0.41.4
+    Add Account#referenceTime
+
+0.41.3
+    Add api undoChangePlan
+    Add support for modifying custom fields
+
+0.41.2
+    Add api to complete a payment associated with an invoice
+
+0.41.0
+    Initial release against 0.19.x branch
+
 0.40.10
     Add getAllAccountCustomFields API
     Add support to create subscription with entRequestedDate and billingRequestedDate.

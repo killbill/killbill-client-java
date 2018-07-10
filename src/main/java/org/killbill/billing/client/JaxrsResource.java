@@ -32,6 +32,9 @@ public interface JaxrsResource {
      */
     public static final String ACCOUNTS = "accounts";
     public static final String ACCOUNTS_PATH = PREFIX + "/" + ACCOUNTS;
+    public static final String AUDIT_LOGS = "auditLogs";
+    public static final String AUDIT_LOG_WITH_HISTORY = "auditLogsWithHistory";
+    public static final String ATTEMPTS = "attempts";
     public static final String BUNDLES = "bundles";
     public static final String BUNDLES_PATH = PREFIX + "/" + BUNDLES;
     public static final String CATALOG = "catalog";
@@ -51,6 +54,8 @@ public interface JaxrsResource {
     public static final String INVOICE_HTML = "html";
     public static final String INVOICES = "invoices";
     public static final String INVOICES_PATH = PREFIX + "/" + INVOICES;
+    public static final String INVOICE_ITEMS = "invoiceItems";
+    public static final String INVOICE_ITEMS_PATH = PREFIX + "/" + INVOICE_ITEMS;
     public static final String DRY_RUN = "dryRun";
     public static final String INVOICE_PAYMENTS = "invoicePayments";
     public static final String INVOICE_PAYMENTS_PATH = PREFIX + "/" + INVOICE_PAYMENTS;
@@ -99,6 +104,7 @@ public interface JaxrsResource {
     public static final String TRANSFER_CREDIT = "transferCredit";
     public static final String SIMPLE_PLAN = "simplePlan";
     public static final String CANCEL_SCHEDULED_PAYMENT_TRANSACTION = "cancelScheduledPaymentTransaction";
+    public static final String VERSIONS = "versions";
 
 
     /*
@@ -163,6 +169,7 @@ public interface JaxrsResource {
     public static final String QUERY_WITH_PLUGIN_INFO = "withPluginInfo";
     public static final String QUERY_AUTO_COMMIT = "autoCommit";
     public static final String QUERY_WITH_MIGRATION_INVOICES = "withMigrationInvoices";
+    public static final String QUERY_INCLUDE_VOIDED_INVOICES = "includeVoidedInvoices";
     public static final String QUERY_BLOCKING_STATE_TYPES = "blockingStateTypes";
     public static final String QUERY_BLOCKING_STATE_SVCS = "blockingStateSvcs";
     public static final String QUERY_ENTITLEMENT_EFFECTIVE_FROM_DT = "effectiveFromDate";
