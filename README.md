@@ -10,7 +10,8 @@ Kill Bill compatibility
 | -------------: | ----------------: |
 | 0.23.y         | 0.16.z            |
 | 0.40.y         | 0.18.z            |
-| 0.41.y         | 0.20.z            |
+| 0.41.y         | 0.19.z            |
+| 1.x.y          | 0.20.z            |
 
 Usage
 -----
@@ -20,7 +21,7 @@ The library is published in Maven Central:
     <dependency>
         <groupId>org.kill-bill.billing</groupId>
         <artifactId>killbill-client-java</artifactId>
-        <version>0.40</version>
+        <version>1.0.6</version>
     </dependency>
 
 The easiest way to get started is to look at some of our [integration tests](https://github.com/killbill/killbill/tree/master/profiles/killbill/src/test/java/org/killbill/billing/jaxrs), which use this library.
