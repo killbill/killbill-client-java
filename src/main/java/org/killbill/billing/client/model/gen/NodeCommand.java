@@ -35,7 +35,7 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class NodeCommand {
 
-    private Boolean isSystemCommandType = false;
+    private Boolean isSystemCommandType = null;
 
     private String nodeCommandType = null;
 

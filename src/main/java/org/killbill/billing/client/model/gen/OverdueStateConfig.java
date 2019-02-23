@@ -36,15 +36,15 @@ public class OverdueStateConfig {
 
     private String name = null;
 
-    private Boolean isClearState = false;
+    private Boolean isClearState = null;
 
     private OverdueCondition condition = null;
 
     private String externalMessage = null;
 
-    private Boolean isBlockChanges = false;
+    private Boolean isBlockChanges = null;
 
-    private Boolean isDisableEntitlement = false;
+    private Boolean isDisableEntitlement = null;
 
     private OverdueCancellationPolicy subscriptionCancellationPolicy = null;
 

@@ -19,6 +19,7 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.BlockingState;
 import org.killbill.billing.client.model.gen.BulkSubscriptionsBundle;
 import org.killbill.billing.client.model.gen.Bundle;
@@ -37,6 +38,7 @@ import org.killbill.billing.client.model.Subscriptions;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.client.model.BulkSubscriptionsBundles;
 import org.killbill.billing.util.api.AuditLevel;
+import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.Tags;
 
 import com.google.common.collect.Multimap;
@@ -406,6 +408,20 @@ public class SubscriptionApi {
         return httpClient.doGet(uri, Subscription.class, requestOptions);
     }
 
+    public AuditLogs getSubscriptionAuditLogsWithHistory(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscriptionAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/subscriptions/{subscriptionId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
+    }
+
     public CustomFields getSubscriptionCustomFields(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
         return getSubscriptionCustomFields(subscriptionId, AuditLevel.NONE, inputOptions);
     }
@@ -427,6 +443,20 @@ public class SubscriptionApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
+    public AuditLogs getSubscriptionEventAuditLogsWithHistory(final UUID eventId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(eventId, "Missing the required parameter 'eventId' when calling getSubscriptionEventAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/subscriptions/events/{eventId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "eventId" + "\\}", eventId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
     public Tags getSubscriptionTags(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {

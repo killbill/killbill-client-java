@@ -70,7 +70,7 @@ public class Invoice extends KillBillObject {
 
     private List<InvoiceItem> items = null;
 
-    private Boolean isParentInvoice = false;
+    private Boolean isParentInvoice = null;
 
     private UUID parentInvoiceId = null;
 

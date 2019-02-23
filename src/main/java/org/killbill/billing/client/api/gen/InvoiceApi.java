@@ -19,6 +19,7 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.Invoice;
 import org.killbill.billing.client.model.gen.InvoiceDryRun;
@@ -33,6 +34,7 @@ import java.util.List;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
+import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.Invoices;
 import org.killbill.billing.client.model.InvoicePayments;
 
@@ -432,6 +434,20 @@ public class InvoiceApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, String.class, requestOptions);
+    }
+
+    public AuditLogs getInvoiceAuditLogsWithHistory(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/invoices/{invoiceId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
     public Invoice getInvoiceByItemId(final UUID itemId, final RequestOptions inputOptions) throws KillBillClientException {

@@ -53,9 +53,9 @@ public class EventSubscription extends KillBillObject {
 
     private SubscriptionEventType eventType = null;
 
-    private Boolean isBlockedBilling = false;
+    private Boolean isBlockedBilling = null;
 
-    private Boolean isBlockedEntitlement = false;
+    private Boolean isBlockedEntitlement = null;
 
     private String serviceName = null;
 

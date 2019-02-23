@@ -55,7 +55,7 @@ public class Account extends KillBillObject {
 
     private UUID parentAccountId = null;
 
-    private Boolean isPaymentDelegatedToParent = false;
+    private Boolean isPaymentDelegatedToParent = null;
 
     private UUID paymentMethodId = null;
 
@@ -83,7 +83,7 @@ public class Account extends KillBillObject {
 
     private String notes = null;
 
-    private Boolean isMigrated = false;
+    private Boolean isMigrated = null;
 
     private BigDecimal accountBalance = null;
 

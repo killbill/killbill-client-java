@@ -585,6 +585,20 @@ public class AccountApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
+    public AuditLogs getBlockingStateAuditLogsWithHistory(final UUID blockingId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(blockingId, "Missing the required parameter 'blockingId' when calling getBlockingStateAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/accounts/block/{blockingId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "blockingId" + "\\}", blockingId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
+    }
+
     public BlockingStates getBlockingStates(final UUID accountId, final List<BlockingStateType> blockingStateTypes, final List<String> blockingStateSvcs, final RequestOptions inputOptions) throws KillBillClientException {
         return getBlockingStates(accountId, blockingStateTypes, blockingStateSvcs, AuditLevel.NONE, inputOptions);
     }

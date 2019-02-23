@@ -40,11 +40,11 @@ public class OverdueState {
 
     private List<Integer> daysBetweenPaymentRetries = null;
 
-    private Boolean isDisableEntitlementAndChangesBlocked = false;
+    private Boolean isDisableEntitlementAndChangesBlocked = null;
 
-    private Boolean isBlockChanges = false;
+    private Boolean isBlockChanges = null;
 
-    private Boolean isClearState = false;
+    private Boolean isClearState = null;
 
     private Integer reevaluationIntervalDays = null;
 
