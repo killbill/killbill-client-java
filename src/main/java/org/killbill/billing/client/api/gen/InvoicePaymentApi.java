@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
-import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.util.api.AuditLevel;
+import org.killbill.billing.client.model.AuditLogs;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -244,20 +244,6 @@ public class InvoicePaymentApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public AuditLogs getInvoiceItemAuditLogsWithHistory1(final UUID invoicePaymentId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoicePaymentId, "Missing the required parameter 'invoicePaymentId' when calling getInvoiceItemAuditLogsWithHistory1");
-
-        final String uri = "/1.0/kb/invoicePayments/{invoicePaymentId}/auditLogsWithHistory"
-          .replaceAll("\\{" + "invoicePaymentId" + "\\}", invoicePaymentId.toString());
-
-
-        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
-        final RequestOptions requestOptions = inputOptionsBuilder.build();
-
-        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
-    }
-
     public InvoicePayment getInvoicePayment(final UUID paymentId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return getInvoicePayment(paymentId, Boolean.valueOf(false), Boolean.valueOf(false), pluginProperty, AuditLevel.NONE, inputOptions);
     }
@@ -288,6 +274,20 @@ public class InvoicePaymentApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, InvoicePayment.class, requestOptions);
+    }
+
+    public AuditLogs getInvoicePaymentAuditLogsWithHistory(final UUID invoicePaymentId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(invoicePaymentId, "Missing the required parameter 'invoicePaymentId' when calling getInvoicePaymentAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/invoicePayments/{invoicePaymentId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "invoicePaymentId" + "\\}", invoicePaymentId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
     public CustomFields getInvoicePaymentCustomFields(final UUID paymentId, final RequestOptions inputOptions) throws KillBillClientException {
