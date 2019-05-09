@@ -11,7 +11,8 @@ Kill Bill compatibility
 | 0.23.y         | 0.16.z            |
 | 0.40.y         | 0.18.z            |
 | 0.41.y         | 0.19.z            |
-| 1.x.y          | 0.20.z            |
+| 1.0.y          | 0.20.z            |
+| 1.1.y          | 0.21.z(dev branch)|
 
 Usage
 -----
