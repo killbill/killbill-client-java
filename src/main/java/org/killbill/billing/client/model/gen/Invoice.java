@@ -28,7 +28,6 @@ import java.util.UUID;
 import org.joda.time.LocalDate;
 import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
-import org.killbill.billing.client.model.gen.Credit;
 import org.killbill.billing.client.model.gen.InvoiceItem;
 import org.killbill.billing.invoice.api.InvoiceStatus;
 
@@ -66,7 +65,7 @@ public class Invoice extends KillBillObject {
 
     private String bundleKeys = null;
 
-    private List<Credit> credits = null;
+    private List<InvoiceItem> credits = null;
 
     private List<InvoiceItem> items = null;
 
@@ -93,7 +92,7 @@ public class Invoice extends KillBillObject {
                      final BigDecimal balance,
                      final UUID accountId,
                      final String bundleKeys,
-                     final List<Credit> credits,
+                     final List<InvoiceItem> credits,
                      final List<InvoiceItem> items,
                      final Boolean isParentInvoice,
                      final UUID parentInvoiceId,
@@ -229,20 +228,20 @@ public class Invoice extends KillBillObject {
         return bundleKeys;
     }
 
-    public Invoice setCredits(final List<Credit> credits) {
+    public Invoice setCredits(final List<InvoiceItem> credits) {
         this.credits = credits;
         return this;
     }
 
-    public Invoice addCreditsItem(final Credit creditsItem) {
+    public Invoice addCreditsItem(final InvoiceItem creditsItem) {
         if (this.credits == null) {
-            this.credits = new ArrayList<Credit>();
+            this.credits = new ArrayList<InvoiceItem>();
         }
         this.credits.add(creditsItem);
         return this;
     }
 
-    public List<Credit> getCredits() {
+    public List<InvoiceItem> getCredits() {
         return credits;
     }
 

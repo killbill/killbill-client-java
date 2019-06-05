@@ -175,11 +175,11 @@ public class SubscriptionApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public Subscription createSubscription(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Integer bcd, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        return createSubscription(body, entitlementDate, billingDate, Boolean.valueOf(true), Boolean.valueOf(false), bcd, Boolean.valueOf(false), Long.valueOf(3), pluginProperty, inputOptions);
+    public Subscription createSubscription(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return createSubscription(body, entitlementDate, billingDate, Boolean.valueOf(true), Boolean.valueOf(false), Boolean.valueOf(false), Long.valueOf(3), pluginProperty, inputOptions);
     }
 
-    public Subscription createSubscription(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Integer bcd, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public Subscription createSubscription(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscription");
 
         final String uri = "/1.0/kb/subscriptions";
@@ -196,9 +196,6 @@ public class SubscriptionApi {
         }
         if (migrated != null) {
             queryParams.put("migrated", String.valueOf(migrated));
-        }
-        if (bcd != null) {
-            queryParams.put("bcd", String.valueOf(bcd));
         }
         if (callCompletion != null) {
             queryParams.put("callCompletion", String.valueOf(callCompletion));
