@@ -19,7 +19,7 @@
 package org.killbill.billing.client.api.gen;
 
 
-import org.killbill.billing.client.model.gen.Credit;
+import org.killbill.billing.client.model.gen.InvoiceItem;
 import java.util.UUID;
 import java.util.Map;
 
@@ -53,11 +53,11 @@ public class CreditApi {
         this.httpClient = httpClient;
     }
 
-    public Credit createCredit(final Credit body, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItem createCredit(final InvoiceItem body, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return createCredit(body, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public Credit createCredit(final Credit body, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItem createCredit(final InvoiceItem body, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCredit");
 
         final String uri = "/1.0/kb/credits";
@@ -78,10 +78,10 @@ public class CreditApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, body, Credit.class, requestOptions);
+        return httpClient.doPost(uri, body, InvoiceItem.class, requestOptions);
     }
 
-    public Credit getCredit(final UUID creditId, final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItem getCredit(final UUID creditId, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(creditId, "Missing the required parameter 'creditId' when calling getCredit");
 
         final String uri = "/1.0/kb/credits/{creditId}"
@@ -92,7 +92,7 @@ public class CreditApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, Credit.class, requestOptions);
+        return httpClient.doGet(uri, InvoiceItem.class, requestOptions);
     }
 
 }
