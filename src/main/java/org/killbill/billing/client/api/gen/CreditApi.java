@@ -21,6 +21,8 @@ package org.killbill.billing.client.api.gen;
 
 import org.killbill.billing.client.model.gen.InvoiceItem;
 import java.util.UUID;
+import org.killbill.billing.client.model.InvoiceItems;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Multimap;
@@ -53,12 +55,12 @@ public class CreditApi {
         this.httpClient = httpClient;
     }
 
-    public InvoiceItem createCredit(final InvoiceItem body, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        return createCredit(body, Boolean.valueOf(false), pluginProperty, inputOptions);
+    public InvoiceItems createCredits(final InvoiceItems body, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return createCredits(body, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public InvoiceItem createCredit(final InvoiceItem body, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCredit");
+    public InvoiceItems createCredits(final InvoiceItems body, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCredits");
 
         final String uri = "/1.0/kb/credits";
 
@@ -78,7 +80,7 @@ public class CreditApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doPost(uri, body, InvoiceItem.class, requestOptions);
+        return httpClient.doPost(uri, body, InvoiceItems.class, requestOptions);
     }
 
     public InvoiceItem getCredit(final UUID creditId, final RequestOptions inputOptions) throws KillBillClientException {
