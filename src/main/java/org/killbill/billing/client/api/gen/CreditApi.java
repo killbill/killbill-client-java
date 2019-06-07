@@ -55,12 +55,12 @@ public class CreditApi {
         this.httpClient = httpClient;
     }
 
-    public InvoiceItems createCredit(final InvoiceItems body, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        return createCredit(body, Boolean.valueOf(false), pluginProperty, inputOptions);
+    public InvoiceItems createCredits(final InvoiceItems body, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return createCredits(body, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public InvoiceItems createCredit(final InvoiceItems body, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCredit");
+    public InvoiceItems createCredits(final InvoiceItems body, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCredits");
 
         final String uri = "/1.0/kb/credits";
 
