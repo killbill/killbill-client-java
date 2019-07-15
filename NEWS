@@ -1,3 +1,6 @@
+1.1.5
+    Subscription#getSubscriptionByKey
+
 1.1.4
     Fix issue in credit api
 
