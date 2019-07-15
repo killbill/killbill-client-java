@@ -419,22 +419,18 @@ public class SubscriptionApi {
         return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
-    public Subscription getSubscriptionByKey(final String externalKey, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getSubscriptionByKey(externalKey, accountId, AuditLevel.NONE, inputOptions);
+    public Subscription getSubscriptionByKey(final String externalKey, final RequestOptions inputOptions) throws KillBillClientException {
+        return getSubscriptionByKey(externalKey, AuditLevel.NONE, inputOptions);
     }
 
-    public Subscription getSubscriptionByKey(final String externalKey, final UUID accountId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Subscription getSubscriptionByKey(final String externalKey, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getSubscriptionByKey");
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getSubscriptionByKey");
 
         final String uri = "/1.0/kb/subscriptions";
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (externalKey != null) {
             queryParams.put("externalKey", String.valueOf(externalKey));
-        }
-        if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
