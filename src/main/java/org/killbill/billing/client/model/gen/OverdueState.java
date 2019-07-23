@@ -21,8 +21,6 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *           DO NOT EDIT !!!
@@ -38,8 +36,6 @@ public class OverdueState {
 
     private String externalMessage = null;
 
-    private List<Integer> daysBetweenPaymentRetries = null;
-
     private Boolean isDisableEntitlementAndChangesBlocked = null;
 
     private Boolean isBlockChanges = null;
@@ -54,14 +50,12 @@ public class OverdueState {
 
     public OverdueState(final String name,
                      final String externalMessage,
-                     final List<Integer> daysBetweenPaymentRetries,
                      final Boolean isDisableEntitlementAndChangesBlocked,
                      final Boolean isBlockChanges,
                      final Boolean isClearState,
                      final Integer reevaluationIntervalDays) {
         this.name = name;
         this.externalMessage = externalMessage;
-        this.daysBetweenPaymentRetries = daysBetweenPaymentRetries;
         this.isDisableEntitlementAndChangesBlocked = isDisableEntitlementAndChangesBlocked;
         this.isBlockChanges = isBlockChanges;
         this.isClearState = isClearState;
@@ -86,23 +80,6 @@ public class OverdueState {
 
     public String getExternalMessage() {
         return externalMessage;
-    }
-
-    public OverdueState setDaysBetweenPaymentRetries(final List<Integer> daysBetweenPaymentRetries) {
-        this.daysBetweenPaymentRetries = daysBetweenPaymentRetries;
-        return this;
-    }
-
-    public OverdueState addDaysBetweenPaymentRetriesItem(final Integer daysBetweenPaymentRetriesItem) {
-        if (this.daysBetweenPaymentRetries == null) {
-            this.daysBetweenPaymentRetries = new ArrayList<Integer>();
-        }
-        this.daysBetweenPaymentRetries.add(daysBetweenPaymentRetriesItem);
-        return this;
-    }
-
-    public List<Integer> getDaysBetweenPaymentRetries() {
-        return daysBetweenPaymentRetries;
     }
 
     public OverdueState setIsDisableEntitlementAndChangesBlocked(final Boolean isDisableEntitlementAndChangesBlocked) {
@@ -155,7 +132,6 @@ public class OverdueState {
         OverdueState overdueState = (OverdueState) o;
         return Objects.equals(this.name, overdueState.name) &&
         Objects.equals(this.externalMessage, overdueState.externalMessage) &&
-        Objects.equals(this.daysBetweenPaymentRetries, overdueState.daysBetweenPaymentRetries) &&
         Objects.equals(this.isDisableEntitlementAndChangesBlocked, overdueState.isDisableEntitlementAndChangesBlocked) &&
         Objects.equals(this.isBlockChanges, overdueState.isBlockChanges) &&
         Objects.equals(this.isClearState, overdueState.isClearState) &&
@@ -167,7 +143,6 @@ public class OverdueState {
     public int hashCode() {
         return Objects.hash(name,
                             externalMessage,
-                            daysBetweenPaymentRetries,
                             isDisableEntitlementAndChangesBlocked,
                             isBlockChanges,
                             isClearState,
@@ -182,7 +157,6 @@ public class OverdueState {
         
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    externalMessage: ").append(toIndentedString(externalMessage)).append("\n");
-        sb.append("    daysBetweenPaymentRetries: ").append(toIndentedString(daysBetweenPaymentRetries)).append("\n");
         sb.append("    isDisableEntitlementAndChangesBlocked: ").append(toIndentedString(isDisableEntitlementAndChangesBlocked)).append("\n");
         sb.append("    isBlockChanges: ").append(toIndentedString(isBlockChanges)).append("\n");
         sb.append("    isClearState: ").append(toIndentedString(isClearState)).append("\n");

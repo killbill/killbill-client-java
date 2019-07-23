@@ -69,6 +69,8 @@ public class Invoice extends KillBillObject {
 
     private List<InvoiceItem> items = null;
 
+    private List<String> trackingIds = null;
+
     private Boolean isParentInvoice = null;
 
     private UUID parentInvoiceId = null;
@@ -94,6 +96,7 @@ public class Invoice extends KillBillObject {
                      final String bundleKeys,
                      final List<InvoiceItem> credits,
                      final List<InvoiceItem> items,
+                     final List<String> trackingIds,
                      final Boolean isParentInvoice,
                      final UUID parentInvoiceId,
                      final UUID parentAccountId,
@@ -113,6 +116,7 @@ public class Invoice extends KillBillObject {
         this.bundleKeys = bundleKeys;
         this.credits = credits;
         this.items = items;
+        this.trackingIds = trackingIds;
         this.isParentInvoice = isParentInvoice;
         this.parentInvoiceId = parentInvoiceId;
         this.parentAccountId = parentAccountId;
@@ -262,6 +266,23 @@ public class Invoice extends KillBillObject {
         return items;
     }
 
+    public Invoice setTrackingIds(final List<String> trackingIds) {
+        this.trackingIds = trackingIds;
+        return this;
+    }
+
+    public Invoice addTrackingIdsItem(final String trackingIdsItem) {
+        if (this.trackingIds == null) {
+            this.trackingIds = new ArrayList<String>();
+        }
+        this.trackingIds.add(trackingIdsItem);
+        return this;
+    }
+
+    public List<String> getTrackingIds() {
+        return trackingIds;
+    }
+
     public Invoice setIsParentInvoice(final Boolean isParentInvoice) {
         this.isParentInvoice = isParentInvoice;
         return this;
@@ -313,6 +334,7 @@ public class Invoice extends KillBillObject {
         Objects.equals(this.bundleKeys, invoice.bundleKeys) &&
         Objects.equals(this.credits, invoice.credits) &&
         Objects.equals(this.items, invoice.items) &&
+        Objects.equals(this.trackingIds, invoice.trackingIds) &&
         Objects.equals(this.isParentInvoice, invoice.isParentInvoice) &&
         Objects.equals(this.parentInvoiceId, invoice.parentInvoiceId) &&
         Objects.equals(this.parentAccountId, invoice.parentAccountId) &&
@@ -336,6 +358,7 @@ public class Invoice extends KillBillObject {
                             bundleKeys,
                             credits,
                             items,
+                            trackingIds,
                             isParentInvoice,
                             parentInvoiceId,
                             parentAccountId,
@@ -362,6 +385,7 @@ public class Invoice extends KillBillObject {
         sb.append("    bundleKeys: ").append(toIndentedString(bundleKeys)).append("\n");
         sb.append("    credits: ").append(toIndentedString(credits)).append("\n");
         sb.append("    items: ").append(toIndentedString(items)).append("\n");
+        sb.append("    trackingIds: ").append(toIndentedString(trackingIds)).append("\n");
         sb.append("    isParentInvoice: ").append(toIndentedString(isParentInvoice)).append("\n");
         sb.append("    parentInvoiceId: ").append(toIndentedString(parentInvoiceId)).append("\n");
         sb.append("    parentAccountId: ").append(toIndentedString(parentAccountId)).append("\n");
