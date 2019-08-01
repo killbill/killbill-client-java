@@ -1,3 +1,7 @@
+1.1.6
+    Regenerate java client for tracking Ids
+    Regenerate java client to remove overdue#this.daysBetweenPaymentRetries
+
 1.1.5
     Subscription#getSubscriptionByKey
 
