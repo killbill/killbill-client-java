@@ -598,10 +598,10 @@ public class InvoiceApi {
     }
 
     public Invoices getInvoices(final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoices(Long.valueOf(0), Long.valueOf(100), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+        return getInvoices(Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoices getInvoices(final Long offset, final Long limit, final Boolean withItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices getInvoices(final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/invoices/pagination";
 
@@ -611,9 +611,6 @@ public class InvoiceApi {
         }
         if (limit != null) {
             queryParams.put("limit", String.valueOf(limit));
-        }
-        if (withItems != null) {
-            queryParams.put("withItems", String.valueOf(withItems));
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
