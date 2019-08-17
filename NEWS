@@ -1,3 +1,6 @@
+1.1.7
+    Remove unused withItems query params
+
 1.1.6
     Regenerate java client for tracking Ids
     Regenerate java client to remove overdue#this.daysBetweenPaymentRetries
