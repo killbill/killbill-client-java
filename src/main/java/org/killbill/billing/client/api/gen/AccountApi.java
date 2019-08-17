@@ -704,10 +704,10 @@ public class AccountApi {
     }
 
     public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, startDate, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+        return getInvoicesForAccount(accountId, startDate, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final Boolean withItems, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicesForAccount");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoices"
@@ -716,9 +716,6 @@ public class AccountApi {
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (startDate != null) {
             queryParams.put("startDate", String.valueOf(startDate));
-        }
-        if (withItems != null) {
-            queryParams.put("withItems", String.valueOf(withItems));
         }
         if (withMigrationInvoices != null) {
             queryParams.put("withMigrationInvoices", String.valueOf(withMigrationInvoices));
