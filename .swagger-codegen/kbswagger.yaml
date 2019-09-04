@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Kill Bill is an open-source billing and payments platform"
-  version: "0.21.4-SNAPSHOT"
+  version: "0.21.5-SNAPSHOT"
   title: "Kill Bill"
   contact:
     name: "killbilling-users@googlegroups.com"
@@ -186,13 +186,13 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/invoicePayments:
+  /1.0/kb/accounts/{accountId}/auditLogs:
     get:
       tags:
       - "Account"
-      summary: "Retrieve account invoice payments"
+      summary: "Retrieve audit logs by account id"
       description: ""
-      operationId: "getInvoicePayments"
+      operationId: "getAccountAuditLogs"
       produces:
       - "application/json"
       parameters:
@@ -202,231 +202,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "withAttempts"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
       responses:
         200:
           description: "successful operation"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/InvoicePayment"
-        400:
-          description: "Invalid account id supplied"
-        404:
-          description: "Account not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    post:
-      tags:
-      - "Account"
-      summary: "Trigger a payment for all unpaid invoices"
-      description: ""
-      operationId: "payAllInvoices"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "paymentMethodId"
-        in: "query"
-        required: false
-        type: "string"
-        format: "uuid"
-      - name: "externalPayment"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "paymentAmount"
-        in: "query"
-        required: false
-        type: "number"
-      - name: "targetDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        404:
-          description: "Invalid account id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/accounts:
-    get:
-      tags:
-      - "Account"
-      summary: "Retrieve an account by external key"
-      description: ""
-      operationId: "getAccountByKey"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "externalKey"
-        in: "query"
-        required: true
-        type: "string"
-      - name: "accountWithBalance"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "accountWithBalanceAndCBA"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Account"
-        404:
-          description: "Account not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    post:
-      tags:
-      - "Account"
-      summary: "Create account"
-      description: ""
-      operationId: "createAccount"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/Account"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Account created successfully"
-          schema:
-            $ref: "#/definitions/Account"
-        400:
-          description: "Invalid account data supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/timeline:
-    get:
-      tags:
-      - "Account"
-      summary: "Retrieve account timeline"
-      description: ""
-      operationId: "getAccountTimeline"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "parallel"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/AccountTimeline"
-        400:
-          description: "Invalid account id supplied"
+              $ref: "#/definitions/AuditLog"
         404:
           description: "Account not found"
       security:
@@ -548,122 +330,13 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/accounts/pagination:
+  /1.0/kb/accounts/{accountId}/customFields:
     get:
       tags:
       - "Account"
-      summary: "List accounts"
+      summary: "Retrieve account custom fields"
       description: ""
-      operationId: "getAccounts"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "offset"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 0
-        format: "int64"
-      - name: "limit"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 100
-        format: "int64"
-      - name: "accountWithBalance"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "accountWithBalanceAndCBA"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Account"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/accounts/search/{searchKey}:
-    get:
-      tags:
-      - "Account"
-      summary: "Search accounts"
-      description: ""
-      operationId: "searchAccounts"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "searchKey"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: ".*"
-      - name: "offset"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 0
-        format: "int64"
-      - name: "limit"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 100
-        format: "int64"
-      - name: "accountWithBalance"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "accountWithBalanceAndCBA"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Account"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/bundles:
-    get:
-      tags:
-      - "Account"
-      summary: "Retrieve bundles for account"
-      description: ""
-      operationId: "getAccountBundles"
+      operationId: "getAccountCustomFields"
       produces:
       - "application/json"
       parameters:
@@ -673,14 +346,6 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "externalKey"
-        in: "query"
-        required: false
-        type: "string"
-      - name: "bundlesFilter"
-        in: "query"
-        required: false
-        type: "string"
       - name: "audit"
         in: "query"
         required: false
@@ -696,112 +361,37 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/Bundle"
+              $ref: "#/definitions/CustomField"
         400:
           description: "Invalid account id supplied"
-        404:
-          description: "Account not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/auditLogs:
-    get:
+    post:
       tags:
       - "Account"
-      summary: "Retrieve audit logs by account id"
+      summary: "Add custom fields to account"
       description: ""
-      operationId: "getAccountAuditLogs"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/AuditLog"
-        404:
-          description: "Account not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/children:
-    get:
-      tags:
-      - "Account"
-      summary: "List children accounts"
-      description: ""
-      operationId: "getChildrenAccounts"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "accountWithBalance"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "accountWithBalanceAndCBA"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Account"
-        400:
-          description: "Invalid parent account id supplied"
-        404:
-          description: "Parent Account not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/accounts/{childAccountId}/transferCredit:
-    put:
-      tags:
-      - "Account"
-      summary: "Move a given child credit to the parent level"
-      description: ""
-      operationId: "transferChildCreditToParent"
+      operationId: "createAccountCustomFields"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: "childAccountId"
+      - name: "accountId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/CustomField"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -815,52 +405,24 @@ paths:
         required: false
         type: "string"
       responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Account does not have credit"
-        404:
-          description: "Account not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/auditLogsWithHistory:
-    get:
-      tags:
-      - "Account"
-      summary: "Retrieve account audit logs with history by account id"
-      description: ""
-      operationId: "getAccountAuditLogsWithHistory"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      responses:
-        200:
-          description: "successful operation"
+        201:
+          description: "Custom field created successfully"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/AuditLog"
-        404:
-          description: "Account not found"
+              $ref: "#/definitions/CustomField"
+        400:
+          description: "Invalid account id supplied"
       security:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/cbaRebalancing:
     put:
       tags:
       - "Account"
-      summary: "Rebalance account CBA"
+      summary: "Modify custom fields to account"
       description: ""
-      operationId: "rebalanceExistingCBAOnAccount"
+      operationId: "modifyAccountCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -872,6 +434,13 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/CustomField"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -893,13 +462,14 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/invoices:
-    get:
+    delete:
       tags:
       - "Account"
-      summary: "Retrieve account invoices"
+      summary: "Remove custom fields from account"
       description: ""
-      operationId: "getInvoicesForAccount"
+      operationId: "deleteAccountCustomFields"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
@@ -909,46 +479,152 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "startDate"
+      - name: "customField"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+          format: "uuid"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid account id supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/accounts/{accountId}/invoicePayments:
+    get:
+      tags:
+      - "Account"
+      summary: "Retrieve account invoice payments"
+      description: ""
+      operationId: "getInvoicePayments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withAttempts"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/InvoicePayment"
+        400:
+          description: "Invalid account id supplied"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    post:
+      tags:
+      - "Account"
+      summary: "Trigger a payment for all unpaid invoices"
+      description: ""
+      operationId: "payAllInvoices"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "paymentMethodId"
+        in: "query"
+        required: false
+        type: "string"
+        format: "uuid"
+      - name: "externalPayment"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "paymentAmount"
+        in: "query"
+        required: false
+        type: "number"
+      - name: "targetDate"
         in: "query"
         required: false
         type: "string"
         format: "date"
-      - name: "withMigrationInvoices"
+      - name: "pluginProperty"
         in: "query"
         required: false
-        type: "boolean"
-        default: false
-      - name: "unpaidInvoicesOnly"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "includeVoidedInvoices"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "audit"
-        in: "query"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
         required: false
         type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Invoice"
-        400:
-          description: "Invalid account id supplied"
+        204:
+          description: "Successful operation"
         404:
-          description: "Account not found"
+          description: "Invalid account id supplied"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -1321,13 +997,13 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/tags:
+  /1.0/kb/accounts/{accountId}/emails:
     get:
       tags:
       - "Account"
-      summary: "Retrieve account tags"
+      summary: "Retrieve an account emails"
       description: ""
-      operationId: "getAccountTags"
+      operationId: "getEmails"
       produces:
       - "application/json"
       parameters:
@@ -1337,27 +1013,60 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
       responses:
         200:
           description: "successful operation"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/Tag"
+              $ref: "#/definitions/AccountEmail"
+        400:
+          description: "Invalid account id supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    post:
+      tags:
+      - "Account"
+      summary: "Add account email"
+      description: ""
+      operationId: "addEmail"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/AccountEmail"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Email created successfully"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AccountEmail"
         400:
           description: "Invalid account id supplied"
         404:
@@ -1366,80 +1075,46 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
+  /1.0/kb/accounts/payments:
     post:
       tags:
       - "Account"
-      summary: "Add tags to account"
+      summary: "Trigger a payment using the account external key (authorization, purchase\
+        \ or credit)"
       description: ""
-      operationId: "createAccountTags"
+      operationId: "processPaymentByExternalKey"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
       - in: "body"
         name: "body"
         required: true
         schema:
-          type: "array"
-          items:
-            type: "string"
-            format: "uuid"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
+          $ref: "#/definitions/PaymentTransaction"
+      - name: "externalKey"
+        in: "query"
         required: true
         type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
+      - name: "paymentMethodId"
+        in: "query"
         required: false
         type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Tag created successfully"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Tag"
-        400:
-          description: "Invalid account id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    delete:
-      tags:
-      - "Account"
-      summary: "Remove tags from account"
-      description: ""
-      operationId: "deleteAccountTags"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagDef"
+      - name: "controlPluginName"
         in: "query"
         required: false
         type: "array"
         items:
           type: "string"
-          format: "uuid"
+        collectionFormat: "multi"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
         collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
@@ -1454,22 +1129,35 @@ paths:
         required: false
         type: "string"
       responses:
-        204:
-          description: "Successful operation"
+        201:
+          description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
         400:
-          description: "Invalid account id supplied or account does not have a default\
-            \ payment method (AUTO_PAY_OFF tag only)"
+          description: "Invalid account external key supplied"
+        404:
+          description: "Account not found"
+        402:
+          description: "Transaction declined by gateway"
+        422:
+          description: "Payment is aborted by a control plugin"
+        502:
+          description: "Failed to submit payment transaction"
+        503:
+          description: "Payment in unknown status, failed to receive gateway response"
+        504:
+          description: "Payment operation timeout"
       security:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/customFields:
+  /1.0/kb/accounts/{accountId}/overdue:
     get:
       tags:
       - "Account"
-      summary: "Retrieve account custom fields"
+      summary: "Retrieve overdue state for account"
       description: ""
-      operationId: "getAccountCustomFields"
+      operationId: "getOverdueAccount"
       produces:
       - "application/json"
       parameters:
@@ -1479,164 +1167,15 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
       responses:
         200:
           description: "successful operation"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/CustomField"
+            $ref: "#/definitions/OverdueState"
         400:
           description: "Invalid account id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    post:
-      tags:
-      - "Account"
-      summary: "Add custom fields to account"
-      description: ""
-      operationId: "createAccountCustomFields"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/CustomField"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Custom field created successfully"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/CustomField"
-        400:
-          description: "Invalid account id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    put:
-      tags:
-      - "Account"
-      summary: "Modify custom fields to account"
-      description: ""
-      operationId: "modifyAccountCustomFields"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/CustomField"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Invalid account id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    delete:
-      tags:
-      - "Account"
-      summary: "Remove custom fields from account"
-      description: ""
-      operationId: "deleteAccountCustomFields"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "customField"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-          format: "uuid"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Invalid account id supplied"
+        404:
+          description: "Account not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -1803,13 +1342,13 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/emails:
+  /1.0/kb/accounts/{accountId}/tags:
     get:
       tags:
       - "Account"
-      summary: "Retrieve an account emails"
+      summary: "Retrieve account tags"
       description: ""
-      operationId: "getEmails"
+      operationId: "getAccountTags"
       produces:
       - "application/json"
       parameters:
@@ -1819,15 +1358,31 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
       responses:
         200:
           description: "successful operation"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/AccountEmail"
+              $ref: "#/definitions/Tag"
         400:
           description: "Invalid account id supplied"
+        404:
+          description: "Account not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -1835,9 +1390,9 @@ paths:
     post:
       tags:
       - "Account"
-      summary: "Add account email"
+      summary: "Add tags to account"
       description: ""
-      operationId: "addEmail"
+      operationId: "createAccountTags"
       consumes:
       - "application/json"
       produces:
@@ -1853,7 +1408,10 @@ paths:
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/AccountEmail"
+          type: "array"
+          items:
+            type: "string"
+            format: "uuid"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -1868,15 +1426,60 @@ paths:
         type: "string"
       responses:
         201:
-          description: "Email created successfully"
+          description: "Tag created successfully"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/AccountEmail"
+              $ref: "#/definitions/Tag"
         400:
           description: "Invalid account id supplied"
-        404:
-          description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    delete:
+      tags:
+      - "Account"
+      summary: "Remove tags from account"
+      description: ""
+      operationId: "deleteAccountTags"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "tagDef"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+          format: "uuid"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid account id supplied or account does not have a default\
+            \ payment method (AUTO_PAY_OFF tag only)"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -1922,6 +1525,148 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
+  /1.0/kb/accounts/{accountId}/timeline:
+    get:
+      tags:
+      - "Account"
+      summary: "Retrieve account timeline"
+      description: ""
+      operationId: "getAccountTimeline"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "parallel"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/AccountTimeline"
+        400:
+          description: "Invalid account id supplied"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/accounts/{accountId}/cbaRebalancing:
+    put:
+      tags:
+      - "Account"
+      summary: "Rebalance account CBA"
+      description: ""
+      operationId: "rebalanceExistingCBAOnAccount"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid account id supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/accounts/{accountId}/invoices:
+    get:
+      tags:
+      - "Account"
+      summary: "Retrieve account invoices"
+      description: ""
+      operationId: "getInvoicesForAccount"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "startDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "withMigrationInvoices"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "unpaidInvoicesOnly"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "includeVoidedInvoices"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Invoice"
+        400:
+          description: "Invalid account id supplied"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
   /1.0/kb/accounts/{accountId}/emails/{accountEmailId}/auditLogsWithHistory:
     get:
       tags:
@@ -1957,89 +1702,13 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/accounts/payments:
-    post:
-      tags:
-      - "Account"
-      summary: "Trigger a payment using the account external key (authorization, purchase\
-        \ or credit)"
-      description: ""
-      operationId: "processPaymentByExternalKey"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
-      - name: "externalKey"
-        in: "query"
-        required: true
-        type: "string"
-      - name: "paymentMethodId"
-        in: "query"
-        required: false
-        type: "string"
-        format: "uuid"
-      - name: "controlPluginName"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Payment transaction created successfully"
-          schema:
-            $ref: "#/definitions/Payment"
-        400:
-          description: "Invalid account external key supplied"
-        404:
-          description: "Account not found"
-        402:
-          description: "Transaction declined by gateway"
-        422:
-          description: "Payment is aborted by a control plugin"
-        502:
-          description: "Failed to submit payment transaction"
-        503:
-          description: "Payment in unknown status, failed to receive gateway response"
-        504:
-          description: "Payment operation timeout"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/overdue:
+  /1.0/kb/accounts/{accountId}/children:
     get:
       tags:
       - "Account"
-      summary: "Retrieve overdue state for account"
+      summary: "List children accounts"
       description: ""
-      operationId: "getOverdueAccount"
+      operationId: "getChildrenAccounts"
       produces:
       - "application/json"
       parameters:
@@ -2049,48 +1718,58 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
+      - name: "accountWithBalance"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "accountWithBalanceAndCBA"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
       responses:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/OverdueState"
+            type: "array"
+            items:
+              $ref: "#/definitions/Account"
         400:
-          description: "Invalid account id supplied"
+          description: "Invalid parent account id supplied"
         404:
-          description: "Account not found"
+          description: "Parent Account not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/admin/payments/{paymentId}/transactions/{paymentTransactionId}:
+  /1.0/kb/accounts/{childAccountId}/transferCredit:
     put:
       tags:
-      - "Admin"
-      summary: "Update existing paymentTransaction and associated payment state"
+      - "Account"
+      summary: "Move a given child credit to the parent level"
       description: ""
-      operationId: "updatePaymentTransactionState"
+      operationId: "transferChildCreditToParent"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: "paymentId"
+      - name: "childAccountId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "paymentTransactionId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/AdminPayment"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -2107,7 +1786,311 @@ paths:
         204:
           description: "Successful operation"
         400:
+          description: "Account does not have credit"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/accounts/{accountId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "Account"
+      summary: "Retrieve account audit logs with history by account id"
+      description: ""
+      operationId: "getAccountAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/accounts/pagination:
+    get:
+      tags:
+      - "Account"
+      summary: "List accounts"
+      description: ""
+      operationId: "getAccounts"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "offset"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 0
+        format: "int64"
+      - name: "limit"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 100
+        format: "int64"
+      - name: "accountWithBalance"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "accountWithBalanceAndCBA"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Account"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/accounts/search/{searchKey}:
+    get:
+      tags:
+      - "Account"
+      summary: "Search accounts"
+      description: ""
+      operationId: "searchAccounts"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "searchKey"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: ".*"
+      - name: "offset"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 0
+        format: "int64"
+      - name: "limit"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 100
+        format: "int64"
+      - name: "accountWithBalance"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "accountWithBalanceAndCBA"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Account"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/accounts/{accountId}/bundles:
+    get:
+      tags:
+      - "Account"
+      summary: "Retrieve bundles for account"
+      description: ""
+      operationId: "getAccountBundles"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "externalKey"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "bundlesFilter"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Bundle"
+        400:
+          description: "Invalid account id supplied"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/accounts:
+    get:
+      tags:
+      - "Account"
+      summary: "Retrieve an account by external key"
+      description: ""
+      operationId: "getAccountByKey"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "externalKey"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "accountWithBalance"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "accountWithBalanceAndCBA"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Account"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    post:
+      tags:
+      - "Account"
+      summary: "Create account"
+      description: ""
+      operationId: "createAccount"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Account"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Account created successfully"
+          schema:
+            $ref: "#/definitions/Account"
+        400:
           description: "Invalid account data supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/admin/healthcheck:
+    put:
+      tags:
+      - "Admin"
+      summary: "Put the host back into rotation"
+      description: ""
+      operationId: "putInRotation"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        204:
+          description: "Successful operation"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    delete:
+      tags:
+      - "Admin"
+      summary: "Put the host out of rotation"
+      description: ""
+      operationId: "putOutOfRotation"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        204:
+          description: "Successful operation"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -2170,6 +2153,56 @@ paths:
           description: "Invalid account id supplied"
         404:
           description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/admin/payments/{paymentId}/transactions/{paymentTransactionId}:
+    put:
+      tags:
+      - "Admin"
+      summary: "Update existing paymentTransaction and associated payment state"
+      description: ""
+      operationId: "updatePaymentTransactionState"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "paymentTransactionId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/AdminPayment"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid account data supplied"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -2283,46 +2316,13 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/admin/healthcheck:
-    put:
-      tags:
-      - "Admin"
-      summary: "Put the host back into rotation"
-      description: ""
-      operationId: "putInRotation"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        204:
-          description: "Successful operation"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    delete:
-      tags:
-      - "Admin"
-      summary: "Put the host out of rotation"
-      description: ""
-      operationId: "putOutOfRotation"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        204:
-          description: "Successful operation"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/bundles/{bundleId}/tags:
+  /1.0/kb/bundles/{bundleId}/customFields:
     get:
       tags:
       - "Bundle"
-      summary: "Retrieve bundle tags"
+      summary: "Retrieve bundle custom fields"
       description: ""
-      operationId: "getBundleTags"
+      operationId: "getBundleCustomFields"
       produces:
       - "application/json"
       parameters:
@@ -2332,11 +2332,6 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
       - name: "audit"
         in: "query"
         required: false
@@ -2352,11 +2347,9 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/Tag"
+              $ref: "#/definitions/CustomField"
         400:
           description: "Invalid bundle id supplied"
-        404:
-          description: "Bundle not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -2364,9 +2357,9 @@ paths:
     post:
       tags:
       - "Bundle"
-      summary: "Add tags to bundle"
+      summary: "Add custom fields to bundle"
       description: ""
-      operationId: "createBundleTags"
+      operationId: "createBundleCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -2384,8 +2377,7 @@ paths:
         schema:
           type: "array"
           items:
-            type: "string"
-            format: "uuid"
+            $ref: "#/definitions/CustomField"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -2400,23 +2392,23 @@ paths:
         type: "string"
       responses:
         201:
-          description: "Tag created successfully"
+          description: "Custom field created successfully"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/Tag"
+              $ref: "#/definitions/CustomField"
         400:
           description: "Invalid bundle id supplied"
       security:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-    delete:
+    put:
       tags:
       - "Bundle"
-      summary: "Remove tags from bundle"
+      summary: "Modify custom fields to bundle"
       description: ""
-      operationId: "deleteBundleTags"
+      operationId: "modifyBundleCustomFields"
       consumes:
       - "application/json"
       produces:
@@ -2428,7 +2420,52 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "tagDef"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/CustomField"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid bundle id supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    delete:
+      tags:
+      - "Bundle"
+      summary: "Remove custom fields from bundle"
+      description: ""
+      operationId: "deleteBundleCustomFields"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "bundleId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "customField"
         in: "query"
         required: false
         type: "array"
@@ -2782,184 +2819,6 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/bundles/{bundleId}/customFields:
-    get:
-      tags:
-      - "Bundle"
-      summary: "Retrieve bundle custom fields"
-      description: ""
-      operationId: "getBundleCustomFields"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "bundleId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/CustomField"
-        400:
-          description: "Invalid bundle id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    post:
-      tags:
-      - "Bundle"
-      summary: "Add custom fields to bundle"
-      description: ""
-      operationId: "createBundleCustomFields"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "bundleId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/CustomField"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Custom field created successfully"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/CustomField"
-        400:
-          description: "Invalid bundle id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    put:
-      tags:
-      - "Bundle"
-      summary: "Modify custom fields to bundle"
-      description: ""
-      operationId: "modifyBundleCustomFields"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "bundleId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/CustomField"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Invalid bundle id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    delete:
-      tags:
-      - "Bundle"
-      summary: "Remove custom fields from bundle"
-      description: ""
-      operationId: "deleteBundleCustomFields"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "bundleId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "customField"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-          format: "uuid"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Invalid bundle id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
   /1.0/kb/bundles/{bundleId}:
     get:
       tags:
@@ -3107,6 +2966,147 @@ paths:
           description: "Invalid argumnent supplied"
         404:
           description: "Bundle not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/bundles/{bundleId}/tags:
+    get:
+      tags:
+      - "Bundle"
+      summary: "Retrieve bundle tags"
+      description: ""
+      operationId: "getBundleTags"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "bundleId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Tag"
+        400:
+          description: "Invalid bundle id supplied"
+        404:
+          description: "Bundle not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    post:
+      tags:
+      - "Bundle"
+      summary: "Add tags to bundle"
+      description: ""
+      operationId: "createBundleTags"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "bundleId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+            format: "uuid"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Tag created successfully"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Tag"
+        400:
+          description: "Invalid bundle id supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    delete:
+      tags:
+      - "Bundle"
+      summary: "Remove tags from bundle"
+      description: ""
+      operationId: "deleteBundleTags"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "bundleId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "tagDef"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+          format: "uuid"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid bundle id supplied"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -3473,35 +3473,6 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/credits/{creditId}:
-    get:
-      tags:
-      - "Credit"
-      summary: "Retrieve a credit by id"
-      description: ""
-      operationId: "getCredit"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "creditId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/InvoiceItem"
-        400:
-          description: "Invalid credit id supplied"
-        404:
-          description: "Credit not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
   /1.0/kb/credits:
     post:
       tags:
@@ -3556,6 +3527,131 @@ paths:
           description: "Invalid account id supplied"
         404:
           description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/credits/{creditId}:
+    get:
+      tags:
+      - "Credit"
+      summary: "Retrieve a credit by id"
+      description: ""
+      operationId: "getCredit"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "creditId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/InvoiceItem"
+        400:
+          description: "Invalid credit id supplied"
+        404:
+          description: "Credit not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/customFields/pagination:
+    get:
+      tags:
+      - "CustomField"
+      summary: "List custom fields"
+      description: ""
+      operationId: "getCustomFields"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "offset"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 0
+        format: "int64"
+      - name: "limit"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 100
+        format: "int64"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CustomField"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/customFields/search:
+    get:
+      tags:
+      - "CustomField"
+      summary: "Search custom fields by type, name and optional value"
+      description: ""
+      operationId: "searchCustomFieldsByTypeName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "objectType"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "fieldName"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "fieldValue"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "offset"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 0
+        format: "int64"
+      - name: "limit"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 100
+        format: "int64"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CustomField"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -3636,102 +3732,6 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/customFields/search:
-    get:
-      tags:
-      - "CustomField"
-      summary: "Search custom fields by type, name and optional value"
-      description: ""
-      operationId: "searchCustomFieldsByTypeName"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "objectType"
-        in: "query"
-        required: false
-        type: "string"
-      - name: "fieldName"
-        in: "query"
-        required: false
-        type: "string"
-      - name: "fieldValue"
-        in: "query"
-        required: false
-        type: "string"
-      - name: "offset"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 0
-        format: "int64"
-      - name: "limit"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 100
-        format: "int64"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/CustomField"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/customFields/pagination:
-    get:
-      tags:
-      - "CustomField"
-      summary: "List custom fields"
-      description: ""
-      operationId: "getCustomFields"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "offset"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 0
-        format: "int64"
-      - name: "limit"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 100
-        format: "int64"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/CustomField"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
   /1.0/kb/export/{accountId}:
     get:
       tags:
@@ -3767,35 +3767,6 @@ paths:
           description: "Invalid account id supplied"
         404:
           description: "Account not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/invoiceItems/{invoiceItemId}/auditLogsWithHistory:
-    get:
-      tags:
-      - "InvoiceItem"
-      summary: "Retrieve invoice item audit logs with history by id"
-      description: ""
-      operationId: "getInvoiceItemAuditLogsWithHistory"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "invoiceItemId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/AuditLog"
-        404:
-          description: "Invoice item not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -3974,6 +3945,35 @@ paths:
           description: "Successful operation"
         400:
           description: "Invalid invoice item id supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/invoiceItems/{invoiceItemId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "InvoiceItem"
+      summary: "Retrieve invoice item audit logs with history by id"
+      description: ""
+      operationId: "getInvoiceItemAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "invoiceItemId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        404:
+          description: "Invoice item not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -4277,181 +4277,6 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/invoicePayments/{paymentId}/refunds:
-    post:
-      tags:
-      - "InvoicePayment"
-      summary: "Refund a payment, and adjust the invoice if needed"
-      description: ""
-      operationId: "createRefundWithAdjustments"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "paymentId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/InvoicePaymentTransaction"
-      - name: "externalPayment"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "paymentMethodId"
-        in: "query"
-        required: false
-        type: "string"
-        format: "uuid"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Created refund successfully"
-          schema:
-            $ref: "#/definitions/InvoicePayment"
-        400:
-          description: "Invalid payment id supplied"
-        404:
-          description: "Account or payment not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/invoicePayments/{paymentId}/chargebacks:
-    post:
-      tags:
-      - "InvoicePayment"
-      summary: "Record a chargeback"
-      description: ""
-      operationId: "createChargeback"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "paymentId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/InvoicePaymentTransaction"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Created chargeback successfully"
-          schema:
-            $ref: "#/definitions/InvoicePayment"
-        400:
-          description: "Invalid payment id supplied"
-        404:
-          description: "Account or payment not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/invoicePayments/{paymentId}/chargebackReversals:
-    post:
-      tags:
-      - "InvoicePayment"
-      summary: "Record a chargebackReversal"
-      description: ""
-      operationId: "createChargebackReversal"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "paymentId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/InvoicePaymentTransaction"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Created chargeback reversal successfully"
-          schema:
-            $ref: "#/definitions/InvoicePayment"
-        400:
-          description: "Invalid payment id supplied"
-        404:
-          description: "Account or payment not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
   /1.0/kb/invoicePayments/{paymentId}/customFields:
     get:
       tags:
@@ -4626,6 +4451,181 @@ paths:
           description: "Successful operation"
         400:
           description: "Invalid payment id supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/invoicePayments/{paymentId}/refunds:
+    post:
+      tags:
+      - "InvoicePayment"
+      summary: "Refund a payment, and adjust the invoice if needed"
+      description: ""
+      operationId: "createRefundWithAdjustments"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/InvoicePaymentTransaction"
+      - name: "externalPayment"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "paymentMethodId"
+        in: "query"
+        required: false
+        type: "string"
+        format: "uuid"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Created refund successfully"
+          schema:
+            $ref: "#/definitions/InvoicePayment"
+        400:
+          description: "Invalid payment id supplied"
+        404:
+          description: "Account or payment not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/invoicePayments/{paymentId}/chargebacks:
+    post:
+      tags:
+      - "InvoicePayment"
+      summary: "Record a chargeback"
+      description: ""
+      operationId: "createChargeback"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/InvoicePaymentTransaction"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Created chargeback successfully"
+          schema:
+            $ref: "#/definitions/InvoicePayment"
+        400:
+          description: "Invalid payment id supplied"
+        404:
+          description: "Account or payment not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/invoicePayments/{paymentId}/chargebackReversals:
+    post:
+      tags:
+      - "InvoicePayment"
+      summary: "Record a chargebackReversal"
+      description: ""
+      operationId: "createChargebackReversal"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/InvoicePaymentTransaction"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Created chargeback reversal successfully"
+          schema:
+            $ref: "#/definitions/InvoicePayment"
+        400:
+          description: "Invalid payment id supplied"
+        404:
+          description: "Account or payment not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -5056,6 +5056,264 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Invoice"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/invoices/{invoiceId}/customFields:
+    get:
+      tags:
+      - "Invoice"
+      summary: "Retrieve invoice custom fields"
+      description: ""
+      operationId: "getInvoiceCustomFields"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "invoiceId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CustomField"
+        400:
+          description: "Invalid invoice id supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    post:
+      tags:
+      - "Invoice"
+      summary: "Add custom fields to invoice"
+      description: ""
+      operationId: "createInvoiceCustomFields"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "invoiceId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/CustomField"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Custom field created successfully"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CustomField"
+        400:
+          description: "Invalid invoice id supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    put:
+      tags:
+      - "Invoice"
+      summary: "Modify custom fields to invoice"
+      description: ""
+      operationId: "modifyInvoiceCustomFields"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "invoiceId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/CustomField"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid invoice id supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    delete:
+      tags:
+      - "Invoice"
+      summary: "Remove custom fields from invoice"
+      description: ""
+      operationId: "deleteInvoiceCustomFields"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "invoiceId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "customField"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+          format: "uuid"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid invoice id supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/invoices/{invoiceId}/commitInvoice:
+    put:
+      tags:
+      - "Invoice"
+      summary: "Perform the invoice status transition from DRAFT to COMMITTED"
+      description: ""
+      operationId: "commitInvoice"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "invoiceId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        404:
+          description: "Invoice not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/invoices/{invoiceId}/voidInvoice:
+    put:
+      tags:
+      - "Invoice"
+      summary: "Perform the action of voiding an invoice"
+      description: ""
+      operationId: "voidInvoice"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "invoiceId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid invoice id supplied"
+        404:
+          description: "Invoice not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -5840,184 +6098,6 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/invoices/{invoiceId}/customFields:
-    get:
-      tags:
-      - "Invoice"
-      summary: "Retrieve invoice custom fields"
-      description: ""
-      operationId: "getInvoiceCustomFields"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "invoiceId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/CustomField"
-        400:
-          description: "Invalid invoice id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    post:
-      tags:
-      - "Invoice"
-      summary: "Add custom fields to invoice"
-      description: ""
-      operationId: "createInvoiceCustomFields"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "invoiceId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/CustomField"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Custom field created successfully"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/CustomField"
-        400:
-          description: "Invalid invoice id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    put:
-      tags:
-      - "Invoice"
-      summary: "Modify custom fields to invoice"
-      description: ""
-      operationId: "modifyInvoiceCustomFields"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "invoiceId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/CustomField"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Invalid invoice id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    delete:
-      tags:
-      - "Invoice"
-      summary: "Remove custom fields from invoice"
-      description: ""
-      operationId: "deleteInvoiceCustomFields"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "invoiceId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "customField"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-          format: "uuid"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Invalid invoice id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
   /1.0/kb/invoices/{invoiceId}/tags:
     get:
       tags:
@@ -6155,86 +6235,6 @@ paths:
           description: "Successful operation"
         400:
           description: "Invalid invoice id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/invoices/{invoiceId}/commitInvoice:
-    put:
-      tags:
-      - "Invoice"
-      summary: "Perform the invoice status transition from DRAFT to COMMITTED"
-      description: ""
-      operationId: "commitInvoice"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "invoiceId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        404:
-          description: "Invoice not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/invoices/{invoiceId}/voidInvoice:
-    put:
-      tags:
-      - "Invoice"
-      summary: "Perform the action of voiding an invoice"
-      description: ""
-      operationId: "voidInvoice"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "invoiceId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Invalid invoice id supplied"
-        404:
-          description: "Invoice not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -6412,23 +6412,28 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/paymentGateways/hosted/form:
+  /1.0/kb/paymentGateways/notification/{pluginName}:
     post:
       tags:
       - "PaymentGateway"
-      summary: "Combo API to generate form data to redirect the customer to the gateway"
-      description: ""
-      operationId: "buildComboFormDescriptor"
+      summary: "Process a gateway notification"
+      description: "The response is built by the appropriate plugin"
+      operationId: "processNotification"
       consumes:
-      - "application/json"
+      - "*/*"
       produces:
       - "application/json"
       parameters:
+      - name: "pluginName"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: ".*"
       - in: "body"
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/ComboHostedPaymentPage"
+          type: "string"
       - name: "controlPluginName"
         in: "query"
         required: false
@@ -6457,11 +6462,7 @@ paths:
         type: "string"
       responses:
         200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/HostedPaymentPageFormDescriptor"
-        400:
-          description: "Invalid data for Account or PaymentMethod"
+          description: "Successful"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -6531,28 +6532,23 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/paymentGateways/notification/{pluginName}:
+  /1.0/kb/paymentGateways/hosted/form:
     post:
       tags:
       - "PaymentGateway"
-      summary: "Process a gateway notification"
-      description: "The response is built by the appropriate plugin"
-      operationId: "processNotification"
+      summary: "Combo API to generate form data to redirect the customer to the gateway"
+      description: ""
+      operationId: "buildComboFormDescriptor"
       consumes:
-      - "*/*"
+      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: "pluginName"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: ".*"
       - in: "body"
         name: "body"
         required: true
         schema:
-          type: "string"
+          $ref: "#/definitions/ComboHostedPaymentPage"
       - name: "controlPluginName"
         in: "query"
         required: false
@@ -6581,7 +6577,11 @@ paths:
         type: "string"
       responses:
         200:
-          description: "Successful"
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/HostedPaymentPageFormDescriptor"
+        400:
+          description: "Invalid data for Account or PaymentMethod"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -6692,115 +6692,6 @@ paths:
           description: "Invalid paymentMethodId supplied"
         404:
           description: "Account or payment method not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/paymentMethods:
-    get:
-      tags:
-      - "PaymentMethod"
-      summary: "Retrieve a payment method by external key"
-      description: ""
-      operationId: "getPaymentMethodByKey"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "externalKey"
-        in: "query"
-        required: true
-        type: "string"
-      - name: "includedDeleted"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/PaymentMethod"
-        404:
-          description: "Account or payment method not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/paymentMethods/pagination:
-    get:
-      tags:
-      - "PaymentMethod"
-      summary: "List payment methods"
-      description: ""
-      operationId: "getPaymentMethods"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "offset"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 0
-        format: "int64"
-      - name: "limit"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 100
-        format: "int64"
-      - name: "pluginName"
-        in: "query"
-        required: false
-        type: "string"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/PaymentMethod"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -6983,31 +6874,111 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/paymentMethods/{paymentMethodId}/auditLogsWithHistory:
+  /1.0/kb/paymentMethods/pagination:
     get:
       tags:
       - "PaymentMethod"
-      summary: "Retrieve payment method audit logs with history by id"
+      summary: "List payment methods"
       description: ""
-      operationId: "getPaymentMethodAuditLogsWithHistory"
+      operationId: "getPaymentMethods"
       produces:
       - "application/json"
       parameters:
-      - name: "paymentMethodId"
-        in: "path"
-        required: true
+      - name: "offset"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 0
+        format: "int64"
+      - name: "limit"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 100
+        format: "int64"
+      - name: "pluginName"
+        in: "query"
+        required: false
         type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
       responses:
         200:
           description: "successful operation"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/AuditLog"
+              $ref: "#/definitions/PaymentMethod"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/paymentMethods:
+    get:
+      tags:
+      - "PaymentMethod"
+      summary: "Retrieve a payment method by external key"
+      description: ""
+      operationId: "getPaymentMethodByKey"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "externalKey"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "includedDeleted"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PaymentMethod"
         404:
-          description: "Account not found"
+          description: "Account or payment method not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -7071,6 +7042,430 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/PaymentMethod"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/paymentMethods/{paymentMethodId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "PaymentMethod"
+      summary: "Retrieve payment method audit logs with history by id"
+      description: ""
+      operationId: "getPaymentMethodAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentMethodId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        404:
+          description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/payments/pagination:
+    get:
+      tags:
+      - "Payment"
+      summary: "Get payments"
+      description: ""
+      operationId: "getPayments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "offset"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 0
+        format: "int64"
+      - name: "limit"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 100
+        format: "int64"
+      - name: "pluginName"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withAttempts"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Payment"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/payments/search/{searchKey}:
+    get:
+      tags:
+      - "Payment"
+      summary: "Search payments"
+      description: ""
+      operationId: "searchPayments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "searchKey"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: ".*"
+      - name: "offset"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 0
+        format: "int64"
+      - name: "limit"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 100
+        format: "int64"
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withAttempts"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "pluginName"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Payment"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/payments/{paymentId}:
+    get:
+      tags:
+      - "Payment"
+      summary: "Retrieve a payment by id"
+      description: ""
+      operationId: "getPayment"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withAttempts"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Payment"
+        400:
+          description: "Invalid paymentId supplied"
+        404:
+          description: "Payment not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    post:
+      tags:
+      - "Payment"
+      summary: "Capture an existing authorization"
+      description: ""
+      operationId: "captureAuthorization"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
+      - name: "controlPluginName"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Payment transaction created successfully"
+          schema:
+            $ref: "#/definitions/Payment"
+        400:
+          description: "Invalid paymentId supplied"
+        404:
+          description: "Account or payment not found"
+        402:
+          description: "Transaction declined by gateway"
+        422:
+          description: "Payment is aborted by a control plugin"
+        502:
+          description: "Failed to submit payment transaction"
+        503:
+          description: "Payment in unknown status, failed to receive gateway response"
+        504:
+          description: "Payment operation timeout"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    put:
+      tags:
+      - "Payment"
+      summary: "Complete an existing transaction"
+      description: ""
+      operationId: "completeTransaction"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
+      - name: "controlPluginName"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid paymentId supplied"
+        404:
+          description: "Account or payment not found"
+        402:
+          description: "Transaction declined by gateway"
+        422:
+          description: "Payment is aborted by a control plugin"
+        502:
+          description: "Failed to submit payment transaction"
+        503:
+          description: "Payment in unknown status, failed to receive gateway response"
+        504:
+          description: "Payment operation timeout"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    delete:
+      tags:
+      - "Payment"
+      summary: "Void an existing payment"
+      description: ""
+      operationId: "voidPayment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
+      - name: "controlPluginName"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid paymentId supplied"
+        404:
+          description: "Account or payment not found"
+        402:
+          description: "Transaction declined by gateway"
+        422:
+          description: "Payment is aborted by a control plugin"
+        502:
+          description: "Failed to submit payment transaction"
+        503:
+          description: "Payment in unknown status, failed to receive gateway response"
+        504:
+          description: "Payment operation timeout"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -7379,401 +7774,6 @@ paths:
           description: "Payment in unknown status, failed to receive gateway response"
         504:
           description: "Payment operation timeout"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/payments/{paymentId}:
-    get:
-      tags:
-      - "Payment"
-      summary: "Retrieve a payment by id"
-      description: ""
-      operationId: "getPayment"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "paymentId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "withAttempts"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
-        400:
-          description: "Invalid paymentId supplied"
-        404:
-          description: "Payment not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    post:
-      tags:
-      - "Payment"
-      summary: "Capture an existing authorization"
-      description: ""
-      operationId: "captureAuthorization"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "paymentId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
-      - name: "controlPluginName"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Payment transaction created successfully"
-          schema:
-            $ref: "#/definitions/Payment"
-        400:
-          description: "Invalid paymentId supplied"
-        404:
-          description: "Account or payment not found"
-        402:
-          description: "Transaction declined by gateway"
-        422:
-          description: "Payment is aborted by a control plugin"
-        502:
-          description: "Failed to submit payment transaction"
-        503:
-          description: "Payment in unknown status, failed to receive gateway response"
-        504:
-          description: "Payment operation timeout"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    put:
-      tags:
-      - "Payment"
-      summary: "Complete an existing transaction"
-      description: ""
-      operationId: "completeTransaction"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "paymentId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
-      - name: "controlPluginName"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Invalid paymentId supplied"
-        404:
-          description: "Account or payment not found"
-        402:
-          description: "Transaction declined by gateway"
-        422:
-          description: "Payment is aborted by a control plugin"
-        502:
-          description: "Failed to submit payment transaction"
-        503:
-          description: "Payment in unknown status, failed to receive gateway response"
-        504:
-          description: "Payment operation timeout"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    delete:
-      tags:
-      - "Payment"
-      summary: "Void an existing payment"
-      description: ""
-      operationId: "voidPayment"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "paymentId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
-      - name: "controlPluginName"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Invalid paymentId supplied"
-        404:
-          description: "Account or payment not found"
-        402:
-          description: "Transaction declined by gateway"
-        422:
-          description: "Payment is aborted by a control plugin"
-        502:
-          description: "Failed to submit payment transaction"
-        503:
-          description: "Payment in unknown status, failed to receive gateway response"
-        504:
-          description: "Payment operation timeout"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/payments/pagination:
-    get:
-      tags:
-      - "Payment"
-      summary: "Get payments"
-      description: ""
-      operationId: "getPayments"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "offset"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 0
-        format: "int64"
-      - name: "limit"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 100
-        format: "int64"
-      - name: "pluginName"
-        in: "query"
-        required: false
-        type: "string"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "withAttempts"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Payment"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/payments/search/{searchKey}:
-    get:
-      tags:
-      - "Payment"
-      summary: "Search payments"
-      description: ""
-      operationId: "searchPayments"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "searchKey"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: ".*"
-      - name: "offset"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 0
-        format: "int64"
-      - name: "limit"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 100
-        format: "int64"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "withAttempts"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "pluginName"
-        in: "query"
-        required: false
-        type: "string"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Payment"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -8646,42 +8646,6 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/security/permissions:
-    get:
-      tags:
-      - "Security"
-      summary: "List user permissions"
-      description: ""
-      operationId: "getCurrentUserPermissions"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              type: "string"
-      security:
-      - basicAuth: []
-  /1.0/kb/security/subject:
-    get:
-      tags:
-      - "Security"
-      summary: "Get user information"
-      description: ""
-      operationId: "getCurrentUserSubject"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Subject"
-      security:
-      - basicAuth: []
   /1.0/kb/security/users:
     post:
       tags:
@@ -8944,35 +8908,42 @@ paths:
           description: "Successful operation"
       security:
       - basicAuth: []
-  /1.0/kb/subscriptions/events/{eventId}/auditLogsWithHistory:
+  /1.0/kb/security/permissions:
     get:
       tags:
-      - "Subscription"
-      summary: "Retrieve subscription event audit logs with history by id"
+      - "Security"
+      summary: "List user permissions"
       description: ""
-      operationId: "getSubscriptionEventAuditLogsWithHistory"
+      operationId: "getCurrentUserPermissions"
       produces:
       - "application/json"
-      parameters:
-      - name: "eventId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
+      parameters: []
       responses:
         200:
           description: "successful operation"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/AuditLog"
-        404:
-          description: "Subscription event not found"
+              type: "string"
       security:
       - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
+  /1.0/kb/security/subject:
+    get:
+      tags:
+      - "Security"
+      summary: "Get user information"
+      description: ""
+      operationId: "getCurrentUserSubject"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Subject"
+      security:
+      - basicAuth: []
   /1.0/kb/subscriptions:
     get:
       tags:
@@ -9082,171 +9053,13 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/subscriptions/createSubscriptionWithAddOns:
-    post:
+  /1.0/kb/subscriptions/{subscriptionId}/auditLogsWithHistory:
+    get:
       tags:
       - "Subscription"
-      summary: "Create an entitlement with addOn products"
+      summary: "Retrieve subscription audit logs with history by id"
       description: ""
-      operationId: "createSubscriptionWithAddOns"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/Subscription"
-      - name: "entitlementDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      - name: "billingDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      - name: "migrated"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "renameKeyIfExistsAndUnused"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: true
-      - name: "callCompletion"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "callTimeoutSec"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 3
-        format: "int64"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Subscriptions created successfully"
-          schema:
-            $ref: "#/definitions/Bundle"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/subscriptions/createSubscriptionsWithAddOns:
-    post:
-      tags:
-      - "Subscription"
-      summary: "Create multiple entitlements with addOn products"
-      description: ""
-      operationId: "createSubscriptionsWithAddOns"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/BulkSubscriptionsBundle"
-      - name: "entitlementDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      - name: "billingDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      - name: "renameKeyIfExistsAndUnused"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: true
-      - name: "migrated"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "callCompletion"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "callTimeoutSec"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 3
-        format: "int64"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Subscriptions created successfully"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Bundle"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/subscriptions/{subscriptionId}/uncancel:
-    put:
-      tags:
-      - "Subscription"
-      summary: "Un-cancel an entitlement"
-      description: ""
-      operationId: "uncancelSubscriptionPlan"
+      operationId: "getSubscriptionAuditLogsWithHistory"
       produces:
       - "application/json"
       parameters:
@@ -9256,32 +9069,44 @@ paths:
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        404:
+          description: "Subscription not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/subscriptions/events/{eventId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "Subscription"
+      summary: "Retrieve subscription event audit logs with history by id"
+      description: ""
+      operationId: "getSubscriptionEventAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "eventId"
+        in: "path"
         required: true
         type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
       responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Invalid subscription id supplied"
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
         404:
-          description: "Entitlement not found"
+          description: "Subscription event not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -9585,6 +9410,130 @@ paths:
           description: "Invalid subscription id supplied"
         404:
           description: "Subscription not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/subscriptions/createSubscriptionWithAddOns:
+    post:
+      tags:
+      - "Subscription"
+      summary: "Create an entitlement with addOn products"
+      description: ""
+      operationId: "createSubscriptionWithAddOns"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/Subscription"
+      - name: "entitlementDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "billingDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "migrated"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "renameKeyIfExistsAndUnused"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: true
+      - name: "callCompletion"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "callTimeoutSec"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 3
+        format: "int64"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Subscriptions created successfully"
+          schema:
+            $ref: "#/definitions/Bundle"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/subscriptions/{subscriptionId}/uncancel:
+    put:
+      tags:
+      - "Subscription"
+      summary: "Un-cancel an entitlement"
+      description: ""
+      operationId: "uncancelSubscriptionPlan"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "subscriptionId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid subscription id supplied"
+        404:
+          description: "Entitlement not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -9952,71 +9901,13 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/subscriptions/{subscriptionId}/auditLogsWithHistory:
-    get:
-      tags:
-      - "Subscription"
-      summary: "Retrieve subscription audit logs with history by id"
-      description: ""
-      operationId: "getSubscriptionAuditLogsWithHistory"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "subscriptionId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/AuditLog"
-        404:
-          description: "Subscription not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/tagDefinitions:
-    get:
-      tags:
-      - "TagDefinition"
-      summary: "List tag definitions"
-      description: ""
-      operationId: "getTagDefinitions"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/TagDefinition"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
+  /1.0/kb/subscriptions/createSubscriptionsWithAddOns:
     post:
       tags:
-      - "TagDefinition"
-      summary: "Create a tag definition"
+      - "Subscription"
+      summary: "Create multiple entitlements with addOn products"
       description: ""
-      operationId: "createTagDefinition"
+      operationId: "createSubscriptionsWithAddOns"
       consumes:
       - "application/json"
       produces:
@@ -10026,7 +9917,47 @@ paths:
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/TagDefinition"
+          type: "array"
+          items:
+            $ref: "#/definitions/BulkSubscriptionsBundle"
+      - name: "entitlementDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "billingDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "renameKeyIfExistsAndUnused"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: true
+      - name: "migrated"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "callCompletion"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "callTimeoutSec"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 3
+        format: "int64"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
       - name: "X-Killbill-CreatedBy"
         in: "header"
         required: true
@@ -10041,11 +9972,11 @@ paths:
         type: "string"
       responses:
         201:
-          description: "Tag definition created successfully"
+          description: "Subscriptions created successfully"
           schema:
-            $ref: "#/definitions/TagDefinition"
-        400:
-          description: "Invalid name or description supplied"
+            type: "array"
+            items:
+              $ref: "#/definitions/Bundle"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -10118,6 +10049,75 @@ paths:
           description: "Successful operation"
         400:
           description: "Invalid tagDefinitionId supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/tagDefinitions:
+    get:
+      tags:
+      - "TagDefinition"
+      summary: "List tag definitions"
+      description: ""
+      operationId: "getTagDefinitions"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TagDefinition"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    post:
+      tags:
+      - "TagDefinition"
+      summary: "Create a tag definition"
+      description: ""
+      operationId: "createTagDefinition"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/TagDefinition"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Tag definition created successfully"
+          schema:
+            $ref: "#/definitions/TagDefinition"
+        400:
+          description: "Invalid name or description supplied"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -10265,6 +10265,109 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Tag"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/tenants/uploadPluginPaymentStateMachineConfig/{pluginName}:
+    get:
+      tags:
+      - "Tenant"
+      summary: "Retrieve a per tenant payment state machine for a plugin"
+      description: ""
+      operationId: "getPluginPaymentStateMachineConfig"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "pluginName"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: ".*"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantKeyValue"
+        400:
+          description: "Invalid tenantId supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    post:
+      tags:
+      - "Tenant"
+      summary: "Add a per tenant payment state machine for a plugin"
+      description: ""
+      operationId: "uploadPluginPaymentStateMachineConfig"
+      consumes:
+      - "text/plain"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "pluginName"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: ".*"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "string"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Per tenant state machine uploaded successfully"
+          schema:
+            $ref: "#/definitions/TenantKeyValue"
+        400:
+          description: "Invalid tenantId supplied"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    delete:
+      tags:
+      - "Tenant"
+      summary: "Delete a per tenant payment state machine for a plugin"
+      description: ""
+      operationId: "deletePluginPaymentStateMachineConfig"
+      parameters:
+      - name: "pluginName"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: ".*"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        204:
+          description: "Successful operation"
+        400:
+          description: "Invalid tenantId supplied"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -10667,109 +10770,6 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/tenants/uploadPluginPaymentStateMachineConfig/{pluginName}:
-    get:
-      tags:
-      - "Tenant"
-      summary: "Retrieve a per tenant payment state machine for a plugin"
-      description: ""
-      operationId: "getPluginPaymentStateMachineConfig"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "pluginName"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: ".*"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/TenantKeyValue"
-        400:
-          description: "Invalid tenantId supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    post:
-      tags:
-      - "Tenant"
-      summary: "Add a per tenant payment state machine for a plugin"
-      description: ""
-      operationId: "uploadPluginPaymentStateMachineConfig"
-      consumes:
-      - "text/plain"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "pluginName"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: ".*"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "string"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Per tenant state machine uploaded successfully"
-          schema:
-            $ref: "#/definitions/TenantKeyValue"
-        400:
-          description: "Invalid tenantId supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    delete:
-      tags:
-      - "Tenant"
-      summary: "Delete a per tenant payment state machine for a plugin"
-      description: ""
-      operationId: "deletePluginPaymentStateMachineConfig"
-      parameters:
-      - name: "pluginName"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: ".*"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        204:
-          description: "Successful operation"
-        400:
-          description: "Invalid tenantId supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
   /1.0/kb/tenants/userKeyValue/{keyName}:
     get:
       tags:
@@ -10869,57 +10869,6 @@ paths:
           description: "Successful operation"
         400:
           description: "Invalid tenantId supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/paymentTransactions:
-    get:
-      tags:
-      - "PaymentTransaction"
-      summary: "Retrieve a payment by transaction external key"
-      description: ""
-      operationId: "getPaymentByTransactionExternalKey"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "transactionExternalKey"
-        in: "query"
-        required: true
-        type: "string"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "withAttempts"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Payment"
-        404:
-          description: "Payment not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -11102,6 +11051,164 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
+  /1.0/kb/paymentTransactions:
+    get:
+      tags:
+      - "PaymentTransaction"
+      summary: "Retrieve a payment by transaction external key"
+      description: ""
+      operationId: "getPaymentByTransactionExternalKey"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "transactionExternalKey"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withAttempts"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Payment"
+        404:
+          description: "Payment not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/paymentTransactions/{transactionId}:
+    get:
+      tags:
+      - "PaymentTransaction"
+      summary: "Retrieve a payment by transaction id"
+      description: ""
+      operationId: "getPaymentByTransactionId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "transactionId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - name: "withPluginInfo"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "withAttempts"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Payment"
+        404:
+          description: "Payment not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    post:
+      tags:
+      - "PaymentTransaction"
+      summary: "Mark a pending payment transaction as succeeded or failed"
+      description: ""
+      operationId: "notifyStateChanged"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "transactionId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentTransaction"
+      - name: "controlPluginName"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Successfully notifiy state change"
+          schema:
+            $ref: "#/definitions/Payment"
+        400:
+          description: "Invalid paymentId supplied"
+        404:
+          description: "Account or Payment not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
   /1.0/kb/paymentTransactions/{transactionId}/tags:
     get:
       tags:
@@ -11272,109 +11379,39 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/paymentTransactions/{transactionId}:
+  /1.0/kb/usages/{subscriptionId}:
     get:
       tags:
-      - "PaymentTransaction"
-      summary: "Retrieve a payment by transaction id"
+      - "Usage"
+      summary: "Retrieve usage for a subscription"
       description: ""
-      operationId: "getPaymentByTransactionId"
+      operationId: "getAllUsage"
       produces:
       - "application/json"
       parameters:
-      - name: "transactionId"
+      - name: "subscriptionId"
         in: "path"
         required: true
         type: "string"
         pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
         format: "uuid"
-      - name: "withPluginInfo"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "withAttempts"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "audit"
+      - name: "startDate"
         in: "query"
         required: false
         type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
+        format: "date"
+      - name: "endDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
       responses:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/Payment"
-        404:
-          description: "Payment not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    post:
-      tags:
-      - "PaymentTransaction"
-      summary: "Mark a pending payment transaction as succeeded or failed"
-      description: ""
-      operationId: "notifyStateChanged"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "transactionId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/PaymentTransaction"
-      - name: "controlPluginName"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        201:
-          description: "Successfully notifiy state change"
-          schema:
-            $ref: "#/definitions/Payment"
+            $ref: "#/definitions/RolledUpUsage"
         400:
-          description: "Invalid paymentId supplied"
-        404:
-          description: "Account or Payment not found"
+          description: "Missing start date or end date"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -11413,43 +11450,6 @@ paths:
           description: "Successfully recorded usage data change"
         400:
           description: "Invalid subscription (e.g. inactive)"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/usages/{subscriptionId}:
-    get:
-      tags:
-      - "Usage"
-      summary: "Retrieve usage for a subscription"
-      description: ""
-      operationId: "getAllUsage"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "subscriptionId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - name: "startDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      - name: "endDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/RolledUpUsage"
-        400:
-          description: "Missing start date or end date"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -11785,12 +11785,83 @@ definitions:
       id:
         type: "string"
         format: "uuid"
-      updatedDate:
-        type: "string"
-        format: "date-time"
       createdDate:
         type: "string"
         format: "date-time"
+      updatedDate:
+        type: "string"
+        format: "date-time"
+  BlockingState:
+    type: "object"
+    properties:
+      blockedId:
+        type: "string"
+        format: "uuid"
+      stateName:
+        type: "string"
+      service:
+        type: "string"
+      isBlockChange:
+        type: "boolean"
+      isBlockEntitlement:
+        type: "boolean"
+      isBlockBilling:
+        type: "boolean"
+      effectiveDate:
+        type: "string"
+        format: "date-time"
+      type:
+        type: "string"
+        enum:
+        - "SUBSCRIPTION"
+        - "SUBSCRIPTION_BUNDLE"
+        - "ACCOUNT"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
+  CustomField:
+    type: "object"
+    required:
+    - "name"
+    - "value"
+    properties:
+      customFieldId:
+        type: "string"
+        format: "uuid"
+      objectId:
+        type: "string"
+        format: "uuid"
+      objectType:
+        type: "string"
+        enum:
+        - "ACCOUNT"
+        - "ACCOUNT_EMAIL"
+        - "BLOCKING_STATES"
+        - "BUNDLE"
+        - "CUSTOM_FIELD"
+        - "INVOICE"
+        - "PAYMENT"
+        - "TRANSACTION"
+        - "INVOICE_ITEM"
+        - "INVOICE_PAYMENT"
+        - "SUBSCRIPTION"
+        - "SUBSCRIPTION_EVENT"
+        - "SERVICE_BROADCAST"
+        - "PAYMENT_ATTEMPT"
+        - "PAYMENT_METHOD"
+        - "TAG"
+        - "TAG_DEFINITION"
+        - "TENANT"
+        - "TENANT_KVS"
+      name:
+        type: "string"
+      value:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
   InvoicePayment:
     type: "object"
     properties:
@@ -12617,6 +12688,314 @@ definitions:
         type: "string"
       isUpdatable:
         type: "boolean"
+  PaymentMethod:
+    type: "object"
+    properties:
+      paymentMethodId:
+        type: "string"
+        format: "uuid"
+      externalKey:
+        type: "string"
+      accountId:
+        type: "string"
+        format: "uuid"
+      isDefault:
+        type: "boolean"
+      pluginName:
+        type: "string"
+      pluginInfo:
+        $ref: "#/definitions/PaymentMethodPluginDetail"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
+  PaymentMethodPluginDetail:
+    type: "object"
+    properties:
+      externalPaymentMethodId:
+        type: "string"
+      isDefaultPaymentMethod:
+        type: "boolean"
+      properties:
+        type: "array"
+        items:
+          $ref: "#/definitions/PluginProperty"
+  Payment:
+    type: "object"
+    properties:
+      accountId:
+        type: "string"
+        format: "uuid"
+      paymentId:
+        type: "string"
+        format: "uuid"
+      paymentNumber:
+        type: "string"
+      paymentExternalKey:
+        type: "string"
+      authAmount:
+        type: "number"
+      capturedAmount:
+        type: "number"
+      purchasedAmount:
+        type: "number"
+      refundedAmount:
+        type: "number"
+      creditedAmount:
+        type: "number"
+      currency:
+        type: "string"
+        enum:
+        - "AED"
+        - "AFN"
+        - "ALL"
+        - "AMD"
+        - "ANG"
+        - "AOA"
+        - "ARS"
+        - "AUD"
+        - "AWG"
+        - "AZN"
+        - "BAM"
+        - "BBD"
+        - "BDT"
+        - "BGN"
+        - "BHD"
+        - "BIF"
+        - "BMD"
+        - "BND"
+        - "BOB"
+        - "BRL"
+        - "BSD"
+        - "BTN"
+        - "BWP"
+        - "BYR"
+        - "BZD"
+        - "CAD"
+        - "CDF"
+        - "CHF"
+        - "CLP"
+        - "CNY"
+        - "COP"
+        - "CRC"
+        - "CUC"
+        - "CUP"
+        - "CVE"
+        - "CZK"
+        - "DJF"
+        - "DKK"
+        - "DOP"
+        - "DZD"
+        - "EGP"
+        - "ERN"
+        - "ETB"
+        - "EUR"
+        - "FJD"
+        - "FKP"
+        - "GBP"
+        - "GEL"
+        - "GGP"
+        - "GHS"
+        - "GIP"
+        - "GMD"
+        - "GNF"
+        - "GTQ"
+        - "GYD"
+        - "HKD"
+        - "HNL"
+        - "HRK"
+        - "HTG"
+        - "HUF"
+        - "IDR"
+        - "ILS"
+        - "IMP"
+        - "INR"
+        - "IQD"
+        - "IRR"
+        - "ISK"
+        - "JEP"
+        - "JMD"
+        - "JOD"
+        - "JPY"
+        - "KES"
+        - "KGS"
+        - "KHR"
+        - "KMF"
+        - "KPW"
+        - "KRW"
+        - "KWD"
+        - "KYD"
+        - "KZT"
+        - "LAK"
+        - "LBP"
+        - "LKR"
+        - "LRD"
+        - "LSL"
+        - "LTL"
+        - "LVL"
+        - "LYD"
+        - "MAD"
+        - "MDL"
+        - "MGA"
+        - "MKD"
+        - "MMK"
+        - "MNT"
+        - "MOP"
+        - "MRO"
+        - "MUR"
+        - "MVR"
+        - "MWK"
+        - "MXN"
+        - "MYR"
+        - "MZN"
+        - "NAD"
+        - "NGN"
+        - "NIO"
+        - "NOK"
+        - "NPR"
+        - "NZD"
+        - "OMR"
+        - "PAB"
+        - "PEN"
+        - "PGK"
+        - "PHP"
+        - "PKR"
+        - "PLN"
+        - "PYG"
+        - "QAR"
+        - "RON"
+        - "RSD"
+        - "RUB"
+        - "RWF"
+        - "SAR"
+        - "SBD"
+        - "SCR"
+        - "SDG"
+        - "SEK"
+        - "SGD"
+        - "SHP"
+        - "SLL"
+        - "SOS"
+        - "SPL"
+        - "SRD"
+        - "STD"
+        - "SVC"
+        - "SYP"
+        - "SZL"
+        - "THB"
+        - "TJS"
+        - "TMT"
+        - "TND"
+        - "TOP"
+        - "TRY"
+        - "TTD"
+        - "TVD"
+        - "TWD"
+        - "TZS"
+        - "UAH"
+        - "UGX"
+        - "USD"
+        - "UYU"
+        - "UZS"
+        - "VEF"
+        - "VND"
+        - "VUV"
+        - "WST"
+        - "XAF"
+        - "XCD"
+        - "XDR"
+        - "XOF"
+        - "XPF"
+        - "YER"
+        - "ZAR"
+        - "ZMW"
+        - "ZWD"
+        - "BTC"
+      paymentMethodId:
+        type: "string"
+        format: "uuid"
+      transactions:
+        type: "array"
+        items:
+          $ref: "#/definitions/PaymentTransaction"
+      paymentAttempts:
+        type: "array"
+        items:
+          $ref: "#/definitions/PaymentAttempt"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
+  AccountEmail:
+    type: "object"
+    required:
+    - "email"
+    properties:
+      accountId:
+        type: "string"
+        format: "uuid"
+      email:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
+  OverdueState:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      externalMessage:
+        type: "string"
+      isDisableEntitlementAndChangesBlocked:
+        type: "boolean"
+      isBlockChanges:
+        type: "boolean"
+      isClearState:
+        type: "boolean"
+      reevaluationIntervalDays:
+        type: "integer"
+        format: "int32"
+  Tag:
+    type: "object"
+    properties:
+      tagId:
+        type: "string"
+        format: "uuid"
+      objectType:
+        type: "string"
+        enum:
+        - "ACCOUNT"
+        - "ACCOUNT_EMAIL"
+        - "BLOCKING_STATES"
+        - "BUNDLE"
+        - "CUSTOM_FIELD"
+        - "INVOICE"
+        - "PAYMENT"
+        - "TRANSACTION"
+        - "INVOICE_ITEM"
+        - "INVOICE_PAYMENT"
+        - "SUBSCRIPTION"
+        - "SUBSCRIPTION_EVENT"
+        - "SERVICE_BROADCAST"
+        - "PAYMENT_ATTEMPT"
+        - "PAYMENT_METHOD"
+        - "TAG"
+        - "TAG_DEFINITION"
+        - "TENANT"
+        - "TENANT_KVS"
+      objectId:
+        type: "string"
+        format: "uuid"
+      tagDefinitionId:
+        type: "string"
+        format: "uuid"
+      tagDefinitionName:
+        type: "string"
+      auditLogs:
+        type: "array"
+        items:
+          $ref: "#/definitions/AuditLog"
   AccountTimeline:
     type: "object"
     properties:
@@ -13215,6 +13594,9 @@ definitions:
         format: "int32"
       itemDetails:
         type: "string"
+      catalogEffectiveDate:
+        type: "string"
+        format: "date-time"
       childItems:
         type: "array"
         items:
@@ -13376,385 +13758,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/TierPrice"
-  BlockingState:
-    type: "object"
-    properties:
-      blockedId:
-        type: "string"
-        format: "uuid"
-      stateName:
-        type: "string"
-      service:
-        type: "string"
-      isBlockChange:
-        type: "boolean"
-      isBlockEntitlement:
-        type: "boolean"
-      isBlockBilling:
-        type: "boolean"
-      effectiveDate:
-        type: "string"
-        format: "date-time"
-      type:
-        type: "string"
-        enum:
-        - "SUBSCRIPTION"
-        - "SUBSCRIPTION_BUNDLE"
-        - "ACCOUNT"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
-  PaymentMethod:
-    type: "object"
-    properties:
-      paymentMethodId:
-        type: "string"
-        format: "uuid"
-      externalKey:
-        type: "string"
-      accountId:
-        type: "string"
-        format: "uuid"
-      isDefault:
-        type: "boolean"
-      pluginName:
-        type: "string"
-      pluginInfo:
-        $ref: "#/definitions/PaymentMethodPluginDetail"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
-  PaymentMethodPluginDetail:
-    type: "object"
-    properties:
-      externalPaymentMethodId:
-        type: "string"
-      isDefaultPaymentMethod:
-        type: "boolean"
-      properties:
-        type: "array"
-        items:
-          $ref: "#/definitions/PluginProperty"
-  Payment:
-    type: "object"
-    properties:
-      accountId:
-        type: "string"
-        format: "uuid"
-      paymentId:
-        type: "string"
-        format: "uuid"
-      paymentNumber:
-        type: "string"
-      paymentExternalKey:
-        type: "string"
-      authAmount:
-        type: "number"
-      capturedAmount:
-        type: "number"
-      purchasedAmount:
-        type: "number"
-      refundedAmount:
-        type: "number"
-      creditedAmount:
-        type: "number"
-      currency:
-        type: "string"
-        enum:
-        - "AED"
-        - "AFN"
-        - "ALL"
-        - "AMD"
-        - "ANG"
-        - "AOA"
-        - "ARS"
-        - "AUD"
-        - "AWG"
-        - "AZN"
-        - "BAM"
-        - "BBD"
-        - "BDT"
-        - "BGN"
-        - "BHD"
-        - "BIF"
-        - "BMD"
-        - "BND"
-        - "BOB"
-        - "BRL"
-        - "BSD"
-        - "BTN"
-        - "BWP"
-        - "BYR"
-        - "BZD"
-        - "CAD"
-        - "CDF"
-        - "CHF"
-        - "CLP"
-        - "CNY"
-        - "COP"
-        - "CRC"
-        - "CUC"
-        - "CUP"
-        - "CVE"
-        - "CZK"
-        - "DJF"
-        - "DKK"
-        - "DOP"
-        - "DZD"
-        - "EGP"
-        - "ERN"
-        - "ETB"
-        - "EUR"
-        - "FJD"
-        - "FKP"
-        - "GBP"
-        - "GEL"
-        - "GGP"
-        - "GHS"
-        - "GIP"
-        - "GMD"
-        - "GNF"
-        - "GTQ"
-        - "GYD"
-        - "HKD"
-        - "HNL"
-        - "HRK"
-        - "HTG"
-        - "HUF"
-        - "IDR"
-        - "ILS"
-        - "IMP"
-        - "INR"
-        - "IQD"
-        - "IRR"
-        - "ISK"
-        - "JEP"
-        - "JMD"
-        - "JOD"
-        - "JPY"
-        - "KES"
-        - "KGS"
-        - "KHR"
-        - "KMF"
-        - "KPW"
-        - "KRW"
-        - "KWD"
-        - "KYD"
-        - "KZT"
-        - "LAK"
-        - "LBP"
-        - "LKR"
-        - "LRD"
-        - "LSL"
-        - "LTL"
-        - "LVL"
-        - "LYD"
-        - "MAD"
-        - "MDL"
-        - "MGA"
-        - "MKD"
-        - "MMK"
-        - "MNT"
-        - "MOP"
-        - "MRO"
-        - "MUR"
-        - "MVR"
-        - "MWK"
-        - "MXN"
-        - "MYR"
-        - "MZN"
-        - "NAD"
-        - "NGN"
-        - "NIO"
-        - "NOK"
-        - "NPR"
-        - "NZD"
-        - "OMR"
-        - "PAB"
-        - "PEN"
-        - "PGK"
-        - "PHP"
-        - "PKR"
-        - "PLN"
-        - "PYG"
-        - "QAR"
-        - "RON"
-        - "RSD"
-        - "RUB"
-        - "RWF"
-        - "SAR"
-        - "SBD"
-        - "SCR"
-        - "SDG"
-        - "SEK"
-        - "SGD"
-        - "SHP"
-        - "SLL"
-        - "SOS"
-        - "SPL"
-        - "SRD"
-        - "STD"
-        - "SVC"
-        - "SYP"
-        - "SZL"
-        - "THB"
-        - "TJS"
-        - "TMT"
-        - "TND"
-        - "TOP"
-        - "TRY"
-        - "TTD"
-        - "TVD"
-        - "TWD"
-        - "TZS"
-        - "UAH"
-        - "UGX"
-        - "USD"
-        - "UYU"
-        - "UZS"
-        - "VEF"
-        - "VND"
-        - "VUV"
-        - "WST"
-        - "XAF"
-        - "XCD"
-        - "XDR"
-        - "XOF"
-        - "XPF"
-        - "YER"
-        - "ZAR"
-        - "ZMW"
-        - "ZWD"
-        - "BTC"
-      paymentMethodId:
-        type: "string"
-        format: "uuid"
-      transactions:
-        type: "array"
-        items:
-          $ref: "#/definitions/PaymentTransaction"
-      paymentAttempts:
-        type: "array"
-        items:
-          $ref: "#/definitions/PaymentAttempt"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
-  Tag:
-    type: "object"
-    properties:
-      tagId:
-        type: "string"
-        format: "uuid"
-      objectType:
-        type: "string"
-        enum:
-        - "ACCOUNT"
-        - "ACCOUNT_EMAIL"
-        - "BLOCKING_STATES"
-        - "BUNDLE"
-        - "CUSTOM_FIELD"
-        - "INVOICE"
-        - "PAYMENT"
-        - "TRANSACTION"
-        - "INVOICE_ITEM"
-        - "INVOICE_PAYMENT"
-        - "SUBSCRIPTION"
-        - "SUBSCRIPTION_EVENT"
-        - "SERVICE_BROADCAST"
-        - "PAYMENT_ATTEMPT"
-        - "PAYMENT_METHOD"
-        - "TAG"
-        - "TAG_DEFINITION"
-        - "TENANT"
-        - "TENANT_KVS"
-      objectId:
-        type: "string"
-        format: "uuid"
-      tagDefinitionId:
-        type: "string"
-        format: "uuid"
-      tagDefinitionName:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
-  CustomField:
-    type: "object"
-    required:
-    - "name"
-    - "value"
-    properties:
-      customFieldId:
-        type: "string"
-        format: "uuid"
-      objectId:
-        type: "string"
-        format: "uuid"
-      objectType:
-        type: "string"
-        enum:
-        - "ACCOUNT"
-        - "ACCOUNT_EMAIL"
-        - "BLOCKING_STATES"
-        - "BUNDLE"
-        - "CUSTOM_FIELD"
-        - "INVOICE"
-        - "PAYMENT"
-        - "TRANSACTION"
-        - "INVOICE_ITEM"
-        - "INVOICE_PAYMENT"
-        - "SUBSCRIPTION"
-        - "SUBSCRIPTION_EVENT"
-        - "SERVICE_BROADCAST"
-        - "PAYMENT_ATTEMPT"
-        - "PAYMENT_METHOD"
-        - "TAG"
-        - "TAG_DEFINITION"
-        - "TENANT"
-        - "TENANT_KVS"
-      name:
-        type: "string"
-      value:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
-  AccountEmail:
-    type: "object"
-    required:
-    - "email"
-    properties:
-      accountId:
-        type: "string"
-        format: "uuid"
-      email:
-        type: "string"
-      auditLogs:
-        type: "array"
-        items:
-          $ref: "#/definitions/AuditLog"
-  OverdueState:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      externalMessage:
-        type: "string"
-      isDisableEntitlementAndChangesBlocked:
-        type: "boolean"
-      isBlockChanges:
-        type: "boolean"
-      isClearState:
-        type: "boolean"
-      reevaluationIntervalDays:
-        type: "integer"
-        format: "int32"
   AdminPayment:
     type: "object"
     properties:
@@ -15148,6 +15151,13 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  HostedPaymentPageFields:
+    type: "object"
+    properties:
+      formFields:
+        type: "array"
+        items:
+          $ref: "#/definitions/PluginProperty"
   ComboHostedPaymentPage:
     type: "object"
     properties:
@@ -15165,13 +15175,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  HostedPaymentPageFields:
-    type: "object"
-    properties:
-      formFields:
-        type: "array"
-        items:
-          $ref: "#/definitions/PluginProperty"
   ComboPaymentTransaction:
     type: "object"
     properties:
@@ -15193,33 +15196,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  Session:
-    type: "object"
-    properties:
-      id:
-        type: "string"
-      startDate:
-        type: "string"
-        format: "date-time"
-      lastAccessDate:
-        type: "string"
-        format: "date-time"
-      timeout:
-        type: "integer"
-        format: "int64"
-      host:
-        type: "string"
-  Subject:
-    type: "object"
-    properties:
-      principal:
-        type: "string"
-      isAuthenticated:
-        type: "boolean"
-      isRemembered:
-        type: "boolean"
-      session:
-        $ref: "#/definitions/Session"
   UserRoles:
     type: "object"
     required:
@@ -15247,6 +15223,33 @@ definitions:
         type: "array"
         items:
           type: "string"
+  Session:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      startDate:
+        type: "string"
+        format: "date-time"
+      lastAccessDate:
+        type: "string"
+        format: "date-time"
+      timeout:
+        type: "integer"
+        format: "int64"
+      host:
+        type: "string"
+  Subject:
+    type: "object"
+    properties:
+      principal:
+        type: "string"
+      isAuthenticated:
+        type: "boolean"
+      isRemembered:
+        type: "boolean"
+      session:
+        $ref: "#/definitions/Session"
   BulkSubscriptionsBundle:
     type: "object"
     required:
@@ -15300,6 +15303,15 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
+  TenantKeyValue:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+      values:
+        type: "array"
+        items:
+          type: "string"
   Tenant:
     type: "object"
     required:
@@ -15319,15 +15331,30 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/AuditLog"
-  TenantKeyValue:
+  RolledUpUnit:
     type: "object"
     properties:
-      key:
+      unitType:
         type: "string"
-      values:
+      amount:
+        type: "integer"
+        format: "int64"
+  RolledUpUsage:
+    type: "object"
+    properties:
+      subscriptionId:
+        type: "string"
+        format: "uuid"
+      startDate:
+        type: "string"
+        format: "date"
+      endDate:
+        type: "string"
+        format: "date"
+      rolledUpUnits:
         type: "array"
         items:
-          type: "string"
+          $ref: "#/definitions/RolledUpUnit"
   SubscriptionUsageRecord:
     type: "object"
     required:
@@ -15361,27 +15388,3 @@ definitions:
       amount:
         type: "integer"
         format: "int64"
-  RolledUpUnit:
-    type: "object"
-    properties:
-      unitType:
-        type: "string"
-      amount:
-        type: "integer"
-        format: "int64"
-  RolledUpUsage:
-    type: "object"
-    properties:
-      subscriptionId:
-        type: "string"
-        format: "uuid"
-      startDate:
-        type: "string"
-        format: "date"
-      endDate:
-        type: "string"
-        format: "date"
-      rolledUpUnits:
-        type: "array"
-        items:
-          $ref: "#/definitions/RolledUpUnit"

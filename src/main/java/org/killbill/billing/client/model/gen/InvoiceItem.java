@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
@@ -88,6 +89,8 @@ public class InvoiceItem extends KillBillObject {
 
     private String itemDetails = null;
 
+    private DateTime catalogEffectiveDate = null;
+
     private List<InvoiceItem> childItems = null;
 
 
@@ -119,6 +122,7 @@ public class InvoiceItem extends KillBillObject {
                      final Currency currency,
                      final Integer quantity,
                      final String itemDetails,
+                     final DateTime catalogEffectiveDate,
                      final List<InvoiceItem> childItems,
                      final List<AuditLog> auditLogs) {
         super(auditLogs);
@@ -146,6 +150,7 @@ public class InvoiceItem extends KillBillObject {
         this.currency = currency;
         this.quantity = quantity;
         this.itemDetails = itemDetails;
+        this.catalogEffectiveDate = catalogEffectiveDate;
         this.childItems = childItems;
 
     }
@@ -367,6 +372,15 @@ public class InvoiceItem extends KillBillObject {
         return itemDetails;
     }
 
+    public InvoiceItem setCatalogEffectiveDate(final DateTime catalogEffectiveDate) {
+        this.catalogEffectiveDate = catalogEffectiveDate;
+        return this;
+    }
+
+    public DateTime getCatalogEffectiveDate() {
+        return catalogEffectiveDate;
+    }
+
     public InvoiceItem setChildItems(final List<InvoiceItem> childItems) {
         this.childItems = childItems;
         return this;
@@ -417,6 +431,7 @@ public class InvoiceItem extends KillBillObject {
         Objects.equals(this.currency, invoiceItem.currency) &&
         Objects.equals(this.quantity, invoiceItem.quantity) &&
         Objects.equals(this.itemDetails, invoiceItem.itemDetails) &&
+        Objects.equals(this.catalogEffectiveDate, invoiceItem.catalogEffectiveDate) &&
         Objects.equals(this.childItems, invoiceItem.childItems) &&
         Objects.equals(this.auditLogs, invoiceItem.auditLogs);
 
@@ -448,6 +463,7 @@ public class InvoiceItem extends KillBillObject {
                             currency,
                             quantity,
                             itemDetails,
+                            catalogEffectiveDate,
                             childItems,
                             auditLogs, super.hashCode());
     }
@@ -482,6 +498,7 @@ public class InvoiceItem extends KillBillObject {
         sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
         sb.append("    quantity: ").append(toIndentedString(quantity)).append("\n");
         sb.append("    itemDetails: ").append(toIndentedString(itemDetails)).append("\n");
+        sb.append("    catalogEffectiveDate: ").append(toIndentedString(catalogEffectiveDate)).append("\n");
         sb.append("    childItems: ").append(toIndentedString(childItems)).append("\n");
         sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
