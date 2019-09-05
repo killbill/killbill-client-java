@@ -1,3 +1,6 @@
+1.1.8
+    Add InvoiceItem#catalogEffectiveDate
+
 1.1.7
     Remove unused withItems query params
 
