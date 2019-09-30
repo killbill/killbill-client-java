@@ -25,6 +25,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import java.util.Objects;
 
 public class RequestOptions {
 
@@ -127,6 +128,68 @@ public class RequestOptions {
                 .withTenantApiKey(tenantApiKey).withTenantApiSecret(tenantApiSecret)
                 .withQueryParams(queryParams)
                 .withFollowLocation(followLocation).withQueryParamsForFollow(queryParamsForFollow);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final RequestOptions that = (RequestOptions) o;
+
+        return Objects.equals(requestId, that.requestId)
+            && Objects.equals(user, that.user)
+            && Objects.equals(password, that.password)
+            && Objects.equals(createdBy, that.createdBy)
+            && Objects.equals(reason, that.reason)
+            && Objects.equals(comment, that.comment)
+            && Objects.equals(tenantApiKey, that.tenantApiKey)
+            && Objects.equals(tenantApiSecret, that.tenantApiSecret)
+            && Objects.equals(headers, that.headers)
+            && Objects.equals(queryParams, that.queryParams)
+            && Objects.equals(followLocation, that.followLocation)
+            && Objects.equals(queryParamsForFollow, that.queryParamsForFollow);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            requestId,
+            user,
+            password,
+            createdBy,
+            reason,
+            comment,
+            tenantApiKey,
+            tenantApiSecret,
+            headers,
+            queryParams,
+            followLocation,
+            queryParamsForFollow);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class RequestOptions {\n");
+        sb.append("    requestId: ").append(requestId).append("\n");
+        sb.append("    user: ").append(user).append("\n");
+        // Don't print the password
+        sb.append("    createdBy: ").append(createdBy).append("\n");
+        sb.append("    reason: ").append(reason).append("\n");
+        sb.append("    comment: ").append(comment).append("\n");
+        sb.append("    tenantApiKey: ").append(tenantApiKey).append("\n");
+        // Don't print the secret
+        sb.append("    headers: ").append(headers).append("\n");
+        sb.append("    queryParams: ").append(queryParams).append("\n");
+        sb.append("    followLocation: ").append(followLocation).append("\n");
+        sb.append("    queryParamsForFollow: ").append(queryParamsForFollow).append("\n");
+        sb.append("}");
+        return sb.toString();
     }
 
     /**
