@@ -1,3 +1,7 @@
+1.1.9
+    Add query param endDate to AccountApi#getInvoicesForAccount.
+    Fix CatalogApi#getCatalogXml to take a DateTime
+
 1.1.8
     Add InvoiceItem#catalogEffectiveDate
 
