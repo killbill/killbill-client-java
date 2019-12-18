@@ -22,7 +22,7 @@ The library is published in Maven Central:
     <dependency>
         <groupId>org.kill-bill.billing</groupId>
         <artifactId>killbill-client-java</artifactId>
-        <version>1.0.6</version>
+        <version>1.0.7</version>
     </dependency>
 
 The easiest way to get started is to look at some of our [integration tests](https://github.com/killbill/killbill/tree/master/profiles/killbill/src/test/java/org/killbill/billing/jaxrs), which use this library.
