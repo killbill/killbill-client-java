@@ -200,7 +200,7 @@ public class KillBillHttpClient implements Closeable {
     }
 
     public KillBillHttpClient() {
-        this(System.getProperty("killbill.url", "http://127.0.0.1:8080/"),
+        this(System.getProperty("killbill.url", "http://127.0.0.1:8080"),
              System.getProperty("killbill.username", "admin"),
              System.getProperty("killbill.password", "password"),
              System.getProperty("killbill.apiKey", "bob"),
