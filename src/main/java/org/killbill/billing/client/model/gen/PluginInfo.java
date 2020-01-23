@@ -45,7 +45,7 @@ public class PluginInfo {
 
     private String state = null;
 
-    private Boolean isSelectedForStart = false;
+    private Boolean isSelectedForStart = null;
 
     private List<PluginServiceInfo> services = null;
 

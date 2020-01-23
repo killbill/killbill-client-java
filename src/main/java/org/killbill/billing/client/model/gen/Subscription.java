@@ -47,6 +47,8 @@ public class Subscription extends KillBillObject {
 
     private UUID bundleId = null;
 
+    private String bundleExternalKey = null;
+
     private UUID subscriptionId = null;
 
     private String externalKey = null;
@@ -92,6 +94,7 @@ public class Subscription extends KillBillObject {
 
     public Subscription(final UUID accountId,
                      final UUID bundleId,
+                     final String bundleExternalKey,
                      final UUID subscriptionId,
                      final String externalKey,
                      final LocalDate startDate,
@@ -115,6 +118,7 @@ public class Subscription extends KillBillObject {
         super(auditLogs);
         this.accountId = accountId;
         this.bundleId = bundleId;
+        this.bundleExternalKey = bundleExternalKey;
         this.subscriptionId = subscriptionId;
         this.externalKey = externalKey;
         this.startDate = startDate;
@@ -154,6 +158,15 @@ public class Subscription extends KillBillObject {
 
     public UUID getBundleId() {
         return bundleId;
+    }
+
+    public Subscription setBundleExternalKey(final String bundleExternalKey) {
+        this.bundleExternalKey = bundleExternalKey;
+        return this;
+    }
+
+    public String getBundleExternalKey() {
+        return bundleExternalKey;
     }
 
     public Subscription setSubscriptionId(final UUID subscriptionId) {
@@ -362,6 +375,7 @@ public class Subscription extends KillBillObject {
         Subscription subscription = (Subscription) o;
         return Objects.equals(this.accountId, subscription.accountId) &&
         Objects.equals(this.bundleId, subscription.bundleId) &&
+        Objects.equals(this.bundleExternalKey, subscription.bundleExternalKey) &&
         Objects.equals(this.subscriptionId, subscription.subscriptionId) &&
         Objects.equals(this.externalKey, subscription.externalKey) &&
         Objects.equals(this.startDate, subscription.startDate) &&
@@ -389,6 +403,7 @@ public class Subscription extends KillBillObject {
     public int hashCode() {
         return Objects.hash(accountId,
                             bundleId,
+                            bundleExternalKey,
                             subscriptionId,
                             externalKey,
                             startDate,
@@ -419,6 +434,7 @@ public class Subscription extends KillBillObject {
         sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    accountId: ").append(toIndentedString(accountId)).append("\n");
         sb.append("    bundleId: ").append(toIndentedString(bundleId)).append("\n");
+        sb.append("    bundleExternalKey: ").append(toIndentedString(bundleExternalKey)).append("\n");
         sb.append("    subscriptionId: ").append(toIndentedString(subscriptionId)).append("\n");
         sb.append("    externalKey: ").append(toIndentedString(externalKey)).append("\n");
         sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");

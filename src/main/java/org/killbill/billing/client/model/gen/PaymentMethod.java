@@ -43,7 +43,7 @@ public class PaymentMethod extends KillBillObject {
 
     private UUID accountId = null;
 
-    private Boolean isDefault = false;
+    private Boolean isDefault = null;
 
     private String pluginName = null;
 

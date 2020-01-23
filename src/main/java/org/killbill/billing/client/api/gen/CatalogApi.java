@@ -169,7 +169,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, DateTimes.class, requestOptions);
     }
 
-    public String getCatalogXml(final LocalDate requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+    public String getCatalogXml(final DateTime requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/xml";
 

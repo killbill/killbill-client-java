@@ -127,4 +127,40 @@ public class CustomFieldApi {
         return httpClient.doGet(uri, CustomFields.class, requestOptions);
     }
 
+    public CustomFields searchCustomFieldsByTypeName(final String objectType, final String fieldName, final String fieldValue, final RequestOptions inputOptions) throws KillBillClientException {
+        return searchCustomFieldsByTypeName(objectType, fieldName, fieldValue, Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
+    }
+
+    public CustomFields searchCustomFieldsByTypeName(final String objectType, final String fieldName, final String fieldValue, final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+
+        final String uri = "/1.0/kb/customFields/search";
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (objectType != null) {
+            queryParams.put("objectType", String.valueOf(objectType));
+        }
+        if (fieldName != null) {
+            queryParams.put("fieldName", String.valueOf(fieldName));
+        }
+        if (fieldValue != null) {
+            queryParams.put("fieldValue", String.valueOf(fieldValue));
+        }
+        if (offset != null) {
+            queryParams.put("offset", String.valueOf(offset));
+        }
+        if (limit != null) {
+            queryParams.put("limit", String.valueOf(limit));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, CustomFields.class, requestOptions);
+    }
+
 }

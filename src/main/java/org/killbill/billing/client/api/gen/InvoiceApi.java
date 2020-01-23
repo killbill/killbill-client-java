@@ -19,6 +19,7 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.Invoice;
 import org.killbill.billing.client.model.gen.InvoiceDryRun;
@@ -33,6 +34,7 @@ import java.util.List;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
+import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.Invoices;
 import org.killbill.billing.client.model.InvoicePayments;
 
@@ -392,19 +394,16 @@ public class InvoiceApi {
     }
 
     public Invoice getInvoice(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoice(invoiceId, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+        return getInvoice(invoiceId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoice getInvoice(final UUID invoiceId, final Boolean withItems, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice getInvoice(final UUID invoiceId, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoice");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (withItems != null) {
-            queryParams.put("withItems", String.valueOf(withItems));
-        }
         if (withChildrenItems != null) {
             queryParams.put("withChildrenItems", String.valueOf(withChildrenItems));
         }
@@ -434,20 +433,31 @@ public class InvoiceApi {
         return httpClient.doGet(uri, String.class, requestOptions);
     }
 
-    public Invoice getInvoiceByItemId(final UUID itemId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoiceByItemId(itemId, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    public AuditLogs getInvoiceAuditLogsWithHistory(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/invoices/{invoiceId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
-    public Invoice getInvoiceByItemId(final UUID itemId, final Boolean withItems, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice getInvoiceByItemId(final UUID itemId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoiceByItemId(itemId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    }
+
+    public Invoice getInvoiceByItemId(final UUID itemId, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(itemId, "Missing the required parameter 'itemId' when calling getInvoiceByItemId");
 
         final String uri = "/1.0/kb/invoices/byItemId/{itemId}"
           .replaceAll("\\{" + "itemId" + "\\}", itemId.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (withItems != null) {
-            queryParams.put("withItems", String.valueOf(withItems));
-        }
         if (withChildrenItems != null) {
             queryParams.put("withChildrenItems", String.valueOf(withChildrenItems));
         }
@@ -464,19 +474,16 @@ public class InvoiceApi {
     }
 
     public Invoice getInvoiceByNumber(final Integer invoiceNumber, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoiceByNumber(invoiceNumber, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+        return getInvoiceByNumber(invoiceNumber, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoice getInvoiceByNumber(final Integer invoiceNumber, final Boolean withItems, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice getInvoiceByNumber(final Integer invoiceNumber, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceNumber, "Missing the required parameter 'invoiceNumber' when calling getInvoiceByNumber");
 
         final String uri = "/1.0/kb/invoices/byNumber/{invoiceNumber}"
           .replaceAll("\\{" + "invoiceNumber" + "\\}", invoiceNumber.toString());
 
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
-        if (withItems != null) {
-            queryParams.put("withItems", String.valueOf(withItems));
-        }
         if (withChildrenItems != null) {
             queryParams.put("withChildrenItems", String.valueOf(withChildrenItems));
         }
@@ -582,10 +589,10 @@ public class InvoiceApi {
     }
 
     public Invoices getInvoices(final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoices(Long.valueOf(0), Long.valueOf(100), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+        return getInvoices(Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoices getInvoices(final Long offset, final Long limit, final Boolean withItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices getInvoices(final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/invoices/pagination";
 
@@ -595,9 +602,6 @@ public class InvoiceApi {
         }
         if (limit != null) {
             queryParams.put("limit", String.valueOf(limit));
-        }
-        if (withItems != null) {
-            queryParams.put("withItems", String.valueOf(withItems));
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
@@ -657,10 +661,10 @@ public class InvoiceApi {
     }
 
     public Invoices searchInvoices(final String searchKey, final RequestOptions inputOptions) throws KillBillClientException {
-        return searchInvoices(searchKey, Long.valueOf(0), Long.valueOf(100), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+        return searchInvoices(searchKey, Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoices searchInvoices(final String searchKey, final Long offset, final Long limit, final Boolean withItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices searchInvoices(final String searchKey, final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchInvoices");
 
         final String uri = "/1.0/kb/invoices/search/{searchKey}"
@@ -672,9 +676,6 @@ public class InvoiceApi {
         }
         if (limit != null) {
             queryParams.put("limit", String.valueOf(limit));
-        }
-        if (withItems != null) {
-            queryParams.put("withItems", String.valueOf(withItems));
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));

@@ -28,7 +28,6 @@ import java.util.UUID;
 import org.joda.time.LocalDate;
 import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
-import org.killbill.billing.client.model.gen.Credit;
 import org.killbill.billing.client.model.gen.InvoiceItem;
 import org.killbill.billing.invoice.api.InvoiceStatus;
 
@@ -66,11 +65,13 @@ public class Invoice extends KillBillObject {
 
     private String bundleKeys = null;
 
-    private List<Credit> credits = null;
+    private List<InvoiceItem> credits = null;
 
     private List<InvoiceItem> items = null;
 
-    private Boolean isParentInvoice = false;
+    private List<String> trackingIds = null;
+
+    private Boolean isParentInvoice = null;
 
     private UUID parentInvoiceId = null;
 
@@ -93,8 +94,9 @@ public class Invoice extends KillBillObject {
                      final BigDecimal balance,
                      final UUID accountId,
                      final String bundleKeys,
-                     final List<Credit> credits,
+                     final List<InvoiceItem> credits,
                      final List<InvoiceItem> items,
+                     final List<String> trackingIds,
                      final Boolean isParentInvoice,
                      final UUID parentInvoiceId,
                      final UUID parentAccountId,
@@ -114,6 +116,7 @@ public class Invoice extends KillBillObject {
         this.bundleKeys = bundleKeys;
         this.credits = credits;
         this.items = items;
+        this.trackingIds = trackingIds;
         this.isParentInvoice = isParentInvoice;
         this.parentInvoiceId = parentInvoiceId;
         this.parentAccountId = parentAccountId;
@@ -229,20 +232,20 @@ public class Invoice extends KillBillObject {
         return bundleKeys;
     }
 
-    public Invoice setCredits(final List<Credit> credits) {
+    public Invoice setCredits(final List<InvoiceItem> credits) {
         this.credits = credits;
         return this;
     }
 
-    public Invoice addCreditsItem(final Credit creditsItem) {
+    public Invoice addCreditsItem(final InvoiceItem creditsItem) {
         if (this.credits == null) {
-            this.credits = new ArrayList<Credit>();
+            this.credits = new ArrayList<InvoiceItem>();
         }
         this.credits.add(creditsItem);
         return this;
     }
 
-    public List<Credit> getCredits() {
+    public List<InvoiceItem> getCredits() {
         return credits;
     }
 
@@ -261,6 +264,23 @@ public class Invoice extends KillBillObject {
 
     public List<InvoiceItem> getItems() {
         return items;
+    }
+
+    public Invoice setTrackingIds(final List<String> trackingIds) {
+        this.trackingIds = trackingIds;
+        return this;
+    }
+
+    public Invoice addTrackingIdsItem(final String trackingIdsItem) {
+        if (this.trackingIds == null) {
+            this.trackingIds = new ArrayList<String>();
+        }
+        this.trackingIds.add(trackingIdsItem);
+        return this;
+    }
+
+    public List<String> getTrackingIds() {
+        return trackingIds;
     }
 
     public Invoice setIsParentInvoice(final Boolean isParentInvoice) {
@@ -314,6 +334,7 @@ public class Invoice extends KillBillObject {
         Objects.equals(this.bundleKeys, invoice.bundleKeys) &&
         Objects.equals(this.credits, invoice.credits) &&
         Objects.equals(this.items, invoice.items) &&
+        Objects.equals(this.trackingIds, invoice.trackingIds) &&
         Objects.equals(this.isParentInvoice, invoice.isParentInvoice) &&
         Objects.equals(this.parentInvoiceId, invoice.parentInvoiceId) &&
         Objects.equals(this.parentAccountId, invoice.parentAccountId) &&
@@ -337,6 +358,7 @@ public class Invoice extends KillBillObject {
                             bundleKeys,
                             credits,
                             items,
+                            trackingIds,
                             isParentInvoice,
                             parentInvoiceId,
                             parentAccountId,
@@ -363,6 +385,7 @@ public class Invoice extends KillBillObject {
         sb.append("    bundleKeys: ").append(toIndentedString(bundleKeys)).append("\n");
         sb.append("    credits: ").append(toIndentedString(credits)).append("\n");
         sb.append("    items: ").append(toIndentedString(items)).append("\n");
+        sb.append("    trackingIds: ").append(toIndentedString(trackingIds)).append("\n");
         sb.append("    isParentInvoice: ").append(toIndentedString(isParentInvoice)).append("\n");
         sb.append("    parentInvoiceId: ").append(toIndentedString(parentInvoiceId)).append("\n");
         sb.append("    parentAccountId: ").append(toIndentedString(parentAccountId)).append("\n");

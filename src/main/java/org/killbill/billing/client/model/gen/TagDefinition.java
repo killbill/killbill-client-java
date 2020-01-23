@@ -39,7 +39,7 @@ public class TagDefinition extends KillBillObject {
 
     private UUID id = null;
 
-    private Boolean isControlTag = false;
+    private Boolean isControlTag = null;
 
     private String name = null;
 

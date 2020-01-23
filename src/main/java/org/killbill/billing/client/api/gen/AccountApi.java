@@ -585,6 +585,20 @@ public class AccountApi {
         return httpClient.doGet(uri, Tags.class, requestOptions);
     }
 
+    public AuditLogs getBlockingStateAuditLogsWithHistory(final UUID blockingId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(blockingId, "Missing the required parameter 'blockingId' when calling getBlockingStateAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/accounts/block/{blockingId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "blockingId" + "\\}", blockingId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
+    }
+
     public BlockingStates getBlockingStates(final UUID accountId, final List<BlockingStateType> blockingStateTypes, final List<String> blockingStateSvcs, final RequestOptions inputOptions) throws KillBillClientException {
         return getBlockingStates(accountId, blockingStateTypes, blockingStateSvcs, AuditLevel.NONE, inputOptions);
     }
@@ -689,11 +703,11 @@ public class AccountApi {
         return httpClient.doGet(uri, InvoicePayments.class, requestOptions);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, startDate, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final LocalDate endDate, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoicesForAccount(accountId, startDate, endDate, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final Boolean withItems, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final LocalDate endDate, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicesForAccount");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoices"
@@ -703,8 +717,8 @@ public class AccountApi {
         if (startDate != null) {
             queryParams.put("startDate", String.valueOf(startDate));
         }
-        if (withItems != null) {
-            queryParams.put("withItems", String.valueOf(withItems));
+        if (endDate != null) {
+            queryParams.put("endDate", String.valueOf(endDate));
         }
         if (withMigrationInvoices != null) {
             queryParams.put("withMigrationInvoices", String.valueOf(withMigrationInvoices));

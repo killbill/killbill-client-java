@@ -37,7 +37,7 @@ public class PaymentMethodPluginDetail {
 
     private String externalPaymentMethodId = null;
 
-    private Boolean isDefaultPaymentMethod = false;
+    private Boolean isDefaultPaymentMethod = null;
 
     private List<PluginProperty> properties = null;
 

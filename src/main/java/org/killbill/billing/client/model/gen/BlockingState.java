@@ -44,11 +44,11 @@ public class BlockingState extends KillBillObject {
 
     private String service = null;
 
-    private Boolean isBlockChange = false;
+    private Boolean isBlockChange = null;
 
-    private Boolean isBlockEntitlement = false;
+    private Boolean isBlockEntitlement = null;
 
-    private Boolean isBlockBilling = false;
+    private Boolean isBlockBilling = null;
 
     private DateTime effectiveDate = null;
 

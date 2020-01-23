@@ -35,9 +35,9 @@ public class Subject {
 
     private String principal = null;
 
-    private Boolean isAuthenticated = false;
+    private Boolean isAuthenticated = null;
 
-    private Boolean isRemembered = false;
+    private Boolean isRemembered = null;
 
     private Session session = null;
 

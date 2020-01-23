@@ -36,7 +36,7 @@ public class PluginProperty {
 
     private String value = null;
 
-    private Boolean isUpdatable = false;
+    private Boolean isUpdatable = null;
 
 
     public PluginProperty() {

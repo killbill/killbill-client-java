@@ -1,3 +1,38 @@
+1.1.10
+    Add equals and toString to RequestOptions (merge from 0.20.x)
+
+1.1.9
+    Add query param endDate to AccountApi#getInvoicesForAccount.
+    Fix CatalogApi#getCatalogXml to take a DateTime
+
+1.1.8
+    Add InvoiceItem#catalogEffectiveDate
+
+1.1.7
+    Remove unused withItems query params
+
+1.1.6
+    Regenerate java client for tracking Ids
+    Regenerate java client to remove overdue#this.daysBetweenPaymentRetries
+
+1.1.5
+    Subscription#getSubscriptionByKey
+
+1.1.4
+    Fix issue in credit api
+
+1.1.3
+    Enhance credit api to pass additional fields
+
+1.1.2
+    Add new custom field search apis.
+
+1.1.1
+    Fix incorrect method name
+
+1.1.0
+    Add missing audit & history apis
+
 1.0.6
     Regenerate client
 

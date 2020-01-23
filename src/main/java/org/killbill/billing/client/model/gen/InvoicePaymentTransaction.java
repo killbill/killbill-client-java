@@ -75,7 +75,7 @@ public class InvoicePaymentTransaction extends KillBillObject {
 
     private List<PluginProperty> properties = null;
 
-    private Boolean isAdjusted = false;
+    private Boolean isAdjusted = null;
 
     private List<InvoiceItem> adjustments = null;
 

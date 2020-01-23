@@ -19,6 +19,7 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.BlockingState;
 import org.killbill.billing.client.model.gen.Bundle;
 import org.killbill.billing.client.model.gen.CustomField;
@@ -31,6 +32,7 @@ import java.util.Map;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
+import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
 
@@ -188,6 +190,20 @@ public class BundleApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doGet(uri, Bundle.class, requestOptions);
+    }
+
+    public AuditLogs getBundleAuditLogsWithHistory(final UUID bundleId, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundleAuditLogsWithHistory");
+
+        final String uri = "/1.0/kb/bundles/{bundleId}/auditLogsWithHistory"
+          .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, AuditLogs.class, requestOptions);
     }
 
     public Bundles getBundleByKey(final String externalKey, final RequestOptions inputOptions) throws KillBillClientException {
