@@ -1,7 +1,8 @@
 /*
- * Copyright 2010-2013 Ning, Inc.
- * Copyright 2014-2016 Groupon, Inc
- * Copyright 2014-2016 The Billing Project, LLC
+ * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014-2020 Groupon, Inc
+ * Copyright 2020-2020 Equinix, Inc
+ * Copyright 2014-2020 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -26,36 +27,33 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
-import java.util.Collection;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.google.common.annotations.VisibleForTesting;
+
+import org.asynchttpclient.DefaultAsyncHttpClient;
+import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 import org.killbill.billing.client.model.KillBillObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ning.http.client.AsyncCompletionHandler;
-import com.ning.http.client.AsyncHandler;
-import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
-import com.ning.http.client.AsyncHttpClientConfig;
-import com.ning.http.client.BodyDeferringAsyncHandler;
-import com.ning.http.client.ListenableFuture;
-import com.ning.http.client.ProxyServer;
-import com.ning.http.client.Realm;
-import com.ning.http.client.Realm.RealmBuilder;
-import com.ning.http.client.Response;
+import org.asynchttpclient.AsyncCompletionHandler;
+import org.asynchttpclient.AsyncHandler;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.BoundRequestBuilder;
+import org.asynchttpclient.handler.BodyDeferringAsyncHandler;
+import org.asynchttpclient.ListenableFuture;
+import org.asynchttpclient.proxy.ProxyServer;
+import org.asynchttpclient.Realm;
+import org.asynchttpclient.Response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.google.common.base.Joiner;
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 
@@ -154,7 +152,7 @@ public class KillBillHttpClient implements Closeable {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
 
-        final AsyncHttpClientConfig.Builder cfg = new AsyncHttpClientConfig.Builder();
+        final DefaultAsyncHttpClientConfig.Builder cfg = new DefaultAsyncHttpClientConfig.Builder();
 
         if (requestTimeout != null) {
             cfg.setRequestTimeout(requestTimeout);
@@ -173,19 +171,15 @@ public class KillBillHttpClient implements Closeable {
         cfg.setUserAgent(USER_AGENT);
 
         if (proxyHost != null && proxyPort != null) {
-            final ProxyServer proxyServer = new ProxyServer(proxyHost, proxyPort);
+            final ProxyServer proxyServer = new ProxyServer.Builder(proxyHost, proxyPort).build();
             cfg.setProxyServer(proxyServer);
         }
 
         if (strictSSL != null) {
-            try {
-                cfg.setSSLContext(SslUtils.getInstance().getSSLContext(strictSSL, SSLProtocol));
-            } catch (final GeneralSecurityException e) {
-                throw new RuntimeException(e);
-            }
+            cfg.setUseInsecureTrustManager(!strictSSL);
         }
 
-        this.httpClient = new AsyncHttpClient(cfg.build());
+        this.httpClient = new DefaultAsyncHttpClient(cfg.build());
 
         mapper = new ObjectMapper();
         mapper.registerModule(new JodaModule());
@@ -208,7 +202,7 @@ public class KillBillHttpClient implements Closeable {
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
         httpClient.close();
     }
 
@@ -522,14 +516,13 @@ public class KillBillHttpClient implements Closeable {
         final String username = requestOptions.getUser() != null ? requestOptions.getUser() : this.username;
         final String password = requestOptions.getPassword() != null ? requestOptions.getPassword() : this.password;
         if (username != null && password != null) {
-            final Realm realm = new RealmBuilder().setPrincipal(username).setPassword(password).setScheme(Realm.AuthScheme.BASIC).setUsePreemptiveAuth(true).build();
+            final Realm realm = new Realm.Builder(username, password).setScheme(Realm.AuthScheme.BASIC).setUsePreemptiveAuth(true).build();
             builder.setRealm(realm);
         }
         for (final Entry<String, String> header : requestOptions.getHeaders().entrySet()) {
             builder.addHeader(header.getKey(), header.getValue());
         }
 
-        builder.setBodyEncoding("UTF-8");
         final Multimap<String, String> queryParams = requestOptions.getQueryParams();
         for (final String key : queryParams.keySet()) {
             if (queryParams.get(key) != null) {

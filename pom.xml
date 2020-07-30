@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2010-2013 Ning, Inc.
-  ~ Copyright 2014 Groupon, Inc
-  ~ Copyright 2014 The Billing Project, LLC
+  ~ Copyright 2010-2014 Ning, Inc.
+  ~ Copyright 2014-2020 Groupon, Inc
+  ~ Copyright 2020-2020 Equinix, Inc
+  ~ Copyright 2014-2020 The Billing Project, LLC
   ~
   ~ The Billing Project licenses this file to you under the Apache License, version 2.0
   ~ (the "License"); you may not use this file except in compliance with the
@@ -19,13 +20,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>killbill-oss-parent</artifactId>
         <groupId>org.kill-bill.billing</groupId>
-        <version>0.143.41</version>
+        <artifactId>killbill-oss-parent</artifactId>
+        <version>0.144.16</version>
     </parent>
-
     <artifactId>killbill-client-java</artifactId>
-    <version>1.1.11-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Kill Bill Client Java</name>
     <description>Kill Bill Java client library</description>
@@ -39,6 +39,9 @@
         <system>Github</system>
         <url>https://github.com/killbill/killbill-client-java/issues</url>
     </issueManagement>
+    <properties>
+        <check.spotbugs-exclude-filter-file>spotbugs-exclude.xml</check.spotbugs-exclude-filter-file>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -57,6 +60,10 @@
             <artifactId>jackson-datatype-joda</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock</artifactId>
             <version>1.58</version>
@@ -71,10 +78,6 @@
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ning</groupId>
-            <artifactId>async-http-client</artifactId>
-        </dependency>
-        <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>
@@ -84,12 +87,16 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.asynchttpclient</groupId>
+            <artifactId>async-http-client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.kill-bill.billing</groupId>
             <artifactId>killbill-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -109,77 +116,6 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.ning.maven.plugins</groupId>
-                <artifactId>maven-dependency-versions-check-plugin</artifactId>
-                <configuration>
-                    <exceptions>
-                        <exception>
-                            <groupId>com.fasterxml.jackson.core</groupId>
-                            <artifactId>jackson-annotations</artifactId>
-                            <expectedVersion>2.6.0</expectedVersion>
-                            <resolvedVersion>${jackson.version}</resolvedVersion>
-                        </exception>
-                        <exception>
-                            <groupId>com.fasterxml.jackson.core</groupId>
-                            <artifactId>jackson-core</artifactId>
-                            <expectedVersion>2.6.0</expectedVersion>
-                            <resolvedVersion>${jackson.version}</resolvedVersion>
-                        </exception>
-                        <exception>
-                            <groupId>com.fasterxml.jackson.core</groupId>
-                            <artifactId>jackson-databind</artifactId>
-                            <expectedVersion>2.6.0</expectedVersion>
-                            <resolvedVersion>${jackson.version}</resolvedVersion>
-                        </exception>
-                        <exception>
-                            <groupId>com.fasterxml.jackson.core</groupId>
-                            <artifactId>jackson-datatype-joda</artifactId>
-                            <expectedVersion>2.6.0</expectedVersion>
-                            <resolvedVersion>${jackson.version}</resolvedVersion>
-                        </exception>
-                        <exception>
-                            <groupId>com.fasterxml.jackson.core</groupId>
-                            <artifactId>jackson-code</artifactId>
-                            <expectedVersion>2.6.0</expectedVersion>
-                            <resolvedVersion>${jackson.version}</resolvedVersion>
-                        </exception>
-                    </exceptions>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>1.2</version>
-                <executions>
-                    <execution>
-                        <id>enforce-versions</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireMavenVersion>
-                                    <version>3.0.0</version>
-                                </requireMavenVersion>
-                                <requireJavaVersion>
-                                    <version>1.7</version>
-                                </requireJavaVersion>
-                                <bannedDependencies>
-                                    <excludes>
-                                        <exclude>com.google.collections:google-collections</exclude>
-                                        <exclude>com.google.guava:guava</exclude>
-                                        <exclude>org.jdbi:jdbi</exclude>
-                                    </excludes>
-                                    <includes>
-                                        <include>com.google.guava:guava:[12,)</include>
-                                    </includes>
-                                </bannedDependencies>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -205,19 +141,4 @@
             </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>jdk17</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <jdk>1.7</jdk>
-            </activation>
-        </profile>
-        <profile>
-            <id>jdk16</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-        </profile>
-    </profiles>
 </project>
