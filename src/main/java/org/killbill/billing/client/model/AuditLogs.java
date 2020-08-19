@@ -1,6 +1,8 @@
 /*
- * Copyright 2014-2018 Groupon, Inc
- * Copyright 2014-2018 The Billing Project, LLC
+ * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014-2020 Groupon, Inc
+ * Copyright 2020-2020 Equinix, Inc
+ * Copyright 2014-2020 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -18,13 +20,8 @@
 package org.killbill.billing.client.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.killbill.billing.client.KillBillClientException;
-import org.killbill.billing.client.model.gen.Account;
 import org.killbill.billing.client.model.gen.AuditLog;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class AuditLogs extends ArrayList<AuditLog> {
 }

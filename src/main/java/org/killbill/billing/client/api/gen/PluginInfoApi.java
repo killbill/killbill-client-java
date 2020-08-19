@@ -1,6 +1,8 @@
 /*
- * Copyright 2014-2018 Groupon, Inc
- * Copyright 2014-2018 The Billing Project, LLC
+ * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014-2020 Groupon, Inc
+ * Copyright 2020-2020 Equinix, Inc
+ * Copyright 2014-2020 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -19,16 +21,8 @@
 package org.killbill.billing.client.api.gen;
 
 
-import org.killbill.billing.client.model.gen.PluginInfo;
 import org.killbill.billing.client.model.PluginInfos;
-import java.util.List;
 
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
-
-import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;

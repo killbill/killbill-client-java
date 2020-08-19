@@ -8,11 +8,9 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: killbill/kbbuild:0.1.0
+      - image: killbill/kbbuild:0.7.0
     steps:
       - checkout
-      - restore_cache:
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "pom.xml" }}
       - run:
           name: Setup dependencies
           command: |
@@ -29,20 +27,20 @@ jobs:
                 fi
               done
             fi
-      - run: mvn -DskipTests=true clean install dependency:go-offline
+      - run: mvn -DskipTests=true clean install
       - save_cache:
           paths:
             - ~/.m2
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "pom.xml" }}
+          key: v1-dependencies-{{ .Revision }}
 
   test-h2:
     <<: *defaults
     docker:
-      - image: killbill/kbbuild:0.1.0
+      - image: killbill/kbbuild:0.7.0
     steps:
       - checkout
       - restore_cache:
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "pom.xml" }}
+          key: v1-dependencies-{{ .Revision }}
       - run: mvn clean install -Ptravis
       - run:
           name: Save test results

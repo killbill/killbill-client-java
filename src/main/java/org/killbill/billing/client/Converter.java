@@ -1,6 +1,8 @@
 /*
- * Copyright 2014-2018 Groupon, Inc
- * Copyright 2014-2018 The Billing Project, LLC
+ * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014-2020 Groupon, Inc
+ * Copyright 2020-2020 Equinix, Inc
+ * Copyright 2014-2020 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -20,9 +22,10 @@ package org.killbill.billing.client;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
-import com.ning.http.util.UTF8UrlEncoder;
+import org.asynchttpclient.util.Utf8UrlEncoder;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
@@ -34,7 +37,7 @@ public class Converter {
         return ImmutableList.copyOf(Iterables.transform(in, new Function<Enum, String>() {
             @Override
             public String apply(final Enum input) {
-                return input.name();
+                return input == null ? null : input.name();
             }
         }));
     }
@@ -43,7 +46,7 @@ public class Converter {
         return ImmutableList.copyOf(Iterables.transform(in, new Function<UUID, String>() {
             @Override
             public String apply(final UUID input) {
-                return input.toString();
+                return input == null ? null : input.toString();
             }
         }));
     }
@@ -53,8 +56,10 @@ public class Converter {
             return ImmutableList.of();
         }
         List<String> result = new ArrayList<String>();
-        for (final String key : pluginProperties.keySet()) {
-            result.add(String.format("%s=%s", UTF8UrlEncoder.encodeQueryElement(key), UTF8UrlEncoder.encodeQueryElement(pluginProperties.get(key))));
+        for (final Entry<String, String> entry : pluginProperties.entrySet()) {
+            final String encodedKey = Utf8UrlEncoder.encodeQueryElement(entry.getKey());
+            final String encodedValue = Utf8UrlEncoder.encodeQueryElement(entry.getValue());
+            result.add(String.format("%s=%s", encodedKey, encodedValue));
         }
         return result;
     }
