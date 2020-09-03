@@ -1,3 +1,9 @@
+1.2.1
+    pom.xml: update to killbill-oss-parent 0.144.28
+
+1.2.0
+    pom.xml: update to killbill-oss-parent 0.144.22
+
 1.1.10
     Add equals and toString to RequestOptions (merge from 0.20.x)
 
