@@ -1,3 +1,6 @@
+1.2.2
+    pom.xml: update to killbill-oss-parent 0.144.47
+
 1.2.1
     pom.xml: update to killbill-oss-parent 0.144.28
 
