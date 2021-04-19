@@ -28,11 +28,9 @@ Add the library to your application:
 </dependency>
 ```
 
-The easiest way to get started is to look at some of our [integration tests](https://github.com/killbill/killbill/tree/master/profiles/killbill/src/test/java/org/killbill/billing/jaxrs), which use this library.
+The easiest way to get started is to look at our [Java client tutorial](https://docs.killbill.io/latest/java_client.html). We also provide a sample [Java client application](https://github.com/killbill/killbill-client-java-example). You can clone this project in order to get started.
 
 When sending a body, if you are unsure which parameters to pass, take a look at the [Java api documentation](https://killbill.github.io/slate/?java#).
-
-Regarding error handling, if the server returns an error (400, 401, 409, 500, etc.), the code will throw `KillBillClientException`. If there is no response (204) or if an object cannot be found (404), the code will return null (for single objects) or an empty list (for collections of objects). Otherwise, you should never get null.
 
 ## Build
 
