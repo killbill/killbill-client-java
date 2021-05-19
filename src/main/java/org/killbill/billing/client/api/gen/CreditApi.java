@@ -24,7 +24,7 @@ package org.killbill.billing.client.api.gen;
 import org.killbill.billing.client.model.gen.InvoiceItem;
 import java.util.UUID;
 import org.killbill.billing.client.model.InvoiceItems;
-
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Multimap;

@@ -21,10 +21,12 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.BlockingState;
 import org.killbill.billing.client.model.gen.Bundle;
+import org.killbill.billing.client.model.gen.CustomField;
 import org.joda.time.LocalDate;
-
+import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import org.killbill.billing.client.model.BlockingStates;
 import java.util.List;

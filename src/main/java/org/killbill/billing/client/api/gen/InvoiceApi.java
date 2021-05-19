@@ -21,12 +21,14 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
+import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.Invoice;
 import org.killbill.billing.client.model.gen.InvoiceDryRun;
 import org.killbill.billing.client.model.gen.InvoiceItem;
 import org.killbill.billing.client.model.gen.InvoicePayment;
 import org.joda.time.LocalDate;
-
+import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import java.util.Map;
 import org.killbill.billing.client.model.InvoiceItems;
@@ -166,11 +168,11 @@ public class InvoiceApi {
         return httpClient.doPost(uri, null, Invoice.class, requestOptions);
     }
 
-    public InvoicePayment createInstantPayment(final UUID invoiceId, final InvoicePayment body, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        return createInstantPayment(invoiceId, body, Boolean.valueOf(false), pluginProperty, inputOptions);
+    public InvoicePayment createInstantPayment(final UUID invoiceId, final InvoicePayment body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return createInstantPayment(invoiceId, body, Boolean.valueOf(false), controlPluginName, pluginProperty, inputOptions);
     }
 
-    public InvoicePayment createInstantPayment(final UUID invoiceId, final InvoicePayment body, final Boolean externalPayment, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoicePayment createInstantPayment(final UUID invoiceId, final InvoicePayment body, final Boolean externalPayment, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createInstantPayment");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createInstantPayment");
 
@@ -180,6 +182,9 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
         if (externalPayment != null) {
             queryParams.put("externalPayment", String.valueOf(externalPayment));
+        }
+        if (controlPluginName != null) {
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
             queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));

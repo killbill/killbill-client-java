@@ -21,6 +21,8 @@
 package org.killbill.billing.client.api.gen;
 
 
+import org.killbill.billing.client.model.gen.AuditLog;
+import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.PaymentMethod;
 import java.util.UUID;
 import org.killbill.billing.client.model.CustomFields;

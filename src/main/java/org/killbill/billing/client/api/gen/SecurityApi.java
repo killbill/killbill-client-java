@@ -25,10 +25,14 @@ import org.killbill.billing.client.model.gen.RoleDefinition;
 import org.killbill.billing.client.model.gen.Subject;
 import org.killbill.billing.client.model.gen.UserRoles;
 import org.killbill.billing.client.model.Strings;
+import java.util.List;
 
+import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.LinkedListMultimap;
 
+import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
