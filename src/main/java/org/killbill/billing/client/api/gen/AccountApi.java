@@ -840,11 +840,11 @@ public class AccountApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void payAllInvoices(final UUID accountId, final UUID paymentMethodId, final BigDecimal paymentAmount, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        payAllInvoices(accountId, paymentMethodId, Boolean.valueOf(false), paymentAmount, targetDate, pluginProperty, inputOptions);
+    public Invoices payAllInvoices(final UUID accountId, final UUID paymentMethodId, final BigDecimal paymentAmount, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return payAllInvoices(accountId, paymentMethodId, Boolean.valueOf(false), paymentAmount, targetDate, pluginProperty, inputOptions);
     }
 
-    public void payAllInvoices(final UUID accountId, final UUID paymentMethodId, final Boolean externalPayment, final BigDecimal paymentAmount, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices payAllInvoices(final UUID accountId, final UUID paymentMethodId, final Boolean externalPayment, final BigDecimal paymentAmount, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling payAllInvoices");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoicePayments"
@@ -875,7 +875,7 @@ public class AccountApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, null, requestOptions);
+        return httpClient.doPost(uri, null, Invoices.class, requestOptions);
     }
 
     public Payment processPayment(final UUID accountId, final PaymentTransaction body, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
