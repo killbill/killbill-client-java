@@ -1,8 +1,8 @@
 /*
  * Copyright 2010-2014 Ning, Inc.
  * Copyright 2014-2020 Groupon, Inc
- * Copyright 2020-2020 Equinix, Inc
- * Copyright 2014-2020 The Billing Project, LLC
+ * Copyright 2020-2021 Equinix, Inc
+ * Copyright 2014-2021 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -24,15 +24,19 @@ package org.killbill.billing.client.api.gen;
 import org.killbill.billing.client.model.gen.Account;
 import org.killbill.billing.client.model.gen.AccountEmail;
 import org.killbill.billing.client.model.gen.AccountTimeline;
-
+import org.killbill.billing.client.model.gen.AuditLog;
 import java.math.BigDecimal;
 import org.killbill.billing.client.model.gen.BlockingState;
+import org.killbill.billing.client.model.gen.Bundle;
+import org.killbill.billing.client.model.gen.CustomField;
+import org.killbill.billing.client.model.gen.Invoice;
+import org.killbill.billing.client.model.gen.InvoicePayment;
 import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.OverdueState;
 import org.killbill.billing.client.model.gen.Payment;
 import org.killbill.billing.client.model.gen.PaymentMethod;
 import org.killbill.billing.client.model.gen.PaymentTransaction;
-
+import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import org.killbill.billing.client.model.BlockingStates;
 import java.util.List;
@@ -701,11 +705,11 @@ public class AccountApi {
         return httpClient.doGet(uri, InvoicePayments.class, requestOptions);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final LocalDate endDate, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, startDate, endDate, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final LocalDate endDate, final String invoicesFilter, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoicesForAccount(accountId, startDate, endDate, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), invoicesFilter, AuditLevel.NONE, inputOptions);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final LocalDate endDate, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final LocalDate endDate, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final String invoicesFilter, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicesForAccount");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoices"
@@ -726,6 +730,9 @@ public class AccountApi {
         }
         if (includeVoidedInvoices != null) {
             queryParams.put("includeVoidedInvoices", String.valueOf(includeVoidedInvoices));
+        }
+        if (invoicesFilter != null) {
+            queryParams.put("invoicesFilter", String.valueOf(invoicesFilter));
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));
@@ -833,11 +840,11 @@ public class AccountApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void payAllInvoices(final UUID accountId, final UUID paymentMethodId, final BigDecimal paymentAmount, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        payAllInvoices(accountId, paymentMethodId, Boolean.valueOf(false), paymentAmount, targetDate, pluginProperty, inputOptions);
+    public Invoices payAllInvoices(final UUID accountId, final UUID paymentMethodId, final BigDecimal paymentAmount, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return payAllInvoices(accountId, paymentMethodId, Boolean.valueOf(false), paymentAmount, targetDate, pluginProperty, inputOptions);
     }
 
-    public void payAllInvoices(final UUID accountId, final UUID paymentMethodId, final Boolean externalPayment, final BigDecimal paymentAmount, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices payAllInvoices(final UUID accountId, final UUID paymentMethodId, final Boolean externalPayment, final BigDecimal paymentAmount, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling payAllInvoices");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoicePayments"
@@ -868,7 +875,7 @@ public class AccountApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, null, requestOptions);
+        return httpClient.doPost(uri, null, Invoices.class, requestOptions);
     }
 
     public Payment processPayment(final UUID accountId, final PaymentTransaction body, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {

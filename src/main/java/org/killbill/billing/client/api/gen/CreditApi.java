@@ -1,8 +1,8 @@
 /*
  * Copyright 2010-2014 Ning, Inc.
  * Copyright 2014-2020 Groupon, Inc
- * Copyright 2020-2020 Equinix, Inc
- * Copyright 2014-2020 The Billing Project, LLC
+ * Copyright 2020-2021 Equinix, Inc
+ * Copyright 2014-2021 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -24,7 +24,7 @@ package org.killbill.billing.client.api.gen;
 import org.killbill.billing.client.model.gen.InvoiceItem;
 import java.util.UUID;
 import org.killbill.billing.client.model.InvoiceItems;
-
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Multimap;
