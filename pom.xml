@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.kill-bill.billing</groupId>
         <artifactId>killbill-oss-parent</artifactId>
-        <version>0.144.47</version>
+        <version>0.144.53-SNAPSHOT</version>
     </parent>
     <artifactId>killbill-client-java</artifactId>
     <version>1.2.4-SNAPSHOT</version>
@@ -118,10 +118,10 @@
                 <executions>
                     <execution>
                         <id>assemble-killbill-client-java</id>
-                        <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <phase>package</phase>
                         <configuration>
                             <createSourcesJar>true</createSourcesJar>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
@@ -132,8 +132,8 @@
                                 </filter>
                             </filters>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer" />
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer" />
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
                                     <resource>MANIFEST.MF</resource>
                                 </transformer>
