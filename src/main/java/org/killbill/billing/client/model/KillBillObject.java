@@ -21,6 +21,7 @@ package org.killbill.billing.client.model;
 
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -44,5 +45,22 @@ public abstract class KillBillObject {
 
     public void setAuditLogs(final List<AuditLog> auditLogs) {
         this.auditLogs = auditLogs;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof KillBillObject)) {
+            return false;
+        }
+        final KillBillObject that = (KillBillObject) o;
+        return Objects.equals(auditLogs, that.auditLogs);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(auditLogs);
     }
 }
