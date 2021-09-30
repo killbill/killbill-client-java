@@ -24,6 +24,8 @@ package org.killbill.billing.client.api.gen;
 import org.killbill.billing.client.model.gen.Tenant;
 import org.killbill.billing.client.model.gen.TenantKeyValue;
 import java.util.UUID;
+import org.killbill.billing.client.model.TenantKeyValues;
+import java.util.List;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -146,7 +148,7 @@ public class TenantApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public TenantKeyValue getAllPluginConfiguration(final String keyPrefix, final RequestOptions inputOptions) throws KillBillClientException {
+    public TenantKeyValues getAllPluginConfiguration(final String keyPrefix, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(keyPrefix, "Missing the required parameter 'keyPrefix' when calling getAllPluginConfiguration");
 
         final String uri = "/1.0/kb/tenants/uploadPerTenantConfig/{keyPrefix}/search"
@@ -157,7 +159,7 @@ public class TenantApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, TenantKeyValue.class, requestOptions);
+        return httpClient.doGet(uri, TenantKeyValues.class, requestOptions);
     }
 
     public TenantKeyValue getPerTenantConfiguration(final RequestOptions inputOptions) throws KillBillClientException {
