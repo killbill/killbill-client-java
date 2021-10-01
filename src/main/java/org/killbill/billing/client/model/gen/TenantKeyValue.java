@@ -33,7 +33,7 @@ import java.util.List;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class TenantKeyValue {
+public class TenantKeyValue extends KillBillObject {
 
     private String key = null;
 
