@@ -24,6 +24,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import org.killbill.billing.client.model.gen.AuditLog;
 
 /**
  *           DO NOT EDIT !!!
@@ -33,18 +34,21 @@ import java.util.List;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class TenantKeyValue {
+public class TenantKeyValue extends KillBillObject {
 
     private String key = null;
 
     private List<String> values = null;
 
 
+
     public TenantKeyValue() {
     }
 
     public TenantKeyValue(final String key,
-                     final List<String> values) {
+                     final List<String> values,
+                     final List<AuditLog> auditLogs) {
+        super(auditLogs);
         this.key = key;
         this.values = values;
 
@@ -87,22 +91,25 @@ public class TenantKeyValue {
         }
         TenantKeyValue tenantKeyValue = (TenantKeyValue) o;
         return Objects.equals(this.key, tenantKeyValue.key) &&
-            Objects.equals(this.values, tenantKeyValue.values);
+            Objects.equals(this.values, tenantKeyValue.values) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(key,
-            values);
+            values,
+            0 /* ignoring auditLogs for identity operations */ );
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class TenantKeyValue {\n");
-        
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
         sb.append("    key: ").append(toIndentedString(key)).append("\n");
         sb.append("    values: ").append(toIndentedString(values)).append("\n");
+        sb.append("    auditLogs: ").append(toIndentedString(auditLogs)).append("\n");
         sb.append("}");
         return sb.toString();
     }
