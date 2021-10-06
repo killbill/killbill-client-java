@@ -75,14 +75,12 @@ public class TierPrice {
         }
         TierPrice tierPrice = (TierPrice) o;
         return Objects.equals(this.blockPrices, tierPrice.blockPrices);
-
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(blockPrices);
     }
-
 
     @Override
     public String toString() {

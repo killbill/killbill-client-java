@@ -141,24 +141,22 @@ public class HostedPaymentPageFormDescriptor extends KillBillObject {
         }
         HostedPaymentPageFormDescriptor hostedPaymentPageFormDescriptor = (HostedPaymentPageFormDescriptor) o;
         return Objects.equals(this.kbAccountId, hostedPaymentPageFormDescriptor.kbAccountId) &&
-        Objects.equals(this.formMethod, hostedPaymentPageFormDescriptor.formMethod) &&
-        Objects.equals(this.formUrl, hostedPaymentPageFormDescriptor.formUrl) &&
-        Objects.equals(this.formFields, hostedPaymentPageFormDescriptor.formFields) &&
-        Objects.equals(this.properties, hostedPaymentPageFormDescriptor.properties) &&
-        Objects.equals(this.auditLogs, hostedPaymentPageFormDescriptor.auditLogs);
-
+            Objects.equals(this.formMethod, hostedPaymentPageFormDescriptor.formMethod) &&
+            Objects.equals(this.formUrl, hostedPaymentPageFormDescriptor.formUrl) &&
+            Objects.equals(this.formFields, hostedPaymentPageFormDescriptor.formFields) &&
+            Objects.equals(this.properties, hostedPaymentPageFormDescriptor.properties) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(kbAccountId,
-                            formMethod,
-                            formUrl,
-                            formFields,
-                            properties,
-                            auditLogs, super.hashCode());
+            formMethod,
+            formUrl,
+            formFields,
+            properties,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

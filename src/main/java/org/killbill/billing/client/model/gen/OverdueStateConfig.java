@@ -161,28 +161,26 @@ public class OverdueStateConfig {
         }
         OverdueStateConfig overdueStateConfig = (OverdueStateConfig) o;
         return Objects.equals(this.name, overdueStateConfig.name) &&
-        Objects.equals(this.isClearState, overdueStateConfig.isClearState) &&
-        Objects.equals(this.condition, overdueStateConfig.condition) &&
-        Objects.equals(this.externalMessage, overdueStateConfig.externalMessage) &&
-        Objects.equals(this.isBlockChanges, overdueStateConfig.isBlockChanges) &&
-        Objects.equals(this.isDisableEntitlement, overdueStateConfig.isDisableEntitlement) &&
-        Objects.equals(this.subscriptionCancellationPolicy, overdueStateConfig.subscriptionCancellationPolicy) &&
-        Objects.equals(this.autoReevaluationIntervalDays, overdueStateConfig.autoReevaluationIntervalDays);
-
+            Objects.equals(this.isClearState, overdueStateConfig.isClearState) &&
+            Objects.equals(this.condition, overdueStateConfig.condition) &&
+            Objects.equals(this.externalMessage, overdueStateConfig.externalMessage) &&
+            Objects.equals(this.isBlockChanges, overdueStateConfig.isBlockChanges) &&
+            Objects.equals(this.isDisableEntitlement, overdueStateConfig.isDisableEntitlement) &&
+            Objects.equals(this.subscriptionCancellationPolicy, overdueStateConfig.subscriptionCancellationPolicy) &&
+            Objects.equals(this.autoReevaluationIntervalDays, overdueStateConfig.autoReevaluationIntervalDays);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name,
-                            isClearState,
-                            condition,
-                            externalMessage,
-                            isBlockChanges,
-                            isDisableEntitlement,
-                            subscriptionCancellationPolicy,
-                            autoReevaluationIntervalDays);
+            isClearState,
+            condition,
+            externalMessage,
+            isBlockChanges,
+            isDisableEntitlement,
+            subscriptionCancellationPolicy,
+            autoReevaluationIntervalDays);
     }
-
 
     @Override
     public String toString() {

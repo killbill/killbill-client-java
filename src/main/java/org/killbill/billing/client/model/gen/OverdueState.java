@@ -133,24 +133,22 @@ public class OverdueState {
         }
         OverdueState overdueState = (OverdueState) o;
         return Objects.equals(this.name, overdueState.name) &&
-        Objects.equals(this.externalMessage, overdueState.externalMessage) &&
-        Objects.equals(this.isDisableEntitlementAndChangesBlocked, overdueState.isDisableEntitlementAndChangesBlocked) &&
-        Objects.equals(this.isBlockChanges, overdueState.isBlockChanges) &&
-        Objects.equals(this.isClearState, overdueState.isClearState) &&
-        Objects.equals(this.reevaluationIntervalDays, overdueState.reevaluationIntervalDays);
-
+            Objects.equals(this.externalMessage, overdueState.externalMessage) &&
+            Objects.equals(this.isDisableEntitlementAndChangesBlocked, overdueState.isDisableEntitlementAndChangesBlocked) &&
+            Objects.equals(this.isBlockChanges, overdueState.isBlockChanges) &&
+            Objects.equals(this.isClearState, overdueState.isClearState) &&
+            Objects.equals(this.reevaluationIntervalDays, overdueState.reevaluationIntervalDays);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name,
-                            externalMessage,
-                            isDisableEntitlementAndChangesBlocked,
-                            isBlockChanges,
-                            isClearState,
-                            reevaluationIntervalDays);
+            externalMessage,
+            isDisableEntitlementAndChangesBlocked,
+            isBlockChanges,
+            isClearState,
+            reevaluationIntervalDays);
     }
-
 
     @Override
     public String toString() {

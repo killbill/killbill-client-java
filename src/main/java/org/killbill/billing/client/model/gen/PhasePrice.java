@@ -141,24 +141,22 @@ public class PhasePrice {
         }
         PhasePrice phasePrice = (PhasePrice) o;
         return Objects.equals(this.planName, phasePrice.planName) &&
-        Objects.equals(this.phaseName, phasePrice.phaseName) &&
-        Objects.equals(this.phaseType, phasePrice.phaseType) &&
-        Objects.equals(this.fixedPrice, phasePrice.fixedPrice) &&
-        Objects.equals(this.recurringPrice, phasePrice.recurringPrice) &&
-        Objects.equals(this.usagePrices, phasePrice.usagePrices);
-
+            Objects.equals(this.phaseName, phasePrice.phaseName) &&
+            Objects.equals(this.phaseType, phasePrice.phaseType) &&
+            Objects.equals(this.fixedPrice, phasePrice.fixedPrice) &&
+            Objects.equals(this.recurringPrice, phasePrice.recurringPrice) &&
+            Objects.equals(this.usagePrices, phasePrice.usagePrices);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(planName,
-                            phaseName,
-                            phaseType,
-                            fixedPrice,
-                            recurringPrice,
-                            usagePrices);
+            phaseName,
+            phaseType,
+            fixedPrice,
+            recurringPrice,
+            usagePrices);
     }
-
 
     @Override
     public String toString() {

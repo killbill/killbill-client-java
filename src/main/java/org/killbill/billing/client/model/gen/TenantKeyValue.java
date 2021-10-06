@@ -33,7 +33,7 @@ import java.util.List;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class TenantKeyValue extends KillBillObject {
+public class TenantKeyValue {
 
     private String key = null;
 
@@ -87,16 +87,14 @@ public class TenantKeyValue extends KillBillObject {
         }
         TenantKeyValue tenantKeyValue = (TenantKeyValue) o;
         return Objects.equals(this.key, tenantKeyValue.key) &&
-        Objects.equals(this.values, tenantKeyValue.values);
-
+            Objects.equals(this.values, tenantKeyValue.values);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(key,
-                            values);
+            values);
     }
-
 
     @Override
     public String toString() {

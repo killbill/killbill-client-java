@@ -171,30 +171,28 @@ public class AuditLog<E> {
         }
         AuditLog auditLog = (AuditLog) o;
         return Objects.equals(this.changeType, auditLog.changeType) &&
-        Objects.equals(this.changeDate, auditLog.changeDate) &&
-        Objects.equals(this.objectType, auditLog.objectType) &&
-        Objects.equals(this.objectId, auditLog.objectId) &&
-        Objects.equals(this.changedBy, auditLog.changedBy) &&
-        Objects.equals(this.reasonCode, auditLog.reasonCode) &&
-        Objects.equals(this.comments, auditLog.comments) &&
-        Objects.equals(this.userToken, auditLog.userToken) &&
-        Objects.equals(this.history, auditLog.history);
-
+            Objects.equals(this.changeDate, auditLog.changeDate) &&
+            Objects.equals(this.objectType, auditLog.objectType) &&
+            Objects.equals(this.objectId, auditLog.objectId) &&
+            Objects.equals(this.changedBy, auditLog.changedBy) &&
+            Objects.equals(this.reasonCode, auditLog.reasonCode) &&
+            Objects.equals(this.comments, auditLog.comments) &&
+            Objects.equals(this.userToken, auditLog.userToken) &&
+            Objects.equals(this.history, auditLog.history);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(changeType,
-                            changeDate,
-                            objectType,
-                            objectId,
-                            changedBy,
-                            reasonCode,
-                            comments,
-                            userToken,
-                            history);
+            changeDate,
+            objectType,
+            objectId,
+            changedBy,
+            reasonCode,
+            comments,
+            userToken,
+            history);
     }
-
 
     @Override
     public String toString() {

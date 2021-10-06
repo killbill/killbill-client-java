@@ -168,24 +168,22 @@ public class Catalog {
         }
         Catalog catalog = (Catalog) o;
         return Objects.equals(this.name, catalog.name) &&
-        Objects.equals(this.effectiveDate, catalog.effectiveDate) &&
-        Objects.equals(this.currencies, catalog.currencies) &&
-        Objects.equals(this.units, catalog.units) &&
-        Objects.equals(this.products, catalog.products) &&
-        Objects.equals(this.priceLists, catalog.priceLists);
-
+            Objects.equals(this.effectiveDate, catalog.effectiveDate) &&
+            Objects.equals(this.currencies, catalog.currencies) &&
+            Objects.equals(this.units, catalog.units) &&
+            Objects.equals(this.products, catalog.products) &&
+            Objects.equals(this.priceLists, catalog.priceLists);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name,
-                            effectiveDate,
-                            currencies,
-                            units,
-                            products,
-                            priceLists);
+            effectiveDate,
+            currencies,
+            units,
+            products,
+            priceLists);
     }
-
 
     @Override
     public String toString() {

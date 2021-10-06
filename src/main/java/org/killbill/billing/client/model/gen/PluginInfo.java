@@ -155,26 +155,24 @@ public class PluginInfo {
         }
         PluginInfo pluginInfo = (PluginInfo) o;
         return Objects.equals(this.bundleSymbolicName, pluginInfo.bundleSymbolicName) &&
-        Objects.equals(this.pluginKey, pluginInfo.pluginKey) &&
-        Objects.equals(this.pluginName, pluginInfo.pluginName) &&
-        Objects.equals(this.version, pluginInfo.version) &&
-        Objects.equals(this.state, pluginInfo.state) &&
-        Objects.equals(this.isSelectedForStart, pluginInfo.isSelectedForStart) &&
-        Objects.equals(this.services, pluginInfo.services);
-
+            Objects.equals(this.pluginKey, pluginInfo.pluginKey) &&
+            Objects.equals(this.pluginName, pluginInfo.pluginName) &&
+            Objects.equals(this.version, pluginInfo.version) &&
+            Objects.equals(this.state, pluginInfo.state) &&
+            Objects.equals(this.isSelectedForStart, pluginInfo.isSelectedForStart) &&
+            Objects.equals(this.services, pluginInfo.services);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(bundleSymbolicName,
-                            pluginKey,
-                            pluginName,
-                            version,
-                            state,
-                            isSelectedForStart,
-                            services);
+            pluginKey,
+            pluginName,
+            version,
+            state,
+            isSelectedForStart,
+            services);
     }
-
 
     @Override
     public String toString() {

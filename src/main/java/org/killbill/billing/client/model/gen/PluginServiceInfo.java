@@ -77,16 +77,14 @@ public class PluginServiceInfo {
         }
         PluginServiceInfo pluginServiceInfo = (PluginServiceInfo) o;
         return Objects.equals(this.serviceTypeName, pluginServiceInfo.serviceTypeName) &&
-        Objects.equals(this.registrationName, pluginServiceInfo.registrationName);
-
+            Objects.equals(this.registrationName, pluginServiceInfo.registrationName);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(serviceTypeName,
-                            registrationName);
+            registrationName);
     }
-
 
     @Override
     public String toString() {

@@ -133,24 +133,22 @@ public class Bundle extends KillBillObject {
         }
         Bundle bundle = (Bundle) o;
         return Objects.equals(this.accountId, bundle.accountId) &&
-        Objects.equals(this.bundleId, bundle.bundleId) &&
-        Objects.equals(this.externalKey, bundle.externalKey) &&
-        Objects.equals(this.subscriptions, bundle.subscriptions) &&
-        Objects.equals(this.timeline, bundle.timeline) &&
-        Objects.equals(this.auditLogs, bundle.auditLogs);
-
+            Objects.equals(this.bundleId, bundle.bundleId) &&
+            Objects.equals(this.externalKey, bundle.externalKey) &&
+            Objects.equals(this.subscriptions, bundle.subscriptions) &&
+            Objects.equals(this.timeline, bundle.timeline) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(accountId,
-                            bundleId,
-                            externalKey,
-                            subscriptions,
-                            timeline,
-                            auditLogs, super.hashCode());
+            bundleId,
+            externalKey,
+            subscriptions,
+            timeline,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

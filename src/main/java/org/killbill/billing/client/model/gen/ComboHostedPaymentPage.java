@@ -121,22 +121,20 @@ public class ComboHostedPaymentPage extends KillBillObject {
         }
         ComboHostedPaymentPage comboHostedPaymentPage = (ComboHostedPaymentPage) o;
         return Objects.equals(this.account, comboHostedPaymentPage.account) &&
-        Objects.equals(this.paymentMethod, comboHostedPaymentPage.paymentMethod) &&
-        Objects.equals(this.hostedPaymentPageFields, comboHostedPaymentPage.hostedPaymentPageFields) &&
-        Objects.equals(this.paymentMethodPluginProperties, comboHostedPaymentPage.paymentMethodPluginProperties) &&
-        Objects.equals(this.auditLogs, comboHostedPaymentPage.auditLogs);
-
+            Objects.equals(this.paymentMethod, comboHostedPaymentPage.paymentMethod) &&
+            Objects.equals(this.hostedPaymentPageFields, comboHostedPaymentPage.hostedPaymentPageFields) &&
+            Objects.equals(this.paymentMethodPluginProperties, comboHostedPaymentPage.paymentMethodPluginProperties) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(account,
-                            paymentMethod,
-                            hostedPaymentPageFields,
-                            paymentMethodPluginProperties,
-                            auditLogs, super.hashCode());
+            paymentMethod,
+            hostedPaymentPageFields,
+            paymentMethodPluginProperties,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

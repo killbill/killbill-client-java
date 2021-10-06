@@ -87,16 +87,14 @@ public class PriceList {
         }
         PriceList priceList = (PriceList) o;
         return Objects.equals(this.name, priceList.name) &&
-        Objects.equals(this.plans, priceList.plans);
-
+            Objects.equals(this.plans, priceList.plans);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name,
-                            plans);
+            plans);
     }
-
 
     @Override
     public String toString() {

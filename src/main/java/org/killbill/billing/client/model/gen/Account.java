@@ -389,64 +389,62 @@ public class Account extends KillBillObject {
         }
         Account account = (Account) o;
         return Objects.equals(this.accountId, account.accountId) &&
-        Objects.equals(this.name, account.name) &&
-        Objects.equals(this.firstNameLength, account.firstNameLength) &&
-        Objects.equals(this.externalKey, account.externalKey) &&
-        Objects.equals(this.email, account.email) &&
-        Objects.equals(this.billCycleDayLocal, account.billCycleDayLocal) &&
-        Objects.equals(this.currency, account.currency) &&
-        Objects.equals(this.parentAccountId, account.parentAccountId) &&
-        Objects.equals(this.isPaymentDelegatedToParent, account.isPaymentDelegatedToParent) &&
-        Objects.equals(this.paymentMethodId, account.paymentMethodId) &&
-        Objects.equals(this.referenceTime, account.referenceTime) &&
-        Objects.equals(this.timeZone, account.timeZone) &&
-        Objects.equals(this.address1, account.address1) &&
-        Objects.equals(this.address2, account.address2) &&
-        Objects.equals(this.postalCode, account.postalCode) &&
-        Objects.equals(this.company, account.company) &&
-        Objects.equals(this.city, account.city) &&
-        Objects.equals(this.state, account.state) &&
-        Objects.equals(this.country, account.country) &&
-        Objects.equals(this.locale, account.locale) &&
-        Objects.equals(this.phone, account.phone) &&
-        Objects.equals(this.notes, account.notes) &&
-        Objects.equals(this.isMigrated, account.isMigrated) &&
-        Objects.equals(this.accountBalance, account.accountBalance) &&
-        Objects.equals(this.accountCBA, account.accountCBA) &&
-        Objects.equals(this.auditLogs, account.auditLogs);
-
+            Objects.equals(this.name, account.name) &&
+            Objects.equals(this.firstNameLength, account.firstNameLength) &&
+            Objects.equals(this.externalKey, account.externalKey) &&
+            Objects.equals(this.email, account.email) &&
+            Objects.equals(this.billCycleDayLocal, account.billCycleDayLocal) &&
+            Objects.equals(this.currency, account.currency) &&
+            Objects.equals(this.parentAccountId, account.parentAccountId) &&
+            Objects.equals(this.isPaymentDelegatedToParent, account.isPaymentDelegatedToParent) &&
+            Objects.equals(this.paymentMethodId, account.paymentMethodId) &&
+            Objects.equals(this.referenceTime, account.referenceTime) &&
+            Objects.equals(this.timeZone, account.timeZone) &&
+            Objects.equals(this.address1, account.address1) &&
+            Objects.equals(this.address2, account.address2) &&
+            Objects.equals(this.postalCode, account.postalCode) &&
+            Objects.equals(this.company, account.company) &&
+            Objects.equals(this.city, account.city) &&
+            Objects.equals(this.state, account.state) &&
+            Objects.equals(this.country, account.country) &&
+            Objects.equals(this.locale, account.locale) &&
+            Objects.equals(this.phone, account.phone) &&
+            Objects.equals(this.notes, account.notes) &&
+            Objects.equals(this.isMigrated, account.isMigrated) &&
+            Objects.equals(this.accountBalance, account.accountBalance) &&
+            Objects.equals(this.accountCBA, account.accountCBA) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(accountId,
-                            name,
-                            firstNameLength,
-                            externalKey,
-                            email,
-                            billCycleDayLocal,
-                            currency,
-                            parentAccountId,
-                            isPaymentDelegatedToParent,
-                            paymentMethodId,
-                            referenceTime,
-                            timeZone,
-                            address1,
-                            address2,
-                            postalCode,
-                            company,
-                            city,
-                            state,
-                            country,
-                            locale,
-                            phone,
-                            notes,
-                            isMigrated,
-                            accountBalance,
-                            accountCBA,
-                            auditLogs, super.hashCode());
+            name,
+            firstNameLength,
+            externalKey,
+            email,
+            billCycleDayLocal,
+            currency,
+            parentAccountId,
+            isPaymentDelegatedToParent,
+            paymentMethodId,
+            referenceTime,
+            timeZone,
+            address1,
+            address2,
+            postalCode,
+            company,
+            city,
+            state,
+            country,
+            locale,
+            phone,
+            notes,
+            isMigrated,
+            accountBalance,
+            accountCBA,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

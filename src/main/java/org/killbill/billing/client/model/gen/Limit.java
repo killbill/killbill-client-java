@@ -90,18 +90,16 @@ public class Limit {
         }
         Limit limit = (Limit) o;
         return Objects.equals(this.unit, limit.unit) &&
-        Objects.equals(this.max, limit.max) &&
-        Objects.equals(this.min, limit.min);
-
+            Objects.equals(this.max, limit.max) &&
+            Objects.equals(this.min, limit.min);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(unit,
-                            max,
-                            min);
+            max,
+            min);
     }
-
 
     @Override
     public String toString() {

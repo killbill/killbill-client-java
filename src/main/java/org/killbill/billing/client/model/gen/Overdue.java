@@ -88,16 +88,14 @@ public class Overdue {
         }
         Overdue overdue = (Overdue) o;
         return Objects.equals(this.initialReevaluationInterval, overdue.initialReevaluationInterval) &&
-        Objects.equals(this.overdueStates, overdue.overdueStates);
-
+            Objects.equals(this.overdueStates, overdue.overdueStates);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(initialReevaluationInterval,
-                            overdueStates);
+            overdueStates);
     }
-
 
     @Override
     public String toString() {

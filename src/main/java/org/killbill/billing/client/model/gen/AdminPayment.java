@@ -90,18 +90,16 @@ public class AdminPayment {
         }
         AdminPayment adminPayment = (AdminPayment) o;
         return Objects.equals(this.lastSuccessPaymentState, adminPayment.lastSuccessPaymentState) &&
-        Objects.equals(this.currentPaymentStateName, adminPayment.currentPaymentStateName) &&
-        Objects.equals(this.transactionStatus, adminPayment.transactionStatus);
-
+            Objects.equals(this.currentPaymentStateName, adminPayment.currentPaymentStateName) &&
+            Objects.equals(this.transactionStatus, adminPayment.transactionStatus);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(lastSuccessPaymentState,
-                            currentPaymentStateName,
-                            transactionStatus);
+            currentPaymentStateName,
+            transactionStatus);
     }
-
 
     @Override
     public String toString() {

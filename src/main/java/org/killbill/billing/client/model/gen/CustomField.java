@@ -124,24 +124,22 @@ public class CustomField extends KillBillObject {
         }
         CustomField customField = (CustomField) o;
         return Objects.equals(this.customFieldId, customField.customFieldId) &&
-        Objects.equals(this.objectId, customField.objectId) &&
-        Objects.equals(this.objectType, customField.objectType) &&
-        Objects.equals(this.name, customField.name) &&
-        Objects.equals(this.value, customField.value) &&
-        Objects.equals(this.auditLogs, customField.auditLogs);
-
+            Objects.equals(this.objectId, customField.objectId) &&
+            Objects.equals(this.objectType, customField.objectType) &&
+            Objects.equals(this.name, customField.name) &&
+            Objects.equals(this.value, customField.value) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(customFieldId,
-                            objectId,
-                            objectType,
-                            name,
-                            value,
-                            auditLogs, super.hashCode());
+            objectId,
+            objectType,
+            name,
+            value,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

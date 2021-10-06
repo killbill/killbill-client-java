@@ -183,30 +183,28 @@ public class SimplePlan {
         }
         SimplePlan simplePlan = (SimplePlan) o;
         return Objects.equals(this.planId, simplePlan.planId) &&
-        Objects.equals(this.productName, simplePlan.productName) &&
-        Objects.equals(this.productCategory, simplePlan.productCategory) &&
-        Objects.equals(this.currency, simplePlan.currency) &&
-        Objects.equals(this.amount, simplePlan.amount) &&
-        Objects.equals(this.billingPeriod, simplePlan.billingPeriod) &&
-        Objects.equals(this.trialLength, simplePlan.trialLength) &&
-        Objects.equals(this.trialTimeUnit, simplePlan.trialTimeUnit) &&
-        Objects.equals(this.availableBaseProducts, simplePlan.availableBaseProducts);
-
+            Objects.equals(this.productName, simplePlan.productName) &&
+            Objects.equals(this.productCategory, simplePlan.productCategory) &&
+            Objects.equals(this.currency, simplePlan.currency) &&
+            Objects.equals(this.amount, simplePlan.amount) &&
+            Objects.equals(this.billingPeriod, simplePlan.billingPeriod) &&
+            Objects.equals(this.trialLength, simplePlan.trialLength) &&
+            Objects.equals(this.trialTimeUnit, simplePlan.trialTimeUnit) &&
+            Objects.equals(this.availableBaseProducts, simplePlan.availableBaseProducts);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(planId,
-                            productName,
-                            productCategory,
-                            currency,
-                            amount,
-                            billingPeriod,
-                            trialLength,
-                            trialTimeUnit,
-                            availableBaseProducts);
+            productName,
+            productCategory,
+            currency,
+            amount,
+            billingPeriod,
+            trialLength,
+            trialTimeUnit,
+            availableBaseProducts);
     }
-
 
     @Override
     public String toString() {

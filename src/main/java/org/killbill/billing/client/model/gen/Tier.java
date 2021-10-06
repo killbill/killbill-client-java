@@ -140,20 +140,18 @@ public class Tier {
         }
         Tier tier = (Tier) o;
         return Objects.equals(this.limits, tier.limits) &&
-        Objects.equals(this.fixedPrice, tier.fixedPrice) &&
-        Objects.equals(this.recurringPrice, tier.recurringPrice) &&
-        Objects.equals(this.blocks, tier.blocks);
-
+            Objects.equals(this.fixedPrice, tier.fixedPrice) &&
+            Objects.equals(this.recurringPrice, tier.recurringPrice) &&
+            Objects.equals(this.blocks, tier.blocks);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(limits,
-                            fixedPrice,
-                            recurringPrice,
-                            blocks);
+            fixedPrice,
+            recurringPrice,
+            blocks);
     }
-
 
     @Override
     public String toString() {

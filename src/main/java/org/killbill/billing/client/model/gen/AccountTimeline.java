@@ -133,20 +133,18 @@ public class AccountTimeline {
         }
         AccountTimeline accountTimeline = (AccountTimeline) o;
         return Objects.equals(this.account, accountTimeline.account) &&
-        Objects.equals(this.bundles, accountTimeline.bundles) &&
-        Objects.equals(this.invoices, accountTimeline.invoices) &&
-        Objects.equals(this.payments, accountTimeline.payments);
-
+            Objects.equals(this.bundles, accountTimeline.bundles) &&
+            Objects.equals(this.invoices, accountTimeline.invoices) &&
+            Objects.equals(this.payments, accountTimeline.payments);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(account,
-                            bundles,
-                            invoices,
-                            payments);
+            bundles,
+            invoices,
+            payments);
     }
-
 
     @Override
     public String toString() {

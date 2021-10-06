@@ -220,38 +220,36 @@ public class EventSubscription extends KillBillObject {
         }
         EventSubscription eventSubscription = (EventSubscription) o;
         return Objects.equals(this.eventId, eventSubscription.eventId) &&
-        Objects.equals(this.billingPeriod, eventSubscription.billingPeriod) &&
-        Objects.equals(this.effectiveDate, eventSubscription.effectiveDate) &&
-        Objects.equals(this.plan, eventSubscription.plan) &&
-        Objects.equals(this.product, eventSubscription.product) &&
-        Objects.equals(this.priceList, eventSubscription.priceList) &&
-        Objects.equals(this.eventType, eventSubscription.eventType) &&
-        Objects.equals(this.isBlockedBilling, eventSubscription.isBlockedBilling) &&
-        Objects.equals(this.isBlockedEntitlement, eventSubscription.isBlockedEntitlement) &&
-        Objects.equals(this.serviceName, eventSubscription.serviceName) &&
-        Objects.equals(this.serviceStateName, eventSubscription.serviceStateName) &&
-        Objects.equals(this.phase, eventSubscription.phase) &&
-        Objects.equals(this.auditLogs, eventSubscription.auditLogs);
-
+            Objects.equals(this.billingPeriod, eventSubscription.billingPeriod) &&
+            Objects.equals(this.effectiveDate, eventSubscription.effectiveDate) &&
+            Objects.equals(this.plan, eventSubscription.plan) &&
+            Objects.equals(this.product, eventSubscription.product) &&
+            Objects.equals(this.priceList, eventSubscription.priceList) &&
+            Objects.equals(this.eventType, eventSubscription.eventType) &&
+            Objects.equals(this.isBlockedBilling, eventSubscription.isBlockedBilling) &&
+            Objects.equals(this.isBlockedEntitlement, eventSubscription.isBlockedEntitlement) &&
+            Objects.equals(this.serviceName, eventSubscription.serviceName) &&
+            Objects.equals(this.serviceStateName, eventSubscription.serviceStateName) &&
+            Objects.equals(this.phase, eventSubscription.phase) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(eventId,
-                            billingPeriod,
-                            effectiveDate,
-                            plan,
-                            product,
-                            priceList,
-                            eventType,
-                            isBlockedBilling,
-                            isBlockedEntitlement,
-                            serviceName,
-                            serviceStateName,
-                            phase,
-                            auditLogs, super.hashCode());
+            billingPeriod,
+            effectiveDate,
+            plan,
+            product,
+            priceList,
+            eventType,
+            isBlockedBilling,
+            isBlockedEntitlement,
+            serviceName,
+            serviceStateName,
+            phase,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

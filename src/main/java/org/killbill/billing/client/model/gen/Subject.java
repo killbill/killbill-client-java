@@ -107,20 +107,18 @@ public class Subject {
         }
         Subject subject = (Subject) o;
         return Objects.equals(this.principal, subject.principal) &&
-        Objects.equals(this.isAuthenticated, subject.isAuthenticated) &&
-        Objects.equals(this.isRemembered, subject.isRemembered) &&
-        Objects.equals(this.session, subject.session);
-
+            Objects.equals(this.isAuthenticated, subject.isAuthenticated) &&
+            Objects.equals(this.isRemembered, subject.isRemembered) &&
+            Objects.equals(this.session, subject.session);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(principal,
-                            isAuthenticated,
-                            isRemembered,
-                            session);
+            isAuthenticated,
+            isRemembered,
+            session);
     }
-
 
     @Override
     public String toString() {

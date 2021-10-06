@@ -103,18 +103,16 @@ public class PaymentMethodPluginDetail {
         }
         PaymentMethodPluginDetail paymentMethodPluginDetail = (PaymentMethodPluginDetail) o;
         return Objects.equals(this.externalPaymentMethodId, paymentMethodPluginDetail.externalPaymentMethodId) &&
-        Objects.equals(this.isDefaultPaymentMethod, paymentMethodPluginDetail.isDefaultPaymentMethod) &&
-        Objects.equals(this.properties, paymentMethodPluginDetail.properties);
-
+            Objects.equals(this.isDefaultPaymentMethod, paymentMethodPluginDetail.isDefaultPaymentMethod) &&
+            Objects.equals(this.properties, paymentMethodPluginDetail.properties);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(externalPaymentMethodId,
-                            isDefaultPaymentMethod,
-                            properties);
+            isDefaultPaymentMethod,
+            properties);
     }
-
 
     @Override
     public String toString() {

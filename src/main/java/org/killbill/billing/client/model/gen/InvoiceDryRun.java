@@ -226,36 +226,34 @@ public class InvoiceDryRun {
         }
         InvoiceDryRun invoiceDryRun = (InvoiceDryRun) o;
         return Objects.equals(this.dryRunType, invoiceDryRun.dryRunType) &&
-        Objects.equals(this.dryRunAction, invoiceDryRun.dryRunAction) &&
-        Objects.equals(this.phaseType, invoiceDryRun.phaseType) &&
-        Objects.equals(this.productName, invoiceDryRun.productName) &&
-        Objects.equals(this.productCategory, invoiceDryRun.productCategory) &&
-        Objects.equals(this.billingPeriod, invoiceDryRun.billingPeriod) &&
-        Objects.equals(this.priceListName, invoiceDryRun.priceListName) &&
-        Objects.equals(this.subscriptionId, invoiceDryRun.subscriptionId) &&
-        Objects.equals(this.bundleId, invoiceDryRun.bundleId) &&
-        Objects.equals(this.effectiveDate, invoiceDryRun.effectiveDate) &&
-        Objects.equals(this.billingPolicy, invoiceDryRun.billingPolicy) &&
-        Objects.equals(this.priceOverrides, invoiceDryRun.priceOverrides);
-
+            Objects.equals(this.dryRunAction, invoiceDryRun.dryRunAction) &&
+            Objects.equals(this.phaseType, invoiceDryRun.phaseType) &&
+            Objects.equals(this.productName, invoiceDryRun.productName) &&
+            Objects.equals(this.productCategory, invoiceDryRun.productCategory) &&
+            Objects.equals(this.billingPeriod, invoiceDryRun.billingPeriod) &&
+            Objects.equals(this.priceListName, invoiceDryRun.priceListName) &&
+            Objects.equals(this.subscriptionId, invoiceDryRun.subscriptionId) &&
+            Objects.equals(this.bundleId, invoiceDryRun.bundleId) &&
+            Objects.equals(this.effectiveDate, invoiceDryRun.effectiveDate) &&
+            Objects.equals(this.billingPolicy, invoiceDryRun.billingPolicy) &&
+            Objects.equals(this.priceOverrides, invoiceDryRun.priceOverrides);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(dryRunType,
-                            dryRunAction,
-                            phaseType,
-                            productName,
-                            productCategory,
-                            billingPeriod,
-                            priceListName,
-                            subscriptionId,
-                            bundleId,
-                            effectiveDate,
-                            billingPolicy,
-                            priceOverrides);
+            dryRunAction,
+            phaseType,
+            productName,
+            productCategory,
+            billingPeriod,
+            priceListName,
+            subscriptionId,
+            bundleId,
+            effectiveDate,
+            billingPolicy,
+            priceOverrides);
     }
-
 
     @Override
     public String toString() {

@@ -124,24 +124,22 @@ public class Tag extends KillBillObject {
         }
         Tag tag = (Tag) o;
         return Objects.equals(this.tagId, tag.tagId) &&
-        Objects.equals(this.objectType, tag.objectType) &&
-        Objects.equals(this.objectId, tag.objectId) &&
-        Objects.equals(this.tagDefinitionId, tag.tagDefinitionId) &&
-        Objects.equals(this.tagDefinitionName, tag.tagDefinitionName) &&
-        Objects.equals(this.auditLogs, tag.auditLogs);
-
+            Objects.equals(this.objectType, tag.objectType) &&
+            Objects.equals(this.objectId, tag.objectId) &&
+            Objects.equals(this.tagDefinitionId, tag.tagDefinitionId) &&
+            Objects.equals(this.tagDefinitionName, tag.tagDefinitionName) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(tagId,
-                            objectType,
-                            objectId,
-                            tagDefinitionId,
-                            tagDefinitionName,
-                            auditLogs, super.hashCode());
+            objectType,
+            objectId,
+            tagDefinitionId,
+            tagDefinitionName,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

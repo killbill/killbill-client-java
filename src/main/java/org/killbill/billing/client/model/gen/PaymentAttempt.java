@@ -227,38 +227,36 @@ public class PaymentAttempt extends KillBillObject {
         }
         PaymentAttempt paymentAttempt = (PaymentAttempt) o;
         return Objects.equals(this.accountId, paymentAttempt.accountId) &&
-        Objects.equals(this.paymentMethodId, paymentAttempt.paymentMethodId) &&
-        Objects.equals(this.paymentExternalKey, paymentAttempt.paymentExternalKey) &&
-        Objects.equals(this.transactionId, paymentAttempt.transactionId) &&
-        Objects.equals(this.transactionExternalKey, paymentAttempt.transactionExternalKey) &&
-        Objects.equals(this.transactionType, paymentAttempt.transactionType) &&
-        Objects.equals(this.effectiveDate, paymentAttempt.effectiveDate) &&
-        Objects.equals(this.stateName, paymentAttempt.stateName) &&
-        Objects.equals(this.amount, paymentAttempt.amount) &&
-        Objects.equals(this.currency, paymentAttempt.currency) &&
-        Objects.equals(this.pluginName, paymentAttempt.pluginName) &&
-        Objects.equals(this.pluginProperties, paymentAttempt.pluginProperties) &&
-        Objects.equals(this.auditLogs, paymentAttempt.auditLogs);
-
+            Objects.equals(this.paymentMethodId, paymentAttempt.paymentMethodId) &&
+            Objects.equals(this.paymentExternalKey, paymentAttempt.paymentExternalKey) &&
+            Objects.equals(this.transactionId, paymentAttempt.transactionId) &&
+            Objects.equals(this.transactionExternalKey, paymentAttempt.transactionExternalKey) &&
+            Objects.equals(this.transactionType, paymentAttempt.transactionType) &&
+            Objects.equals(this.effectiveDate, paymentAttempt.effectiveDate) &&
+            Objects.equals(this.stateName, paymentAttempt.stateName) &&
+            Objects.equals(this.amount, paymentAttempt.amount) &&
+            Objects.equals(this.currency, paymentAttempt.currency) &&
+            Objects.equals(this.pluginName, paymentAttempt.pluginName) &&
+            Objects.equals(this.pluginProperties, paymentAttempt.pluginProperties) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(accountId,
-                            paymentMethodId,
-                            paymentExternalKey,
-                            transactionId,
-                            transactionExternalKey,
-                            transactionType,
-                            effectiveDate,
-                            stateName,
-                            amount,
-                            currency,
-                            pluginName,
-                            pluginProperties,
-                            auditLogs, super.hashCode());
+            paymentMethodId,
+            paymentExternalKey,
+            transactionId,
+            transactionExternalKey,
+            transactionType,
+            effectiveDate,
+            stateName,
+            amount,
+            currency,
+            pluginName,
+            pluginProperties,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

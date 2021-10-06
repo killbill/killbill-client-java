@@ -323,50 +323,48 @@ public class Invoice extends KillBillObject {
         }
         Invoice invoice = (Invoice) o;
         return Objects.equals(this.amount, invoice.amount) &&
-        Objects.equals(this.currency, invoice.currency) &&
-        Objects.equals(this.status, invoice.status) &&
-        Objects.equals(this.creditAdj, invoice.creditAdj) &&
-        Objects.equals(this.refundAdj, invoice.refundAdj) &&
-        Objects.equals(this.invoiceId, invoice.invoiceId) &&
-        Objects.equals(this.invoiceDate, invoice.invoiceDate) &&
-        Objects.equals(this.targetDate, invoice.targetDate) &&
-        Objects.equals(this.invoiceNumber, invoice.invoiceNumber) &&
-        Objects.equals(this.balance, invoice.balance) &&
-        Objects.equals(this.accountId, invoice.accountId) &&
-        Objects.equals(this.bundleKeys, invoice.bundleKeys) &&
-        Objects.equals(this.credits, invoice.credits) &&
-        Objects.equals(this.items, invoice.items) &&
-        Objects.equals(this.trackingIds, invoice.trackingIds) &&
-        Objects.equals(this.isParentInvoice, invoice.isParentInvoice) &&
-        Objects.equals(this.parentInvoiceId, invoice.parentInvoiceId) &&
-        Objects.equals(this.parentAccountId, invoice.parentAccountId) &&
-        Objects.equals(this.auditLogs, invoice.auditLogs);
-
+            Objects.equals(this.currency, invoice.currency) &&
+            Objects.equals(this.status, invoice.status) &&
+            Objects.equals(this.creditAdj, invoice.creditAdj) &&
+            Objects.equals(this.refundAdj, invoice.refundAdj) &&
+            Objects.equals(this.invoiceId, invoice.invoiceId) &&
+            Objects.equals(this.invoiceDate, invoice.invoiceDate) &&
+            Objects.equals(this.targetDate, invoice.targetDate) &&
+            Objects.equals(this.invoiceNumber, invoice.invoiceNumber) &&
+            Objects.equals(this.balance, invoice.balance) &&
+            Objects.equals(this.accountId, invoice.accountId) &&
+            Objects.equals(this.bundleKeys, invoice.bundleKeys) &&
+            Objects.equals(this.credits, invoice.credits) &&
+            Objects.equals(this.items, invoice.items) &&
+            Objects.equals(this.trackingIds, invoice.trackingIds) &&
+            Objects.equals(this.isParentInvoice, invoice.isParentInvoice) &&
+            Objects.equals(this.parentInvoiceId, invoice.parentInvoiceId) &&
+            Objects.equals(this.parentAccountId, invoice.parentAccountId) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(amount,
-                            currency,
-                            status,
-                            creditAdj,
-                            refundAdj,
-                            invoiceId,
-                            invoiceDate,
-                            targetDate,
-                            invoiceNumber,
-                            balance,
-                            accountId,
-                            bundleKeys,
-                            credits,
-                            items,
-                            trackingIds,
-                            isParentInvoice,
-                            parentInvoiceId,
-                            parentAccountId,
-                            auditLogs, super.hashCode());
+            currency,
+            status,
+            creditAdj,
+            refundAdj,
+            invoiceId,
+            invoiceDate,
+            targetDate,
+            invoiceNumber,
+            balance,
+            accountId,
+            bundleKeys,
+            credits,
+            items,
+            trackingIds,
+            isParentInvoice,
+            parentInvoiceId,
+            parentAccountId,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

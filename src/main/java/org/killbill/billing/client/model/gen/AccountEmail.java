@@ -84,18 +84,16 @@ public class AccountEmail extends KillBillObject {
         }
         AccountEmail accountEmail = (AccountEmail) o;
         return Objects.equals(this.accountId, accountEmail.accountId) &&
-        Objects.equals(this.email, accountEmail.email) &&
-        Objects.equals(this.auditLogs, accountEmail.auditLogs);
-
+            Objects.equals(this.email, accountEmail.email) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(accountId,
-                            email,
-                            auditLogs, super.hashCode());
+            email,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

@@ -142,24 +142,22 @@ public class ComboPaymentTransaction extends KillBillObject {
         }
         ComboPaymentTransaction comboPaymentTransaction = (ComboPaymentTransaction) o;
         return Objects.equals(this.account, comboPaymentTransaction.account) &&
-        Objects.equals(this.paymentMethod, comboPaymentTransaction.paymentMethod) &&
-        Objects.equals(this.transaction, comboPaymentTransaction.transaction) &&
-        Objects.equals(this.paymentMethodPluginProperties, comboPaymentTransaction.paymentMethodPluginProperties) &&
-        Objects.equals(this.transactionPluginProperties, comboPaymentTransaction.transactionPluginProperties) &&
-        Objects.equals(this.auditLogs, comboPaymentTransaction.auditLogs);
-
+            Objects.equals(this.paymentMethod, comboPaymentTransaction.paymentMethod) &&
+            Objects.equals(this.transaction, comboPaymentTransaction.transaction) &&
+            Objects.equals(this.paymentMethodPluginProperties, comboPaymentTransaction.paymentMethodPluginProperties) &&
+            Objects.equals(this.transactionPluginProperties, comboPaymentTransaction.transactionPluginProperties) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(account,
-                            paymentMethod,
-                            transaction,
-                            paymentMethodPluginProperties,
-                            transactionPluginProperties,
-                            auditLogs, super.hashCode());
+            paymentMethod,
+            transaction,
+            paymentMethodPluginProperties,
+            transactionPluginProperties,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

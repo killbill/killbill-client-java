@@ -410,66 +410,64 @@ public class InvoiceItem extends KillBillObject {
         }
         InvoiceItem invoiceItem = (InvoiceItem) o;
         return Objects.equals(this.invoiceItemId, invoiceItem.invoiceItemId) &&
-        Objects.equals(this.invoiceId, invoiceItem.invoiceId) &&
-        Objects.equals(this.linkedInvoiceItemId, invoiceItem.linkedInvoiceItemId) &&
-        Objects.equals(this.accountId, invoiceItem.accountId) &&
-        Objects.equals(this.childAccountId, invoiceItem.childAccountId) &&
-        Objects.equals(this.bundleId, invoiceItem.bundleId) &&
-        Objects.equals(this.subscriptionId, invoiceItem.subscriptionId) &&
-        Objects.equals(this.productName, invoiceItem.productName) &&
-        Objects.equals(this.planName, invoiceItem.planName) &&
-        Objects.equals(this.phaseName, invoiceItem.phaseName) &&
-        Objects.equals(this.usageName, invoiceItem.usageName) &&
-        Objects.equals(this.prettyProductName, invoiceItem.prettyProductName) &&
-        Objects.equals(this.prettyPlanName, invoiceItem.prettyPlanName) &&
-        Objects.equals(this.prettyPhaseName, invoiceItem.prettyPhaseName) &&
-        Objects.equals(this.prettyUsageName, invoiceItem.prettyUsageName) &&
-        Objects.equals(this.itemType, invoiceItem.itemType) &&
-        Objects.equals(this.description, invoiceItem.description) &&
-        Objects.equals(this.startDate, invoiceItem.startDate) &&
-        Objects.equals(this.endDate, invoiceItem.endDate) &&
-        Objects.equals(this.amount, invoiceItem.amount) &&
-        Objects.equals(this.rate, invoiceItem.rate) &&
-        Objects.equals(this.currency, invoiceItem.currency) &&
-        Objects.equals(this.quantity, invoiceItem.quantity) &&
-        Objects.equals(this.itemDetails, invoiceItem.itemDetails) &&
-        Objects.equals(this.catalogEffectiveDate, invoiceItem.catalogEffectiveDate) &&
-        Objects.equals(this.childItems, invoiceItem.childItems) &&
-        Objects.equals(this.auditLogs, invoiceItem.auditLogs);
-
+            Objects.equals(this.invoiceId, invoiceItem.invoiceId) &&
+            Objects.equals(this.linkedInvoiceItemId, invoiceItem.linkedInvoiceItemId) &&
+            Objects.equals(this.accountId, invoiceItem.accountId) &&
+            Objects.equals(this.childAccountId, invoiceItem.childAccountId) &&
+            Objects.equals(this.bundleId, invoiceItem.bundleId) &&
+            Objects.equals(this.subscriptionId, invoiceItem.subscriptionId) &&
+            Objects.equals(this.productName, invoiceItem.productName) &&
+            Objects.equals(this.planName, invoiceItem.planName) &&
+            Objects.equals(this.phaseName, invoiceItem.phaseName) &&
+            Objects.equals(this.usageName, invoiceItem.usageName) &&
+            Objects.equals(this.prettyProductName, invoiceItem.prettyProductName) &&
+            Objects.equals(this.prettyPlanName, invoiceItem.prettyPlanName) &&
+            Objects.equals(this.prettyPhaseName, invoiceItem.prettyPhaseName) &&
+            Objects.equals(this.prettyUsageName, invoiceItem.prettyUsageName) &&
+            Objects.equals(this.itemType, invoiceItem.itemType) &&
+            Objects.equals(this.description, invoiceItem.description) &&
+            Objects.equals(this.startDate, invoiceItem.startDate) &&
+            Objects.equals(this.endDate, invoiceItem.endDate) &&
+            Objects.equals(this.amount, invoiceItem.amount) &&
+            Objects.equals(this.rate, invoiceItem.rate) &&
+            Objects.equals(this.currency, invoiceItem.currency) &&
+            Objects.equals(this.quantity, invoiceItem.quantity) &&
+            Objects.equals(this.itemDetails, invoiceItem.itemDetails) &&
+            Objects.equals(this.catalogEffectiveDate, invoiceItem.catalogEffectiveDate) &&
+            Objects.equals(this.childItems, invoiceItem.childItems) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(invoiceItemId,
-                            invoiceId,
-                            linkedInvoiceItemId,
-                            accountId,
-                            childAccountId,
-                            bundleId,
-                            subscriptionId,
-                            productName,
-                            planName,
-                            phaseName,
-                            usageName,
-                            prettyProductName,
-                            prettyPlanName,
-                            prettyPhaseName,
-                            prettyUsageName,
-                            itemType,
-                            description,
-                            startDate,
-                            endDate,
-                            amount,
-                            rate,
-                            currency,
-                            quantity,
-                            itemDetails,
-                            catalogEffectiveDate,
-                            childItems,
-                            auditLogs, super.hashCode());
+            invoiceId,
+            linkedInvoiceItemId,
+            accountId,
+            childAccountId,
+            bundleId,
+            subscriptionId,
+            productName,
+            planName,
+            phaseName,
+            usageName,
+            prettyProductName,
+            prettyPlanName,
+            prettyPhaseName,
+            prettyUsageName,
+            itemType,
+            description,
+            startDate,
+            endDate,
+            amount,
+            rate,
+            currency,
+            quantity,
+            itemDetails,
+            catalogEffectiveDate,
+            childItems,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

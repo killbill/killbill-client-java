@@ -143,24 +143,22 @@ public class OverdueCondition {
         }
         OverdueCondition overdueCondition = (OverdueCondition) o;
         return Objects.equals(this.timeSinceEarliestUnpaidInvoiceEqualsOrExceeds, overdueCondition.timeSinceEarliestUnpaidInvoiceEqualsOrExceeds) &&
-        Objects.equals(this.controlTagInclusion, overdueCondition.controlTagInclusion) &&
-        Objects.equals(this.controlTagExclusion, overdueCondition.controlTagExclusion) &&
-        Objects.equals(this.numberOfUnpaidInvoicesEqualsOrExceeds, overdueCondition.numberOfUnpaidInvoicesEqualsOrExceeds) &&
-        Objects.equals(this.responseForLastFailedPayment, overdueCondition.responseForLastFailedPayment) &&
-        Objects.equals(this.totalUnpaidInvoiceBalanceEqualsOrExceeds, overdueCondition.totalUnpaidInvoiceBalanceEqualsOrExceeds);
-
+            Objects.equals(this.controlTagInclusion, overdueCondition.controlTagInclusion) &&
+            Objects.equals(this.controlTagExclusion, overdueCondition.controlTagExclusion) &&
+            Objects.equals(this.numberOfUnpaidInvoicesEqualsOrExceeds, overdueCondition.numberOfUnpaidInvoicesEqualsOrExceeds) &&
+            Objects.equals(this.responseForLastFailedPayment, overdueCondition.responseForLastFailedPayment) &&
+            Objects.equals(this.totalUnpaidInvoiceBalanceEqualsOrExceeds, overdueCondition.totalUnpaidInvoiceBalanceEqualsOrExceeds);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(timeSinceEarliestUnpaidInvoiceEqualsOrExceeds,
-                            controlTagInclusion,
-                            controlTagExclusion,
-                            numberOfUnpaidInvoicesEqualsOrExceeds,
-                            responseForLastFailedPayment,
-                            totalUnpaidInvoiceBalanceEqualsOrExceeds);
+            controlTagInclusion,
+            controlTagExclusion,
+            numberOfUnpaidInvoicesEqualsOrExceeds,
+            responseForLastFailedPayment,
+            totalUnpaidInvoiceBalanceEqualsOrExceeds);
     }
-
 
     @Override
     public String toString() {

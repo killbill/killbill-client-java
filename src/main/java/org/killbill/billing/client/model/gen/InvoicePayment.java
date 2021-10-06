@@ -260,42 +260,40 @@ public class InvoicePayment extends KillBillObject {
         }
         InvoicePayment invoicePayment = (InvoicePayment) o;
         return Objects.equals(this.targetInvoiceId, invoicePayment.targetInvoiceId) &&
-        Objects.equals(this.accountId, invoicePayment.accountId) &&
-        Objects.equals(this.paymentId, invoicePayment.paymentId) &&
-        Objects.equals(this.paymentNumber, invoicePayment.paymentNumber) &&
-        Objects.equals(this.paymentExternalKey, invoicePayment.paymentExternalKey) &&
-        Objects.equals(this.authAmount, invoicePayment.authAmount) &&
-        Objects.equals(this.capturedAmount, invoicePayment.capturedAmount) &&
-        Objects.equals(this.purchasedAmount, invoicePayment.purchasedAmount) &&
-        Objects.equals(this.refundedAmount, invoicePayment.refundedAmount) &&
-        Objects.equals(this.creditedAmount, invoicePayment.creditedAmount) &&
-        Objects.equals(this.currency, invoicePayment.currency) &&
-        Objects.equals(this.paymentMethodId, invoicePayment.paymentMethodId) &&
-        Objects.equals(this.transactions, invoicePayment.transactions) &&
-        Objects.equals(this.paymentAttempts, invoicePayment.paymentAttempts) &&
-        Objects.equals(this.auditLogs, invoicePayment.auditLogs);
-
+            Objects.equals(this.accountId, invoicePayment.accountId) &&
+            Objects.equals(this.paymentId, invoicePayment.paymentId) &&
+            Objects.equals(this.paymentNumber, invoicePayment.paymentNumber) &&
+            Objects.equals(this.paymentExternalKey, invoicePayment.paymentExternalKey) &&
+            Objects.equals(this.authAmount, invoicePayment.authAmount) &&
+            Objects.equals(this.capturedAmount, invoicePayment.capturedAmount) &&
+            Objects.equals(this.purchasedAmount, invoicePayment.purchasedAmount) &&
+            Objects.equals(this.refundedAmount, invoicePayment.refundedAmount) &&
+            Objects.equals(this.creditedAmount, invoicePayment.creditedAmount) &&
+            Objects.equals(this.currency, invoicePayment.currency) &&
+            Objects.equals(this.paymentMethodId, invoicePayment.paymentMethodId) &&
+            Objects.equals(this.transactions, invoicePayment.transactions) &&
+            Objects.equals(this.paymentAttempts, invoicePayment.paymentAttempts) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(targetInvoiceId,
-                            accountId,
-                            paymentId,
-                            paymentNumber,
-                            paymentExternalKey,
-                            authAmount,
-                            capturedAmount,
-                            purchasedAmount,
-                            refundedAmount,
-                            creditedAmount,
-                            currency,
-                            paymentMethodId,
-                            transactions,
-                            paymentAttempts,
-                            auditLogs, super.hashCode());
+            accountId,
+            paymentId,
+            paymentNumber,
+            paymentExternalKey,
+            authAmount,
+            capturedAmount,
+            purchasedAmount,
+            refundedAmount,
+            creditedAmount,
+            currency,
+            paymentMethodId,
+            transactions,
+            paymentAttempts,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

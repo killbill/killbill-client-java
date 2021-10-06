@@ -97,18 +97,16 @@ public class UserRoles {
         }
         UserRoles userRoles = (UserRoles) o;
         return Objects.equals(this.username, userRoles.username) &&
-        Objects.equals(this.password, userRoles.password) &&
-        Objects.equals(this.roles, userRoles.roles);
-
+            Objects.equals(this.password, userRoles.password) &&
+            Objects.equals(this.roles, userRoles.roles);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(username,
-                            password,
-                            roles);
+            password,
+            roles);
     }
-
 
     @Override
     public String toString() {

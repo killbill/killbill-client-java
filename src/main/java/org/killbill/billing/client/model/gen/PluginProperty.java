@@ -92,18 +92,16 @@ public class PluginProperty {
         }
         PluginProperty pluginProperty = (PluginProperty) o;
         return Objects.equals(this.key, pluginProperty.key) &&
-        Objects.equals(this.value, pluginProperty.value) &&
-        Objects.equals(this.isUpdatable, pluginProperty.isUpdatable);
-
+            Objects.equals(this.value, pluginProperty.value) &&
+            Objects.equals(this.isUpdatable, pluginProperty.isUpdatable);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(key,
-                            value,
-                            isUpdatable);
+            value,
+            isUpdatable);
     }
-
 
     @Override
     public String toString() {

@@ -114,20 +114,18 @@ public class TieredBlock {
         }
         TieredBlock tieredBlock = (TieredBlock) o;
         return Objects.equals(this.unit, tieredBlock.unit) &&
-        Objects.equals(this.size, tieredBlock.size) &&
-        Objects.equals(this.max, tieredBlock.max) &&
-        Objects.equals(this.prices, tieredBlock.prices);
-
+            Objects.equals(this.size, tieredBlock.size) &&
+            Objects.equals(this.max, tieredBlock.max) &&
+            Objects.equals(this.prices, tieredBlock.prices);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(unit,
-                            size,
-                            max,
-                            prices);
+            size,
+            max,
+            prices);
     }
-
 
     @Override
     public String toString() {

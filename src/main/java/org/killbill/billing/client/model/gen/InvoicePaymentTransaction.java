@@ -317,50 +317,48 @@ public class InvoicePaymentTransaction extends KillBillObject {
         }
         InvoicePaymentTransaction invoicePaymentTransaction = (InvoicePaymentTransaction) o;
         return Objects.equals(this.transactionId, invoicePaymentTransaction.transactionId) &&
-        Objects.equals(this.transactionExternalKey, invoicePaymentTransaction.transactionExternalKey) &&
-        Objects.equals(this.paymentId, invoicePaymentTransaction.paymentId) &&
-        Objects.equals(this.paymentExternalKey, invoicePaymentTransaction.paymentExternalKey) &&
-        Objects.equals(this.transactionType, invoicePaymentTransaction.transactionType) &&
-        Objects.equals(this.amount, invoicePaymentTransaction.amount) &&
-        Objects.equals(this.currency, invoicePaymentTransaction.currency) &&
-        Objects.equals(this.effectiveDate, invoicePaymentTransaction.effectiveDate) &&
-        Objects.equals(this.processedAmount, invoicePaymentTransaction.processedAmount) &&
-        Objects.equals(this.processedCurrency, invoicePaymentTransaction.processedCurrency) &&
-        Objects.equals(this.status, invoicePaymentTransaction.status) &&
-        Objects.equals(this.gatewayErrorCode, invoicePaymentTransaction.gatewayErrorCode) &&
-        Objects.equals(this.gatewayErrorMsg, invoicePaymentTransaction.gatewayErrorMsg) &&
-        Objects.equals(this.firstPaymentReferenceId, invoicePaymentTransaction.firstPaymentReferenceId) &&
-        Objects.equals(this.secondPaymentReferenceId, invoicePaymentTransaction.secondPaymentReferenceId) &&
-        Objects.equals(this.properties, invoicePaymentTransaction.properties) &&
-        Objects.equals(this.isAdjusted, invoicePaymentTransaction.isAdjusted) &&
-        Objects.equals(this.adjustments, invoicePaymentTransaction.adjustments) &&
-        Objects.equals(this.auditLogs, invoicePaymentTransaction.auditLogs);
-
+            Objects.equals(this.transactionExternalKey, invoicePaymentTransaction.transactionExternalKey) &&
+            Objects.equals(this.paymentId, invoicePaymentTransaction.paymentId) &&
+            Objects.equals(this.paymentExternalKey, invoicePaymentTransaction.paymentExternalKey) &&
+            Objects.equals(this.transactionType, invoicePaymentTransaction.transactionType) &&
+            Objects.equals(this.amount, invoicePaymentTransaction.amount) &&
+            Objects.equals(this.currency, invoicePaymentTransaction.currency) &&
+            Objects.equals(this.effectiveDate, invoicePaymentTransaction.effectiveDate) &&
+            Objects.equals(this.processedAmount, invoicePaymentTransaction.processedAmount) &&
+            Objects.equals(this.processedCurrency, invoicePaymentTransaction.processedCurrency) &&
+            Objects.equals(this.status, invoicePaymentTransaction.status) &&
+            Objects.equals(this.gatewayErrorCode, invoicePaymentTransaction.gatewayErrorCode) &&
+            Objects.equals(this.gatewayErrorMsg, invoicePaymentTransaction.gatewayErrorMsg) &&
+            Objects.equals(this.firstPaymentReferenceId, invoicePaymentTransaction.firstPaymentReferenceId) &&
+            Objects.equals(this.secondPaymentReferenceId, invoicePaymentTransaction.secondPaymentReferenceId) &&
+            Objects.equals(this.properties, invoicePaymentTransaction.properties) &&
+            Objects.equals(this.isAdjusted, invoicePaymentTransaction.isAdjusted) &&
+            Objects.equals(this.adjustments, invoicePaymentTransaction.adjustments) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(transactionId,
-                            transactionExternalKey,
-                            paymentId,
-                            paymentExternalKey,
-                            transactionType,
-                            amount,
-                            currency,
-                            effectiveDate,
-                            processedAmount,
-                            processedCurrency,
-                            status,
-                            gatewayErrorCode,
-                            gatewayErrorMsg,
-                            firstPaymentReferenceId,
-                            secondPaymentReferenceId,
-                            properties,
-                            isAdjusted,
-                            adjustments,
-                            auditLogs, super.hashCode());
+            transactionExternalKey,
+            paymentId,
+            paymentExternalKey,
+            transactionType,
+            amount,
+            currency,
+            effectiveDate,
+            processedAmount,
+            processedCurrency,
+            status,
+            gatewayErrorCode,
+            gatewayErrorMsg,
+            firstPaymentReferenceId,
+            secondPaymentReferenceId,
+            properties,
+            isAdjusted,
+            adjustments,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

@@ -77,16 +77,14 @@ public class RolledUpUnit {
         }
         RolledUpUnit rolledUpUnit = (RolledUpUnit) o;
         return Objects.equals(this.unitType, rolledUpUnit.unitType) &&
-        Objects.equals(this.amount, rolledUpUnit.amount);
-
+            Objects.equals(this.amount, rolledUpUnit.amount);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(unitType,
-                            amount);
+            amount);
     }
-
 
     @Override
     public String toString() {

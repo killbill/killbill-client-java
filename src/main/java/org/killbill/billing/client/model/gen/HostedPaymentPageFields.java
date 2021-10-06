@@ -75,14 +75,12 @@ public class HostedPaymentPageFields {
         }
         HostedPaymentPageFields hostedPaymentPageFields = (HostedPaymentPageFields) o;
         return Objects.equals(this.formFields, hostedPaymentPageFields.formFields);
-
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(formFields);
     }
-
 
     @Override
     public String toString() {

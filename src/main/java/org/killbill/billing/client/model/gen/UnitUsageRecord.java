@@ -88,16 +88,14 @@ public class UnitUsageRecord {
         }
         UnitUsageRecord unitUsageRecord = (UnitUsageRecord) o;
         return Objects.equals(this.unitType, unitUsageRecord.unitType) &&
-        Objects.equals(this.usageRecords, unitUsageRecord.usageRecords);
-
+            Objects.equals(this.usageRecords, unitUsageRecord.usageRecords);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(unitType,
-                            usageRecords);
+            usageRecords);
     }
-
 
     @Override
     public String toString() {

@@ -84,16 +84,14 @@ public class RoleDefinition {
         }
         RoleDefinition roleDefinition = (RoleDefinition) o;
         return Objects.equals(this.role, roleDefinition.role) &&
-        Objects.equals(this.permissions, roleDefinition.permissions);
-
+            Objects.equals(this.permissions, roleDefinition.permissions);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(role,
-                            permissions);
+            permissions);
     }
-
 
     @Override
     public String toString() {

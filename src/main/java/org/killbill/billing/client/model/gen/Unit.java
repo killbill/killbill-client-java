@@ -77,16 +77,14 @@ public class Unit {
         }
         Unit unit = (Unit) o;
         return Objects.equals(this.name, unit.name) &&
-        Objects.equals(this.prettyName, unit.prettyName);
-
+            Objects.equals(this.prettyName, unit.prettyName);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name,
-                            prettyName);
+            prettyName);
     }
-
 
     @Override
     public String toString() {

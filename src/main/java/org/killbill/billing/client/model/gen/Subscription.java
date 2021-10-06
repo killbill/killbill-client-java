@@ -376,58 +376,56 @@ public class Subscription extends KillBillObject {
         }
         Subscription subscription = (Subscription) o;
         return Objects.equals(this.accountId, subscription.accountId) &&
-        Objects.equals(this.bundleId, subscription.bundleId) &&
-        Objects.equals(this.bundleExternalKey, subscription.bundleExternalKey) &&
-        Objects.equals(this.subscriptionId, subscription.subscriptionId) &&
-        Objects.equals(this.externalKey, subscription.externalKey) &&
-        Objects.equals(this.startDate, subscription.startDate) &&
-        Objects.equals(this.productName, subscription.productName) &&
-        Objects.equals(this.productCategory, subscription.productCategory) &&
-        Objects.equals(this.billingPeriod, subscription.billingPeriod) &&
-        Objects.equals(this.phaseType, subscription.phaseType) &&
-        Objects.equals(this.priceList, subscription.priceList) &&
-        Objects.equals(this.planName, subscription.planName) &&
-        Objects.equals(this.state, subscription.state) &&
-        Objects.equals(this.sourceType, subscription.sourceType) &&
-        Objects.equals(this.cancelledDate, subscription.cancelledDate) &&
-        Objects.equals(this.chargedThroughDate, subscription.chargedThroughDate) &&
-        Objects.equals(this.billingStartDate, subscription.billingStartDate) &&
-        Objects.equals(this.billingEndDate, subscription.billingEndDate) &&
-        Objects.equals(this.billCycleDayLocal, subscription.billCycleDayLocal) &&
-        Objects.equals(this.events, subscription.events) &&
-        Objects.equals(this.priceOverrides, subscription.priceOverrides) &&
-        Objects.equals(this.prices, subscription.prices) &&
-        Objects.equals(this.auditLogs, subscription.auditLogs);
-
+            Objects.equals(this.bundleId, subscription.bundleId) &&
+            Objects.equals(this.bundleExternalKey, subscription.bundleExternalKey) &&
+            Objects.equals(this.subscriptionId, subscription.subscriptionId) &&
+            Objects.equals(this.externalKey, subscription.externalKey) &&
+            Objects.equals(this.startDate, subscription.startDate) &&
+            Objects.equals(this.productName, subscription.productName) &&
+            Objects.equals(this.productCategory, subscription.productCategory) &&
+            Objects.equals(this.billingPeriod, subscription.billingPeriod) &&
+            Objects.equals(this.phaseType, subscription.phaseType) &&
+            Objects.equals(this.priceList, subscription.priceList) &&
+            Objects.equals(this.planName, subscription.planName) &&
+            Objects.equals(this.state, subscription.state) &&
+            Objects.equals(this.sourceType, subscription.sourceType) &&
+            Objects.equals(this.cancelledDate, subscription.cancelledDate) &&
+            Objects.equals(this.chargedThroughDate, subscription.chargedThroughDate) &&
+            Objects.equals(this.billingStartDate, subscription.billingStartDate) &&
+            Objects.equals(this.billingEndDate, subscription.billingEndDate) &&
+            Objects.equals(this.billCycleDayLocal, subscription.billCycleDayLocal) &&
+            Objects.equals(this.events, subscription.events) &&
+            Objects.equals(this.priceOverrides, subscription.priceOverrides) &&
+            Objects.equals(this.prices, subscription.prices) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(accountId,
-                            bundleId,
-                            bundleExternalKey,
-                            subscriptionId,
-                            externalKey,
-                            startDate,
-                            productName,
-                            productCategory,
-                            billingPeriod,
-                            phaseType,
-                            priceList,
-                            planName,
-                            state,
-                            sourceType,
-                            cancelledDate,
-                            chargedThroughDate,
-                            billingStartDate,
-                            billingEndDate,
-                            billCycleDayLocal,
-                            events,
-                            priceOverrides,
-                            prices,
-                            auditLogs, super.hashCode());
+            bundleId,
+            bundleExternalKey,
+            subscriptionId,
+            externalKey,
+            startDate,
+            productName,
+            productCategory,
+            billingPeriod,
+            phaseType,
+            priceList,
+            planName,
+            state,
+            sourceType,
+            cancelledDate,
+            chargedThroughDate,
+            billingStartDate,
+            billingEndDate,
+            billCycleDayLocal,
+            events,
+            priceOverrides,
+            prices,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

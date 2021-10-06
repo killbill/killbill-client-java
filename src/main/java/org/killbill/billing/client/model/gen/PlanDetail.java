@@ -128,22 +128,20 @@ public class PlanDetail {
         }
         PlanDetail planDetail = (PlanDetail) o;
         return Objects.equals(this.product, planDetail.product) &&
-        Objects.equals(this.plan, planDetail.plan) &&
-        Objects.equals(this.priceList, planDetail.priceList) &&
-        Objects.equals(this.finalPhaseBillingPeriod, planDetail.finalPhaseBillingPeriod) &&
-        Objects.equals(this.finalPhaseRecurringPrice, planDetail.finalPhaseRecurringPrice);
-
+            Objects.equals(this.plan, planDetail.plan) &&
+            Objects.equals(this.priceList, planDetail.priceList) &&
+            Objects.equals(this.finalPhaseBillingPeriod, planDetail.finalPhaseBillingPeriod) &&
+            Objects.equals(this.finalPhaseRecurringPrice, planDetail.finalPhaseRecurringPrice);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(product,
-                            plan,
-                            priceList,
-                            finalPhaseBillingPeriod,
-                            finalPhaseRecurringPrice);
+            plan,
+            priceList,
+            finalPhaseBillingPeriod,
+            finalPhaseRecurringPrice);
     }
-
 
     @Override
     public String toString() {

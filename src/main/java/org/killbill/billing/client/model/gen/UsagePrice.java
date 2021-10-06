@@ -130,22 +130,20 @@ public class UsagePrice {
         }
         UsagePrice usagePrice = (UsagePrice) o;
         return Objects.equals(this.usageName, usagePrice.usageName) &&
-        Objects.equals(this.usageType, usagePrice.usageType) &&
-        Objects.equals(this.billingMode, usagePrice.billingMode) &&
-        Objects.equals(this.tierBlockPolicy, usagePrice.tierBlockPolicy) &&
-        Objects.equals(this.tierPrices, usagePrice.tierPrices);
-
+            Objects.equals(this.usageType, usagePrice.usageType) &&
+            Objects.equals(this.billingMode, usagePrice.billingMode) &&
+            Objects.equals(this.tierBlockPolicy, usagePrice.tierBlockPolicy) &&
+            Objects.equals(this.tierPrices, usagePrice.tierPrices);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(usageName,
-                            usageType,
-                            billingMode,
-                            tierBlockPolicy,
-                            tierPrices);
+            usageType,
+            billingMode,
+            tierBlockPolicy,
+            tierPrices);
     }
-
 
     @Override
     public String toString() {

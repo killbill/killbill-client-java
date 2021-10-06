@@ -77,16 +77,14 @@ public class NodeCommandProperty {
         }
         NodeCommandProperty nodeCommandProperty = (NodeCommandProperty) o;
         return Objects.equals(this.key, nodeCommandProperty.key) &&
-        Objects.equals(this.value, nodeCommandProperty.value);
-
+            Objects.equals(this.value, nodeCommandProperty.value);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(key,
-                            value);
+            value);
     }
-
 
     @Override
     public String toString() {

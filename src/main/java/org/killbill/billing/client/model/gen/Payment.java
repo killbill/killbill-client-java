@@ -247,40 +247,38 @@ public class Payment extends KillBillObject {
         }
         Payment payment = (Payment) o;
         return Objects.equals(this.accountId, payment.accountId) &&
-        Objects.equals(this.paymentId, payment.paymentId) &&
-        Objects.equals(this.paymentNumber, payment.paymentNumber) &&
-        Objects.equals(this.paymentExternalKey, payment.paymentExternalKey) &&
-        Objects.equals(this.authAmount, payment.authAmount) &&
-        Objects.equals(this.capturedAmount, payment.capturedAmount) &&
-        Objects.equals(this.purchasedAmount, payment.purchasedAmount) &&
-        Objects.equals(this.refundedAmount, payment.refundedAmount) &&
-        Objects.equals(this.creditedAmount, payment.creditedAmount) &&
-        Objects.equals(this.currency, payment.currency) &&
-        Objects.equals(this.paymentMethodId, payment.paymentMethodId) &&
-        Objects.equals(this.transactions, payment.transactions) &&
-        Objects.equals(this.paymentAttempts, payment.paymentAttempts) &&
-        Objects.equals(this.auditLogs, payment.auditLogs);
-
+            Objects.equals(this.paymentId, payment.paymentId) &&
+            Objects.equals(this.paymentNumber, payment.paymentNumber) &&
+            Objects.equals(this.paymentExternalKey, payment.paymentExternalKey) &&
+            Objects.equals(this.authAmount, payment.authAmount) &&
+            Objects.equals(this.capturedAmount, payment.capturedAmount) &&
+            Objects.equals(this.purchasedAmount, payment.purchasedAmount) &&
+            Objects.equals(this.refundedAmount, payment.refundedAmount) &&
+            Objects.equals(this.creditedAmount, payment.creditedAmount) &&
+            Objects.equals(this.currency, payment.currency) &&
+            Objects.equals(this.paymentMethodId, payment.paymentMethodId) &&
+            Objects.equals(this.transactions, payment.transactions) &&
+            Objects.equals(this.paymentAttempts, payment.paymentAttempts) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(accountId,
-                            paymentId,
-                            paymentNumber,
-                            paymentExternalKey,
-                            authAmount,
-                            capturedAmount,
-                            purchasedAmount,
-                            refundedAmount,
-                            creditedAmount,
-                            currency,
-                            paymentMethodId,
-                            transactions,
-                            paymentAttempts,
-                            auditLogs, super.hashCode());
+            paymentId,
+            paymentNumber,
+            paymentExternalKey,
+            authAmount,
+            capturedAmount,
+            purchasedAmount,
+            refundedAmount,
+            creditedAmount,
+            currency,
+            paymentMethodId,
+            transactions,
+            paymentAttempts,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

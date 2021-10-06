@@ -78,16 +78,14 @@ public class Duration {
         }
         Duration duration = (Duration) o;
         return Objects.equals(this.unit, duration.unit) &&
-        Objects.equals(this.number, duration.number);
-
+            Objects.equals(this.number, duration.number);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(unit,
-                            number);
+            number);
     }
-
 
     @Override
     public String toString() {

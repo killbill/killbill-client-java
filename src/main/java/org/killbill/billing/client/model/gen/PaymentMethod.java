@@ -139,26 +139,24 @@ public class PaymentMethod extends KillBillObject {
         }
         PaymentMethod paymentMethod = (PaymentMethod) o;
         return Objects.equals(this.paymentMethodId, paymentMethod.paymentMethodId) &&
-        Objects.equals(this.externalKey, paymentMethod.externalKey) &&
-        Objects.equals(this.accountId, paymentMethod.accountId) &&
-        Objects.equals(this.isDefault, paymentMethod.isDefault) &&
-        Objects.equals(this.pluginName, paymentMethod.pluginName) &&
-        Objects.equals(this.pluginInfo, paymentMethod.pluginInfo) &&
-        Objects.equals(this.auditLogs, paymentMethod.auditLogs);
-
+            Objects.equals(this.externalKey, paymentMethod.externalKey) &&
+            Objects.equals(this.accountId, paymentMethod.accountId) &&
+            Objects.equals(this.isDefault, paymentMethod.isDefault) &&
+            Objects.equals(this.pluginName, paymentMethod.pluginName) &&
+            Objects.equals(this.pluginInfo, paymentMethod.pluginInfo) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(paymentMethodId,
-                            externalKey,
-                            accountId,
-                            isDefault,
-                            pluginName,
-                            pluginInfo,
-                            auditLogs, super.hashCode());
+            externalKey,
+            accountId,
+            isDefault,
+            pluginName,
+            pluginInfo,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

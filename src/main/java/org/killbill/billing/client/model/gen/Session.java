@@ -117,22 +117,20 @@ public class Session {
         }
         Session session = (Session) o;
         return Objects.equals(this.id, session.id) &&
-        Objects.equals(this.startDate, session.startDate) &&
-        Objects.equals(this.lastAccessDate, session.lastAccessDate) &&
-        Objects.equals(this.timeout, session.timeout) &&
-        Objects.equals(this.host, session.host);
-
+            Objects.equals(this.startDate, session.startDate) &&
+            Objects.equals(this.lastAccessDate, session.lastAccessDate) &&
+            Objects.equals(this.timeout, session.timeout) &&
+            Objects.equals(this.host, session.host);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id,
-                            startDate,
-                            lastAccessDate,
-                            timeout,
-                            host);
+            startDate,
+            lastAccessDate,
+            timeout,
+            host);
     }
-
 
     @Override
     public String toString() {

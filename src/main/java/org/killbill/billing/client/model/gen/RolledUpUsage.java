@@ -116,20 +116,18 @@ public class RolledUpUsage {
         }
         RolledUpUsage rolledUpUsage = (RolledUpUsage) o;
         return Objects.equals(this.subscriptionId, rolledUpUsage.subscriptionId) &&
-        Objects.equals(this.startDate, rolledUpUsage.startDate) &&
-        Objects.equals(this.endDate, rolledUpUsage.endDate) &&
-        Objects.equals(this.rolledUpUnits, rolledUpUsage.rolledUpUnits);
-
+            Objects.equals(this.startDate, rolledUpUsage.startDate) &&
+            Objects.equals(this.endDate, rolledUpUsage.endDate) &&
+            Objects.equals(this.rolledUpUnits, rolledUpUsage.rolledUpUnits);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(subscriptionId,
-                            startDate,
-                            endDate,
-                            rolledUpUnits);
+            startDate,
+            endDate,
+            rolledUpUnits);
     }
-
 
     @Override
     public String toString() {

@@ -145,22 +145,20 @@ public class Phase {
         }
         Phase phase = (Phase) o;
         return Objects.equals(this.type, phase.type) &&
-        Objects.equals(this.prices, phase.prices) &&
-        Objects.equals(this.fixedPrices, phase.fixedPrices) &&
-        Objects.equals(this.duration, phase.duration) &&
-        Objects.equals(this.usages, phase.usages);
-
+            Objects.equals(this.prices, phase.prices) &&
+            Objects.equals(this.fixedPrices, phase.fixedPrices) &&
+            Objects.equals(this.duration, phase.duration) &&
+            Objects.equals(this.usages, phase.usages);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(type,
-                            prices,
-                            fixedPrices,
-                            duration,
-                            usages);
+            prices,
+            fixedPrices,
+            duration,
+            usages);
     }
-
 
     @Override
     public String toString() {

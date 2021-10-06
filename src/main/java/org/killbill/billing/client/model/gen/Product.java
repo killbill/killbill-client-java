@@ -156,24 +156,22 @@ public class Product {
         }
         Product product = (Product) o;
         return Objects.equals(this.type, product.type) &&
-        Objects.equals(this.name, product.name) &&
-        Objects.equals(this.prettyName, product.prettyName) &&
-        Objects.equals(this.plans, product.plans) &&
-        Objects.equals(this.included, product.included) &&
-        Objects.equals(this.available, product.available);
-
+            Objects.equals(this.name, product.name) &&
+            Objects.equals(this.prettyName, product.prettyName) &&
+            Objects.equals(this.plans, product.plans) &&
+            Objects.equals(this.included, product.included) &&
+            Objects.equals(this.available, product.available);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(type,
-                            name,
-                            prettyName,
-                            plans,
-                            included,
-                            available);
+            name,
+            prettyName,
+            plans,
+            included,
+            available);
     }
-
 
     @Override
     public String toString() {

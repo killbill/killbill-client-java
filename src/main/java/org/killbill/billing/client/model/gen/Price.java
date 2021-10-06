@@ -79,16 +79,14 @@ public class Price {
         }
         Price price = (Price) o;
         return Objects.equals(this.currency, price.currency) &&
-        Objects.equals(this.value, price.value);
-
+            Objects.equals(this.value, price.value);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(currency,
-                            value);
+            value);
     }
-
 
     @Override
     public String toString() {

@@ -78,16 +78,14 @@ public class UsageRecord {
         }
         UsageRecord usageRecord = (UsageRecord) o;
         return Objects.equals(this.recordDate, usageRecord.recordDate) &&
-        Objects.equals(this.amount, usageRecord.amount);
-
+            Objects.equals(this.amount, usageRecord.amount);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(recordDate,
-                            amount);
+            amount);
     }
-
 
     @Override
     public String toString() {

@@ -110,22 +110,20 @@ public class Tenant extends KillBillObject {
         }
         Tenant tenant = (Tenant) o;
         return Objects.equals(this.tenantId, tenant.tenantId) &&
-        Objects.equals(this.externalKey, tenant.externalKey) &&
-        Objects.equals(this.apiKey, tenant.apiKey) &&
-        Objects.equals(this.apiSecret, tenant.apiSecret) &&
-        Objects.equals(this.auditLogs, tenant.auditLogs);
-
+            Objects.equals(this.externalKey, tenant.externalKey) &&
+            Objects.equals(this.apiKey, tenant.apiKey) &&
+            Objects.equals(this.apiSecret, tenant.apiSecret) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(tenantId,
-                            externalKey,
-                            apiKey,
-                            apiSecret,
-                            auditLogs, super.hashCode());
+            externalKey,
+            apiKey,
+            apiSecret,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

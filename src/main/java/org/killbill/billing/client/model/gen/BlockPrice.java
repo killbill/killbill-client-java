@@ -104,20 +104,18 @@ public class BlockPrice {
         }
         BlockPrice blockPrice = (BlockPrice) o;
         return Objects.equals(this.unitName, blockPrice.unitName) &&
-        Objects.equals(this.size, blockPrice.size) &&
-        Objects.equals(this.price, blockPrice.price) &&
-        Objects.equals(this.max, blockPrice.max);
-
+            Objects.equals(this.size, blockPrice.size) &&
+            Objects.equals(this.price, blockPrice.price) &&
+            Objects.equals(this.max, blockPrice.max);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(unitName,
-                            size,
-                            price,
-                            max);
+            size,
+            price,
+            max);
     }
-
 
     @Override
     public String toString() {

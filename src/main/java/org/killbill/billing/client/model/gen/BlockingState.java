@@ -168,30 +168,28 @@ public class BlockingState extends KillBillObject {
         }
         BlockingState blockingState = (BlockingState) o;
         return Objects.equals(this.blockedId, blockingState.blockedId) &&
-        Objects.equals(this.stateName, blockingState.stateName) &&
-        Objects.equals(this.service, blockingState.service) &&
-        Objects.equals(this.isBlockChange, blockingState.isBlockChange) &&
-        Objects.equals(this.isBlockEntitlement, blockingState.isBlockEntitlement) &&
-        Objects.equals(this.isBlockBilling, blockingState.isBlockBilling) &&
-        Objects.equals(this.effectiveDate, blockingState.effectiveDate) &&
-        Objects.equals(this.type, blockingState.type) &&
-        Objects.equals(this.auditLogs, blockingState.auditLogs);
-
+            Objects.equals(this.stateName, blockingState.stateName) &&
+            Objects.equals(this.service, blockingState.service) &&
+            Objects.equals(this.isBlockChange, blockingState.isBlockChange) &&
+            Objects.equals(this.isBlockEntitlement, blockingState.isBlockEntitlement) &&
+            Objects.equals(this.isBlockBilling, blockingState.isBlockBilling) &&
+            Objects.equals(this.effectiveDate, blockingState.effectiveDate) &&
+            Objects.equals(this.type, blockingState.type) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(blockedId,
-                            stateName,
-                            service,
-                            isBlockChange,
-                            isBlockEntitlement,
-                            isBlockBilling,
-                            effectiveDate,
-                            type,
-                            auditLogs, super.hashCode());
+            stateName,
+            service,
+            isBlockChange,
+            isBlockEntitlement,
+            isBlockBilling,
+            effectiveDate,
+            type,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

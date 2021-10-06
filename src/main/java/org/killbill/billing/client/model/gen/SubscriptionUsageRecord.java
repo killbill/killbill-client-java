@@ -99,18 +99,16 @@ public class SubscriptionUsageRecord {
         }
         SubscriptionUsageRecord subscriptionUsageRecord = (SubscriptionUsageRecord) o;
         return Objects.equals(this.subscriptionId, subscriptionUsageRecord.subscriptionId) &&
-        Objects.equals(this.trackingId, subscriptionUsageRecord.trackingId) &&
-        Objects.equals(this.unitUsageRecords, subscriptionUsageRecord.unitUsageRecords);
-
+            Objects.equals(this.trackingId, subscriptionUsageRecord.trackingId) &&
+            Objects.equals(this.unitUsageRecords, subscriptionUsageRecord.unitUsageRecords);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(subscriptionId,
-                            trackingId,
-                            unitUsageRecords);
+            trackingId,
+            unitUsageRecords);
     }
-
 
     @Override
     public String toString() {

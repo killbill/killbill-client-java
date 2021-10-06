@@ -280,46 +280,44 @@ public class PaymentTransaction extends KillBillObject {
         }
         PaymentTransaction paymentTransaction = (PaymentTransaction) o;
         return Objects.equals(this.transactionId, paymentTransaction.transactionId) &&
-        Objects.equals(this.transactionExternalKey, paymentTransaction.transactionExternalKey) &&
-        Objects.equals(this.paymentId, paymentTransaction.paymentId) &&
-        Objects.equals(this.paymentExternalKey, paymentTransaction.paymentExternalKey) &&
-        Objects.equals(this.transactionType, paymentTransaction.transactionType) &&
-        Objects.equals(this.amount, paymentTransaction.amount) &&
-        Objects.equals(this.currency, paymentTransaction.currency) &&
-        Objects.equals(this.effectiveDate, paymentTransaction.effectiveDate) &&
-        Objects.equals(this.processedAmount, paymentTransaction.processedAmount) &&
-        Objects.equals(this.processedCurrency, paymentTransaction.processedCurrency) &&
-        Objects.equals(this.status, paymentTransaction.status) &&
-        Objects.equals(this.gatewayErrorCode, paymentTransaction.gatewayErrorCode) &&
-        Objects.equals(this.gatewayErrorMsg, paymentTransaction.gatewayErrorMsg) &&
-        Objects.equals(this.firstPaymentReferenceId, paymentTransaction.firstPaymentReferenceId) &&
-        Objects.equals(this.secondPaymentReferenceId, paymentTransaction.secondPaymentReferenceId) &&
-        Objects.equals(this.properties, paymentTransaction.properties) &&
-        Objects.equals(this.auditLogs, paymentTransaction.auditLogs);
-
+            Objects.equals(this.transactionExternalKey, paymentTransaction.transactionExternalKey) &&
+            Objects.equals(this.paymentId, paymentTransaction.paymentId) &&
+            Objects.equals(this.paymentExternalKey, paymentTransaction.paymentExternalKey) &&
+            Objects.equals(this.transactionType, paymentTransaction.transactionType) &&
+            Objects.equals(this.amount, paymentTransaction.amount) &&
+            Objects.equals(this.currency, paymentTransaction.currency) &&
+            Objects.equals(this.effectiveDate, paymentTransaction.effectiveDate) &&
+            Objects.equals(this.processedAmount, paymentTransaction.processedAmount) &&
+            Objects.equals(this.processedCurrency, paymentTransaction.processedCurrency) &&
+            Objects.equals(this.status, paymentTransaction.status) &&
+            Objects.equals(this.gatewayErrorCode, paymentTransaction.gatewayErrorCode) &&
+            Objects.equals(this.gatewayErrorMsg, paymentTransaction.gatewayErrorMsg) &&
+            Objects.equals(this.firstPaymentReferenceId, paymentTransaction.firstPaymentReferenceId) &&
+            Objects.equals(this.secondPaymentReferenceId, paymentTransaction.secondPaymentReferenceId) &&
+            Objects.equals(this.properties, paymentTransaction.properties) &&
+            true /* ignoring this.auditLogs for identity operations */;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(transactionId,
-                            transactionExternalKey,
-                            paymentId,
-                            paymentExternalKey,
-                            transactionType,
-                            amount,
-                            currency,
-                            effectiveDate,
-                            processedAmount,
-                            processedCurrency,
-                            status,
-                            gatewayErrorCode,
-                            gatewayErrorMsg,
-                            firstPaymentReferenceId,
-                            secondPaymentReferenceId,
-                            properties,
-                            auditLogs, super.hashCode());
+            transactionExternalKey,
+            paymentId,
+            paymentExternalKey,
+            transactionType,
+            amount,
+            currency,
+            effectiveDate,
+            processedAmount,
+            processedCurrency,
+            status,
+            gatewayErrorCode,
+            gatewayErrorMsg,
+            firstPaymentReferenceId,
+            secondPaymentReferenceId,
+            properties,
+            0 /* ignoring auditLogs for identity operations */ );
     }
-
 
     @Override
     public String toString() {

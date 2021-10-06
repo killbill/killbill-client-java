@@ -115,20 +115,18 @@ public class Plan {
         }
         Plan plan = (Plan) o;
         return Objects.equals(this.name, plan.name) &&
-        Objects.equals(this.prettyName, plan.prettyName) &&
-        Objects.equals(this.billingPeriod, plan.billingPeriod) &&
-        Objects.equals(this.phases, plan.phases);
-
+            Objects.equals(this.prettyName, plan.prettyName) &&
+            Objects.equals(this.billingPeriod, plan.billingPeriod) &&
+            Objects.equals(this.phases, plan.phases);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name,
-                            prettyName,
-                            billingPeriod,
-                            phases);
+            prettyName,
+            billingPeriod,
+            phases);
     }
-
 
     @Override
     public String toString() {

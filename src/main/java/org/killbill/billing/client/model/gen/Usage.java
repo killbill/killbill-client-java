@@ -88,16 +88,14 @@ public class Usage {
         }
         Usage usage = (Usage) o;
         return Objects.equals(this.billingPeriod, usage.billingPeriod) &&
-        Objects.equals(this.tiers, usage.tiers);
-
+            Objects.equals(this.tiers, usage.tiers);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(billingPeriod,
-                            tiers);
+            tiers);
     }
-
 
     @Override
     public String toString() {

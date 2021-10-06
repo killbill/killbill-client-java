@@ -103,18 +103,16 @@ public class NodeCommand {
         }
         NodeCommand nodeCommand = (NodeCommand) o;
         return Objects.equals(this.isSystemCommandType, nodeCommand.isSystemCommandType) &&
-        Objects.equals(this.nodeCommandType, nodeCommand.nodeCommandType) &&
-        Objects.equals(this.nodeCommandProperties, nodeCommand.nodeCommandProperties);
-
+            Objects.equals(this.nodeCommandType, nodeCommand.nodeCommandType) &&
+            Objects.equals(this.nodeCommandProperties, nodeCommand.nodeCommandProperties);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(isSystemCommandType,
-                            nodeCommandType,
-                            nodeCommandProperties);
+            nodeCommandType,
+            nodeCommandProperties);
     }
-
 
     @Override
     public String toString() {

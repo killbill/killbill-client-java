@@ -72,14 +72,12 @@ public class BulkSubscriptionsBundle {
         }
         BulkSubscriptionsBundle bulkSubscriptionsBundle = (BulkSubscriptionsBundle) o;
         return Objects.equals(this.baseEntitlementAndAddOns, bulkSubscriptionsBundle.baseEntitlementAndAddOns);
-
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(baseEntitlementAndAddOns);
     }
-
 
     @Override
     public String toString() {
