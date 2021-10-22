@@ -1,3 +1,11 @@
+1.2.6
+    pom.xml: update to killbill-oss-parent 0.144.71
+
+1.2.5
+    Fix https://github.com/killbill/killbill-swagger-coden/issues/17
+    Fix for https://github.com/killbill/killbill/issues/1496
+    Kill Bill 0.22.27 compatibility
+
 1.2.4
     pom.xml: update to killbill-oss-parent 0.144.57
 
