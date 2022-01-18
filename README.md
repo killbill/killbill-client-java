@@ -13,6 +13,7 @@ Java client library for Kill Bill.
 | 1.0.y          | 0.20.z            |
 | 1.1.y          | 0.22.z            |
 | 1.2.y          | 0.22.z            |
+| 1.3.y          | 0.23.z            |
 
 We've upgraded numerous dependencies in 1.2.x (required for Java 11 support).
 
