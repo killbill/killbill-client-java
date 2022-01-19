@@ -43,6 +43,8 @@
     <properties>
         <check.fail-spotbugs>true</check.fail-spotbugs>
         <check.spotbugs-exclude-filter-file>spotbugs-exclude.xml</check.spotbugs-exclude-filter-file>
+        <!-- Temporary, until we get rid of SNAPSHOT dependencies on 0.23.x -->
+        <killbill-platform.version>0.40.12</killbill-platform.version>
     </properties>
     <dependencies>
         <dependency>
