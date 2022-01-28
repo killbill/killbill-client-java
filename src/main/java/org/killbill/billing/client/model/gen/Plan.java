@@ -130,6 +130,7 @@ public class Plan {
         Plan plan = (Plan) o;
         return Objects.equals(this.name, plan.name) &&
             Objects.equals(this.prettyName, plan.prettyName) &&
+            Objects.equals(this.recurringBillingMode, plan.recurringBillingMode) &&
             Objects.equals(this.billingPeriod, plan.billingPeriod) &&
             Objects.equals(this.phases, plan.phases);
     }
@@ -149,6 +150,7 @@ public class Plan {
         
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    prettyName: ").append(toIndentedString(prettyName)).append("\n");
+        sb.append("    recurringBillingMode: ").append(toIndentedString(recurringBillingMode)).append("\n");
         sb.append("    billingPeriod: ").append(toIndentedString(billingPeriod)).append("\n");
         sb.append("    phases: ").append(toIndentedString(phases)).append("\n");
         sb.append("}");
