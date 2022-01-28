@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import org.killbill.billing.catalog.api.BillingPeriod;
+import org.killbill.billing.catalog.api.BillingMode;
 import org.killbill.billing.client.model.gen.Phase;
 
 /**
@@ -41,6 +42,8 @@ public class Plan {
 
     private String prettyName = null;
 
+    private BillingMode recurringBillingMode = null;
+
     private BillingPeriod billingPeriod = null;
 
     private List<Phase> phases = null;
@@ -52,9 +55,11 @@ public class Plan {
     public Plan(final String name,
                      final String prettyName,
                      final BillingPeriod billingPeriod,
+                     final BillingMode recurringBillingMode,
                      final List<Phase> phases) {
         this.name = name;
         this.prettyName = prettyName;
+        this.recurringBillingMode = recurringBillingMode;
         this.billingPeriod = billingPeriod;
         this.phases = phases;
 
@@ -77,6 +82,15 @@ public class Plan {
 
     public String getPrettyName() {
         return prettyName;
+    }
+
+    public Plan setRecurringBillingMode(final BillingMode recurringBillingMode) {
+        this.recurringBillingMode = recurringBillingMode;
+        return this;
+    }
+
+    public BillingMode getRecurringBillingMode() {
+        return recurringBillingMode;
     }
 
     public Plan setBillingPeriod(final BillingPeriod billingPeriod) {

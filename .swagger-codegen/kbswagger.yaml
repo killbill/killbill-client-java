@@ -14248,6 +14248,11 @@ definitions:
         type: "string"
       prettyName:
         type: "string"
+      billingMode:
+        type: "string"
+        enum:
+          - "IN_ADVANCE"
+          - "IN_ARREAR"
       billingPeriod:
         type: "string"
         enum:
