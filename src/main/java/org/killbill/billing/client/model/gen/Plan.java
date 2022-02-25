@@ -139,6 +139,7 @@ public class Plan {
     public int hashCode() {
         return Objects.hash(name,
             prettyName,
+            recurringBillingMode,
             billingPeriod,
             phases);
     }
