@@ -22,6 +22,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.math.BigDecimal;
 
 /**
  *           DO NOT EDIT !!!
@@ -35,14 +36,14 @@ public class RolledUpUnit {
 
     private String unitType = null;
 
-    private Long amount = null;
+    private BigDecimal amount = null;
 
 
     public RolledUpUnit() {
     }
 
     public RolledUpUnit(final String unitType,
-                     final Long amount) {
+                     final BigDecimal amount) {
         this.unitType = unitType;
         this.amount = amount;
 
@@ -58,12 +59,12 @@ public class RolledUpUnit {
         return unitType;
     }
 
-    public RolledUpUnit setAmount(final Long amount) {
+    public RolledUpUnit setAmount(final BigDecimal amount) {
         this.amount = amount;
         return this;
     }
 
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 

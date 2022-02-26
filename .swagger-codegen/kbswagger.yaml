@@ -13560,8 +13560,7 @@ definitions:
         - "ZWD"
         - "BTC"
       quantity:
-        type: "integer"
-        format: "int32"
+        type: "number"
       itemDetails:
         type: "string"
       catalogEffectiveDate:
@@ -14248,7 +14247,7 @@ definitions:
         type: "string"
       prettyName:
         type: "string"
-      billingMode:
+      recurringBillingMode:
         type: "string"
         enum:
           - "IN_ADVANCE"
@@ -15385,8 +15384,7 @@ definitions:
       unitType:
         type: "string"
       amount:
-        type: "integer"
-        format: "int64"
+        type: "number"
   RolledUpUsage:
     type: "object"
     properties:
@@ -15434,5 +15432,4 @@ definitions:
         type: "string"
         format: "date"
       amount:
-        type: "integer"
-        format: "int64"
+        type: "number"
