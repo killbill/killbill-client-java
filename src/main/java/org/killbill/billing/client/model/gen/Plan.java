@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import org.killbill.billing.catalog.api.BillingPeriod;
-import org.killbill.billing.catalog.api.BillingMode;
 import org.killbill.billing.client.model.gen.Phase;
 
 /**
@@ -42,8 +41,6 @@ public class Plan {
 
     private String prettyName = null;
 
-    private BillingMode recurringBillingMode = null;
-
     private BillingPeriod billingPeriod = null;
 
     private List<Phase> phases = null;
@@ -55,11 +52,9 @@ public class Plan {
     public Plan(final String name,
                      final String prettyName,
                      final BillingPeriod billingPeriod,
-                     final BillingMode recurringBillingMode,
                      final List<Phase> phases) {
         this.name = name;
         this.prettyName = prettyName;
-        this.recurringBillingMode = recurringBillingMode;
         this.billingPeriod = billingPeriod;
         this.phases = phases;
 
@@ -82,15 +77,6 @@ public class Plan {
 
     public String getPrettyName() {
         return prettyName;
-    }
-
-    public Plan setRecurringBillingMode(final BillingMode recurringBillingMode) {
-        this.recurringBillingMode = recurringBillingMode;
-        return this;
-    }
-
-    public BillingMode getRecurringBillingMode() {
-        return recurringBillingMode;
     }
 
     public Plan setBillingPeriod(final BillingPeriod billingPeriod) {
@@ -130,7 +116,6 @@ public class Plan {
         Plan plan = (Plan) o;
         return Objects.equals(this.name, plan.name) &&
             Objects.equals(this.prettyName, plan.prettyName) &&
-            Objects.equals(this.recurringBillingMode, plan.recurringBillingMode) &&
             Objects.equals(this.billingPeriod, plan.billingPeriod) &&
             Objects.equals(this.phases, plan.phases);
     }
@@ -139,7 +124,6 @@ public class Plan {
     public int hashCode() {
         return Objects.hash(name,
             prettyName,
-            recurringBillingMode,
             billingPeriod,
             phases);
     }
@@ -151,7 +135,6 @@ public class Plan {
         
         sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    prettyName: ").append(toIndentedString(prettyName)).append("\n");
-        sb.append("    recurringBillingMode: ").append(toIndentedString(recurringBillingMode)).append("\n");
         sb.append("    billingPeriod: ").append(toIndentedString(billingPeriod)).append("\n");
         sb.append("    phases: ").append(toIndentedString(phases)).append("\n");
         sb.append("}");

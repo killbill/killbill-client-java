@@ -25,6 +25,7 @@ import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.RolledUpUsage;
 import org.killbill.billing.client.model.gen.SubscriptionUsageRecord;
 import java.util.UUID;
+import java.util.Map;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -56,7 +57,7 @@ public class UsageApi {
         this.httpClient = httpClient;
     }
 
-    public RolledUpUsage getAllUsage(final UUID subscriptionId, final LocalDate startDate, final LocalDate endDate, final RequestOptions inputOptions) throws KillBillClientException {
+    public RolledUpUsage getAllUsage(final UUID subscriptionId, final LocalDate startDate, final LocalDate endDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getAllUsage");
 
         final String uri = "/1.0/kb/usages/{subscriptionId}"
@@ -69,6 +70,9 @@ public class UsageApi {
         if (endDate != null) {
             queryParams.put("endDate", String.valueOf(endDate));
         }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         inputOptionsBuilder.withQueryParams(queryParams);
@@ -78,7 +82,7 @@ public class UsageApi {
         return httpClient.doGet(uri, RolledUpUsage.class, requestOptions);
     }
 
-    public RolledUpUsage getUsage(final UUID subscriptionId, final String unitType, final LocalDate startDate, final LocalDate endDate, final RequestOptions inputOptions) throws KillBillClientException {
+    public RolledUpUsage getUsage(final UUID subscriptionId, final String unitType, final LocalDate startDate, final LocalDate endDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getUsage");
         Preconditions.checkNotNull(unitType, "Missing the required parameter 'unitType' when calling getUsage");
 
@@ -92,6 +96,9 @@ public class UsageApi {
         }
         if (endDate != null) {
             queryParams.put("endDate", String.valueOf(endDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
