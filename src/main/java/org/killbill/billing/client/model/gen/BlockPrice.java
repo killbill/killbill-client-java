@@ -36,20 +36,20 @@ public class BlockPrice {
 
     private String unitName = null;
 
-    private Double size = null;
+    private BigDecimal size = null;
 
     private BigDecimal price = null;
 
-    private Double max = null;
+    private BigDecimal max = null;
 
 
     public BlockPrice() {
     }
 
     public BlockPrice(final String unitName,
-                     final Double size,
+                     final BigDecimal size,
                      final BigDecimal price,
-                     final Double max) {
+                     final BigDecimal max) {
         this.unitName = unitName;
         this.size = size;
         this.price = price;
@@ -67,12 +67,12 @@ public class BlockPrice {
         return unitName;
     }
 
-    public BlockPrice setSize(final Double size) {
+    public BlockPrice setSize(final BigDecimal size) {
         this.size = size;
         return this;
     }
 
-    public Double getSize() {
+    public BigDecimal getSize() {
         return size;
     }
 
@@ -85,12 +85,12 @@ public class BlockPrice {
         return price;
     }
 
-    public BlockPrice setMax(final Double max) {
+    public BlockPrice setMax(final BigDecimal max) {
         this.max = max;
         return this;
     }
 
-    public Double getMax() {
+    public BigDecimal getMax() {
         return max;
     }
 
