@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.entitlement.api.SubscriptionEventType;
@@ -45,7 +45,7 @@ public class EventSubscription extends KillBillObject {
 
     private BillingPeriod billingPeriod = null;
 
-    private LocalDate effectiveDate = null;
+    private DateTime effectiveDate = null;
 
     private String plan = null;
 
@@ -72,7 +72,7 @@ public class EventSubscription extends KillBillObject {
 
     public EventSubscription(final UUID eventId,
                      final BillingPeriod billingPeriod,
-                     final LocalDate effectiveDate,
+                     final DateTime effectiveDate,
                      final String plan,
                      final String product,
                      final String priceList,
@@ -118,12 +118,12 @@ public class EventSubscription extends KillBillObject {
         return billingPeriod;
     }
 
-    public EventSubscription setEffectiveDate(final LocalDate effectiveDate) {
+    public EventSubscription setEffectiveDate(final DateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    public LocalDate getEffectiveDate() {
+    public DateTime getEffectiveDate() {
         return effectiveDate;
     }
 
