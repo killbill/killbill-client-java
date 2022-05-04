@@ -1,8 +1,8 @@
 /*
  * Copyright 2010-2014 Ning, Inc.
  * Copyright 2014-2020 Groupon, Inc
- * Copyright 2020-2020 Equinix, Inc
- * Copyright 2014-2020 The Billing Project, LLC
+ * Copyright 2020-2022 Equinix, Inc
+ * Copyright 2014-2022 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -19,12 +19,13 @@
 
 package org.killbill.billing.client;
 
-import org.asynchttpclient.Response;
+import java.io.InputStream;
+import java.net.http.HttpResponse;
 
 @SuppressWarnings("serial")
 public class KillBillClientException extends Exception {
 
-    private final Response response;
+    private final HttpResponse<InputStream> response;
     private final BillingException billingException;
 
     public KillBillClientException(final Exception cause) {
@@ -33,25 +34,25 @@ public class KillBillClientException extends Exception {
         billingException = null;
     }
 
-    public KillBillClientException(final Response response) {
+    public KillBillClientException(final HttpResponse<InputStream> response) {
         super();
         this.response = response;
         this.billingException = null;
     }
 
-    public KillBillClientException(final Exception cause, final Response response) {
+    public KillBillClientException(final Exception cause, final HttpResponse<InputStream> response) {
         super(cause);
         this.response = response;
         billingException = null;
     }
 
-    public KillBillClientException(final BillingException exception, final Response response) {
+    public KillBillClientException(final BillingException exception, final HttpResponse<InputStream> response) {
         super(exception.getMessage());
         this.response = response;
         this.billingException = exception;
     }
 
-    public Response getResponse() {
+    public HttpResponse<InputStream> getResponse() {
         return response;
     }
 

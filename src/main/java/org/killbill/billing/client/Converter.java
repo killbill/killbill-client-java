@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import org.asynchttpclient.util.Utf8UrlEncoder;
-
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
@@ -57,8 +55,8 @@ public class Converter {
         }
         List<String> result = new ArrayList<String>();
         for (final Entry<String, String> entry : pluginProperties.entrySet()) {
-            final String encodedKey = Utf8UrlEncoder.encodeQueryElement(entry.getKey());
-            final String encodedValue = Utf8UrlEncoder.encodeQueryElement(entry.getValue());
+            final String encodedKey = UTF8UrlEncoder.encode(entry.getKey());
+            final String encodedValue = UTF8UrlEncoder.encode(entry.getValue());
             result.add(String.format("%s=%s", encodedKey, encodedValue));
         }
         return result;

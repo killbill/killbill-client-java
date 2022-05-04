@@ -33,11 +33,11 @@ import java.util.UUID;
 import java.util.Map;
 import org.killbill.billing.client.model.InvoiceItems;
 import java.util.List;
+import org.killbill.billing.client.model.Invoices;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.AuditLogs;
-import org.killbill.billing.client.model.Invoices;
 import org.killbill.billing.client.model.InvoicePayments;
 
 import com.google.common.collect.Multimap;
@@ -166,6 +166,30 @@ public class InvoiceApi {
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, null, Invoice.class, requestOptions);
+    }
+
+    public Invoices createFutureInvoiceGroup(final UUID accountId, final LocalDate targetDate, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createFutureInvoiceGroup");
+
+        final String uri = "/1.0/kb/invoices/group";
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (accountId != null) {
+            queryParams.put("accountId", String.valueOf(accountId));
+        }
+        if (targetDate != null) {
+            queryParams.put("targetDate", String.valueOf(targetDate));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doPost(uri, null, Invoices.class, requestOptions);
     }
 
     public InvoicePayment createInstantPayment(final UUID invoiceId, final InvoicePayment body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
@@ -607,6 +631,36 @@ public class InvoiceApi {
         }
         if (limit != null) {
             queryParams.put("limit", String.valueOf(limit));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, Invoices.class, requestOptions);
+    }
+
+    public Invoices getInvoicesGroup(final UUID groupId, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoicesGroup(groupId, accountId, Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
+    }
+
+    public Invoices getInvoicesGroup(final UUID groupId, final UUID accountId, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(groupId, "Missing the required parameter 'groupId' when calling getInvoicesGroup");
+        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicesGroup");
+
+        final String uri = "/1.0/kb/invoices/{groupId}/group"
+          .replaceAll("\\{" + "groupId" + "\\}", groupId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (accountId != null) {
+            queryParams.put("accountId", String.valueOf(accountId));
+        }
+        if (withChildrenItems != null) {
+            queryParams.put("withChildrenItems", String.valueOf(withChildrenItems));
         }
         if (audit != null) {
             queryParams.put("audit", String.valueOf(audit));

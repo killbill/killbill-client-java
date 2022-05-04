@@ -23,8 +23,9 @@ package org.killbill.billing.client.api.gen;
 
 import org.killbill.billing.client.model.gen.AdminPayment;
 import java.util.UUID;
+import java.io.InputStream;
 import java.io.OutputStream;
-import org.asynchttpclient.Response;
+import java.net.http.HttpResponse;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -98,8 +99,8 @@ public class AdminApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/octet-stream");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        final Response response = httpClient.doGet(uri, outputStream, requestOptions);
-        return response.getStatusCode();
+        final HttpResponse<InputStream> response = httpClient.doGet(uri, outputStream, requestOptions);
+        return response.statusCode();
     }
 
 
