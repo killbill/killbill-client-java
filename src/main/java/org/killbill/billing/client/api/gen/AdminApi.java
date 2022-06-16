@@ -26,6 +26,7 @@ import java.util.UUID;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.http.HttpResponse;
+import java.util.Map;
 
 import com.google.common.collect.Multimap;
 import com.google.common.base.Preconditions;
@@ -174,11 +175,11 @@ public class AdminApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public void triggerInvoiceGenerationForParkedAccounts(final RequestOptions inputOptions) throws KillBillClientException {
-        triggerInvoiceGenerationForParkedAccounts(Long.valueOf(0), Long.valueOf(100), inputOptions);
+    public void triggerInvoiceGenerationForParkedAccounts(final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        triggerInvoiceGenerationForParkedAccounts(Long.valueOf(0), Long.valueOf(100), pluginProperty, inputOptions);
     }
 
-    public void triggerInvoiceGenerationForParkedAccounts(final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+    public void triggerInvoiceGenerationForParkedAccounts(final Long offset, final Long limit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/admin/invoices";
 
@@ -188,6 +189,9 @@ public class AdminApi {
         }
         if (limit != null) {
             queryParams.put("limit", String.valueOf(limit));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

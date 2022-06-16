@@ -144,7 +144,7 @@ public class InvoiceApi {
         return httpClient.doPost(uri, body, InvoiceItems.class, requestOptions);
     }
 
-    public Invoice createFutureInvoice(final UUID accountId, final LocalDate targetDate, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice createFutureInvoice(final UUID accountId, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createFutureInvoice");
 
         final String uri = "/1.0/kb/invoices";
@@ -155,6 +155,9 @@ public class InvoiceApi {
         }
         if (targetDate != null) {
             queryParams.put("targetDate", String.valueOf(targetDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -168,7 +171,7 @@ public class InvoiceApi {
         return httpClient.doPost(uri, null, Invoice.class, requestOptions);
     }
 
-    public Invoices createFutureInvoiceGroup(final UUID accountId, final LocalDate targetDate, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices createFutureInvoiceGroup(final UUID accountId, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createFutureInvoiceGroup");
 
         final String uri = "/1.0/kb/invoices/group";
@@ -179,6 +182,9 @@ public class InvoiceApi {
         }
         if (targetDate != null) {
             queryParams.put("targetDate", String.valueOf(targetDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -383,7 +389,7 @@ public class InvoiceApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public Invoice generateDryRunInvoice(final InvoiceDryRun body, final UUID accountId, final LocalDate targetDate, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoice generateDryRunInvoice(final InvoiceDryRun body, final UUID accountId, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling generateDryRunInvoice");
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling generateDryRunInvoice");
 
@@ -395,6 +401,9 @@ public class InvoiceApi {
         }
         if (targetDate != null) {
             queryParams.put("targetDate", String.valueOf(targetDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();

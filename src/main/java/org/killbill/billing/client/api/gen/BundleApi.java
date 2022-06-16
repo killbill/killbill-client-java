@@ -31,6 +31,7 @@ import java.util.UUID;
 import org.killbill.billing.client.model.BlockingStates;
 import java.util.List;
 import java.util.Map;
+import org.joda.time.DateTime;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
@@ -69,6 +70,31 @@ public class BundleApi {
     }
 
     public BlockingStates addBundleBlockingState(final UUID bundleId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling addBundleBlockingState");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
+
+        final String uri = "/1.0/kb/bundles/{bundleId}/block"
+          .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doPost(uri, body, BlockingStates.class, requestOptions);
+    }
+
+    public BlockingStates addBundleBlockingState(final UUID bundleId, final BlockingState body, final DateTime requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling addBundleBlockingState");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
 
