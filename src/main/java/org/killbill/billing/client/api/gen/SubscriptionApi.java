@@ -33,9 +33,9 @@ import java.util.UUID;
 import org.killbill.billing.client.model.BlockingStates;
 import java.util.List;
 import java.util.Map;
+import org.joda.time.DateTime;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
-import org.joda.time.DateTime;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Subscriptions;
 import org.killbill.billing.client.model.Bundles;
@@ -75,6 +75,31 @@ public class SubscriptionApi {
     }
 
     public BlockingStates addSubscriptionBlockingState(final UUID subscriptionId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling addSubscriptionBlockingState");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addSubscriptionBlockingState");
+
+        final String uri = "/1.0/kb/subscriptions/{subscriptionId}/block"
+          .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
+
+        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doPost(uri, body, BlockingStates.class, requestOptions);
+    }
+
+    public BlockingStates addSubscriptionBlockingState(final UUID subscriptionId, final BlockingState body, final DateTime requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling addSubscriptionBlockingState");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addSubscriptionBlockingState");
 
