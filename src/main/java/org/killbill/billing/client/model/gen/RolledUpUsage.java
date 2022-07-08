@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.killbill.billing.client.model.gen.RolledUpUnit;
 
 /**
@@ -40,9 +40,9 @@ public class RolledUpUsage {
 
     private UUID subscriptionId = null;
 
-    private LocalDate startDate = null;
+    private DateTime startDate = null;
 
-    private LocalDate endDate = null;
+    private DateTime endDate = null;
 
     private List<RolledUpUnit> rolledUpUnits = null;
 
@@ -51,8 +51,8 @@ public class RolledUpUsage {
     }
 
     public RolledUpUsage(final UUID subscriptionId,
-                     final LocalDate startDate,
-                     final LocalDate endDate,
+                     final DateTime startDate,
+                     final DateTime endDate,
                      final List<RolledUpUnit> rolledUpUnits) {
         this.subscriptionId = subscriptionId;
         this.startDate = startDate;
@@ -71,21 +71,21 @@ public class RolledUpUsage {
         return subscriptionId;
     }
 
-    public RolledUpUsage setStartDate(final LocalDate startDate) {
+    public RolledUpUsage setStartDate(final DateTime startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    public LocalDate getStartDate() {
+    public DateTime getStartDate() {
         return startDate;
     }
 
-    public RolledUpUsage setEndDate(final LocalDate endDate) {
+    public RolledUpUsage setEndDate(final DateTime endDate) {
         this.endDate = endDate;
         return this;
     }
 
-    public LocalDate getEndDate() {
+    public DateTime getEndDate() {
         return endDate;
     }
 
