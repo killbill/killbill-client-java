@@ -19,6 +19,8 @@
 
 package org.killbill.billing.client;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +28,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+
+import java.util.Map.Entry;
 import java.util.Objects;
 
 public class RequestOptions {
@@ -104,6 +108,13 @@ public class RequestOptions {
         return queryParams;
     }
 
+    public Map<String, Collection<String>> getQueryParamsAsMap() {
+        if (queryParams == null) {
+            return Collections.emptyMap();
+        }
+        return queryParams.asMap();
+    }
+
     public Boolean getFollowLocation() {
         return followLocation;
     }
@@ -117,6 +128,13 @@ public class RequestOptions {
 
     public Multimap<String, String> getQueryParamsForFollow() {
         return queryParamsForFollow;
+    }
+
+    public Map<String, Collection<String>> getQueryParamsForFollowAsMap() {
+        if (queryParamsForFollow == null) {
+            return Collections.emptyMap();
+        }
+        return queryParamsForFollow.asMap();
     }
 
     public RequestOptionsBuilder extend() {
@@ -277,6 +295,15 @@ public class RequestOptions {
             return this;
         }
 
+        public RequestOptionsBuilder withQueryParams(final Map<String, Collection<String>> queryParams) {
+            final Multimap<String, String> local = HashMultimap.create();
+            for (final Entry<String, Collection<String>> entry : queryParams.entrySet()) {
+                local.putAll(entry.getKey(), entry.getValue());
+            }
+            this.queryParams = local;
+            return this;
+        }
+
         public RequestOptionsBuilder withFollowLocation(final Boolean followLocation) {
             this.followLocation = followLocation;
             return this;
@@ -284,6 +311,15 @@ public class RequestOptions {
 
         public RequestOptionsBuilder withQueryParamsForFollow(final Multimap<String, String> queryParamsForFollow) {
             this.queryParamsForFollow = queryParamsForFollow;
+            return this;
+        }
+
+        public RequestOptionsBuilder withQueryParamsForFollow(final Map<String, Collection<String>> queryParamsForFollow) {
+            final Multimap<String, String> local = HashMultimap.create();
+            for (final Entry<String, Collection<String>> entry : queryParamsForFollow.entrySet()) {
+                local.putAll(entry.getKey(), entry.getValue());
+            }
+            this.queryParamsForFollow = local;
             return this;
         }
 
