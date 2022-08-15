@@ -20,40 +20,32 @@
 package org.killbill.billing.client;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
-
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
+import java.util.stream.Collectors;
 
 public class Converter {
 
-    public static List<String> convertEnumListToStringList(List<? extends Enum> in) {
-        return ImmutableList.copyOf(Iterables.transform(in, new Function<Enum, String>() {
-            @Override
-            public String apply(final Enum input) {
-                return input == null ? null : input.name();
-            }
-        }));
+    public static List<String> convertEnumListToStringList(final List<? extends Enum<?>> in) {
+        return in.stream()
+                .map(input -> input == null ? null : input.name())
+                .collect(Collectors.toUnmodifiableList());
     }
 
-    public static List<String> convertUUIDListToStringList(List<UUID> in) {
-        return ImmutableList.copyOf(Iterables.transform(in, new Function<UUID, String>() {
-            @Override
-            public String apply(final UUID input) {
-                return input == null ? null : input.toString();
-            }
-        }));
+    public static List<String> convertUUIDListToStringList(final List<UUID> in) {
+        return in.stream()
+                .map(input -> input == null ? null : input.toString())
+                .collect(Collectors.toUnmodifiableList());
     }
 
-    public static List<String> convertPluginPropertyMap(Map<String, String> pluginProperties) {
+    public static List<String> convertPluginPropertyMap(final Map<String, String> pluginProperties) {
         if (pluginProperties == null || pluginProperties.isEmpty()) {
-            return ImmutableList.of();
+            return Collections.emptyList();
         }
-        List<String> result = new ArrayList<String>();
+        final List<String> result = new ArrayList<>();
         for (final Entry<String, String> entry : pluginProperties.entrySet()) {
             final String encodedKey = UTF8UrlEncoder.encode(entry.getKey());
             final String encodedValue = UTF8UrlEncoder.encode(entry.getValue());
