@@ -20,6 +20,11 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.CustomField;
@@ -39,11 +44,6 @@ import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.InvoicePayments;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -70,23 +70,38 @@ public class InvoiceApi {
         this.httpClient = httpClient;
     }
 
+    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
+        if (map.containsKey(key)) {
+            map.get(key).addAll(values);
+        } else {
+            map.put(key, values);
+        }
+    }
+
+    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
+        if (reference == null) {
+            throw new NullPointerException(String.valueOf(errorMessage));
+        }
+        return reference;
+    }
+
     public Invoice adjustInvoiceItem(final UUID invoiceId, final InvoiceItem body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling adjustInvoiceItem");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling adjustInvoiceItem");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling adjustInvoiceItem");
+        checkNotNull(body, "Missing the required parameter 'body' when calling adjustInvoiceItem");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -97,7 +112,7 @@ public class InvoiceApi {
     }
 
     public void commitInvoice(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling commitInvoice");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling commitInvoice");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/commitInvoice"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
@@ -116,25 +131,25 @@ public class InvoiceApi {
     }
 
     public InvoiceItems createExternalCharges(final UUID accountId, final InvoiceItems body, final LocalDate requestedDate, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createExternalCharges");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createExternalCharges");
+        checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createExternalCharges");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createExternalCharges");
 
         final String uri = "/1.0/kb/invoices/charges/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (autoCommit != null) {
-            queryParams.put("autoCommit", String.valueOf(autoCommit));
+            addToMapValues(queryParams, "autoCommit", List.of(String.valueOf(autoCommit)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -145,23 +160,23 @@ public class InvoiceApi {
     }
 
     public Invoice createFutureInvoice(final UUID accountId, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createFutureInvoice");
+        checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createFutureInvoice");
 
         final String uri = "/1.0/kb/invoices";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
+            addToMapValues(queryParams, "accountId", List.of(String.valueOf(accountId)));
         }
         if (targetDate != null) {
-            queryParams.put("targetDate", String.valueOf(targetDate));
+            addToMapValues(queryParams, "targetDate", List.of(String.valueOf(targetDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -172,23 +187,23 @@ public class InvoiceApi {
     }
 
     public Invoices createFutureInvoiceGroup(final UUID accountId, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createFutureInvoiceGroup");
+        checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createFutureInvoiceGroup");
 
         final String uri = "/1.0/kb/invoices/group";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
+            addToMapValues(queryParams, "accountId", List.of(String.valueOf(accountId)));
         }
         if (targetDate != null) {
-            queryParams.put("targetDate", String.valueOf(targetDate));
+            addToMapValues(queryParams, "targetDate", List.of(String.valueOf(targetDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -203,25 +218,25 @@ public class InvoiceApi {
     }
 
     public InvoicePayment createInstantPayment(final UUID invoiceId, final InvoicePayment body, final Boolean externalPayment, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createInstantPayment");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createInstantPayment");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createInstantPayment");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createInstantPayment");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/payments"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (externalPayment != null) {
-            queryParams.put("externalPayment", String.valueOf(externalPayment));
+            addToMapValues(queryParams, "externalPayment", List.of(String.valueOf(externalPayment)));
         }
         if (controlPluginName != null) {
-            queryParams.putAll("controlPluginName", controlPluginName);
+            addToMapValues(queryParams, "controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -232,15 +247,15 @@ public class InvoiceApi {
     }
 
     public CustomFields createInvoiceCustomFields(final UUID invoiceId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createInvoiceCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createInvoiceCustomFields");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createInvoiceCustomFields");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createInvoiceCustomFields");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/customFields"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -250,15 +265,15 @@ public class InvoiceApi {
     }
 
     public Tags createInvoiceTags(final UUID invoiceId, final List<UUID> body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createInvoiceTags");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createInvoiceTags");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling createInvoiceTags");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createInvoiceTags");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/tags"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -268,19 +283,19 @@ public class InvoiceApi {
     }
 
     public Invoice createMigrationInvoice(final UUID accountId, final InvoiceItems body, final LocalDate targetDate, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createMigrationInvoice");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createMigrationInvoice");
+        checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createMigrationInvoice");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createMigrationInvoice");
 
         final String uri = "/1.0/kb/invoices/migration/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (targetDate != null) {
-            queryParams.put("targetDate", String.valueOf(targetDate));
+            addToMapValues(queryParams, "targetDate", List.of(String.valueOf(targetDate)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -295,25 +310,25 @@ public class InvoiceApi {
     }
 
     public InvoiceItems createTaxItems(final UUID accountId, final InvoiceItems body, final Boolean autoCommit, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createTaxItems");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createTaxItems");
+        checkNotNull(accountId, "Missing the required parameter 'accountId' when calling createTaxItems");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createTaxItems");
 
         final String uri = "/1.0/kb/invoices/taxes/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (autoCommit != null) {
-            queryParams.put("autoCommit", String.valueOf(autoCommit));
+            addToMapValues(queryParams, "autoCommit", List.of(String.valueOf(autoCommit)));
         }
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -325,17 +340,17 @@ public class InvoiceApi {
 
 
     public void deleteCBA(final UUID invoiceId, final UUID invoiceItemId, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling deleteCBA");
-        Preconditions.checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling deleteCBA");
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling deleteCBA");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling deleteCBA");
+        checkNotNull(invoiceItemId, "Missing the required parameter 'invoiceItemId' when calling deleteCBA");
+        checkNotNull(accountId, "Missing the required parameter 'accountId' when calling deleteCBA");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/{invoiceItemId}/cba"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString())
           .replaceAll("\\{" + "invoiceItemId" + "\\}", invoiceItemId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
+            addToMapValues(queryParams, "accountId", List.of(String.valueOf(accountId)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -349,14 +364,14 @@ public class InvoiceApi {
 
 
     public void deleteInvoiceCustomFields(final UUID invoiceId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling deleteInvoiceCustomFields");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling deleteInvoiceCustomFields");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/customFields"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (customField != null) {
-            queryParams.putAll("customField", Converter.convertUUIDListToStringList(customField));
+            addToMapValues(queryParams, "customField", Converter.convertUUIDListToStringList(customField));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -370,14 +385,14 @@ public class InvoiceApi {
 
 
     public void deleteInvoiceTags(final UUID invoiceId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling deleteInvoiceTags");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling deleteInvoiceTags");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/tags"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (tagDef != null) {
-            queryParams.putAll("tagDef", Converter.convertUUIDListToStringList(tagDef));
+            addToMapValues(queryParams, "tagDef", Converter.convertUUIDListToStringList(tagDef));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -390,24 +405,24 @@ public class InvoiceApi {
     }
 
     public Invoice generateDryRunInvoice(final InvoiceDryRun body, final UUID accountId, final LocalDate targetDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling generateDryRunInvoice");
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling generateDryRunInvoice");
+        checkNotNull(body, "Missing the required parameter 'body' when calling generateDryRunInvoice");
+        checkNotNull(accountId, "Missing the required parameter 'accountId' when calling generateDryRunInvoice");
 
         final String uri = "/1.0/kb/invoices/dryRun";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
+            addToMapValues(queryParams, "accountId", List.of(String.valueOf(accountId)));
         }
         if (targetDate != null) {
-            queryParams.put("targetDate", String.valueOf(targetDate));
+            addToMapValues(queryParams, "targetDate", List.of(String.valueOf(targetDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -418,7 +433,7 @@ public class InvoiceApi {
     }
 
     public String getCatalogTranslation(final String locale, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling getCatalogTranslation");
+        checkNotNull(locale, "Missing the required parameter 'locale' when calling getCatalogTranslation");
 
         final String uri = "/1.0/kb/invoices/catalogTranslation/{locale}"
           .replaceAll("\\{" + "locale" + "\\}", locale.toString());
@@ -436,17 +451,17 @@ public class InvoiceApi {
     }
 
     public Invoice getInvoice(final UUID invoiceId, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoice");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoice");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (withChildrenItems != null) {
-            queryParams.put("withChildrenItems", String.valueOf(withChildrenItems));
+            addToMapValues(queryParams, "withChildrenItems", List.of(String.valueOf(withChildrenItems)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -458,7 +473,7 @@ public class InvoiceApi {
     }
 
     public String getInvoiceAsHTML(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceAsHTML");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceAsHTML");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/html"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
@@ -472,7 +487,7 @@ public class InvoiceApi {
     }
 
     public AuditLogs getInvoiceAuditLogsWithHistory(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceAuditLogsWithHistory");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceAuditLogsWithHistory");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/auditLogsWithHistory"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
@@ -490,17 +505,17 @@ public class InvoiceApi {
     }
 
     public Invoice getInvoiceByItemId(final UUID itemId, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(itemId, "Missing the required parameter 'itemId' when calling getInvoiceByItemId");
+        checkNotNull(itemId, "Missing the required parameter 'itemId' when calling getInvoiceByItemId");
 
         final String uri = "/1.0/kb/invoices/byItemId/{itemId}"
           .replaceAll("\\{" + "itemId" + "\\}", itemId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (withChildrenItems != null) {
-            queryParams.put("withChildrenItems", String.valueOf(withChildrenItems));
+            addToMapValues(queryParams, "withChildrenItems", List.of(String.valueOf(withChildrenItems)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -516,17 +531,17 @@ public class InvoiceApi {
     }
 
     public Invoice getInvoiceByNumber(final Integer invoiceNumber, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceNumber, "Missing the required parameter 'invoiceNumber' when calling getInvoiceByNumber");
+        checkNotNull(invoiceNumber, "Missing the required parameter 'invoiceNumber' when calling getInvoiceByNumber");
 
         final String uri = "/1.0/kb/invoices/byNumber/{invoiceNumber}"
           .replaceAll("\\{" + "invoiceNumber" + "\\}", invoiceNumber.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (withChildrenItems != null) {
-            queryParams.put("withChildrenItems", String.valueOf(withChildrenItems));
+            addToMapValues(queryParams, "withChildrenItems", List.of(String.valueOf(withChildrenItems)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -542,14 +557,14 @@ public class InvoiceApi {
     }
 
     public CustomFields getInvoiceCustomFields(final UUID invoiceId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceCustomFields");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceCustomFields");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/customFields"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -561,7 +576,7 @@ public class InvoiceApi {
     }
 
     public String getInvoiceMPTemplate(final String locale, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling getInvoiceMPTemplate");
+        checkNotNull(locale, "Missing the required parameter 'locale' when calling getInvoiceMPTemplate");
 
         final String uri = "/1.0/kb/invoices/manualPayTemplate/{locale}"
           .replaceAll("\\{" + "locale" + "\\}", locale.toString());
@@ -579,17 +594,17 @@ public class InvoiceApi {
     }
 
     public Tags getInvoiceTags(final UUID invoiceId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceTags");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getInvoiceTags");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/tags"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (includedDeleted != null) {
-            queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+            addToMapValues(queryParams, "includedDeleted", List.of(String.valueOf(includedDeleted)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -613,7 +628,7 @@ public class InvoiceApi {
     }
 
     public String getInvoiceTranslation(final String locale, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling getInvoiceTranslation");
+        checkNotNull(locale, "Missing the required parameter 'locale' when calling getInvoiceTranslation");
 
         final String uri = "/1.0/kb/invoices/translation/{locale}"
           .replaceAll("\\{" + "locale" + "\\}", locale.toString());
@@ -634,15 +649,15 @@ public class InvoiceApi {
 
         final String uri = "/1.0/kb/invoices/pagination";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (offset != null) {
-            queryParams.put("offset", String.valueOf(offset));
+            addToMapValues(queryParams, "offset", List.of(String.valueOf(offset)));
         }
         if (limit != null) {
-            queryParams.put("limit", String.valueOf(limit));
+            addToMapValues(queryParams, "limit", List.of(String.valueOf(limit)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -658,21 +673,21 @@ public class InvoiceApi {
     }
 
     public Invoices getInvoicesGroup(final UUID groupId, final UUID accountId, final Boolean withChildrenItems, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(groupId, "Missing the required parameter 'groupId' when calling getInvoicesGroup");
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicesGroup");
+        checkNotNull(groupId, "Missing the required parameter 'groupId' when calling getInvoicesGroup");
+        checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicesGroup");
 
         final String uri = "/1.0/kb/invoices/{groupId}/group"
           .replaceAll("\\{" + "groupId" + "\\}", groupId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
+            addToMapValues(queryParams, "accountId", List.of(String.valueOf(accountId)));
         }
         if (withChildrenItems != null) {
-            queryParams.put("withChildrenItems", String.valueOf(withChildrenItems));
+            addToMapValues(queryParams, "withChildrenItems", List.of(String.valueOf(withChildrenItems)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -688,20 +703,20 @@ public class InvoiceApi {
     }
 
     public InvoicePayments getPaymentsForInvoice(final UUID invoiceId, final Boolean withPluginInfo, final Boolean withAttempts, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getPaymentsForInvoice");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling getPaymentsForInvoice");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/payments"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (withPluginInfo != null) {
-            queryParams.put("withPluginInfo", String.valueOf(withPluginInfo));
+            addToMapValues(queryParams, "withPluginInfo", List.of(String.valueOf(withPluginInfo)));
         }
         if (withAttempts != null) {
-            queryParams.put("withAttempts", String.valueOf(withAttempts));
+            addToMapValues(queryParams, "withAttempts", List.of(String.valueOf(withAttempts)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -713,8 +728,8 @@ public class InvoiceApi {
     }
 
     public void modifyInvoiceCustomFields(final UUID invoiceId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling modifyInvoiceCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyInvoiceCustomFields");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling modifyInvoiceCustomFields");
+        checkNotNull(body, "Missing the required parameter 'body' when calling modifyInvoiceCustomFields");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/customFields"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());
@@ -733,20 +748,20 @@ public class InvoiceApi {
     }
 
     public Invoices searchInvoices(final String searchKey, final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchInvoices");
+        checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchInvoices");
 
         final String uri = "/1.0/kb/invoices/search/{searchKey}"
           .replaceAll("\\{" + "searchKey" + "\\}", searchKey.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (offset != null) {
-            queryParams.put("offset", String.valueOf(offset));
+            addToMapValues(queryParams, "offset", List.of(String.valueOf(offset)));
         }
         if (limit != null) {
-            queryParams.put("limit", String.valueOf(limit));
+            addToMapValues(queryParams, "limit", List.of(String.valueOf(limit)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -762,19 +777,19 @@ public class InvoiceApi {
     }
 
     public String uploadCatalogTranslation(final String locale, final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadCatalogTranslation");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadCatalogTranslation");
+        checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadCatalogTranslation");
+        checkNotNull(body, "Missing the required parameter 'body' when calling uploadCatalogTranslation");
 
         final String uri = "/1.0/kb/invoices/catalogTranslation/{locale}"
           .replaceAll("\\{" + "locale" + "\\}", locale.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (deleteIfExists != null) {
-            queryParams.put("deleteIfExists", String.valueOf(deleteIfExists));
+            addToMapValues(queryParams, "deleteIfExists", List.of(String.valueOf(deleteIfExists)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/plain");
@@ -789,17 +804,17 @@ public class InvoiceApi {
     }
 
     public String uploadInvoiceMPTemplate(final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceMPTemplate");
+        checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceMPTemplate");
 
         final String uri = "/1.0/kb/invoices/manualPayTemplate";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (deleteIfExists != null) {
-            queryParams.put("deleteIfExists", String.valueOf(deleteIfExists));
+            addToMapValues(queryParams, "deleteIfExists", List.of(String.valueOf(deleteIfExists)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/html");
@@ -814,17 +829,17 @@ public class InvoiceApi {
     }
 
     public String uploadInvoiceTemplate(final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTemplate");
+        checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTemplate");
 
         final String uri = "/1.0/kb/invoices/template";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (deleteIfExists != null) {
-            queryParams.put("deleteIfExists", String.valueOf(deleteIfExists));
+            addToMapValues(queryParams, "deleteIfExists", List.of(String.valueOf(deleteIfExists)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/html");
@@ -839,19 +854,19 @@ public class InvoiceApi {
     }
 
     public String uploadInvoiceTranslation(final String locale, final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadInvoiceTranslation");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTranslation");
+        checkNotNull(locale, "Missing the required parameter 'locale' when calling uploadInvoiceTranslation");
+        checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTranslation");
 
         final String uri = "/1.0/kb/invoices/translation/{locale}"
           .replaceAll("\\{" + "locale" + "\\}", locale.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (deleteIfExists != null) {
-            queryParams.put("deleteIfExists", String.valueOf(deleteIfExists));
+            addToMapValues(queryParams, "deleteIfExists", List.of(String.valueOf(deleteIfExists)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/plain");
@@ -862,7 +877,7 @@ public class InvoiceApi {
     }
 
     public void voidInvoice(final UUID invoiceId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling voidInvoice");
+        checkNotNull(invoiceId, "Missing the required parameter 'invoiceId' when calling voidInvoice");
 
         final String uri = "/1.0/kb/invoices/{invoiceId}/voidInvoice"
           .replaceAll("\\{" + "invoiceId" + "\\}", invoiceId.toString());

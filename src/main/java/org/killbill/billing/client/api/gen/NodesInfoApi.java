@@ -20,16 +20,16 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.NodeCommand;
 import org.killbill.billing.client.model.gen.PluginInfo;
 import org.killbill.billing.client.model.PluginInfos;
 import java.util.List;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -56,6 +56,21 @@ public class NodesInfoApi {
         this.httpClient = httpClient;
     }
 
+    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
+        if (map.containsKey(key)) {
+            map.get(key).addAll(values);
+        } else {
+            map.put(key, values);
+        }
+    }
+
+    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
+        if (reference == null) {
+            throw new NullPointerException(String.valueOf(errorMessage));
+        }
+        return reference;
+    }
+
     public PluginInfos getNodesInfo(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/nodesInfo";
@@ -73,17 +88,17 @@ public class NodesInfoApi {
     }
 
     public void triggerNodeCommand(final NodeCommand body, final Boolean localNodeOnly, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling triggerNodeCommand");
+        checkNotNull(body, "Missing the required parameter 'body' when calling triggerNodeCommand");
 
         final String uri = "/1.0/kb/nodesInfo";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (localNodeOnly != null) {
-            queryParams.put("localNodeOnly", String.valueOf(localNodeOnly));
+            addToMapValues(queryParams, "localNodeOnly", List.of(String.valueOf(localNodeOnly)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");

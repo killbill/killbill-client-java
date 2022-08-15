@@ -20,17 +20,17 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Objects;
 
 import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.RolledUpUsage;
 import org.killbill.billing.client.model.gen.SubscriptionUsageRecord;
 import java.util.UUID;
 import java.util.Map;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -57,21 +57,36 @@ public class UsageApi {
         this.httpClient = httpClient;
     }
 
+    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
+        if (map.containsKey(key)) {
+            map.get(key).addAll(values);
+        } else {
+            map.put(key, values);
+        }
+    }
+
+    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
+        if (reference == null) {
+            throw new NullPointerException(String.valueOf(errorMessage));
+        }
+        return reference;
+    }
+
     public RolledUpUsage getAllUsage(final UUID subscriptionId, final LocalDate startDate, final LocalDate endDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getAllUsage");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getAllUsage");
 
         final String uri = "/1.0/kb/usages/{subscriptionId}"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (startDate != null) {
-            queryParams.put("startDate", String.valueOf(startDate));
+            addToMapValues(queryParams, "startDate", List.of(String.valueOf(startDate)));
         }
         if (endDate != null) {
-            queryParams.put("endDate", String.valueOf(endDate));
+            addToMapValues(queryParams, "endDate", List.of(String.valueOf(endDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -83,22 +98,22 @@ public class UsageApi {
     }
 
     public RolledUpUsage getUsage(final UUID subscriptionId, final String unitType, final LocalDate startDate, final LocalDate endDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getUsage");
-        Preconditions.checkNotNull(unitType, "Missing the required parameter 'unitType' when calling getUsage");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getUsage");
+        checkNotNull(unitType, "Missing the required parameter 'unitType' when calling getUsage");
 
         final String uri = "/1.0/kb/usages/{subscriptionId}/{unitType}"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString())
           .replaceAll("\\{" + "unitType" + "\\}", unitType.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (startDate != null) {
-            queryParams.put("startDate", String.valueOf(startDate));
+            addToMapValues(queryParams, "startDate", List.of(String.valueOf(startDate)));
         }
         if (endDate != null) {
-            queryParams.put("endDate", String.valueOf(endDate));
+            addToMapValues(queryParams, "endDate", List.of(String.valueOf(endDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -110,13 +125,13 @@ public class UsageApi {
     }
 
     public void recordUsage(final SubscriptionUsageRecord body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling recordUsage");
+        checkNotNull(body, "Missing the required parameter 'body' when calling recordUsage");
 
         final String uri = "/1.0/kb/usages";
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");

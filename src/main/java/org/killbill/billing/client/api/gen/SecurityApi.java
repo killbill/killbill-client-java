@@ -20,17 +20,17 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.RoleDefinition;
 import org.killbill.billing.client.model.gen.Subject;
 import org.killbill.billing.client.model.gen.UserRoles;
 import org.killbill.billing.client.model.Strings;
 import java.util.List;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -57,14 +57,29 @@ public class SecurityApi {
         this.httpClient = httpClient;
     }
 
+    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
+        if (map.containsKey(key)) {
+            map.get(key).addAll(values);
+        } else {
+            map.put(key, values);
+        }
+    }
+
+    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
+        if (reference == null) {
+            throw new NullPointerException(String.valueOf(errorMessage));
+        }
+        return reference;
+    }
+
     public RoleDefinition addRoleDefinition(final RoleDefinition body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addRoleDefinition");
+        checkNotNull(body, "Missing the required parameter 'body' when calling addRoleDefinition");
 
         final String uri = "/1.0/kb/security/roles";
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -74,13 +89,13 @@ public class SecurityApi {
     }
 
     public UserRoles addUserRoles(final UserRoles body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addUserRoles");
+        checkNotNull(body, "Missing the required parameter 'body' when calling addUserRoles");
 
         final String uri = "/1.0/kb/security/users";
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -114,7 +129,7 @@ public class SecurityApi {
     }
 
     public RoleDefinition getRoleDefinition(final String role, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(role, "Missing the required parameter 'role' when calling getRoleDefinition");
+        checkNotNull(role, "Missing the required parameter 'role' when calling getRoleDefinition");
 
         final String uri = "/1.0/kb/security/roles/{role}"
           .replaceAll("\\{" + "role" + "\\}", role.toString());
@@ -128,7 +143,7 @@ public class SecurityApi {
     }
 
     public UserRoles getUserRoles(final String username, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(username, "Missing the required parameter 'username' when calling getUserRoles");
+        checkNotNull(username, "Missing the required parameter 'username' when calling getUserRoles");
 
         final String uri = "/1.0/kb/security/users/{username}/roles"
           .replaceAll("\\{" + "username" + "\\}", username.toString());
@@ -143,7 +158,7 @@ public class SecurityApi {
 
 
     public void invalidateUser(final String username, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(username, "Missing the required parameter 'username' when calling invalidateUser");
+        checkNotNull(username, "Missing the required parameter 'username' when calling invalidateUser");
 
         final String uri = "/1.0/kb/security/users/{username}"
           .replaceAll("\\{" + "username" + "\\}", username.toString());
@@ -158,7 +173,7 @@ public class SecurityApi {
     }
 
     public void updateRoleDefinition(final RoleDefinition body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateRoleDefinition");
+        checkNotNull(body, "Missing the required parameter 'body' when calling updateRoleDefinition");
 
         final String uri = "/1.0/kb/security/roles";
 
@@ -172,8 +187,8 @@ public class SecurityApi {
     }
 
     public void updateUserPassword(final String username, final UserRoles body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(username, "Missing the required parameter 'username' when calling updateUserPassword");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateUserPassword");
+        checkNotNull(username, "Missing the required parameter 'username' when calling updateUserPassword");
+        checkNotNull(body, "Missing the required parameter 'body' when calling updateUserPassword");
 
         final String uri = "/1.0/kb/security/users/{username}/password"
           .replaceAll("\\{" + "username" + "\\}", username.toString());
@@ -188,8 +203,8 @@ public class SecurityApi {
     }
 
     public void updateUserRoles(final String username, final UserRoles body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(username, "Missing the required parameter 'username' when calling updateUserRoles");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateUserRoles");
+        checkNotNull(username, "Missing the required parameter 'username' when calling updateUserRoles");
+        checkNotNull(body, "Missing the required parameter 'body' when calling updateUserRoles");
 
         final String uri = "/1.0/kb/security/users/{username}/roles"
           .replaceAll("\\{" + "username" + "\\}", username.toString());

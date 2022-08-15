@@ -20,6 +20,11 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.BlockingState;
@@ -43,11 +48,6 @@ import org.killbill.billing.client.model.BulkSubscriptionsBundles;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.Tags;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -74,23 +74,38 @@ public class SubscriptionApi {
         this.httpClient = httpClient;
     }
 
+    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
+        if (map.containsKey(key)) {
+            map.get(key).addAll(values);
+        } else {
+            map.put(key, values);
+        }
+    }
+
+    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
+        if (reference == null) {
+            throw new NullPointerException(String.valueOf(errorMessage));
+        }
+        return reference;
+    }
+
     public BlockingStates addSubscriptionBlockingState(final UUID subscriptionId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling addSubscriptionBlockingState");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addSubscriptionBlockingState");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling addSubscriptionBlockingState");
+        checkNotNull(body, "Missing the required parameter 'body' when calling addSubscriptionBlockingState");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/block"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -100,22 +115,22 @@ public class SubscriptionApi {
     }
 
     public BlockingStates addSubscriptionBlockingState(final UUID subscriptionId, final BlockingState body, final DateTime requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling addSubscriptionBlockingState");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addSubscriptionBlockingState");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling addSubscriptionBlockingState");
+        checkNotNull(body, "Missing the required parameter 'body' when calling addSubscriptionBlockingState");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/block"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -130,32 +145,32 @@ public class SubscriptionApi {
 
 
     public void cancelSubscriptionPlan(final UUID subscriptionId, final LocalDate requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Boolean useRequestedDateForBilling, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling cancelSubscriptionPlan");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling cancelSubscriptionPlan");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (callCompletion != null) {
-            queryParams.put("callCompletion", String.valueOf(callCompletion));
+            addToMapValues(queryParams, "callCompletion", List.of(String.valueOf(callCompletion)));
         }
         if (callTimeoutSec != null) {
-            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+            addToMapValues(queryParams, "callTimeoutSec", List.of(String.valueOf(callTimeoutSec)));
         }
         if (entitlementPolicy != null) {
-            queryParams.put("entitlementPolicy", String.valueOf(entitlementPolicy));
+            addToMapValues(queryParams, "entitlementPolicy", List.of(String.valueOf(entitlementPolicy)));
         }
         if (billingPolicy != null) {
-            queryParams.put("billingPolicy", String.valueOf(billingPolicy));
+            addToMapValues(queryParams, "billingPolicy", List.of(String.valueOf(billingPolicy)));
         }
         if (useRequestedDateForBilling != null) {
-            queryParams.put("useRequestedDateForBilling", String.valueOf(useRequestedDateForBilling));
+            addToMapValues(queryParams, "useRequestedDateForBilling", List.of(String.valueOf(useRequestedDateForBilling)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -172,32 +187,32 @@ public class SubscriptionApi {
 
 
     public void cancelSubscriptionPlan(final UUID subscriptionId, final DateTime requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Boolean useRequestedDateForBilling, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling cancelSubscriptionPlan");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling cancelSubscriptionPlan");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (callCompletion != null) {
-            queryParams.put("callCompletion", String.valueOf(callCompletion));
+            addToMapValues(queryParams, "callCompletion", List.of(String.valueOf(callCompletion)));
         }
         if (callTimeoutSec != null) {
-            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+            addToMapValues(queryParams, "callTimeoutSec", List.of(String.valueOf(callTimeoutSec)));
         }
         if (entitlementPolicy != null) {
-            queryParams.put("entitlementPolicy", String.valueOf(entitlementPolicy));
+            addToMapValues(queryParams, "entitlementPolicy", List.of(String.valueOf(entitlementPolicy)));
         }
         if (billingPolicy != null) {
-            queryParams.put("billingPolicy", String.valueOf(billingPolicy));
+            addToMapValues(queryParams, "billingPolicy", List.of(String.valueOf(billingPolicy)));
         }
         if (useRequestedDateForBilling != null) {
-            queryParams.put("useRequestedDateForBilling", String.valueOf(useRequestedDateForBilling));
+            addToMapValues(queryParams, "useRequestedDateForBilling", List.of(String.valueOf(useRequestedDateForBilling)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -213,27 +228,27 @@ public class SubscriptionApi {
     }
 
     public void changeSubscriptionPlan(final UUID subscriptionId, final Subscription body, final LocalDate requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling changeSubscriptionPlan");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling changeSubscriptionPlan");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling changeSubscriptionPlan");
+        checkNotNull(body, "Missing the required parameter 'body' when calling changeSubscriptionPlan");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (callCompletion != null) {
-            queryParams.put("callCompletion", String.valueOf(callCompletion));
+            addToMapValues(queryParams, "callCompletion", List.of(String.valueOf(callCompletion)));
         }
         if (callTimeoutSec != null) {
-            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+            addToMapValues(queryParams, "callTimeoutSec", List.of(String.valueOf(callTimeoutSec)));
         }
         if (billingPolicy != null) {
-            queryParams.put("billingPolicy", String.valueOf(billingPolicy));
+            addToMapValues(queryParams, "billingPolicy", List.of(String.valueOf(billingPolicy)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -250,27 +265,27 @@ public class SubscriptionApi {
     }
 
     public void changeSubscriptionPlan(final UUID subscriptionId, final Subscription body, final DateTime requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling changeSubscriptionPlan");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling changeSubscriptionPlan");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling changeSubscriptionPlan");
+        checkNotNull(body, "Missing the required parameter 'body' when calling changeSubscriptionPlan");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (callCompletion != null) {
-            queryParams.put("callCompletion", String.valueOf(callCompletion));
+            addToMapValues(queryParams, "callCompletion", List.of(String.valueOf(callCompletion)));
         }
         if (callTimeoutSec != null) {
-            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+            addToMapValues(queryParams, "callTimeoutSec", List.of(String.valueOf(callTimeoutSec)));
         }
         if (billingPolicy != null) {
-            queryParams.put("billingPolicy", String.valueOf(billingPolicy));
+            addToMapValues(queryParams, "billingPolicy", List.of(String.valueOf(billingPolicy)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -287,38 +302,38 @@ public class SubscriptionApi {
     }
 
     public Subscription createSubscription(final Subscription body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean skipResponse, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscription");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createSubscription");
 
         final String uri = "/1.0/kb/subscriptions";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (entitlementDate != null) {
-            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+            addToMapValues(queryParams, "entitlementDate", List.of(String.valueOf(entitlementDate)));
         }
         if (billingDate != null) {
-            queryParams.put("billingDate", String.valueOf(billingDate));
+            addToMapValues(queryParams, "billingDate", List.of(String.valueOf(billingDate)));
         }
         if (renameKeyIfExistsAndUnused != null) {
-            queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
+            addToMapValues(queryParams, "renameKeyIfExistsAndUnused", List.of(String.valueOf(renameKeyIfExistsAndUnused)));
         }
         if (migrated != null) {
-            queryParams.put("migrated", String.valueOf(migrated));
+            addToMapValues(queryParams, "migrated", List.of(String.valueOf(migrated)));
         }
         if (skipResponse != null) {
-            queryParams.put("skipResponse", String.valueOf(skipResponse));
+            addToMapValues(queryParams, "skipResponse", List.of(String.valueOf(skipResponse)));
         }
         if (callCompletion != null) {
-            queryParams.put("callCompletion", String.valueOf(callCompletion));
+            addToMapValues(queryParams, "callCompletion", List.of(String.valueOf(callCompletion)));
         }
         if (callTimeoutSec != null) {
-            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+            addToMapValues(queryParams, "callTimeoutSec", List.of(String.valueOf(callTimeoutSec)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -333,38 +348,38 @@ public class SubscriptionApi {
     }
 
     public Subscription createSubscription(final Subscription body, final DateTime entitlementDate, final DateTime billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean skipResponse, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscription");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createSubscription");
 
         final String uri = "/1.0/kb/subscriptions";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (entitlementDate != null) {
-            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+            addToMapValues(queryParams, "entitlementDate", List.of(String.valueOf(entitlementDate)));
         }
         if (billingDate != null) {
-            queryParams.put("billingDate", String.valueOf(billingDate));
+            addToMapValues(queryParams, "billingDate", List.of(String.valueOf(billingDate)));
         }
         if (renameKeyIfExistsAndUnused != null) {
-            queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
+            addToMapValues(queryParams, "renameKeyIfExistsAndUnused", List.of(String.valueOf(renameKeyIfExistsAndUnused)));
         }
         if (migrated != null) {
-            queryParams.put("migrated", String.valueOf(migrated));
+            addToMapValues(queryParams, "migrated", List.of(String.valueOf(migrated)));
         }
         if (skipResponse != null) {
-            queryParams.put("skipResponse", String.valueOf(skipResponse));
+            addToMapValues(queryParams, "skipResponse", List.of(String.valueOf(skipResponse)));
         }
         if (callCompletion != null) {
-            queryParams.put("callCompletion", String.valueOf(callCompletion));
+            addToMapValues(queryParams, "callCompletion", List.of(String.valueOf(callCompletion)));
         }
         if (callTimeoutSec != null) {
-            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+            addToMapValues(queryParams, "callTimeoutSec", List.of(String.valueOf(callTimeoutSec)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -375,15 +390,15 @@ public class SubscriptionApi {
     }
 
     public void createSubscriptionCustomFields(final UUID subscriptionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createSubscriptionCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionCustomFields");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createSubscriptionCustomFields");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionCustomFields");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -393,15 +408,15 @@ public class SubscriptionApi {
     }
 
     public void createSubscriptionTags(final UUID subscriptionId, final List<UUID> body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createSubscriptionTags");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionTags");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling createSubscriptionTags");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -415,38 +430,38 @@ public class SubscriptionApi {
     }
 
     public Bundle createSubscriptionWithAddOns(final Subscriptions body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean migrated, final Boolean skipResponse, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionWithAddOns");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createSubscriptionWithAddOns";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (entitlementDate != null) {
-            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+            addToMapValues(queryParams, "entitlementDate", List.of(String.valueOf(entitlementDate)));
         }
         if (billingDate != null) {
-            queryParams.put("billingDate", String.valueOf(billingDate));
+            addToMapValues(queryParams, "billingDate", List.of(String.valueOf(billingDate)));
         }
         if (migrated != null) {
-            queryParams.put("migrated", String.valueOf(migrated));
+            addToMapValues(queryParams, "migrated", List.of(String.valueOf(migrated)));
         }
         if (skipResponse != null) {
-            queryParams.put("skipResponse", String.valueOf(skipResponse));
+            addToMapValues(queryParams, "skipResponse", List.of(String.valueOf(skipResponse)));
         }
         if (renameKeyIfExistsAndUnused != null) {
-            queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
+            addToMapValues(queryParams, "renameKeyIfExistsAndUnused", List.of(String.valueOf(renameKeyIfExistsAndUnused)));
         }
         if (callCompletion != null) {
-            queryParams.put("callCompletion", String.valueOf(callCompletion));
+            addToMapValues(queryParams, "callCompletion", List.of(String.valueOf(callCompletion)));
         }
         if (callTimeoutSec != null) {
-            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+            addToMapValues(queryParams, "callTimeoutSec", List.of(String.valueOf(callTimeoutSec)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -461,38 +476,38 @@ public class SubscriptionApi {
     }
 
     public Bundle createSubscriptionWithAddOns(final Subscriptions body, final DateTime entitlementDate, final DateTime billingDate, final Boolean migrated, final Boolean skipResponse, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionWithAddOns");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createSubscriptionWithAddOns";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (entitlementDate != null) {
-            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+            addToMapValues(queryParams, "entitlementDate", List.of(String.valueOf(entitlementDate)));
         }
         if (billingDate != null) {
-            queryParams.put("billingDate", String.valueOf(billingDate));
+            addToMapValues(queryParams, "billingDate", List.of(String.valueOf(billingDate)));
         }
         if (migrated != null) {
-            queryParams.put("migrated", String.valueOf(migrated));
+            addToMapValues(queryParams, "migrated", List.of(String.valueOf(migrated)));
         }
         if (skipResponse != null) {
-            queryParams.put("skipResponse", String.valueOf(skipResponse));
+            addToMapValues(queryParams, "skipResponse", List.of(String.valueOf(skipResponse)));
         }
         if (renameKeyIfExistsAndUnused != null) {
-            queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
+            addToMapValues(queryParams, "renameKeyIfExistsAndUnused", List.of(String.valueOf(renameKeyIfExistsAndUnused)));
         }
         if (callCompletion != null) {
-            queryParams.put("callCompletion", String.valueOf(callCompletion));
+            addToMapValues(queryParams, "callCompletion", List.of(String.valueOf(callCompletion)));
         }
         if (callTimeoutSec != null) {
-            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+            addToMapValues(queryParams, "callTimeoutSec", List.of(String.valueOf(callTimeoutSec)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -507,38 +522,38 @@ public class SubscriptionApi {
     }
 
     public Bundles createSubscriptionsWithAddOns(final BulkSubscriptionsBundles body, final LocalDate entitlementDate, final LocalDate billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean skipResponse, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionsWithAddOns");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionsWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createSubscriptionsWithAddOns";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (entitlementDate != null) {
-            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+            addToMapValues(queryParams, "entitlementDate", List.of(String.valueOf(entitlementDate)));
         }
         if (billingDate != null) {
-            queryParams.put("billingDate", String.valueOf(billingDate));
+            addToMapValues(queryParams, "billingDate", List.of(String.valueOf(billingDate)));
         }
         if (renameKeyIfExistsAndUnused != null) {
-            queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
+            addToMapValues(queryParams, "renameKeyIfExistsAndUnused", List.of(String.valueOf(renameKeyIfExistsAndUnused)));
         }
         if (migrated != null) {
-            queryParams.put("migrated", String.valueOf(migrated));
+            addToMapValues(queryParams, "migrated", List.of(String.valueOf(migrated)));
         }
         if (skipResponse != null) {
-            queryParams.put("skipResponse", String.valueOf(skipResponse));
+            addToMapValues(queryParams, "skipResponse", List.of(String.valueOf(skipResponse)));
         }
         if (callCompletion != null) {
-            queryParams.put("callCompletion", String.valueOf(callCompletion));
+            addToMapValues(queryParams, "callCompletion", List.of(String.valueOf(callCompletion)));
         }
         if (callTimeoutSec != null) {
-            queryParams.put("callTimeoutSec", String.valueOf(callTimeoutSec));
+            addToMapValues(queryParams, "callTimeoutSec", List.of(String.valueOf(callTimeoutSec)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -550,14 +565,14 @@ public class SubscriptionApi {
 
 
     public void deleteSubscriptionCustomFields(final UUID subscriptionId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteSubscriptionCustomFields");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteSubscriptionCustomFields");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (customField != null) {
-            queryParams.putAll("customField", Converter.convertUUIDListToStringList(customField));
+            addToMapValues(queryParams, "customField", Converter.convertUUIDListToStringList(customField));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -571,14 +586,14 @@ public class SubscriptionApi {
 
 
     public void deleteSubscriptionTags(final UUID subscriptionId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteSubscriptionTags");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling deleteSubscriptionTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (tagDef != null) {
-            queryParams.putAll("tagDef", Converter.convertUUIDListToStringList(tagDef));
+            addToMapValues(queryParams, "tagDef", Converter.convertUUIDListToStringList(tagDef));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -595,14 +610,14 @@ public class SubscriptionApi {
     }
 
     public Subscription getSubscription(final UUID subscriptionId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscription");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscription");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -614,7 +629,7 @@ public class SubscriptionApi {
     }
 
     public AuditLogs getSubscriptionAuditLogsWithHistory(final UUID subscriptionId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscriptionAuditLogsWithHistory");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscriptionAuditLogsWithHistory");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/auditLogsWithHistory"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
@@ -632,16 +647,16 @@ public class SubscriptionApi {
     }
 
     public Subscription getSubscriptionByKey(final String externalKey, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getSubscriptionByKey");
+        checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getSubscriptionByKey");
 
         final String uri = "/1.0/kb/subscriptions";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (externalKey != null) {
-            queryParams.put("externalKey", String.valueOf(externalKey));
+            addToMapValues(queryParams, "externalKey", List.of(String.valueOf(externalKey)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -657,14 +672,14 @@ public class SubscriptionApi {
     }
 
     public CustomFields getSubscriptionCustomFields(final UUID subscriptionId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscriptionCustomFields");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscriptionCustomFields");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -676,7 +691,7 @@ public class SubscriptionApi {
     }
 
     public AuditLogs getSubscriptionEventAuditLogsWithHistory(final UUID eventId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(eventId, "Missing the required parameter 'eventId' when calling getSubscriptionEventAuditLogsWithHistory");
+        checkNotNull(eventId, "Missing the required parameter 'eventId' when calling getSubscriptionEventAuditLogsWithHistory");
 
         final String uri = "/1.0/kb/subscriptions/events/{eventId}/auditLogsWithHistory"
           .replaceAll("\\{" + "eventId" + "\\}", eventId.toString());
@@ -694,17 +709,17 @@ public class SubscriptionApi {
     }
 
     public Tags getSubscriptionTags(final UUID subscriptionId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscriptionTags");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling getSubscriptionTags");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/tags"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (includedDeleted != null) {
-            queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+            addToMapValues(queryParams, "includedDeleted", List.of(String.valueOf(includedDeleted)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -716,8 +731,8 @@ public class SubscriptionApi {
     }
 
     public void modifySubscriptionCustomFields(final UUID subscriptionId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling modifySubscriptionCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifySubscriptionCustomFields");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling modifySubscriptionCustomFields");
+        checkNotNull(body, "Missing the required parameter 'body' when calling modifySubscriptionCustomFields");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/customFields"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
@@ -732,14 +747,14 @@ public class SubscriptionApi {
     }
 
     public void uncancelSubscriptionPlan(final UUID subscriptionId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling uncancelSubscriptionPlan");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling uncancelSubscriptionPlan");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/uncancel"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -751,14 +766,14 @@ public class SubscriptionApi {
     }
 
     public void undoChangeSubscriptionPlan(final UUID subscriptionId, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling undoChangeSubscriptionPlan");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling undoChangeSubscriptionPlan");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/undoChangePlan"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -774,18 +789,18 @@ public class SubscriptionApi {
     }
 
     public void updateSubscriptionBCD(final UUID subscriptionId, final Subscription body, final LocalDate effectiveFromDate, final Boolean forceNewBcdWithPastEffectiveDate, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling updateSubscriptionBCD");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateSubscriptionBCD");
+        checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling updateSubscriptionBCD");
+        checkNotNull(body, "Missing the required parameter 'body' when calling updateSubscriptionBCD");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}/bcd"
           .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (effectiveFromDate != null) {
-            queryParams.put("effectiveFromDate", String.valueOf(effectiveFromDate));
+            addToMapValues(queryParams, "effectiveFromDate", List.of(String.valueOf(effectiveFromDate)));
         }
         if (forceNewBcdWithPastEffectiveDate != null) {
-            queryParams.put("forceNewBcdWithPastEffectiveDate", String.valueOf(forceNewBcdWithPastEffectiveDate));
+            addToMapValues(queryParams, "forceNewBcdWithPastEffectiveDate", List.of(String.valueOf(forceNewBcdWithPastEffectiveDate)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
