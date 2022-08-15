@@ -24,12 +24,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
-
-import java.util.Map.Entry;
 import java.util.Objects;
 
 public class RequestOptions {
@@ -42,18 +36,22 @@ public class RequestOptions {
 
     private final String tenantApiKey, tenantApiSecret;
 
-    private final ImmutableMap<String, String> headers;
+    private final Map<String, String> headers;
 
-    private final ImmutableMultimap<String, String> queryParams;
+    private final Map<String, Collection<String>> queryParams;
 
     private final Boolean followLocation;
 
-    private final Multimap<String, String> queryParamsForFollow;
+    private final Map<String, Collection<String>> queryParamsForFollow;
 
-    public RequestOptions(final String requestId, final String user, final String password, final String createdBy,
-                          final String reason, final String comment, final String tenantApiKey, final String tenantApiSecret,
-                          final Map<String, String> headers, final Multimap<String, String> queryParams,
-                          final Boolean followLocation, final Multimap<String, String> queryParamsForFollow) {
+    public RequestOptions(final String requestId,
+                          final String user, final String password,
+                          final String createdBy, final String reason, final String comment,
+                          final String tenantApiKey, final String tenantApiSecret,
+                          final Map<String, String> headers,
+                          final Map<String, ? extends Collection<String>> queryParams,
+                          final Boolean followLocation,
+                          final Map<String, ? extends Collection<String>> queryParamsForFollow) {
         this.requestId = requestId;
         this.user = user;
         this.password = password;
@@ -62,10 +60,10 @@ public class RequestOptions {
         this.comment = comment;
         this.tenantApiKey = tenantApiKey;
         this.tenantApiSecret = tenantApiSecret;
-        this.headers = (headers != null) ? ImmutableMap.copyOf(headers) : ImmutableMap.<String, String>of();
-        this.queryParams = (queryParams != null) ? ImmutableMultimap.copyOf(queryParams) : ImmutableMultimap.<String, String>of();
+        this.headers = (headers != null) ? new HashMap<>(headers) : Collections.emptyMap();
+        this.queryParams = (queryParams != null) ? new HashMap<>(queryParams) : Collections.emptyMap();
         this.followLocation = followLocation;
-        this.queryParamsForFollow = ImmutableMultimap.copyOf(queryParamsForFollow);
+        this.queryParamsForFollow = (queryParamsForFollow != null) ? new HashMap<>(queryParamsForFollow) : Collections.emptyMap();
     }
 
     public String getRequestId() {
@@ -100,19 +98,12 @@ public class RequestOptions {
         return tenantApiSecret;
     }
 
-    public ImmutableMap<String, String> getHeaders() {
-        return this.headers;
+    public Map<String, String> getHeaders() {
+        return Map.copyOf(this.headers);
     }
 
-    public ImmutableMultimap<String, String> getQueryParams() {
-        return queryParams;
-    }
-
-    public Map<String, Collection<String>> getQueryParamsAsMap() {
-        if (queryParams == null) {
-            return Collections.emptyMap();
-        }
-        return queryParams.asMap();
+    public Map<String, Collection<String>> getQueryParams() {
+        return Map.copyOf(queryParams);
     }
 
     public Boolean getFollowLocation() {
@@ -126,15 +117,8 @@ public class RequestOptions {
         return followLocation;
     }
 
-    public Multimap<String, String> getQueryParamsForFollow() {
-        return queryParamsForFollow;
-    }
-
-    public Map<String, Collection<String>> getQueryParamsForFollowAsMap() {
-        if (queryParamsForFollow == null) {
-            return Collections.emptyMap();
-        }
-        return queryParamsForFollow.asMap();
+    public Map<String, Collection<String>> getQueryParamsForFollow() {
+        return Map.copyOf(queryParamsForFollow);
     }
 
     public RequestOptionsBuilder extend() {
@@ -237,13 +221,13 @@ public class RequestOptions {
 
         private String tenantApiKey, tenantApiSecret;
 
-        private final Map<String, String> headers = new HashMap<String, String>();
+        private final Map<String, String> headers = new HashMap<>();
 
-        private Multimap<String, String> queryParams = HashMultimap.<String, String>create();
+        private Map<String, ? extends Collection<String>> queryParams = new HashMap<>();
 
         private Boolean followLocation;
 
-        private Multimap<String, String> queryParamsForFollow = HashMultimap.<String, String>create();
+        private Map<String, ? extends Collection<String>> queryParamsForFollow = new HashMap<>();
 
         public RequestOptionsBuilder withRequestId(final String requestId) {
             this.requestId = requestId;
@@ -290,17 +274,8 @@ public class RequestOptions {
             return this;
         }
 
-        public RequestOptionsBuilder withQueryParams(final Multimap<String, String> queryParams) {
+        public RequestOptionsBuilder withQueryParams(final Map<String, ? extends Collection<String>> queryParams) {
             this.queryParams = queryParams;
-            return this;
-        }
-
-        public RequestOptionsBuilder withQueryParams(final Map<String, Collection<String>> queryParams) {
-            final Multimap<String, String> local = HashMultimap.create();
-            for (final Entry<String, Collection<String>> entry : queryParams.entrySet()) {
-                local.putAll(entry.getKey(), entry.getValue());
-            }
-            this.queryParams = local;
             return this;
         }
 
@@ -309,17 +284,8 @@ public class RequestOptions {
             return this;
         }
 
-        public RequestOptionsBuilder withQueryParamsForFollow(final Multimap<String, String> queryParamsForFollow) {
+        public RequestOptionsBuilder withQueryParamsForFollow(final Map<String, ? extends Collection<String>> queryParamsForFollow) {
             this.queryParamsForFollow = queryParamsForFollow;
-            return this;
-        }
-
-        public RequestOptionsBuilder withQueryParamsForFollow(final Map<String, Collection<String>> queryParamsForFollow) {
-            final Multimap<String, String> local = HashMultimap.create();
-            for (final Entry<String, Collection<String>> entry : queryParamsForFollow.entrySet()) {
-                local.putAll(entry.getKey(), entry.getValue());
-            }
-            this.queryParamsForFollow = local;
             return this;
         }
 
