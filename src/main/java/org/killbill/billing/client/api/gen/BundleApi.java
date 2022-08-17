@@ -20,6 +20,11 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.BlockingState;
@@ -38,11 +43,6 @@ import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -69,23 +69,38 @@ public class BundleApi {
         this.httpClient = httpClient;
     }
 
+    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
+        if (map.containsKey(key)) {
+            map.get(key).addAll(values);
+        } else {
+            map.put(key, values);
+        }
+    }
+
+    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
+        if (reference == null) {
+            throw new NullPointerException(String.valueOf(errorMessage));
+        }
+        return reference;
+    }
+
     public BlockingStates addBundleBlockingState(final UUID bundleId, final BlockingState body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling addBundleBlockingState");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling addBundleBlockingState");
+        checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/block"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -95,22 +110,22 @@ public class BundleApi {
     }
 
     public BlockingStates addBundleBlockingState(final UUID bundleId, final BlockingState body, final DateTime requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling addBundleBlockingState");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling addBundleBlockingState");
+        checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/block"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -120,15 +135,15 @@ public class BundleApi {
     }
 
     public CustomFields createBundleCustomFields(final UUID bundleId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling createBundleCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createBundleCustomFields");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling createBundleCustomFields");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createBundleCustomFields");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -138,15 +153,15 @@ public class BundleApi {
     }
 
     public Tags createBundleTags(final UUID bundleId, final List<UUID> body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling createBundleTags");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createBundleTags");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling createBundleTags");
+        checkNotNull(body, "Missing the required parameter 'body' when calling createBundleTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -157,14 +172,14 @@ public class BundleApi {
 
 
     public void deleteBundleCustomFields(final UUID bundleId, final List<UUID> customField, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteBundleCustomFields");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteBundleCustomFields");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (customField != null) {
-            queryParams.putAll("customField", Converter.convertUUIDListToStringList(customField));
+            addToMapValues(queryParams, "customField", Converter.convertUUIDListToStringList(customField));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -178,14 +193,14 @@ public class BundleApi {
 
 
     public void deleteBundleTags(final UUID bundleId, final List<UUID> tagDef, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteBundleTags");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling deleteBundleTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (tagDef != null) {
-            queryParams.putAll("tagDef", Converter.convertUUIDListToStringList(tagDef));
+            addToMapValues(queryParams, "tagDef", Converter.convertUUIDListToStringList(tagDef));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -202,14 +217,14 @@ public class BundleApi {
     }
 
     public Bundle getBundle(final UUID bundleId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundle");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundle");
 
         final String uri = "/1.0/kb/bundles/{bundleId}"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -221,7 +236,7 @@ public class BundleApi {
     }
 
     public AuditLogs getBundleAuditLogsWithHistory(final UUID bundleId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundleAuditLogsWithHistory");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundleAuditLogsWithHistory");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/auditLogsWithHistory"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
@@ -239,19 +254,19 @@ public class BundleApi {
     }
 
     public Bundles getBundleByKey(final String externalKey, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getBundleByKey");
+        checkNotNull(externalKey, "Missing the required parameter 'externalKey' when calling getBundleByKey");
 
         final String uri = "/1.0/kb/bundles";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (externalKey != null) {
-            queryParams.put("externalKey", String.valueOf(externalKey));
+            addToMapValues(queryParams, "externalKey", List.of(String.valueOf(externalKey)));
         }
         if (includedDeleted != null) {
-            queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+            addToMapValues(queryParams, "includedDeleted", List.of(String.valueOf(includedDeleted)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -267,14 +282,14 @@ public class BundleApi {
     }
 
     public CustomFields getBundleCustomFields(final UUID bundleId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundleCustomFields");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundleCustomFields");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -290,17 +305,17 @@ public class BundleApi {
     }
 
     public Tags getBundleTags(final UUID bundleId, final Boolean includedDeleted, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundleTags");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling getBundleTags");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/tags"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (includedDeleted != null) {
-            queryParams.put("includedDeleted", String.valueOf(includedDeleted));
+            addToMapValues(queryParams, "includedDeleted", List.of(String.valueOf(includedDeleted)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -319,15 +334,15 @@ public class BundleApi {
 
         final String uri = "/1.0/kb/bundles/pagination";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (offset != null) {
-            queryParams.put("offset", String.valueOf(offset));
+            addToMapValues(queryParams, "offset", List.of(String.valueOf(offset)));
         }
         if (limit != null) {
-            queryParams.put("limit", String.valueOf(limit));
+            addToMapValues(queryParams, "limit", List.of(String.valueOf(limit)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -339,8 +354,8 @@ public class BundleApi {
     }
 
     public void modifyBundleCustomFields(final UUID bundleId, final CustomFields body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling modifyBundleCustomFields");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling modifyBundleCustomFields");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling modifyBundleCustomFields");
+        checkNotNull(body, "Missing the required parameter 'body' when calling modifyBundleCustomFields");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/customFields"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
@@ -355,17 +370,17 @@ public class BundleApi {
     }
 
     public void pauseBundle(final UUID bundleId, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling pauseBundle");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling pauseBundle");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/pause"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -378,8 +393,8 @@ public class BundleApi {
     }
 
     public void renameExternalKey(final UUID bundleId, final Bundle body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling renameExternalKey");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling renameExternalKey");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling renameExternalKey");
+        checkNotNull(body, "Missing the required parameter 'body' when calling renameExternalKey");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/renameKey"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
@@ -393,17 +408,17 @@ public class BundleApi {
     }
 
     public void resumeBundle(final UUID bundleId, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling resumeBundle");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling resumeBundle");
 
         final String uri = "/1.0/kb/bundles/{bundleId}/resume"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -420,20 +435,20 @@ public class BundleApi {
     }
 
     public Bundles searchBundles(final String searchKey, final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchBundles");
+        checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchBundles");
 
         final String uri = "/1.0/kb/bundles/search/{searchKey}"
           .replaceAll("\\{" + "searchKey" + "\\}", searchKey.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (offset != null) {
-            queryParams.put("offset", String.valueOf(offset));
+            addToMapValues(queryParams, "offset", List.of(String.valueOf(offset)));
         }
         if (limit != null) {
-            queryParams.put("limit", String.valueOf(limit));
+            addToMapValues(queryParams, "limit", List.of(String.valueOf(limit)));
         }
         if (audit != null) {
-            queryParams.put("audit", String.valueOf(audit));
+            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -449,25 +464,25 @@ public class BundleApi {
     }
 
     public Bundle transferBundle(final UUID bundleId, final Bundle body, final LocalDate requestedDate, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling transferBundle");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling transferBundle");
+        checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling transferBundle");
+        checkNotNull(body, "Missing the required parameter 'body' when calling transferBundle");
 
         final String uri = "/1.0/kb/bundles/{bundleId}"
           .replaceAll("\\{" + "bundleId" + "\\}", bundleId.toString());
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (billingPolicy != null) {
-            queryParams.put("billingPolicy", String.valueOf(billingPolicy));
+            addToMapValues(queryParams, "billingPolicy", List.of(String.valueOf(billingPolicy)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");

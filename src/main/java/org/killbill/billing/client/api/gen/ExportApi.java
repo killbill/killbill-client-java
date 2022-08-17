@@ -20,16 +20,16 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Objects;
 
 import java.util.UUID;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.http.HttpResponse;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -56,8 +56,23 @@ public class ExportApi {
         this.httpClient = httpClient;
     }
 
+    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
+        if (map.containsKey(key)) {
+            map.get(key).addAll(values);
+        } else {
+            map.put(key, values);
+        }
+    }
+
+    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
+        if (reference == null) {
+            throw new NullPointerException(String.valueOf(errorMessage));
+        }
+        return reference;
+    }
+
     public int exportDataForAccount(final UUID accountId, final OutputStream outputStream, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling exportDataForAccount");
+        checkNotNull(accountId, "Missing the required parameter 'accountId' when calling exportDataForAccount");
 
         final String uri = "/1.0/kb/export/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());

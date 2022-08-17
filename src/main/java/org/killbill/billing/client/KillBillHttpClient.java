@@ -39,7 +39,11 @@ import java.security.GeneralSecurityException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -50,16 +54,12 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 
 public class KillBillHttpClient implements Closeable {
 
     public static final int DEFAULT_HTTP_TIMEOUT_SEC = 10;
 
-    public static final Multimap<String, String> DEFAULT_EMPTY_QUERY = ImmutableMultimap.<String, String>of();
+    public static final Map<String, Collection<String>> DEFAULT_EMPTY_QUERY = Collections.emptyMap();
     public static final String AUDIT_OPTION_CREATED_BY = "__AUDIT_OPTION_CREATED_BY";
     public static final String AUDIT_OPTION_REASON = "__AUDIT_OPTION_REASON";
     public static final String AUDIT_OPTION_COMMENT = "__AUDIT_OPTION_COMMENT";
@@ -150,7 +150,7 @@ public class KillBillHttpClient implements Closeable {
         try {
             builder = HttpClient.newBuilder()
                                 .sslContext(SslUtils.getInstance().getSSLContext(!strictSSL, SSLProtocol))
-                                .connectTimeout(Duration.of(MoreObjects.firstNonNull(connectTimeOut, DEFAULT_HTTP_TIMEOUT_SEC * 1000), ChronoUnit.MILLIS));
+                                .connectTimeout(Duration.of(Objects.requireNonNullElse(connectTimeOut, DEFAULT_HTTP_TIMEOUT_SEC * 1000), ChronoUnit.MILLIS));
         } catch (final GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
@@ -377,7 +377,7 @@ public class KillBillHttpClient implements Closeable {
         }
     }
 
-    @VisibleForTesting
+    // VisibleForTesting
     void throwExceptionOnResponseError(final HttpResponse<InputStream> response) throws KillBillClientException {
         if (response.statusCode() == 401) {
             throw new KillBillClientException(
@@ -395,7 +395,7 @@ public class KillBillHttpClient implements Closeable {
         }
     }
 
-    @VisibleForTesting
+    // VisibleForTesting
     <T> T deserializeResponse(final HttpResponse<InputStream> response, final Class<T> clazz) throws KillBillClientException {
         // No deserialization required
         if (HttpResponse.class.isAssignableFrom(clazz)) {
@@ -503,7 +503,7 @@ public class KillBillHttpClient implements Closeable {
         return builder;
     }
 
-    private URI getURI(final String url, final Multimap<String, String> queryParams) throws KillBillClientException {
+    private URI getURI(final String url, final Map<String, ? extends Collection<String>> queryParams) throws KillBillClientException {
         try {
             if (url == null) {
                 throw new URISyntaxException("(null)", "HttpClient URL misconfigured");

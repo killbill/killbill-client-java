@@ -20,6 +20,11 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.Catalog;
 import org.joda.time.DateTime;
@@ -35,11 +40,6 @@ import org.killbill.billing.client.model.PlanDetails;
 import java.util.List;
 import org.killbill.billing.client.model.Catalogs;
 import org.killbill.billing.client.model.DateTimes;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -66,14 +66,29 @@ public class CatalogApi {
         this.httpClient = httpClient;
     }
 
+    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
+        if (map.containsKey(key)) {
+            map.get(key).addAll(values);
+        } else {
+            map.put(key, values);
+        }
+    }
+
+    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
+        if (reference == null) {
+            throw new NullPointerException(String.valueOf(errorMessage));
+        }
+        return reference;
+    }
+
     public String addSimplePlan(final SimplePlan body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addSimplePlan");
+        checkNotNull(body, "Missing the required parameter 'body' when calling addSimplePlan");
 
         final String uri = "/1.0/kb/catalog/simplePlan";
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
@@ -98,15 +113,15 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/availableAddons";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (baseProductName != null) {
-            queryParams.put("baseProductName", String.valueOf(baseProductName));
+            addToMapValues(queryParams, "baseProductName", List.of(String.valueOf(baseProductName)));
         }
         if (priceListName != null) {
-            queryParams.put("priceListName", String.valueOf(priceListName));
+            addToMapValues(queryParams, "priceListName", List.of(String.valueOf(priceListName)));
         }
         if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
+            addToMapValues(queryParams, "accountId", List.of(String.valueOf(accountId)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -121,9 +136,9 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/availableBasePlans";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
+            addToMapValues(queryParams, "accountId", List.of(String.valueOf(accountId)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -138,12 +153,12 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
+            addToMapValues(queryParams, "accountId", List.of(String.valueOf(accountId)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -158,9 +173,9 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/versions";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
+            addToMapValues(queryParams, "accountId", List.of(String.valueOf(accountId)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -175,12 +190,12 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/xml";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
         if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
+            addToMapValues(queryParams, "accountId", List.of(String.valueOf(accountId)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -195,12 +210,12 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/phase";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (subscriptionId != null) {
-            queryParams.put("subscriptionId", String.valueOf(subscriptionId));
+            addToMapValues(queryParams, "subscriptionId", List.of(String.valueOf(subscriptionId)));
         }
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -215,12 +230,12 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/plan";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (subscriptionId != null) {
-            queryParams.put("subscriptionId", String.valueOf(subscriptionId));
+            addToMapValues(queryParams, "subscriptionId", List.of(String.valueOf(subscriptionId)));
         }
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -235,12 +250,12 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/priceList";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (subscriptionId != null) {
-            queryParams.put("subscriptionId", String.valueOf(subscriptionId));
+            addToMapValues(queryParams, "subscriptionId", List.of(String.valueOf(subscriptionId)));
         }
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -255,12 +270,12 @@ public class CatalogApi {
 
         final String uri = "/1.0/kb/catalog/product";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (subscriptionId != null) {
-            queryParams.put("subscriptionId", String.valueOf(subscriptionId));
+            addToMapValues(queryParams, "subscriptionId", List.of(String.valueOf(subscriptionId)));
         }
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            addToMapValues(queryParams, "requestedDate", List.of(String.valueOf(requestedDate)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -272,18 +287,33 @@ public class CatalogApi {
     }
 
     public String uploadCatalogXml(final String body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadCatalogXml");
+        checkNotNull(body, "Missing the required parameter 'body' when calling uploadCatalogXml");
 
         final String uri = "/1.0/kb/catalog/xml";
 
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/xml");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
         return httpClient.doPost(uri, body, String.class, requestOptions);
+    }
+
+    public void validateCatalogXml(final String body, final RequestOptions inputOptions) throws KillBillClientException {
+        checkNotNull(body, "Missing the required parameter 'body' when calling validateCatalogXml");
+
+        final String uri = "/1.0/kb/catalog/xml/validate";
+
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
+        inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/xml");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        httpClient.doPost(uri, body, requestOptions);
     }
 
 }

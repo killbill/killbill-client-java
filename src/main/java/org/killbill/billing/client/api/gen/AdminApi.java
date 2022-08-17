@@ -20,6 +20,11 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.AdminPayment;
 import java.util.UUID;
@@ -27,11 +32,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.http.HttpResponse;
 import java.util.Map;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -58,6 +58,21 @@ public class AdminApi {
         this.httpClient = httpClient;
     }
 
+    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
+        if (map.containsKey(key)) {
+            map.get(key).addAll(values);
+        } else {
+            map.put(key, values);
+        }
+    }
+
+    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
+        if (reference == null) {
+            throw new NullPointerException(String.valueOf(errorMessage));
+        }
+        return reference;
+    }
+
     public int getQueueEntries(final UUID accountId, final String queueName, final String serviceName, final String minDate, final String maxDate, final OutputStream outputStream, final RequestOptions inputOptions) throws KillBillClientException {
         return getQueueEntries(accountId, queueName, serviceName, Boolean.valueOf(true), minDate, maxDate, Boolean.valueOf(true), Boolean.valueOf(true), Boolean.valueOf(true), outputStream, inputOptions);
     }
@@ -66,33 +81,33 @@ public class AdminApi {
 
         final String uri = "/1.0/kb/admin/queues";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (accountId != null) {
-            queryParams.put("accountId", String.valueOf(accountId));
+            addToMapValues(queryParams, "accountId", List.of(String.valueOf(accountId)));
         }
         if (queueName != null) {
-            queryParams.put("queueName", String.valueOf(queueName));
+            addToMapValues(queryParams, "queueName", List.of(String.valueOf(queueName)));
         }
         if (serviceName != null) {
-            queryParams.put("serviceName", String.valueOf(serviceName));
+            addToMapValues(queryParams, "serviceName", List.of(String.valueOf(serviceName)));
         }
         if (withHistory != null) {
-            queryParams.put("withHistory", String.valueOf(withHistory));
+            addToMapValues(queryParams, "withHistory", List.of(String.valueOf(withHistory)));
         }
         if (minDate != null) {
-            queryParams.put("minDate", String.valueOf(minDate));
+            addToMapValues(queryParams, "minDate", List.of(String.valueOf(minDate)));
         }
         if (maxDate != null) {
-            queryParams.put("maxDate", String.valueOf(maxDate));
+            addToMapValues(queryParams, "maxDate", List.of(String.valueOf(maxDate)));
         }
         if (withInProcessing != null) {
-            queryParams.put("withInProcessing", String.valueOf(withInProcessing));
+            addToMapValues(queryParams, "withInProcessing", List.of(String.valueOf(withInProcessing)));
         }
         if (withBusEvents != null) {
-            queryParams.put("withBusEvents", String.valueOf(withBusEvents));
+            addToMapValues(queryParams, "withBusEvents", List.of(String.valueOf(withBusEvents)));
         }
         if (withNotifications != null) {
-            queryParams.put("withNotifications", String.valueOf(withNotifications));
+            addToMapValues(queryParams, "withNotifications", List.of(String.valueOf(withNotifications)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -109,9 +124,9 @@ public class AdminApi {
 
         final String uri = "/1.0/kb/admin/cache";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (cacheName != null) {
-            queryParams.put("cacheName", String.valueOf(cacheName));
+            addToMapValues(queryParams, "cacheName", List.of(String.valueOf(cacheName)));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
@@ -124,7 +139,7 @@ public class AdminApi {
 
 
     public void invalidatesCacheByAccount(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling invalidatesCacheByAccount");
+        checkNotNull(accountId, "Missing the required parameter 'accountId' when calling invalidatesCacheByAccount");
 
         final String uri = "/1.0/kb/admin/cache/accounts/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
@@ -183,19 +198,19 @@ public class AdminApi {
 
         final String uri = "/1.0/kb/admin/invoices";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
         if (offset != null) {
-            queryParams.put("offset", String.valueOf(offset));
+            addToMapValues(queryParams, "offset", List.of(String.valueOf(offset)));
         }
         if (limit != null) {
-            queryParams.put("limit", String.valueOf(limit));
+            addToMapValues(queryParams, "limit", List.of(String.valueOf(limit)));
         }
         if (pluginProperty != null) {
-            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
         inputOptionsBuilder.withQueryParams(queryParams);
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
@@ -206,9 +221,9 @@ public class AdminApi {
     }
 
     public void updatePaymentTransactionState(final UUID paymentId, final UUID paymentTransactionId, final AdminPayment body, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling updatePaymentTransactionState");
-        Preconditions.checkNotNull(paymentTransactionId, "Missing the required parameter 'paymentTransactionId' when calling updatePaymentTransactionState");
-        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updatePaymentTransactionState");
+        checkNotNull(paymentId, "Missing the required parameter 'paymentId' when calling updatePaymentTransactionState");
+        checkNotNull(paymentTransactionId, "Missing the required parameter 'paymentTransactionId' when calling updatePaymentTransactionState");
+        checkNotNull(body, "Missing the required parameter 'body' when calling updatePaymentTransactionState");
 
         final String uri = "/1.0/kb/admin/payments/{paymentId}/transactions/{paymentTransactionId}"
           .replaceAll("\\{" + "paymentId" + "\\}", paymentId.toString())

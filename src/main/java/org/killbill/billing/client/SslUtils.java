@@ -23,13 +23,12 @@ import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-import com.google.common.base.MoreObjects;
 
 public class SslUtils {
 
@@ -57,7 +56,7 @@ public class SslUtils {
         if (acceptAnyCertificate) {
             return looseTrustManagerSSLContext;
         } else if (context == null) {
-            this.context = SSLContext.getInstance(MoreObjects.firstNonNull(protocol, TLS_PROTOCOL_DEFAULT));
+            this.context = SSLContext.getInstance(Objects.requireNonNullElse(protocol, TLS_PROTOCOL_DEFAULT));
             this.context.init(null, null, null);
         }
         return this.context;
