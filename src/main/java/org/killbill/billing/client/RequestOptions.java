@@ -19,11 +19,13 @@
 
 package org.killbill.billing.client;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.Map.Entry;
 import java.util.Objects;
 
 public class RequestOptions {
@@ -103,7 +105,7 @@ public class RequestOptions {
     }
 
     public Map<String, Collection<String>> getQueryParams() {
-        return Map.copyOf(queryParams);
+        return new HashMap<>(queryParams);
     }
 
     public Boolean getFollowLocation() {
@@ -118,7 +120,7 @@ public class RequestOptions {
     }
 
     public Map<String, Collection<String>> getQueryParamsForFollow() {
-        return Map.copyOf(queryParamsForFollow);
+        return new HashMap<>(queryParamsForFollow);
     }
 
     public RequestOptionsBuilder extend() {
@@ -275,7 +277,7 @@ public class RequestOptions {
         }
 
         public RequestOptionsBuilder withQueryParams(final Map<String, ? extends Collection<String>> queryParams) {
-            this.queryParams = queryParams;
+            this.queryParams = toMutableMapValues(queryParams);
             return this;
         }
 
@@ -285,13 +287,29 @@ public class RequestOptions {
         }
 
         public RequestOptionsBuilder withQueryParamsForFollow(final Map<String, ? extends Collection<String>> queryParamsForFollow) {
-            this.queryParamsForFollow = queryParamsForFollow;
+            this.queryParamsForFollow = toMutableMapValues(queryParamsForFollow);
             return this;
         }
 
         public RequestOptions build() {
             return new RequestOptions(requestId, user, password, createdBy, reason, comment, tenantApiKey, tenantApiSecret,
                                       headers, queryParams, followLocation, queryParamsForFollow);
+        }
+
+        /**
+         * Make sure that map collection values are mutable. Used to rebuild method parameter in
+         * {@link #withQueryParams(Map)} and {@link #withQueryParamsForFollow(Map)} .
+         *
+         * See {@code TestRequestOptions} for why we may need this.
+         */
+        Map<String, ? extends Collection<String>> toMutableMapValues(final Map<String, ? extends Collection<String>> map) {
+            final Map<String, Collection<String>> result = new HashMap<>();
+
+            for (final Entry<String, ? extends Collection<String>> entry : map.entrySet()) {
+                result.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+            }
+
+            return result;
         }
     }
 }
