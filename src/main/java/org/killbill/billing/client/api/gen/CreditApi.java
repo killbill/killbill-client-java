@@ -20,10 +20,6 @@
 
 package org.killbill.billing.client.api.gen;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.InvoiceItem;
@@ -38,6 +34,9 @@ import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
 import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
+import org.killbill.billing.client.util.Preconditions;
+import org.killbill.billing.client.util.Multimap;
+import org.killbill.billing.client.util.TreeMapSetMultimap;
 
 /**
  *           DO NOT EDIT !!!
@@ -57,42 +56,27 @@ public class CreditApi {
         this.httpClient = httpClient;
     }
 
-    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
-        if (map.containsKey(key)) {
-            map.get(key).addAll(values);
-        } else {
-            map.put(key, values);
-        }
-    }
-
-    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
-        if (reference == null) {
-            throw new NullPointerException(String.valueOf(errorMessage));
-        }
-        return reference;
-    }
-
     public InvoiceItems createCredits(final InvoiceItems body, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return createCredits(body, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
     public InvoiceItems createCredits(final InvoiceItems body, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(body, "Missing the required parameter 'body' when calling createCredits");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCredits");
 
         final String uri = "/1.0/kb/credits";
 
-        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (autoCommit != null) {
-            addToMapValues(queryParams, "autoCommit", List.of(String.valueOf(autoCommit)));
+            queryParams.put("autoCommit", String.valueOf(autoCommit));
         }
         if (pluginProperty != null) {
-            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
@@ -101,7 +85,7 @@ public class CreditApi {
     }
 
     public InvoiceItem getCredit(final UUID creditId, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(creditId, "Missing the required parameter 'creditId' when calling getCredit");
+        Preconditions.checkNotNull(creditId, "Missing the required parameter 'creditId' when calling getCredit");
 
         final String uri = "/1.0/kb/credits/{creditId}"
           .replaceAll("\\{" + "creditId" + "\\}", creditId.toString());

@@ -20,10 +20,6 @@
 
 package org.killbill.billing.client.api.gen;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.AuditLog;
@@ -40,6 +36,9 @@ import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
 import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
+import org.killbill.billing.client.util.Preconditions;
+import org.killbill.billing.client.util.Multimap;
+import org.killbill.billing.client.util.TreeMapSetMultimap;
 
 /**
  *           DO NOT EDIT !!!
@@ -59,23 +58,8 @@ public class TagApi {
         this.httpClient = httpClient;
     }
 
-    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
-        if (map.containsKey(key)) {
-            map.get(key).addAll(values);
-        } else {
-            map.put(key, values);
-        }
-    }
-
-    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
-        if (reference == null) {
-            throw new NullPointerException(String.valueOf(errorMessage));
-        }
-        return reference;
-    }
-
     public AuditLogs getTagAuditLogsWithHistory(final UUID tagId, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(tagId, "Missing the required parameter 'tagId' when calling getTagAuditLogsWithHistory");
+        Preconditions.checkNotNull(tagId, "Missing the required parameter 'tagId' when calling getTagAuditLogsWithHistory");
 
         final String uri = "/1.0/kb/tags/{tagId}/auditLogsWithHistory"
           .replaceAll("\\{" + "tagId" + "\\}", tagId.toString());
@@ -96,19 +80,19 @@ public class TagApi {
 
         final String uri = "/1.0/kb/tags/pagination";
 
-        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (offset != null) {
-            addToMapValues(queryParams, "offset", List.of(String.valueOf(offset)));
+            queryParams.put("offset", String.valueOf(offset));
         }
         if (limit != null) {
-            addToMapValues(queryParams, "limit", List.of(String.valueOf(limit)));
+            queryParams.put("limit", String.valueOf(limit));
         }
         if (audit != null) {
-            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
@@ -120,24 +104,24 @@ public class TagApi {
     }
 
     public Tags searchTags(final String searchKey, final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchTags");
+        Preconditions.checkNotNull(searchKey, "Missing the required parameter 'searchKey' when calling searchTags");
 
         final String uri = "/1.0/kb/tags/search/{searchKey}"
           .replaceAll("\\{" + "searchKey" + "\\}", searchKey.toString());
 
-        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (offset != null) {
-            addToMapValues(queryParams, "offset", List.of(String.valueOf(offset)));
+            queryParams.put("offset", String.valueOf(offset));
         }
         if (limit != null) {
-            addToMapValues(queryParams, "limit", List.of(String.valueOf(limit)));
+            queryParams.put("limit", String.valueOf(limit));
         }
         if (audit != null) {
-            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 

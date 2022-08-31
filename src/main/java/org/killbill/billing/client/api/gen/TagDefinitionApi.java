@@ -20,10 +20,6 @@
 
 package org.killbill.billing.client.api.gen;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.AuditLog;
@@ -40,6 +36,9 @@ import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
 import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
+import org.killbill.billing.client.util.Preconditions;
+import org.killbill.billing.client.util.Multimap;
+import org.killbill.billing.client.util.TreeMapSetMultimap;
 
 /**
  *           DO NOT EDIT !!!
@@ -59,23 +58,8 @@ public class TagDefinitionApi {
         this.httpClient = httpClient;
     }
 
-    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
-        if (map.containsKey(key)) {
-            map.get(key).addAll(values);
-        } else {
-            map.put(key, values);
-        }
-    }
-
-    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
-        if (reference == null) {
-            throw new NullPointerException(String.valueOf(errorMessage));
-        }
-        return reference;
-    }
-
     public TagDefinition createTagDefinition(final TagDefinition body, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(body, "Missing the required parameter 'body' when calling createTagDefinition");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createTagDefinition");
 
         final String uri = "/1.0/kb/tagDefinitions";
 
@@ -92,7 +76,7 @@ public class TagDefinitionApi {
 
 
     public void deleteTagDefinition(final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling deleteTagDefinition");
+        Preconditions.checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling deleteTagDefinition");
 
         final String uri = "/1.0/kb/tagDefinitions/{tagDefinitionId}"
           .replaceAll("\\{" + "tagDefinitionId" + "\\}", tagDefinitionId.toString());
@@ -110,18 +94,18 @@ public class TagDefinitionApi {
     }
 
     public TagDefinition getTagDefinition(final UUID tagDefinitionId, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling getTagDefinition");
+        Preconditions.checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling getTagDefinition");
 
         final String uri = "/1.0/kb/tagDefinitions/{tagDefinitionId}"
           .replaceAll("\\{" + "tagDefinitionId" + "\\}", tagDefinitionId.toString());
 
-        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (audit != null) {
-            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
@@ -129,7 +113,7 @@ public class TagDefinitionApi {
     }
 
     public AuditLogs getTagDefinitionAuditLogsWithHistory(final UUID tagDefinitionId, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling getTagDefinitionAuditLogsWithHistory");
+        Preconditions.checkNotNull(tagDefinitionId, "Missing the required parameter 'tagDefinitionId' when calling getTagDefinitionAuditLogsWithHistory");
 
         final String uri = "/1.0/kb/tagDefinitions/{tagDefinitionId}/auditLogsWithHistory"
           .replaceAll("\\{" + "tagDefinitionId" + "\\}", tagDefinitionId.toString());
@@ -150,13 +134,13 @@ public class TagDefinitionApi {
 
         final String uri = "/1.0/kb/tagDefinitions";
 
-        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (audit != null) {
-            addToMapValues(queryParams, "audit", List.of(String.valueOf(audit)));
+            queryParams.put("audit", String.valueOf(audit));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 

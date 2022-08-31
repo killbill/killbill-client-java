@@ -1081,6 +1081,35 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
+  /1.0/kb/accounts/{accountId}/auditLogs:
+    get:
+      tags:
+      - "Account"
+      summary: "Retrieve audit logs by account id"
+      description: ""
+      operationId: "getAccountAuditLogs"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        "404":
+          description: "Account not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
   /1.0/kb/accounts/{accountId}/customFields:
     get:
       tags:
@@ -1255,35 +1284,6 @@ paths:
           description: "Successful operation"
         "400":
           description: "Invalid account id supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/accounts/{accountId}/auditLogs:
-    get:
-      tags:
-      - "Account"
-      summary: "Retrieve audit logs by account id"
-      description: ""
-      operationId: "getAccountAuditLogs"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/AuditLog"
-        "404":
-          description: "Account not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -2764,6 +2764,48 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
+  /1.0/kb/bundles/pagination:
+    get:
+      tags:
+      - "Bundle"
+      summary: "List bundles"
+      description: ""
+      operationId: "getBundles"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "offset"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 0
+        format: "int64"
+      - name: "limit"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 100
+        format: "int64"
+      - name: "audit"
+        in: "query"
+        required: false
+        type: "string"
+        default: "NONE"
+        enum:
+        - "FULL"
+        - "MINIMAL"
+        - "NONE"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Bundle"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
   /1.0/kb/bundles/{bundleId}/block:
     post:
       tags:
@@ -2890,48 +2932,6 @@ paths:
               $ref: "#/definitions/Bundle"
         "404":
           description: "Bundle not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/bundles/pagination:
-    get:
-      tags:
-      - "Bundle"
-      summary: "List bundles"
-      description: ""
-      operationId: "getBundles"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "offset"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 0
-        format: "int64"
-      - name: "limit"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 100
-        format: "int64"
-      - name: "audit"
-        in: "query"
-        required: false
-        type: "string"
-        default: "NONE"
-        enum:
-        - "FULL"
-        - "MINIMAL"
-        - "NONE"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Bundle"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -3228,186 +3228,6 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/catalog/availableAddons:
-    get:
-      tags:
-      - "Catalog"
-      summary: "Retrieve available add-ons for a given product"
-      description: ""
-      operationId: "getAvailableAddons"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "baseProductName"
-        in: "query"
-        required: false
-        type: "string"
-      - name: "priceListName"
-        in: "query"
-        required: false
-        type: "string"
-      - name: "accountId"
-        in: "query"
-        required: false
-        type: "string"
-        format: "uuid"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/PlanDetail"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/catalog/availableBasePlans:
-    get:
-      tags:
-      - "Catalog"
-      summary: "Retrieve available base plans"
-      description: ""
-      operationId: "getAvailableBasePlans"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "query"
-        required: false
-        type: "string"
-        format: "uuid"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/PlanDetail"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/catalog/versions:
-    get:
-      tags:
-      - "Catalog"
-      summary: "Retrieve a list of catalog versions"
-      description: ""
-      operationId: "getCatalogVersions"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "accountId"
-        in: "query"
-        required: false
-        type: "string"
-        format: "uuid"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              type: "string"
-              format: "date-time"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/catalog/xml:
-    get:
-      tags:
-      - "Catalog"
-      summary: "Retrieve the full catalog as XML"
-      description: ""
-      operationId: "getCatalogXml"
-      produces:
-      - "text/xml"
-      parameters:
-      - name: "requestedDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date-time"
-      - name: "accountId"
-        in: "query"
-        required: false
-        type: "string"
-        format: "uuid"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "string"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-    post:
-      tags:
-      - "Catalog"
-      summary: "Upload the full catalog as XML"
-      description: ""
-      operationId: "uploadCatalogXml"
-      consumes:
-      - "text/xml"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "string"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        "201":
-          description: "Catalog XML created successfully"
-          schema:
-            type: "string"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/catalog/phase:
-    get:
-      tags:
-      - "Catalog"
-      summary: "Retrieve phase for a given subscription and date"
-      description: ""
-      operationId: "getPhaseForSubscriptionAndDate"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "subscriptionId"
-        in: "query"
-        required: false
-        type: "string"
-        format: "uuid"
-      - name: "requestedDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Phase"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
   /1.0/kb/catalog/plan:
     get:
       tags:
@@ -3495,6 +3315,70 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
+  /1.0/kb/catalog/xml:
+    get:
+      tags:
+      - "Catalog"
+      summary: "Retrieve the full catalog as XML"
+      description: ""
+      operationId: "getCatalogXml"
+      produces:
+      - "text/xml"
+      parameters:
+      - name: "requestedDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date-time"
+      - name: "accountId"
+        in: "query"
+        required: false
+        type: "string"
+        format: "uuid"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "string"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+    post:
+      tags:
+      - "Catalog"
+      summary: "Upload the full catalog as XML"
+      description: ""
+      operationId: "uploadCatalogXml"
+      consumes:
+      - "text/xml"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "string"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        "201":
+          description: "Catalog XML created successfully"
+          schema:
+            type: "string"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
   /1.0/kb/catalog/xml/validate:
     post:
       tags:
@@ -3527,6 +3411,122 @@ paths:
           description: "Valid XML catalog"
         "400":
           description: "Invalid XML catalog"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/catalog/availableAddons:
+    get:
+      tags:
+      - "Catalog"
+      summary: "Retrieve available add-ons for a given product"
+      description: ""
+      operationId: "getAvailableAddons"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "baseProductName"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "priceListName"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "accountId"
+        in: "query"
+        required: false
+        type: "string"
+        format: "uuid"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/PlanDetail"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/catalog/availableBasePlans:
+    get:
+      tags:
+      - "Catalog"
+      summary: "Retrieve available base plans"
+      description: ""
+      operationId: "getAvailableBasePlans"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "query"
+        required: false
+        type: "string"
+        format: "uuid"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/PlanDetail"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/catalog/versions:
+    get:
+      tags:
+      - "Catalog"
+      summary: "Retrieve a list of catalog versions"
+      description: ""
+      operationId: "getCatalogVersions"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "accountId"
+        in: "query"
+        required: false
+        type: "string"
+        format: "uuid"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              format: "date-time"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/catalog/phase:
+    get:
+      tags:
+      - "Catalog"
+      summary: "Retrieve phase for a given subscription and date"
+      description: ""
+      operationId: "getPhaseForSubscriptionAndDate"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "subscriptionId"
+        in: "query"
+        required: false
+        type: "string"
+        format: "uuid"
+      - name: "requestedDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Phase"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -3618,21 +3618,16 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/customFields/search/{searchKey}:
+  /1.0/kb/customFields/pagination:
     get:
       tags:
       - "CustomField"
-      summary: "Search custom fields"
+      summary: "List custom fields"
       description: ""
-      operationId: "searchCustomFields"
+      operationId: "getCustomFields"
       produces:
       - "application/json"
       parameters:
-      - name: "searchKey"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: ".*"
       - name: "offset"
         in: "query"
         required: false
@@ -3665,16 +3660,21 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/customFields/pagination:
+  /1.0/kb/customFields/search/{searchKey}:
     get:
       tags:
       - "CustomField"
-      summary: "List custom fields"
+      summary: "Search custom fields"
       description: ""
-      operationId: "getCustomFields"
+      operationId: "searchCustomFields"
       produces:
       - "application/json"
       parameters:
+      - name: "searchKey"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: ".*"
       - name: "offset"
         in: "query"
         required: false
@@ -4454,61 +4454,6 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/invoicePayments/{paymentId}/chargebackReversals:
-    post:
-      tags:
-      - "InvoicePayment"
-      summary: "Record a chargebackReversal"
-      description: ""
-      operationId: "createChargebackReversal"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "paymentId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/InvoicePaymentTransaction"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        "201":
-          description: "Created chargeback reversal successfully"
-          schema:
-            $ref: "#/definitions/InvoicePayment"
-        "400":
-          description: "Invalid payment id supplied"
-        "404":
-          description: "Account or payment not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
   /1.0/kb/invoicePayments/{paymentId}/chargebacks:
     post:
       tags:
@@ -4554,6 +4499,61 @@ paths:
       responses:
         "201":
           description: "Created chargeback successfully"
+          schema:
+            $ref: "#/definitions/InvoicePayment"
+        "400":
+          description: "Invalid payment id supplied"
+        "404":
+          description: "Account or payment not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/invoicePayments/{paymentId}/chargebackReversals:
+    post:
+      tags:
+      - "InvoicePayment"
+      summary: "Record a chargebackReversal"
+      description: ""
+      operationId: "createChargebackReversal"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "paymentId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/InvoicePaymentTransaction"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        "201":
+          description: "Created chargeback reversal successfully"
           schema:
             $ref: "#/definitions/InvoicePayment"
         "400":
@@ -4742,6 +4742,35 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
+  /1.0/kb/invoicePayments/{invoicePaymentId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "InvoicePayment"
+      summary: "Retrieve invoice payment audit logs with history by id"
+      description: ""
+      operationId: "getInvoicePaymentAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "invoicePaymentId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        "404":
+          description: "Invoice payment not found"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
   /1.0/kb/invoicePayments/{paymentId}/refunds:
     post:
       tags:
@@ -4803,35 +4832,6 @@ paths:
           description: "Invalid payment id supplied"
         "404":
           description: "Account or payment not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/invoicePayments/{invoicePaymentId}/auditLogsWithHistory:
-    get:
-      tags:
-      - "InvoicePayment"
-      summary: "Retrieve invoice payment audit logs with history by id"
-      description: ""
-      operationId: "getInvoicePaymentAuditLogsWithHistory"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "invoicePaymentId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/AuditLog"
-        "404":
-          description: "Invoice payment not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -9434,61 +9434,32 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/subscriptions/createSubscriptionWithAddOns:
+  /1.0/kb/subscriptions/{subscriptionId}/block:
     post:
       tags:
       - "Subscription"
-      summary: "Create an entitlement with addOn products"
+      summary: "Block a subscription"
       description: ""
-      operationId: "createSubscriptionWithAddOns"
+      operationId: "addSubscriptionBlockingState"
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       parameters:
+      - name: "subscriptionId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
       - in: "body"
         name: "body"
         required: true
         schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/Subscription"
-      - name: "entitlementDate"
+          $ref: "#/definitions/BlockingState"
+      - name: "requestedDate"
         in: "query"
         required: false
         type: "string"
         format: "date"
-      - name: "billingDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      - name: "migrated"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "skipResponse"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "renameKeyIfExistsAndUnused"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: true
-      - name: "callCompletion"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "callTimeoutSec"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 3
-        format: "int64"
       - name: "pluginProperty"
         in: "query"
         required: false
@@ -9510,94 +9481,15 @@ paths:
         type: "string"
       responses:
         "201":
-          description: "Subscriptions created successfully"
-          schema:
-            $ref: "#/definitions/Bundle"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/subscriptions/createSubscriptionsWithAddOns:
-    post:
-      tags:
-      - "Subscription"
-      summary: "Create multiple entitlements with addOn products"
-      description: ""
-      operationId: "createSubscriptionsWithAddOns"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/BulkSubscriptionsBundle"
-      - name: "entitlementDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      - name: "billingDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      - name: "renameKeyIfExistsAndUnused"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: true
-      - name: "migrated"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "skipResponse"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "callCompletion"
-        in: "query"
-        required: false
-        type: "boolean"
-        default: false
-      - name: "callTimeoutSec"
-        in: "query"
-        required: false
-        type: "integer"
-        default: 3
-        format: "int64"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        "201":
-          description: "Subscriptions created successfully"
+          description: "Blocking state created successfully"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/Bundle"
+              $ref: "#/definitions/BlockingState"
+        "400":
+          description: "Invalid subscription id supplied"
+        "404":
+          description: "Subscription not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -9799,35 +9691,6 @@ paths:
       - basicAuth: []
       - Killbill Api Key: []
       - Killbill Api Secret: []
-  /1.0/kb/subscriptions/{subscriptionId}/auditLogsWithHistory:
-    get:
-      tags:
-      - "Subscription"
-      summary: "Retrieve subscription audit logs with history by id"
-      description: ""
-      operationId: "getSubscriptionAuditLogsWithHistory"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "subscriptionId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/AuditLog"
-        "404":
-          description: "Subscription not found"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
   /1.0/kb/subscriptions:
     get:
       tags:
@@ -9938,6 +9801,203 @@ paths:
           description: "Subscription created successfully"
           schema:
             $ref: "#/definitions/Subscription"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/subscriptions/createSubscriptionWithAddOns:
+    post:
+      tags:
+      - "Subscription"
+      summary: "Create an entitlement with addOn products"
+      description: ""
+      operationId: "createSubscriptionWithAddOns"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/Subscription"
+      - name: "entitlementDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "billingDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "migrated"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "skipResponse"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "renameKeyIfExistsAndUnused"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: true
+      - name: "callCompletion"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "callTimeoutSec"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 3
+        format: "int64"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        "201":
+          description: "Subscriptions created successfully"
+          schema:
+            $ref: "#/definitions/Bundle"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/subscriptions/createSubscriptionsWithAddOns:
+    post:
+      tags:
+      - "Subscription"
+      summary: "Create multiple entitlements with addOn products"
+      description: ""
+      operationId: "createSubscriptionsWithAddOns"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/BulkSubscriptionsBundle"
+      - name: "entitlementDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "billingDate"
+        in: "query"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "renameKeyIfExistsAndUnused"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: true
+      - name: "migrated"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "skipResponse"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "callCompletion"
+        in: "query"
+        required: false
+        type: "boolean"
+        default: false
+      - name: "callTimeoutSec"
+        in: "query"
+        required: false
+        type: "integer"
+        default: 3
+        format: "int64"
+      - name: "pluginProperty"
+        in: "query"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "X-Killbill-CreatedBy"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "X-Killbill-Reason"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "X-Killbill-Comment"
+        in: "header"
+        required: false
+        type: "string"
+      responses:
+        "201":
+          description: "Subscriptions created successfully"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Bundle"
+      security:
+      - basicAuth: []
+      - Killbill Api Key: []
+      - Killbill Api Secret: []
+  /1.0/kb/subscriptions/{subscriptionId}/auditLogsWithHistory:
+    get:
+      tags:
+      - "Subscription"
+      summary: "Retrieve subscription audit logs with history by id"
+      description: ""
+      operationId: "getSubscriptionAuditLogsWithHistory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "subscriptionId"
+        in: "path"
+        required: true
+        type: "string"
+        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
+        format: "uuid"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/AuditLog"
+        "404":
+          description: "Subscription not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -10113,66 +10173,6 @@ paths:
           description: "Successful operation"
         "400":
           description: "Invalid entitlement supplied"
-      security:
-      - basicAuth: []
-      - Killbill Api Key: []
-      - Killbill Api Secret: []
-  /1.0/kb/subscriptions/{subscriptionId}/block:
-    post:
-      tags:
-      - "Subscription"
-      summary: "Block a subscription"
-      description: ""
-      operationId: "addSubscriptionBlockingState"
-      consumes:
-      - "application/json"
-      parameters:
-      - name: "subscriptionId"
-        in: "path"
-        required: true
-        type: "string"
-        pattern: "\\w+-\\w+-\\w+-\\w+-\\w+"
-        format: "uuid"
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/BlockingState"
-      - name: "requestedDate"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      - name: "pluginProperty"
-        in: "query"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "X-Killbill-CreatedBy"
-        in: "header"
-        required: true
-        type: "string"
-      - name: "X-Killbill-Reason"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "X-Killbill-Comment"
-        in: "header"
-        required: false
-        type: "string"
-      responses:
-        "201":
-          description: "Blocking state created successfully"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/BlockingState"
-        "400":
-          description: "Invalid subscription id supplied"
-        "404":
-          description: "Subscription not found"
       security:
       - basicAuth: []
       - Killbill Api Key: []
@@ -11765,15 +11765,15 @@ definitions:
   Entity:
     type: "object"
     properties:
-      createdDate:
-        type: "string"
-        format: "date-time"
-      updatedDate:
-        type: "string"
-        format: "date-time"
       id:
         type: "string"
         format: "uuid"
+      updatedDate:
+        type: "string"
+        format: "date-time"
+      createdDate:
+        type: "string"
+        format: "date-time"
   Tag:
     type: "object"
     properties:
@@ -14191,16 +14191,61 @@ definitions:
         type: "array"
         items:
           type: "string"
-  PlanDetail:
+  Duration:
     type: "object"
     properties:
-      product:
+      unit:
         type: "string"
-      plan:
+        enum:
+        - "DAYS"
+        - "WEEKS"
+        - "MONTHS"
+        - "YEARS"
+        - "UNLIMITED"
+      number:
+        type: "integer"
+        format: "int32"
+  Limit:
+    type: "object"
+    properties:
+      unit:
         type: "string"
-      priceList:
+      max:
         type: "string"
-      finalPhaseBillingPeriod:
+      min:
+        type: "string"
+  Phase:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      fixedPrices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      duration:
+        $ref: "#/definitions/Duration"
+      usages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Usage"
+  Plan:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      prettyName:
+        type: "string"
+      recurringBillingMode:
+        type: "string"
+        enum:
+        - "IN_ADVANCE"
+        - "IN_ARREAR"
+      billingPeriod:
         type: "string"
         enum:
         - "DAILY"
@@ -14217,10 +14262,10 @@ definitions:
         - "ANNUAL"
         - "BIENNIAL"
         - "NO_BILLING_PERIOD"
-      finalPhaseRecurringPrice:
+      phases:
         type: "array"
         items:
-          $ref: "#/definitions/Price"
+          $ref: "#/definitions/Phase"
   Price:
     type: "object"
     properties:
@@ -14394,6 +14439,107 @@ definitions:
         - "BTC"
       value:
         type: "number"
+  Tier:
+    type: "object"
+    properties:
+      limits:
+        type: "array"
+        items:
+          $ref: "#/definitions/Limit"
+      fixedPrice:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      recurringPrice:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+      blocks:
+        type: "array"
+        items:
+          $ref: "#/definitions/TieredBlock"
+  TieredBlock:
+    type: "object"
+    properties:
+      unit:
+        type: "string"
+      size:
+        type: "string"
+      max:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
+  Usage:
+    type: "object"
+    properties:
+      billingPeriod:
+        type: "string"
+      tiers:
+        type: "array"
+        items:
+          $ref: "#/definitions/Tier"
+  PriceList:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      plans:
+        type: "array"
+        items:
+          type: "string"
+  Product:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+      name:
+        type: "string"
+      prettyName:
+        type: "string"
+      plans:
+        type: "array"
+        items:
+          $ref: "#/definitions/Plan"
+      included:
+        type: "array"
+        items:
+          type: "string"
+      available:
+        type: "array"
+        items:
+          type: "string"
+  PlanDetail:
+    type: "object"
+    properties:
+      product:
+        type: "string"
+      plan:
+        type: "string"
+      priceList:
+        type: "string"
+      finalPhaseBillingPeriod:
+        type: "string"
+        enum:
+        - "DAILY"
+        - "WEEKLY"
+        - "BIWEEKLY"
+        - "THIRTY_DAYS"
+        - "SIXTY_DAYS"
+        - "NINETY_DAYS"
+        - "MONTHLY"
+        - "BIMESTRIAL"
+        - "QUARTERLY"
+        - "TRIANNUAL"
+        - "BIANNUAL"
+        - "ANNUAL"
+        - "BIENNIAL"
+        - "NO_BILLING_PERIOD"
+      finalPhaseRecurringPrice:
+        type: "array"
+        items:
+          $ref: "#/definitions/Price"
   Catalog:
     type: "object"
     properties:
@@ -14584,143 +14730,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/PriceList"
-  Duration:
-    type: "object"
-    properties:
-      unit:
-        type: "string"
-        enum:
-        - "DAYS"
-        - "WEEKS"
-        - "MONTHS"
-        - "YEARS"
-        - "UNLIMITED"
-      number:
-        type: "integer"
-        format: "int32"
-  Limit:
-    type: "object"
-    properties:
-      unit:
-        type: "string"
-      max:
-        type: "string"
-      min:
-        type: "string"
-  Phase:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      fixedPrices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      duration:
-        $ref: "#/definitions/Duration"
-      usages:
-        type: "array"
-        items:
-          $ref: "#/definitions/Usage"
-  Plan:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      prettyName:
-        type: "string"
-      recurringBillingMode:
-        type: "string"
-        enum:
-        - "IN_ADVANCE"
-        - "IN_ARREAR"
-      billingPeriod:
-        type: "string"
-        enum:
-        - "DAILY"
-        - "WEEKLY"
-        - "BIWEEKLY"
-        - "THIRTY_DAYS"
-        - "SIXTY_DAYS"
-        - "NINETY_DAYS"
-        - "MONTHLY"
-        - "BIMESTRIAL"
-        - "QUARTERLY"
-        - "TRIANNUAL"
-        - "BIANNUAL"
-        - "ANNUAL"
-        - "BIENNIAL"
-        - "NO_BILLING_PERIOD"
-      phases:
-        type: "array"
-        items:
-          $ref: "#/definitions/Phase"
-  PriceList:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      plans:
-        type: "array"
-        items:
-          type: "string"
-  Product:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-      name:
-        type: "string"
-      prettyName:
-        type: "string"
-      plans:
-        type: "array"
-        items:
-          $ref: "#/definitions/Plan"
-      included:
-        type: "array"
-        items:
-          type: "string"
-      available:
-        type: "array"
-        items:
-          type: "string"
-  Tier:
-    type: "object"
-    properties:
-      limits:
-        type: "array"
-        items:
-          $ref: "#/definitions/Limit"
-      fixedPrice:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      recurringPrice:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
-      blocks:
-        type: "array"
-        items:
-          $ref: "#/definitions/TieredBlock"
-  TieredBlock:
-    type: "object"
-    properties:
-      unit:
-        type: "string"
-      size:
-        type: "string"
-      max:
-        type: "string"
-      prices:
-        type: "array"
-        items:
-          $ref: "#/definitions/Price"
   Unit:
     type: "object"
     properties:
@@ -14728,15 +14737,6 @@ definitions:
         type: "string"
       prettyName:
         type: "string"
-  Usage:
-    type: "object"
-    properties:
-      billingPeriod:
-        type: "string"
-      tiers:
-        type: "array"
-        items:
-          $ref: "#/definitions/Tier"
   InvoicePaymentTransaction:
     type: "object"
     properties:
