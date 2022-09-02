@@ -20,10 +20,6 @@
 
 package org.killbill.billing.client.api.gen;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.ComboHostedPaymentPage;
@@ -39,6 +35,9 @@ import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
 import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
+import org.killbill.billing.client.util.Preconditions;
+import org.killbill.billing.client.util.Multimap;
+import org.killbill.billing.client.util.TreeMapSetMultimap;
 
 /**
  *           DO NOT EDIT !!!
@@ -58,38 +57,23 @@ public class PaymentGatewayApi {
         this.httpClient = httpClient;
     }
 
-    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
-        if (map.containsKey(key)) {
-            map.get(key).addAll(values);
-        } else {
-            map.put(key, values);
-        }
-    }
-
-    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
-        if (reference == null) {
-            throw new NullPointerException(String.valueOf(errorMessage));
-        }
-        return reference;
-    }
-
     public HostedPaymentPageFormDescriptor buildComboFormDescriptor(final ComboHostedPaymentPage body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(body, "Missing the required parameter 'body' when calling buildComboFormDescriptor");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling buildComboFormDescriptor");
 
         final String uri = "/1.0/kb/paymentGateways/hosted/form";
 
-        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (controlPluginName != null) {
-            addToMapValues(queryParams, "controlPluginName", controlPluginName);
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
@@ -98,27 +82,27 @@ public class PaymentGatewayApi {
     }
 
     public HostedPaymentPageFormDescriptor buildFormDescriptor(final UUID accountId, final HostedPaymentPageFields body, final UUID paymentMethodId, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(accountId, "Missing the required parameter 'accountId' when calling buildFormDescriptor");
-        checkNotNull(body, "Missing the required parameter 'body' when calling buildFormDescriptor");
+        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling buildFormDescriptor");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling buildFormDescriptor");
 
         final String uri = "/1.0/kb/paymentGateways/hosted/form/{accountId}"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
 
-        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (paymentMethodId != null) {
-            addToMapValues(queryParams, "paymentMethodId", List.of(String.valueOf(paymentMethodId)));
+            queryParams.put("paymentMethodId", String.valueOf(paymentMethodId));
         }
         if (controlPluginName != null) {
-            addToMapValues(queryParams, "controlPluginName", controlPluginName);
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
@@ -127,24 +111,24 @@ public class PaymentGatewayApi {
     }
 
     public void processNotification(final String pluginName, final String body, final List<String> controlPluginName, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling processNotification");
-        checkNotNull(body, "Missing the required parameter 'body' when calling processNotification");
+        Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling processNotification");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling processNotification");
 
         final String uri = "/1.0/kb/paymentGateways/notification/{pluginName}"
           .replaceAll("\\{" + "pluginName" + "\\}", pluginName.toString());
 
-        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (controlPluginName != null) {
-            addToMapValues(queryParams, "controlPluginName", controlPluginName);
+            queryParams.putAll("controlPluginName", controlPluginName);
         }
         if (pluginProperty != null) {
-            addToMapValues(queryParams, "pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "*/*");
         final RequestOptions requestOptions = inputOptionsBuilder.build();

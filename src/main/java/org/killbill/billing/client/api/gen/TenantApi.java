@@ -20,10 +20,6 @@
 
 package org.killbill.billing.client.api.gen;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.Tenant;
@@ -38,6 +34,9 @@ import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
 import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
+import org.killbill.billing.client.util.Preconditions;
+import org.killbill.billing.client.util.Multimap;
+import org.killbill.billing.client.util.TreeMapSetMultimap;
 
 /**
  *           DO NOT EDIT !!!
@@ -57,39 +56,24 @@ public class TenantApi {
         this.httpClient = httpClient;
     }
 
-    private <K, V> void addToMapValues(final Map<K, Collection<V>> map, final K key, final Collection<V> values) {
-        if (map.containsKey(key)) {
-            map.get(key).addAll(values);
-        } else {
-            map.put(key, values);
-        }
-    }
-
-    public static <T> T checkNotNull(final T reference, final Object errorMessage) {
-        if (reference == null) {
-            throw new NullPointerException(String.valueOf(errorMessage));
-        }
-        return reference;
-    }
-
     public Tenant createTenant(final Tenant body, final RequestOptions inputOptions) throws KillBillClientException {
         return createTenant(body, Boolean.valueOf(false), inputOptions);
     }
 
     public Tenant createTenant(final Tenant body, final Boolean useGlobalDefault, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(body, "Missing the required parameter 'body' when calling createTenant");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createTenant");
 
         final String uri = "/1.0/kb/tenants";
 
-        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (useGlobalDefault != null) {
-            addToMapValues(queryParams, "useGlobalDefault", List.of(String.valueOf(useGlobalDefault)));
+            queryParams.put("useGlobalDefault", String.valueOf(useGlobalDefault));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
@@ -111,7 +95,7 @@ public class TenantApi {
 
 
     public void deletePluginConfiguration(final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling deletePluginConfiguration");
+        Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling deletePluginConfiguration");
 
         final String uri = "/1.0/kb/tenants/uploadPluginConfig/{pluginName}"
           .replaceAll("\\{" + "pluginName" + "\\}", pluginName.toString());
@@ -125,7 +109,7 @@ public class TenantApi {
 
 
     public void deletePluginPaymentStateMachineConfig(final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling deletePluginPaymentStateMachineConfig");
+        Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling deletePluginPaymentStateMachineConfig");
 
         final String uri = "/1.0/kb/tenants/uploadPluginPaymentStateMachineConfig/{pluginName}"
           .replaceAll("\\{" + "pluginName" + "\\}", pluginName.toString());
@@ -151,7 +135,7 @@ public class TenantApi {
 
 
     public void deleteUserKeyValue(final String keyName, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(keyName, "Missing the required parameter 'keyName' when calling deleteUserKeyValue");
+        Preconditions.checkNotNull(keyName, "Missing the required parameter 'keyName' when calling deleteUserKeyValue");
 
         final String uri = "/1.0/kb/tenants/userKeyValue/{keyName}"
           .replaceAll("\\{" + "keyName" + "\\}", keyName.toString());
@@ -164,7 +148,7 @@ public class TenantApi {
     }
 
     public TenantKeyValues getAllPluginConfiguration(final String keyPrefix, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(keyPrefix, "Missing the required parameter 'keyPrefix' when calling getAllPluginConfiguration");
+        Preconditions.checkNotNull(keyPrefix, "Missing the required parameter 'keyPrefix' when calling getAllPluginConfiguration");
 
         final String uri = "/1.0/kb/tenants/uploadPerTenantConfig/{keyPrefix}/search"
           .replaceAll("\\{" + "keyPrefix" + "\\}", keyPrefix.toString());
@@ -190,7 +174,7 @@ public class TenantApi {
     }
 
     public TenantKeyValue getPluginConfiguration(final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling getPluginConfiguration");
+        Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling getPluginConfiguration");
 
         final String uri = "/1.0/kb/tenants/uploadPluginConfig/{pluginName}"
           .replaceAll("\\{" + "pluginName" + "\\}", pluginName.toString());
@@ -204,7 +188,7 @@ public class TenantApi {
     }
 
     public TenantKeyValue getPluginPaymentStateMachineConfig(final String pluginName, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling getPluginPaymentStateMachineConfig");
+        Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling getPluginPaymentStateMachineConfig");
 
         final String uri = "/1.0/kb/tenants/uploadPluginPaymentStateMachineConfig/{pluginName}"
           .replaceAll("\\{" + "pluginName" + "\\}", pluginName.toString());
@@ -230,7 +214,7 @@ public class TenantApi {
     }
 
     public Tenant getTenant(final UUID tenantId, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(tenantId, "Missing the required parameter 'tenantId' when calling getTenant");
+        Preconditions.checkNotNull(tenantId, "Missing the required parameter 'tenantId' when calling getTenant");
 
         final String uri = "/1.0/kb/tenants/{tenantId}"
           .replaceAll("\\{" + "tenantId" + "\\}", tenantId.toString());
@@ -247,13 +231,13 @@ public class TenantApi {
 
         final String uri = "/1.0/kb/tenants";
 
-        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (apiKey != null) {
-            addToMapValues(queryParams, "apiKey", List.of(String.valueOf(apiKey)));
+            queryParams.put("apiKey", String.valueOf(apiKey));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
@@ -261,7 +245,7 @@ public class TenantApi {
     }
 
     public TenantKeyValue getUserKeyValue(final String keyName, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(keyName, "Missing the required parameter 'keyName' when calling getUserKeyValue");
+        Preconditions.checkNotNull(keyName, "Missing the required parameter 'keyName' when calling getUserKeyValue");
 
         final String uri = "/1.0/kb/tenants/userKeyValue/{keyName}"
           .replaceAll("\\{" + "keyName" + "\\}", keyName.toString());
@@ -275,8 +259,8 @@ public class TenantApi {
     }
 
     public TenantKeyValue insertUserKeyValue(final String keyName, final String body, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(keyName, "Missing the required parameter 'keyName' when calling insertUserKeyValue");
-        checkNotNull(body, "Missing the required parameter 'body' when calling insertUserKeyValue");
+        Preconditions.checkNotNull(keyName, "Missing the required parameter 'keyName' when calling insertUserKeyValue");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling insertUserKeyValue");
 
         final String uri = "/1.0/kb/tenants/userKeyValue/{keyName}"
           .replaceAll("\\{" + "keyName" + "\\}", keyName.toString());
@@ -296,15 +280,15 @@ public class TenantApi {
 
         final String uri = "/1.0/kb/tenants/registerNotificationCallback";
 
-        final Map<String, Collection<String>> queryParams = new HashMap<>(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (cb != null) {
-            addToMapValues(queryParams, "cb", List.of(String.valueOf(cb)));
+            queryParams.put("cb", String.valueOf(cb));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
@@ -313,7 +297,7 @@ public class TenantApi {
     }
 
     public TenantKeyValue uploadPerTenantConfiguration(final String body, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(body, "Missing the required parameter 'body' when calling uploadPerTenantConfiguration");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadPerTenantConfiguration");
 
         final String uri = "/1.0/kb/tenants/uploadPerTenantConfig";
 
@@ -329,8 +313,8 @@ public class TenantApi {
     }
 
     public TenantKeyValue uploadPluginConfiguration(final String pluginName, final String body, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling uploadPluginConfiguration");
-        checkNotNull(body, "Missing the required parameter 'body' when calling uploadPluginConfiguration");
+        Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling uploadPluginConfiguration");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadPluginConfiguration");
 
         final String uri = "/1.0/kb/tenants/uploadPluginConfig/{pluginName}"
           .replaceAll("\\{" + "pluginName" + "\\}", pluginName.toString());
@@ -347,8 +331,8 @@ public class TenantApi {
     }
 
     public TenantKeyValue uploadPluginPaymentStateMachineConfig(final String pluginName, final String body, final RequestOptions inputOptions) throws KillBillClientException {
-        checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling uploadPluginPaymentStateMachineConfig");
-        checkNotNull(body, "Missing the required parameter 'body' when calling uploadPluginPaymentStateMachineConfig");
+        Preconditions.checkNotNull(pluginName, "Missing the required parameter 'pluginName' when calling uploadPluginPaymentStateMachineConfig");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadPluginPaymentStateMachineConfig");
 
         final String uri = "/1.0/kb/tenants/uploadPluginPaymentStateMachineConfig/{pluginName}"
           .replaceAll("\\{" + "pluginName" + "\\}", pluginName.toString());
