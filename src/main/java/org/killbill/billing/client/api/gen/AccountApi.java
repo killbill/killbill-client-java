@@ -705,10 +705,10 @@ public class AccountApi {
     }
 
     public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final LocalDate endDate, final String invoicesFilter, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoicesForAccount(accountId, startDate, endDate, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), invoicesFilter, AuditLevel.NONE, inputOptions);
+        return getInvoicesForAccount(accountId, startDate, endDate, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), invoicesFilter, AuditLevel.NONE, inputOptions);
     }
 
-    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final LocalDate endDate, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final String invoicesFilter, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+    public Invoices getInvoicesForAccount(final UUID accountId, final LocalDate startDate, final LocalDate endDate, final Boolean withMigrationInvoices, final Boolean unpaidInvoicesOnly, final Boolean includeVoidedInvoices, final Boolean withInvoiceItems, final String invoicesFilter, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicesForAccount");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoices"
@@ -729,6 +729,9 @@ public class AccountApi {
         }
         if (includeVoidedInvoices != null) {
             queryParams.put("includeVoidedInvoices", String.valueOf(includeVoidedInvoices));
+        }
+        if (withInvoiceItems != null) {
+            queryParams.put("withInvoiceItems", String.valueOf(withInvoiceItems));
         }
         if (invoicesFilter != null) {
             queryParams.put("invoicesFilter", String.valueOf(invoicesFilter));
