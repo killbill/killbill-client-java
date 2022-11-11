@@ -68,6 +68,8 @@ public class InvoiceDryRun {
 
     private List<PhasePrice> priceOverrides = null;
 
+    private String planName = null;
+
 
     public InvoiceDryRun() {
     }
@@ -83,7 +85,8 @@ public class InvoiceDryRun {
                      final UUID bundleId,
                      final LocalDate effectiveDate,
                      final BillingActionPolicy billingPolicy,
-                     final List<PhasePrice> priceOverrides) {
+                     final List<PhasePrice> priceOverrides,
+                     final String planName) {
         this.dryRunType = dryRunType;
         this.dryRunAction = dryRunAction;
         this.phaseType = phaseType;
@@ -96,6 +99,7 @@ public class InvoiceDryRun {
         this.effectiveDate = effectiveDate;
         this.billingPolicy = billingPolicy;
         this.priceOverrides = priceOverrides;
+        this.planName = planName;
 
     }
 
@@ -216,6 +220,15 @@ public class InvoiceDryRun {
         return priceOverrides;
     }
 
+    public InvoiceDryRun setPlanName(final String planName) {
+        this.planName = planName;
+        return this;
+    }
+
+    public String getPlanName() {
+        return planName;
+    }
+
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -236,7 +249,8 @@ public class InvoiceDryRun {
             Objects.equals(this.bundleId, invoiceDryRun.bundleId) &&
             Objects.equals(this.effectiveDate, invoiceDryRun.effectiveDate) &&
             Objects.equals(this.billingPolicy, invoiceDryRun.billingPolicy) &&
-            Objects.equals(this.priceOverrides, invoiceDryRun.priceOverrides);
+            Objects.equals(this.priceOverrides, invoiceDryRun.priceOverrides) &&
+            Objects.equals(this.planName, invoiceDryRun.planName);
     }
 
     @Override
@@ -252,7 +266,8 @@ public class InvoiceDryRun {
             bundleId,
             effectiveDate,
             billingPolicy,
-            priceOverrides);
+            priceOverrides,
+            planName);
     }
 
     @Override
@@ -272,6 +287,7 @@ public class InvoiceDryRun {
         sb.append("    effectiveDate: ").append(toIndentedString(effectiveDate)).append("\n");
         sb.append("    billingPolicy: ").append(toIndentedString(billingPolicy)).append("\n");
         sb.append("    priceOverrides: ").append(toIndentedString(priceOverrides)).append("\n");
+        sb.append("    planName: ").append(toIndentedString(planName)).append("\n");
         sb.append("}");
         return sb.toString();
     }
