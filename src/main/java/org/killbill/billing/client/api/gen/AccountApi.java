@@ -376,6 +376,35 @@ public class AccountApi {
         return httpClient.doGet(uri, Bundles.class, requestOptions);
     }
 
+    public Bundles getAccountBundlesPaginated(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getAccountBundlesPaginated(accountId, Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
+    }
+
+    public Bundles getAccountBundlesPaginated(final UUID accountId, final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getAccountBundlesPaginated");
+
+        final String uri = "/1.0/kb/accounts/{accountId}/bundles/pagination"
+          .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
+
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
+        if (offset != null) {
+            queryParams.put("offset", String.valueOf(offset));
+        }
+        if (limit != null) {
+            queryParams.put("limit", String.valueOf(limit));
+        }
+        if (audit != null) {
+            queryParams.put("audit", String.valueOf(audit));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        return httpClient.doGet(uri, Bundles.class, requestOptions);
+    }
+
     public Account getAccountByKey(final String externalKey, final RequestOptions inputOptions) throws KillBillClientException {
         return getAccountByKey(externalKey, Boolean.valueOf(false), Boolean.valueOf(false), AuditLevel.NONE, inputOptions);
     }
@@ -748,12 +777,12 @@ public class AccountApi {
         return httpClient.doGet(uri, Invoices.class, requestOptions);
     }
 
-    public Invoices getInvoicesForAccountWithPagination(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
-        return getInvoicesForAccountWithPagination(accountId, Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
+    public Invoices getInvoicesForAccountPaginated(final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoicesForAccountPaginated(accountId, Long.valueOf(0), Long.valueOf(100), AuditLevel.NONE, inputOptions);
     }
 
-    public Invoices getInvoicesForAccountWithPagination(final UUID accountId, final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
-        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicesForAccountWithPagination");
+    public Invoices getInvoicesForAccountPaginated(final UUID accountId, final Long offset, final Long limit, final AuditLevel audit, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(accountId, "Missing the required parameter 'accountId' when calling getInvoicesForAccountPaginated");
 
         final String uri = "/1.0/kb/accounts/{accountId}/invoices/pagination"
           .replaceAll("\\{" + "accountId" + "\\}", accountId.toString());
