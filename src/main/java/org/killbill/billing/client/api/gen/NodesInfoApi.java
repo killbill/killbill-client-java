@@ -23,8 +23,8 @@ package org.killbill.billing.client.api.gen;
 import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.NodeCommand;
-import org.killbill.billing.client.model.gen.PluginInfo;
-import org.killbill.billing.client.model.PluginInfos;
+import org.killbill.billing.client.model.gen.NodeInfo;
+import org.killbill.billing.client.model.NodeInfos;
 import java.util.List;
 
 import org.killbill.billing.client.Converter;
@@ -55,7 +55,7 @@ public class NodesInfoApi {
         this.httpClient = httpClient;
     }
 
-    public PluginInfos getNodesInfo(final RequestOptions inputOptions) throws KillBillClientException {
+    public NodeInfos getNodesInfo(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/nodesInfo";
 
@@ -64,7 +64,7 @@ public class NodesInfoApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, PluginInfos.class, requestOptions);
+        return httpClient.doGet(uri, NodeInfos.class, requestOptions);
     }
 
     public void triggerNodeCommand(final NodeCommand body, final RequestOptions inputOptions) throws KillBillClientException {
