@@ -796,4 +796,32 @@ public class SubscriptionApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
+    public void updateSubscriptionQuantity(final UUID subscriptionId, final Subscription body, final LocalDate effectiveFromDate, final RequestOptions inputOptions) throws KillBillClientException {
+        updateSubscriptionQuantity(subscriptionId, body, effectiveFromDate, Boolean.valueOf(false), inputOptions);
+    }
+
+    public void updateSubscriptionQuantity(final UUID subscriptionId, final Subscription body, final LocalDate effectiveFromDate, final Boolean forceNewQuantityWithPastEffectiveDate, final RequestOptions inputOptions) throws KillBillClientException {
+        Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling updateSubscriptionQuantity");
+        Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling updateSubscriptionQuantity");
+
+        final String uri = "/1.0/kb/subscriptions/{subscriptionId}/quantity"
+          .replaceAll("\\{" + "subscriptionId" + "\\}", subscriptionId.toString());
+
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
+        if (effectiveFromDate != null) {
+            queryParams.put("effectiveFromDate", String.valueOf(effectiveFromDate));
+        }
+        if (forceNewQuantityWithPastEffectiveDate != null) {
+            queryParams.put("forceNewQuantityWithPastEffectiveDate", String.valueOf(forceNewQuantityWithPastEffectiveDate));
+        }
+
+        final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
+        final RequestOptions requestOptions = inputOptionsBuilder.build();
+
+        httpClient.doPut(uri, body, requestOptions);
+    }
+
 }
