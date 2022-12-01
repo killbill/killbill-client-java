@@ -23,6 +23,7 @@ package org.killbill.billing.client.api.gen;
 import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.Catalog;
+import org.killbill.billing.client.model.gen.CatalogValidation;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.killbill.billing.client.model.gen.Phase;
@@ -285,7 +286,7 @@ public class CatalogApi {
         return httpClient.doPost(uri, body, String.class, requestOptions);
     }
 
-    public void validateCatalogXml(final String body, final RequestOptions inputOptions) throws KillBillClientException {
+    public CatalogValidation validateCatalogXml(final String body, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling validateCatalogXml");
 
         final String uri = "/1.0/kb/catalog/xml/validate";
@@ -294,10 +295,11 @@ public class CatalogApi {
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
         final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
+        inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "text/xml");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        httpClient.doPost(uri, body, requestOptions);
+        return httpClient.doPost(uri, body, CatalogValidation.class, requestOptions);
     }
 
 }
