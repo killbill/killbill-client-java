@@ -84,6 +84,8 @@ public class Subscription extends KillBillObject {
 
     private Integer billCycleDayLocal = null;
 
+    private Integer quantity = null;
+
     private List<EventSubscription> events = null;
 
     private List<PhasePrice> priceOverrides = null;
@@ -114,6 +116,7 @@ public class Subscription extends KillBillObject {
                      final DateTime billingStartDate,
                      final DateTime billingEndDate,
                      final Integer billCycleDayLocal,
+                     final Integer quantity,
                      final List<EventSubscription> events,
                      final List<PhasePrice> priceOverrides,
                      final List<PhasePrice> prices,
@@ -138,6 +141,7 @@ public class Subscription extends KillBillObject {
         this.billingStartDate = billingStartDate;
         this.billingEndDate = billingEndDate;
         this.billCycleDayLocal = billCycleDayLocal;
+        this.quantity = quantity;
         this.events = events;
         this.priceOverrides = priceOverrides;
         this.prices = prices;
@@ -316,6 +320,15 @@ public class Subscription extends KillBillObject {
         return billCycleDayLocal;
     }
 
+    public Subscription setQuantity(final Integer quantity) {
+        this.quantity = quantity;
+        return this;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
     public Subscription setEvents(final List<EventSubscription> events) {
         this.events = events;
         return this;
@@ -395,6 +408,7 @@ public class Subscription extends KillBillObject {
             Objects.equals(this.billingStartDate, subscription.billingStartDate) &&
             Objects.equals(this.billingEndDate, subscription.billingEndDate) &&
             Objects.equals(this.billCycleDayLocal, subscription.billCycleDayLocal) &&
+            Objects.equals(this.quantity, subscription.quantity) &&
             Objects.equals(this.events, subscription.events) &&
             Objects.equals(this.priceOverrides, subscription.priceOverrides) &&
             Objects.equals(this.prices, subscription.prices) &&
@@ -422,6 +436,7 @@ public class Subscription extends KillBillObject {
             billingStartDate,
             billingEndDate,
             billCycleDayLocal,
+            quantity,
             events,
             priceOverrides,
             prices,
@@ -452,6 +467,7 @@ public class Subscription extends KillBillObject {
         sb.append("    billingStartDate: ").append(toIndentedString(billingStartDate)).append("\n");
         sb.append("    billingEndDate: ").append(toIndentedString(billingEndDate)).append("\n");
         sb.append("    billCycleDayLocal: ").append(toIndentedString(billCycleDayLocal)).append("\n");
+        sb.append("    quantity: ").append(toIndentedString(quantity)).append("\n");
         sb.append("    events: ").append(toIndentedString(events)).append("\n");
         sb.append("    priceOverrides: ").append(toIndentedString(priceOverrides)).append("\n");
         sb.append("    prices: ").append(toIndentedString(prices)).append("\n");
