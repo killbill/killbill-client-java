@@ -43,6 +43,7 @@
     <properties>
         <check.fail-spotbugs>true</check.fail-spotbugs>
         <check.spotbugs-exclude-filter-file>spotbugs-exclude.xml</check.spotbugs-exclude-filter-file>
+        <killbill-api.version>0.54.0-ded8ade-SNAPSHOT</killbill-api.version>
     </properties>
     <dependencies>
         <dependency>
