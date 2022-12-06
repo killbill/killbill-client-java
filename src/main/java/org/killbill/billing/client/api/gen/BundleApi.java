@@ -39,6 +39,7 @@ import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.Bundles;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
+import org.killbill.billing.entitlement.api.BcdTransfer;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -444,10 +445,10 @@ public class BundleApi {
     }
 
     public Bundle transferBundle(final UUID bundleId, final Bundle body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        return transferBundle(bundleId, body, requestedDate, BillingActionPolicy.END_OF_TERM, pluginProperty, inputOptions);
+        return transferBundle(bundleId, body, requestedDate, BillingActionPolicy.END_OF_TERM, BcdTransfer.USE_EXISTING, pluginProperty, inputOptions);
     }
 
-    public Bundle transferBundle(final UUID bundleId, final Bundle body, final LocalDate requestedDate, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle transferBundle(final UUID bundleId, final Bundle body, final LocalDate requestedDate, final BillingActionPolicy billingPolicy, final BcdTransfer bcdTransfer, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling transferBundle");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling transferBundle");
 
@@ -460,6 +461,9 @@ public class BundleApi {
         }
         if (billingPolicy != null) {
             queryParams.put("billingPolicy", String.valueOf(billingPolicy));
+        }
+        if (bcdTransfer != null) {
+            queryParams.put("bcdTransfer", String.valueOf(bcdTransfer));
         }
         if (pluginProperty != null) {
             queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
