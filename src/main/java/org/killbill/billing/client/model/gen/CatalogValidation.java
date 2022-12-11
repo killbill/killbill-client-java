@@ -22,7 +22,9 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import org.killbill.billing.client.model.gen.CatalogValidationError;
 
 /**
  *           DO NOT EDIT !!!
@@ -32,66 +34,35 @@ import java.math.BigDecimal;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class BlockPrice {
+public class CatalogValidation {
 
-    private String unitName = null;
-
-    private BigDecimal size = null;
-
-    private BigDecimal price = null;
-
-    private BigDecimal max = null;
+    private List<CatalogValidationError> catalogValidationErrors = null;
 
 
-    public BlockPrice() {
+    public CatalogValidation() {
     }
 
-    public BlockPrice(final String unitName,
-                     final BigDecimal size,
-                     final BigDecimal price,
-                     final BigDecimal max) {
-        this.unitName = unitName;
-        this.size = size;
-        this.price = price;
-        this.max = max;
+    public CatalogValidation(final List<CatalogValidationError> catalogValidationErrors) {
+        this.catalogValidationErrors = catalogValidationErrors;
 
     }
 
 
-    public BlockPrice setUnitName(final String unitName) {
-        this.unitName = unitName;
+    public CatalogValidation setCatalogValidationErrors(final List<CatalogValidationError> catalogValidationErrors) {
+        this.catalogValidationErrors = catalogValidationErrors;
         return this;
     }
 
-    public String getUnitName() {
-        return unitName;
-    }
-
-    public BlockPrice setSize(final BigDecimal size) {
-        this.size = size;
+    public CatalogValidation addCatalogValidationErrorsItem(final CatalogValidationError catalogValidationErrorsItem) {
+        if (this.catalogValidationErrors == null) {
+            this.catalogValidationErrors = new ArrayList<CatalogValidationError>();
+        }
+        this.catalogValidationErrors.add(catalogValidationErrorsItem);
         return this;
     }
 
-    public BigDecimal getSize() {
-        return size;
-    }
-
-    public BlockPrice setPrice(final BigDecimal price) {
-        this.price = price;
-        return this;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public BlockPrice setMax(final BigDecimal max) {
-        this.max = max;
-        return this;
-    }
-
-    public BigDecimal getMax() {
-        return max;
+    public List<CatalogValidationError> getCatalogValidationErrors() {
+        return catalogValidationErrors;
     }
 
     @Override
@@ -102,30 +73,21 @@ public class BlockPrice {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        BlockPrice blockPrice = (BlockPrice) o;
-        return Objects.equals(this.unitName, blockPrice.unitName) &&
-            Objects.equals(this.size, blockPrice.size) &&
-            Objects.equals(this.price, blockPrice.price) &&
-            Objects.equals(this.max, blockPrice.max);
+        CatalogValidation catalogValidation = (CatalogValidation) o;
+        return Objects.equals(this.catalogValidationErrors, catalogValidation.catalogValidationErrors);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(unitName,
-            size,
-            price,
-            max);
+        return Objects.hash(catalogValidationErrors);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class BlockPrice {\n");
+        sb.append("class CatalogValidation {\n");
         
-        sb.append("    unitName: ").append(toIndentedString(unitName)).append("\n");
-        sb.append("    size: ").append(toIndentedString(size)).append("\n");
-        sb.append("    price: ").append(toIndentedString(price)).append("\n");
-        sb.append("    max: ").append(toIndentedString(max)).append("\n");
+        sb.append("    catalogValidationErrors: ").append(toIndentedString(catalogValidationErrors)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -20,16 +20,14 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.AdminPayment;
 import java.util.UUID;
+import java.io.InputStream;
 import java.io.OutputStream;
-import org.asynchttpclient.Response;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
+import java.net.http.HttpResponse;
+import java.util.Map;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -37,6 +35,9 @@ import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
 import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
+import org.killbill.billing.client.util.Preconditions;
+import org.killbill.billing.client.util.Multimap;
+import org.killbill.billing.client.util.TreeMapSetMultimap;
 
 /**
  *           DO NOT EDIT !!!
@@ -64,7 +65,7 @@ public class AdminApi {
 
         final String uri = "/1.0/kb/admin/queues";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (accountId != null) {
             queryParams.put("accountId", String.valueOf(accountId));
         }
@@ -94,12 +95,12 @@ public class AdminApi {
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/octet-stream");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        final Response response = httpClient.doGet(uri, outputStream, requestOptions);
-        return response.getStatusCode();
+        final HttpResponse<InputStream> response = httpClient.doGet(uri, outputStream, requestOptions);
+        return response.statusCode();
     }
 
 
@@ -107,13 +108,13 @@ public class AdminApi {
 
         final String uri = "/1.0/kb/admin/cache";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (cacheName != null) {
             queryParams.put("cacheName", String.valueOf(cacheName));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
@@ -173,26 +174,29 @@ public class AdminApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public void triggerInvoiceGenerationForParkedAccounts(final RequestOptions inputOptions) throws KillBillClientException {
-        triggerInvoiceGenerationForParkedAccounts(Long.valueOf(0), Long.valueOf(100), inputOptions);
+    public void triggerInvoiceGenerationForParkedAccounts(final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        triggerInvoiceGenerationForParkedAccounts(Long.valueOf(0), Long.valueOf(100), pluginProperty, inputOptions);
     }
 
-    public void triggerInvoiceGenerationForParkedAccounts(final Long offset, final Long limit, final RequestOptions inputOptions) throws KillBillClientException {
+    public void triggerInvoiceGenerationForParkedAccounts(final Long offset, final Long limit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/admin/invoices";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (offset != null) {
             queryParams.put("offset", String.valueOf(offset));
         }
         if (limit != null) {
             queryParams.put("limit", String.valueOf(limit));
         }
+        if (pluginProperty != null) {
+            queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();

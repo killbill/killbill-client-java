@@ -20,15 +20,12 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Objects;
 
 import java.util.UUID;
+import java.io.InputStream;
 import java.io.OutputStream;
-import org.asynchttpclient.Response;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
+import java.net.http.HttpResponse;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -36,6 +33,9 @@ import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
 import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
+import org.killbill.billing.client.util.Preconditions;
+import org.killbill.billing.client.util.Multimap;
+import org.killbill.billing.client.util.TreeMapSetMultimap;
 
 /**
  *           DO NOT EDIT !!!
@@ -66,8 +66,8 @@ public class ExportApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/octet-stream");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        final Response response = httpClient.doGet(uri, outputStream, requestOptions);
-        return response.getStatusCode();
+        final HttpResponse<InputStream> response = httpClient.doGet(uri, outputStream, requestOptions);
+        return response.statusCode();
     }
 
 }

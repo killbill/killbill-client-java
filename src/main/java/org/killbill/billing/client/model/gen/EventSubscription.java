@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.entitlement.api.SubscriptionEventType;
@@ -45,7 +45,9 @@ public class EventSubscription extends KillBillObject {
 
     private BillingPeriod billingPeriod = null;
 
-    private LocalDate effectiveDate = null;
+    private DateTime effectiveDate = null;
+    
+    private DateTime catalogEffectiveDate = null;
 
     private String plan = null;
 
@@ -72,7 +74,8 @@ public class EventSubscription extends KillBillObject {
 
     public EventSubscription(final UUID eventId,
                      final BillingPeriod billingPeriod,
-                     final LocalDate effectiveDate,
+                     final DateTime effectiveDate,
+                     final DateTime catalogEffectiveDate,
                      final String plan,
                      final String product,
                      final String priceList,
@@ -87,6 +90,7 @@ public class EventSubscription extends KillBillObject {
         this.eventId = eventId;
         this.billingPeriod = billingPeriod;
         this.effectiveDate = effectiveDate;
+        this.catalogEffectiveDate = catalogEffectiveDate;
         this.plan = plan;
         this.product = product;
         this.priceList = priceList;
@@ -118,16 +122,24 @@ public class EventSubscription extends KillBillObject {
         return billingPeriod;
     }
 
-    public EventSubscription setEffectiveDate(final LocalDate effectiveDate) {
+    public EventSubscription setEffectiveDate(final DateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    public LocalDate getEffectiveDate() {
+    public DateTime getEffectiveDate() {
         return effectiveDate;
     }
 
-    public EventSubscription setPlan(final String plan) {
+    public DateTime getCatalogEffectiveDate() {
+		return catalogEffectiveDate;
+	}
+
+	public void setCatalogEffectiveDate(DateTime catalogEffectiveDate) {
+		this.catalogEffectiveDate = catalogEffectiveDate;
+	}
+
+	public EventSubscription setPlan(final String plan) {
         this.plan = plan;
         return this;
     }
@@ -222,6 +234,7 @@ public class EventSubscription extends KillBillObject {
         return Objects.equals(this.eventId, eventSubscription.eventId) &&
             Objects.equals(this.billingPeriod, eventSubscription.billingPeriod) &&
             Objects.equals(this.effectiveDate, eventSubscription.effectiveDate) &&
+            Objects.equals(this.catalogEffectiveDate, eventSubscription.catalogEffectiveDate) &&
             Objects.equals(this.plan, eventSubscription.plan) &&
             Objects.equals(this.product, eventSubscription.product) &&
             Objects.equals(this.priceList, eventSubscription.priceList) &&
@@ -239,6 +252,7 @@ public class EventSubscription extends KillBillObject {
         return Objects.hash(eventId,
             billingPeriod,
             effectiveDate,
+            catalogEffectiveDate,
             plan,
             product,
             priceList,
@@ -259,6 +273,7 @@ public class EventSubscription extends KillBillObject {
         sb.append("    eventId: ").append(toIndentedString(eventId)).append("\n");
         sb.append("    billingPeriod: ").append(toIndentedString(billingPeriod)).append("\n");
         sb.append("    effectiveDate: ").append(toIndentedString(effectiveDate)).append("\n");
+        sb.append("    catalogEffectiveDate: ").append(toIndentedString(catalogEffectiveDate)).append("\n");
         sb.append("    plan: ").append(toIndentedString(plan)).append("\n");
         sb.append("    product: ").append(toIndentedString(product)).append("\n");
         sb.append("    priceList: ").append(toIndentedString(priceList)).append("\n");

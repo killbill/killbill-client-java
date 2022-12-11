@@ -20,16 +20,12 @@
 
 package org.killbill.billing.client.api.gen;
 
+import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.NodeCommand;
-import org.killbill.billing.client.model.gen.PluginInfo;
-import org.killbill.billing.client.model.PluginInfos;
+import org.killbill.billing.client.model.gen.NodeInfo;
+import org.killbill.billing.client.model.NodeInfos;
 import java.util.List;
-
-import com.google.common.collect.Multimap;
-import com.google.common.base.Preconditions;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.LinkedListMultimap;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -37,6 +33,9 @@ import org.killbill.billing.client.KillBillHttpClient;
 import org.killbill.billing.client.RequestOptions;
 import org.killbill.billing.client.RequestOptions.RequestOptionsBuilder;
 
+import org.killbill.billing.client.util.Preconditions;
+import org.killbill.billing.client.util.Multimap;
+import org.killbill.billing.client.util.TreeMapSetMultimap;
 
 /**
  *           DO NOT EDIT !!!
@@ -56,7 +55,7 @@ public class NodesInfoApi {
         this.httpClient = httpClient;
     }
 
-    public PluginInfos getNodesInfo(final RequestOptions inputOptions) throws KillBillClientException {
+    public NodeInfos getNodesInfo(final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/nodesInfo";
 
@@ -65,7 +64,7 @@ public class NodesInfoApi {
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
-        return httpClient.doGet(uri, PluginInfos.class, requestOptions);
+        return httpClient.doGet(uri, NodeInfos.class, requestOptions);
     }
 
     public void triggerNodeCommand(final NodeCommand body, final RequestOptions inputOptions) throws KillBillClientException {
@@ -77,15 +76,15 @@ public class NodesInfoApi {
 
         final String uri = "/1.0/kb/nodesInfo";
 
-        final Multimap<String, String> queryParams = LinkedListMultimap.create(inputOptions.getQueryParams());
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (localNodeOnly != null) {
             queryParams.put("localNodeOnly", String.valueOf(localNodeOnly));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
-        final Boolean followLocation = MoreObjects.firstNonNull(inputOptions.getFollowLocation(), Boolean.TRUE);
+        final Boolean followLocation = Objects.requireNonNullElse(inputOptions.getFollowLocation(), Boolean.TRUE);
         inputOptionsBuilder.withFollowLocation(followLocation);
-        inputOptionsBuilder.withQueryParams(queryParams);
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "application/json");
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_CONTENT_TYPE, "application/json");
         final RequestOptions requestOptions = inputOptionsBuilder.build();

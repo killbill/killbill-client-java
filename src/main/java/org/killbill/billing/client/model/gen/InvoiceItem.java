@@ -87,7 +87,7 @@ public class InvoiceItem extends KillBillObject {
 
     private Currency currency = null;
 
-    private Integer quantity = null;
+    private BigDecimal quantity = null;
 
     private String itemDetails = null;
 
@@ -122,7 +122,7 @@ public class InvoiceItem extends KillBillObject {
                      final BigDecimal amount,
                      final BigDecimal rate,
                      final Currency currency,
-                     final Integer quantity,
+                     final BigDecimal quantity,
                      final String itemDetails,
                      final DateTime catalogEffectiveDate,
                      final List<InvoiceItem> childItems,
@@ -356,12 +356,12 @@ public class InvoiceItem extends KillBillObject {
         return currency;
     }
 
-    public InvoiceItem setQuantity(final Integer quantity) {
+    public InvoiceItem setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
         return this;
     }
 
-    public Integer getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 

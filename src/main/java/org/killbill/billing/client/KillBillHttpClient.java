@@ -1,8 +1,8 @@
 /*
  * Copyright 2010-2014 Ning, Inc.
  * Copyright 2014-2020 Groupon, Inc
- * Copyright 2020-2020 Equinix, Inc
- * Copyright 2014-2020 The Billing Project, LLC
+ * Copyright 2020-2022 Equinix, Inc
+ * Copyright 2014-2022 The Billing Project, LLC
  *
  * The Billing Project licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -25,43 +25,41 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.InetSocketAddress;
+import java.net.ProxySelector;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutionException;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
-import com.google.common.annotations.VisibleForTesting;
-
-import org.asynchttpclient.DefaultAsyncHttpClient;
-import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 import org.killbill.billing.client.model.KillBillObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.asynchttpclient.AsyncCompletionHandler;
-import org.asynchttpclient.AsyncHandler;
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.BoundRequestBuilder;
-import org.asynchttpclient.handler.BodyDeferringAsyncHandler;
-import org.asynchttpclient.ListenableFuture;
-import org.asynchttpclient.proxy.ProxyServer;
-import org.asynchttpclient.Realm;
-import org.asynchttpclient.Response;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 
 public class KillBillHttpClient implements Closeable {
 
     public static final int DEFAULT_HTTP_TIMEOUT_SEC = 10;
 
-    public static final Multimap<String, String> DEFAULT_EMPTY_QUERY = ImmutableMultimap.<String, String>of();
+    public static final Map<String, Collection<String>> DEFAULT_EMPTY_QUERY = Collections.emptyMap();
     public static final String AUDIT_OPTION_CREATED_BY = "__AUDIT_OPTION_CREATED_BY";
     public static final String AUDIT_OPTION_REASON = "__AUDIT_OPTION_REASON";
     public static final String AUDIT_OPTION_COMMENT = "__AUDIT_OPTION_COMMENT";
@@ -91,9 +89,9 @@ public class KillBillHttpClient implements Closeable {
     private final String password;
     private final String apiKey;
     private final String apiSecret;
-    private final AsyncHttpClient httpClient;
+    private final HttpClient httpClient;
     private final ObjectMapper mapper;
-    private final int requestTimeoutSec;
+    private final int defaultReadTimeoutSec;
 
     /**
      * @param kbServerUrl    Kill Bill url
@@ -105,7 +103,6 @@ public class KillBillHttpClient implements Closeable {
      * @param proxyPort      port number of a proxy server that the client should use
      * @param connectTimeOut connect timeout in milliseconds
      * @param readTimeOut    read timeout in milliseconds
-     * @param requestTimeout request timeout in milliseconds
      */
     public KillBillHttpClient(final String kbServerUrl,
                               final String username,
@@ -115,9 +112,8 @@ public class KillBillHttpClient implements Closeable {
                               final String proxyHost,
                               final Integer proxyPort,
                               final Integer connectTimeOut,
-                              final Integer readTimeOut,
-                              final Integer requestTimeout) {
-        this(kbServerUrl, username, password, apiKey, apiSecret, proxyHost, proxyPort, connectTimeOut, readTimeOut, requestTimeout, null, null);
+                              final Integer readTimeOut) {
+        this(kbServerUrl, username, password, apiKey, apiSecret, proxyHost, proxyPort, connectTimeOut, readTimeOut, true, null);
     }
 
     /**
@@ -130,7 +126,6 @@ public class KillBillHttpClient implements Closeable {
      * @param proxyPort      port number of a proxy server that the client should use
      * @param connectTimeOut connect timeout in milliseconds
      * @param readTimeOut    read timeout in milliseconds
-     * @param requestTimeout request timeout in milliseconds
      * @param strictSSL      whether to bypass SSL certificates validation
      * @param SSLProtocol    SSL protocol to use
      */
@@ -143,7 +138,6 @@ public class KillBillHttpClient implements Closeable {
                               final Integer proxyPort,
                               final Integer connectTimeOut,
                               final Integer readTimeOut,
-                              final Integer requestTimeout,
                               final Boolean strictSSL,
                               final String SSLProtocol) {
         this.kbServerUrl = kbServerUrl;
@@ -152,45 +146,41 @@ public class KillBillHttpClient implements Closeable {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
 
-        final DefaultAsyncHttpClientConfig.Builder cfg = new DefaultAsyncHttpClientConfig.Builder();
-
-        if (requestTimeout != null) {
-            cfg.setRequestTimeout(requestTimeout);
-            int timeoutSec = (int) TimeUnit.MILLISECONDS.toSeconds(requestTimeout);
-            if (TimeUnit.SECONDS.toMillis(timeoutSec) != requestTimeout) {
-                timeoutSec += 1;
-            }
-            requestTimeoutSec = timeoutSec;
-        } else {
-            cfg.setRequestTimeout(DEFAULT_HTTP_TIMEOUT_SEC * 1000);
-            requestTimeoutSec = DEFAULT_HTTP_TIMEOUT_SEC;
+        final HttpClient.Builder builder;
+        try {
+            builder = HttpClient.newBuilder()
+                                .sslContext(SslUtils.getInstance().getSSLContext(!strictSSL, SSLProtocol))
+                                .connectTimeout(Duration.of(Objects.requireNonNullElse(connectTimeOut, DEFAULT_HTTP_TIMEOUT_SEC * 1000), ChronoUnit.MILLIS));
+        } catch (final GeneralSecurityException e) {
+            throw new RuntimeException(e);
         }
-
-        cfg.setConnectTimeout(MoreObjects.firstNonNull(connectTimeOut, DEFAULT_HTTP_TIMEOUT_SEC * 1000));
-        cfg.setReadTimeout(MoreObjects.firstNonNull(readTimeOut, DEFAULT_HTTP_TIMEOUT_SEC * 1000));
-        cfg.setUserAgent(USER_AGENT);
 
         if (proxyHost != null && proxyPort != null) {
-            final ProxyServer proxyServer = new ProxyServer.Builder(proxyHost, proxyPort).build();
-            cfg.setProxyServer(proxyServer);
+            builder.proxy(ProxySelector.of(new InetSocketAddress(proxyHost, proxyPort)));
         }
 
-        if (strictSSL != null) {
-            cfg.setUseInsecureTrustManager(!strictSSL);
-        }
+        httpClient = builder.build();
 
-        this.httpClient = new DefaultAsyncHttpClient(cfg.build());
+        if (readTimeOut != null) {
+            int timeoutSec = (int) TimeUnit.MILLISECONDS.toSeconds(readTimeOut);
+            if (TimeUnit.SECONDS.toMillis(timeoutSec) != readTimeOut) {
+                timeoutSec += 1;
+            }
+            this.defaultReadTimeoutSec = timeoutSec;
+        } else {
+            this.defaultReadTimeoutSec = DEFAULT_HTTP_TIMEOUT_SEC;
+        }
 
         mapper = new ObjectMapper();
         mapper.registerModule(new JodaModule());
     }
 
     public KillBillHttpClient(final String kbServerUrl, final String username, final String password, final String apiKey, final String apiSecret) {
-        this(kbServerUrl, username, password, apiKey, apiSecret, null, null, null, null, null);
+        this(kbServerUrl, username, password, apiKey, apiSecret, null, null, null, null);
     }
 
     public KillBillHttpClient(final String kbServerUrl, final String username, final String password, final String apiKey, final String apiSecret, final String proxyHost, final Integer proxyPort) {
-        this(kbServerUrl, username, password, apiKey, apiSecret, proxyHost, proxyPort, null, null, null);
+        this(kbServerUrl, username, password, apiKey, apiSecret, proxyHost, proxyPort, null, null);
     }
 
     public KillBillHttpClient() {
@@ -202,17 +192,17 @@ public class KillBillHttpClient implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
-        httpClient.close();
+    public void close() {
     }
 
     // POST
-    public Response doPost(final String uri, final Object body, final RequestOptions requestOptions) throws KillBillClientException {
-        return doPost(uri, body, Response.class, requestOptions);
+    @SuppressWarnings("unchecked")
+    public HttpResponse<InputStream> doPost(final String uri, final Object body, final RequestOptions requestOptions) throws KillBillClientException {
+        return doPost(uri, body, HttpResponse.class, requestOptions);
     }
 
     public <T> T doPost(final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions) throws KillBillClientException {
-        return doPost(uri, body, returnClass, requestOptions, this.requestTimeoutSec);
+        return doPost(uri, body, returnClass, requestOptions, this.defaultReadTimeoutSec);
     }
 
     public <T> T doPost(final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
@@ -220,12 +210,13 @@ public class KillBillHttpClient implements Closeable {
         return doPrepareRequest(verb, uri, body, returnClass, requestOptions, timeoutSec);
     }
 
-    public Response doPut(final String uri, final Object body, final RequestOptions options) throws KillBillClientException {
-        return doPut(uri, body, Response.class, options);
+    @SuppressWarnings("unchecked")
+    public HttpResponse<InputStream> doPut(final String uri, final Object body, final RequestOptions options) throws KillBillClientException {
+        return doPut(uri, body, HttpResponse.class, options);
     }
 
     public <T> T doPut(final String uri, final Object body, final Class<T> returnClass, final RequestOptions options) throws KillBillClientException {
-        return doPut(uri, body, returnClass, options, this.requestTimeoutSec);
+        return doPut(uri, body, returnClass, options, this.defaultReadTimeoutSec);
     }
 
     public <T> T doPut(final String uri, final Object body, final Class<T> returnClass, final RequestOptions options, final int timeoutSec) throws KillBillClientException {
@@ -234,16 +225,18 @@ public class KillBillHttpClient implements Closeable {
     }
 
     // DELETE
-    public Response doDelete(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
-        return doDelete(uri, null, Response.class, requestOptions);
+    @SuppressWarnings("unchecked")
+    public HttpResponse<InputStream> doDelete(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
+        return doDelete(uri, null, HttpResponse.class, requestOptions);
     }
 
-    public Response doDelete(final String uri, final Object body, final RequestOptions options) throws KillBillClientException {
-        return doDelete(uri, body, Response.class, options);
+    @SuppressWarnings("unchecked")
+    public HttpResponse<InputStream> doDelete(final String uri, final Object body, final RequestOptions options) throws KillBillClientException {
+        return doDelete(uri, body, HttpResponse.class, options);
     }
 
     public <T> T doDelete(final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions) throws KillBillClientException {
-        return doDelete(uri, body, returnClass, requestOptions, this.requestTimeoutSec);
+        return doDelete(uri, body, returnClass, requestOptions, this.defaultReadTimeoutSec);
     }
 
     public <T> T doDelete(final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
@@ -251,17 +244,19 @@ public class KillBillHttpClient implements Closeable {
         return doPrepareRequest(verb, uri, body, returnClass, requestOptions, timeoutSec);
     }
 
-    public Response doGet(final String uri, final OutputStream outputStream, final RequestOptions requestOptions) throws KillBillClientException {
+    // GET
+    public HttpResponse<InputStream> doGet(final String uri, final OutputStream outputStream, final RequestOptions requestOptions) throws KillBillClientException {
         final String verb = "GET";
-        return doPrepareRequest(verb, uri, null, outputStream, requestOptions, this.requestTimeoutSec);
+        return doPrepareRequest(verb, uri, null, outputStream, requestOptions, this.defaultReadTimeoutSec);
     }
 
-    public Response doGet(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
-        return doGet(uri, Response.class, requestOptions);
+    @SuppressWarnings("unchecked")
+    public HttpResponse<InputStream> doGet(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
+        return doGet(uri, HttpResponse.class, requestOptions);
     }
 
     public <T> T doGet(final String uri, final Class<T> returnClass, final RequestOptions requestOptions) throws KillBillClientException {
-        return doGet(uri, returnClass, requestOptions, this.requestTimeoutSec);
+        return doGet(uri, returnClass, requestOptions, this.defaultReadTimeoutSec);
     }
 
     public <T> T doGet(final String uri, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
@@ -270,28 +265,31 @@ public class KillBillHttpClient implements Closeable {
     }
 
     // HEAD
-    public Response doHead(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
-        return doHead(uri, requestOptions, this.requestTimeoutSec);
+    public HttpResponse<InputStream> doHead(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
+        return doHead(uri, requestOptions, this.defaultReadTimeoutSec);
     }
 
-    public Response doHead(final String uri, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
+    @SuppressWarnings("unchecked")
+    public HttpResponse<InputStream> doHead(final String uri, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
         final String verb = "HEAD";
-        return doPrepareRequest(verb, uri, null, Response.class, requestOptions, timeoutSec);
+        return doPrepareRequest(verb, uri, null, HttpResponse.class, requestOptions, timeoutSec);
     }
 
     // OPTIONS
-    public Response doOptions(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
-        return doOptions(uri, requestOptions, this.requestTimeoutSec);
+    public HttpResponse<InputStream> doOptions(final String uri, final RequestOptions requestOptions) throws KillBillClientException {
+        return doOptions(uri, requestOptions, this.defaultReadTimeoutSec);
     }
 
-    public Response doOptions(final String uri, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
+    @SuppressWarnings("unchecked")
+    public HttpResponse<InputStream> doOptions(final String uri, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
         final String verb = "OPTIONS";
-        return doPrepareRequest(verb, uri, null, Response.class, requestOptions, timeoutSec);
+        return doPrepareRequest(verb, uri, null, HttpResponse.class, requestOptions, timeoutSec);
     }
 
     // COMMON
-    private Response doPrepareRequest(final String verb, final String uri, final Object body, final OutputStream outputStream, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
-        return doPrepareRequestInternal(verb, uri, body, Response.class, outputStream, requestOptions, timeoutSec);
+    @SuppressWarnings("unchecked")
+    private HttpResponse<InputStream> doPrepareRequest(final String verb, final String uri, final Object body, final OutputStream outputStream, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
+        return doPrepareRequestInternal(verb, uri, body, HttpResponse.class, outputStream, requestOptions, timeoutSec);
     }
 
     private <T> T doPrepareRequest(final String verb, final String uri, final Object body, final Class<T> returnClass, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
@@ -299,7 +297,7 @@ public class KillBillHttpClient implements Closeable {
     }
 
     private <T> T doPrepareRequestInternal(final String verb, final String uri, final Object body, final Class<T> returnClass, final OutputStream outputStream, final RequestOptions requestOptions, final int timeoutSec) throws KillBillClientException {
-        final BoundRequestBuilder builder = getBuilderWithHeaderAndQuery(verb, getKBServerUrl(uri), requestOptions);
+        final HttpRequest.Builder builder = getBuilderWithHeaderAndQuery(verb, uri, requestOptions);
 
         // Multi-Tenancy headers
         final String apiKey = requestOptions.getTenantApiKey() != null ? requestOptions.getTenantApiKey() : this.apiKey;
@@ -315,28 +313,28 @@ public class KillBillHttpClient implements Closeable {
         addHeader(builder, JaxrsResource.HDR_REQUEST_ID, requestOptions.getRequestId());
 
         if (!"GET".equals(verb) && !"HEAD".equals(verb)) {
+            String bodyString = "{}";
             if (body != null) {
                 if (body instanceof String) {
-                    builder.setBody((String) body);
+                    bodyString = (String) body;
                 } else {
                     try {
-                        builder.setBody(mapper.writeValueAsString(body));
+                        bodyString = mapper.writeValueAsString(body);
                     } catch (final JsonProcessingException e) {
                         throw new KillBillClientException(e);
                     }
                 }
-            } else {
-                builder.setBody("{}");
             }
+            builder.method(verb, BodyPublishers.ofString(bodyString));
         }
 
-        final Response response = outputStream != null ? doRequest(builder, outputStream, timeoutSec) : doRequest(builder, timeoutSec);
-        if (response.getStatusCode() == 404 || response.getStatusCode() == 204) {
+        final HttpResponse<InputStream> response = outputStream != null ? doRequest(builder, outputStream, timeoutSec) : doRequest(builder, timeoutSec);
+        if (response.statusCode() == 404 || response.statusCode() == 204) {
             return createEmptyResult(returnClass);
         }
 
-        if (requestOptions.shouldFollowLocation() && response.getHeader("Location") != null) {
-            final String location = response.getHeader("Location");
+        if (requestOptions.shouldFollowLocation() && response.headers().firstValue("Location").isPresent()) {
+            final String location = response.headers().firstValue("Location").get();
             final RequestOptions optionsForFollow = RequestOptions.builder()
                                                                   .withUser(requestOptions.getUser())
                                                                   .withPassword(requestOptions.getPassword())
@@ -353,90 +351,80 @@ public class KillBillHttpClient implements Closeable {
 
     }
 
-    private static void addHeader(final BoundRequestBuilder builder, final String headerName, final String value) {
+    private static void addHeader(final HttpRequest.Builder builder, final String headerName, final String value) {
         if (value != null) {
-            builder.addHeader(headerName, value);
+            builder.header(headerName, value);
         }
     }
 
-    private static Response doRequest(final BoundRequestBuilder builder, final OutputStream outputStream, final int timeoutSec) throws KillBillClientException {
-        final BodyDeferringAsyncHandler asynHandler = new BodyDeferringAsyncHandler(outputStream);
-        return doRequest(builder, asynHandler, timeoutSec);
-    }
-
-    private static Response doRequest(final BoundRequestBuilder builder, final int timeoutSec) throws KillBillClientException {
-        final AsyncCompletionHandler<Response> asynHandler = new AsyncCompletionHandler<Response>() {
-            @Override
-            public Response onCompleted(final Response response) throws Exception {
-                return response;
-            }
-        };
-        return doRequest(builder, asynHandler, timeoutSec);
-    }
-
-    private static Response doRequest(final BoundRequestBuilder builder, final AsyncHandler<Response> asynHandler, final int timeoutSec) throws KillBillClientException {
+    private HttpResponse<InputStream> doRequest(final HttpRequest.Builder builder, final OutputStream outputStream, final int timeoutSec) throws KillBillClientException {
+        final HttpResponse<InputStream> response = doRequest(builder, timeoutSec);
         try {
-            final ListenableFuture<Response> futureStatus = builder.execute(asynHandler);
-            return futureStatus.get(timeoutSec, TimeUnit.SECONDS);
-        } catch (final InterruptedException e) {
+            response.body().transferTo(outputStream);
+        } catch (final IOException e) {
             throw new KillBillClientException(e);
-        } catch (final ExecutionException e) {
-            throw new KillBillClientException(e);
-        } catch (final TimeoutException e) {
+        }
+        return response;
+    }
+
+    private HttpResponse<InputStream> doRequest(final HttpRequest.Builder builder, final int timeoutSec) throws KillBillClientException {
+        builder.timeout(Duration.of(timeoutSec, ChronoUnit.SECONDS));
+
+        try {
+            return httpClient.send(builder.build(), BodyHandlers.ofInputStream());
+        } catch (final IOException | InterruptedException e) {
             throw new KillBillClientException(e);
         }
     }
 
-    @VisibleForTesting
-    void throwExceptionOnResponseError(final Response response) throws KillBillClientException {
-        if (response.getStatusCode() == 401) {
+    // VisibleForTesting
+    void throwExceptionOnResponseError(final HttpResponse<InputStream> response) throws KillBillClientException {
+        if (response.statusCode() == 401) {
             throw new KillBillClientException(
                     new IllegalArgumentException("Unauthorized - did you configure your RBAC and/or tenant credentials?"), response);
         }
-        if (response.getStatusCode() >= 400) {
+        if (response.statusCode() >= 400) {
             final BillingException exception = deserializeResponse(response, BillingException.class);
             if (exception != null) {
-                log.warn("Error " + response.getStatusCode() + " from Kill Bill: " + exception.getMessage());
+                log.warn("Error " + response.statusCode() + " from Kill Bill: " + exception.getMessage());
                 throw new KillBillClientException(exception, response);
             } else {
-                log.warn("Error " + response.getStatusCode() + " from Kill Bill");
+                log.warn("Error " + response.statusCode() + " from Kill Bill");
                 throw new KillBillClientException(response);
             }
         }
     }
 
-    @VisibleForTesting
-    <T> T deserializeResponse(final Response response, final Class<T> clazz) throws KillBillClientException {
+    // VisibleForTesting
+    <T> T deserializeResponse(final HttpResponse<InputStream> response, final Class<T> clazz) throws KillBillClientException {
         // No deserialization required
-        if (Response.class.isAssignableFrom(clazz)) {
+        if (HttpResponse.class.isAssignableFrom(clazz)) {
             return clazz.cast(response);
         }
 
         // Nothing to deserialize
-        if(!response.hasResponseBody()) {
+        if (response.headers().firstValueAsLong("Content-Length").orElse(-1) == 0L) {
             return createEmptyResult(clazz);
         }
 
         final T result = unmarshalResponse(response, clazz);
         if (KillBillObjects.class.isAssignableFrom(clazz)) {
-            final KillBillObjects objects = ((KillBillObjects) result);
-            final String paginationCurrentOffset = response.getHeader(JaxrsResource.HDR_PAGINATION_CURRENT_OFFSET);
-            if (paginationCurrentOffset != null) {
-                objects.setPaginationCurrentOffset(Integer.parseInt(paginationCurrentOffset));
-            }
-            final String paginationNextOffset = response.getHeader(JaxrsResource.HDR_PAGINATION_NEXT_OFFSET);
-            if (paginationNextOffset != null) {
-                objects.setPaginationNextOffset(Integer.parseInt(paginationNextOffset));
-            }
-            final String paginationTotalNbRecords = response.getHeader(JaxrsResource.HDR_PAGINATION_TOTAL_NB_RECORDS);
-            if (paginationTotalNbRecords != null) {
-                objects.setPaginationTotalNbRecords(Integer.parseInt(paginationTotalNbRecords));
-            }
-            final String paginationMaxNbRecords = response.getHeader(JaxrsResource.HDR_PAGINATION_MAX_NB_RECORDS);
-            if (paginationMaxNbRecords != null) {
-                objects.setPaginationMaxNbRecords(Integer.parseInt(paginationMaxNbRecords));
-            }
-            objects.setPaginationNextPageUri(response.getHeader(JaxrsResource.HDR_PAGINATION_NEXT_PAGE_URI));
+            final KillBillObjects<?> objects = ((KillBillObjects<?>) result);
+            final Optional<String> paginationCurrentOffset = response.headers().firstValue(JaxrsResource.HDR_PAGINATION_CURRENT_OFFSET);
+            paginationCurrentOffset.ifPresent(s -> objects.setPaginationCurrentOffset(Integer.parseInt(s)));
+
+            final Optional<String> paginationNextOffset = response.headers().firstValue(JaxrsResource.HDR_PAGINATION_NEXT_OFFSET);
+            paginationNextOffset.ifPresent(s -> objects.setPaginationNextOffset(Integer.parseInt(s)));
+
+            final Optional<String> paginationTotalNbRecords = response.headers().firstValue(JaxrsResource.HDR_PAGINATION_TOTAL_NB_RECORDS);
+            paginationTotalNbRecords.ifPresent(s -> objects.setPaginationTotalNbRecords(Integer.parseInt(s)));
+
+            final Optional<String> paginationMaxNbRecords = response.headers().firstValue(JaxrsResource.HDR_PAGINATION_MAX_NB_RECORDS);
+            paginationMaxNbRecords.ifPresent(s -> objects.setPaginationMaxNbRecords(Integer.parseInt(s)));
+
+            final Optional<String> paginationNextPageUri = response.headers().firstValue(JaxrsResource.HDR_PAGINATION_NEXT_PAGE_URI);
+            paginationNextPageUri.ifPresent(objects::setPaginationNextPageUri);
+
             objects.setKillBillHttpClient(this);
         }
 
@@ -445,7 +433,7 @@ public class KillBillHttpClient implements Closeable {
 
     private static <T> T createEmptyResult(final Class<T> clazz) {// Return empty list for KillBillObjects instead of null for convenience
         if (Iterable.class.isAssignableFrom(clazz)) {
-            for (final Constructor constructor : clazz.getConstructors()) {
+            for (final Constructor<?> constructor : clazz.getConstructors()) {
                 if (constructor.getParameterTypes().length == 0) {
                     try {
                         return clazz.cast(constructor.newInstance());
@@ -464,19 +452,20 @@ public class KillBillHttpClient implements Closeable {
         }
     }
 
-    private <T> T unmarshalResponse(final Response response, final Class<T> clazz) throws KillBillClientException {
+    @SuppressWarnings("unchecked")
+    private <T> T unmarshalResponse(final HttpResponse<InputStream> response, final Class<T> clazz) throws KillBillClientException {
         final T result;
 
         final boolean requiresMapper = (String.class != clazz);
         try {
             if (DEBUG || !requiresMapper) {
-                final String content = response.getResponseBody();
+                final String content = new String(response.body().readAllBytes(), StandardCharsets.UTF_8);
                 log.debug("Received: " + content);
                 result = requiresMapper ? mapper.readValue(content, clazz) : (T) content;
             } else {
                 InputStream in = null;
                 try {
-                    in = response.getResponseBodyAsStream();
+                    in = response.body();
                     result = mapper.readValue(in, clazz);
                 } finally {
                     if (in != null) {
@@ -494,57 +483,116 @@ public class KillBillHttpClient implements Closeable {
         return result;
     }
 
-    private BoundRequestBuilder getBuilderWithHeaderAndQuery(final String verb, final String url, final RequestOptions requestOptions) {
-        final BoundRequestBuilder builder;
+    private HttpRequest.Builder getBuilderWithHeaderAndQuery(final String verb, final String url, final RequestOptions requestOptions) throws KillBillClientException {
+        final HttpRequest.Builder builder = HttpRequest.newBuilder()
+                                                       .uri(getURI(url, requestOptions.getQueryParams()))
+                                                       .method(verb, BodyPublishers.noBody()); // Body overridden later on
 
-        if ("GET".equals(verb)) {
-            builder = httpClient.prepareGet(url);
-        } else if ("POST".equals(verb)) {
-            builder = httpClient.preparePost(url);
-        } else if ("PUT".equals(verb)) {
-            builder = httpClient.preparePut(url);
-        } else if ("DELETE".equals(verb)) {
-            builder = httpClient.prepareDelete(url);
-        } else if ("HEAD".equals(verb)) {
-            builder = httpClient.prepareHead(url);
-        } else if ("OPTIONS".equals(verb)) {
-            builder = httpClient.prepareOptions(url);
-        } else {
-            throw new IllegalArgumentException("Unrecognized verb: " + verb);
+        builder.header("User-Agent", USER_AGENT);
+
+        final String usernameMaybeOverridden = requestOptions.getUser() != null ? requestOptions.getUser() : this.username;
+        final String passwordMaybeOverridden = requestOptions.getPassword() != null ? requestOptions.getPassword() : this.password;
+        if (usernameMaybeOverridden != null || passwordMaybeOverridden != null) {
+            builder.header("Authorization", "Basic " + Base64.getEncoder().encodeToString((usernameMaybeOverridden + ":" + passwordMaybeOverridden).getBytes(StandardCharsets.UTF_8)));
         }
 
-        final String username = requestOptions.getUser() != null ? requestOptions.getUser() : this.username;
-        final String password = requestOptions.getPassword() != null ? requestOptions.getPassword() : this.password;
-        if (username != null && password != null) {
-            final Realm realm = new Realm.Builder(username, password).setScheme(Realm.AuthScheme.BASIC).setUsePreemptiveAuth(true).build();
-            builder.setRealm(realm);
-        }
         for (final Entry<String, String> header : requestOptions.getHeaders().entrySet()) {
-            builder.addHeader(header.getKey(), header.getValue());
-        }
-
-        final Multimap<String, String> queryParams = requestOptions.getQueryParams();
-        for (final String key : queryParams.keySet()) {
-            if (queryParams.get(key) != null) {
-                for (final String value : queryParams.get(key)) {
-                    builder.addQueryParam(key, value);
-                }
-            }
+            builder.header(header.getKey(), header.getValue());
         }
 
         return builder;
     }
 
-    private String getKBServerUrl(final String uri) throws KillBillClientException {
+    private URI getURI(final String url, final Map<String, ? extends Collection<String>> queryParams) throws KillBillClientException {
         try {
-            final URI u = new URI(uri);
-            if (u.isAbsolute()) {
-                return uri;
-            } else {
-                return String.format("%s%s", kbServerUrl, uri);
+            if (url == null) {
+                throw new URISyntaxException("(null)", "HttpClient URL misconfigured");
             }
+
+            URI u = new URI(url);
+            if (!u.isAbsolute()) {
+                u = new URI(String.format("%s%s", this.kbServerUrl, url));
+            }
+
+            if (queryParams.isEmpty()) {
+                return u;
+            }
+
+            final StringBuilder sb = new StringBuilder(u.getQuery() == null ? "" : u.getQuery());
+            queryParams.keySet().forEach(key -> {
+                for (final String value : queryParams.get(key)) {
+                    if (sb.length() > 0) {
+                        sb.append('&');
+                    }
+                    sb.append(UTF8UrlEncoder.encode(key));
+                    sb.append('=');
+                    sb.append(UTF8UrlEncoder.encode(value));
+                }
+            });
+
+            final String query = sb.toString();
+
+            return new URI(buildURI(u.getScheme(),
+                                    u.getUserInfo(),
+                                    u.getHost(),
+                                    u.getPort(),
+                                    u.getAuthority(),
+                                    u.getRawPath(), // Keep the raw path (don't decode it)
+                                    query,
+                                    u.getFragment()));
         } catch (final URISyntaxException e) {
             throw new KillBillClientException(e);
         }
+    }
+
+    private String buildURI(final String scheme,
+                            final String userInfo,
+                            final String host,
+                            final int port,
+                            final String authority,
+                            final String path,
+                            final String query,
+                            final String fragment) {
+        final StringBuilder sb = new StringBuilder();
+        if (scheme != null) {
+            sb.append(scheme);
+            sb.append(':');
+        }
+        if (host != null) {
+            sb.append("//");
+            if (userInfo != null) {
+                sb.append(userInfo);
+                sb.append('@');
+            }
+            final boolean needBrackets = ((host.indexOf(':') >= 0)
+                                          && !host.startsWith("[")
+                                          && !host.endsWith("]"));
+            if (needBrackets) {
+                sb.append('[');
+            }
+            sb.append(host);
+            if (needBrackets) {
+                sb.append(']');
+            }
+            if (port != -1) {
+                sb.append(':');
+                sb.append(port);
+            }
+        } else if (authority != null) {
+            sb.append("//");
+            sb.append(authority);
+        }
+        if (path != null) {
+            sb.append(path);
+        }
+        if (query != null) {
+            sb.append('?');
+            sb.append(query);
+        }
+        if (fragment != null) {
+            sb.append('#');
+            sb.append(fragment);
+        }
+        return sb.toString();
     }
 }

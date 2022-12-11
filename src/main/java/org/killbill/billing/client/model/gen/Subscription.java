@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.catalog.api.PhaseType;
@@ -55,7 +56,7 @@ public class Subscription extends KillBillObject {
 
     private String externalKey = null;
 
-    private LocalDate startDate = null;
+    private DateTime startDate = null;
 
     private String productName = null;
 
@@ -73,15 +74,17 @@ public class Subscription extends KillBillObject {
 
     private EntitlementSourceType sourceType = null;
 
-    private LocalDate cancelledDate = null;
+    private DateTime cancelledDate = null;
 
     private LocalDate chargedThroughDate = null;
 
-    private LocalDate billingStartDate = null;
+    private DateTime billingStartDate = null;
 
-    private LocalDate billingEndDate = null;
+    private DateTime billingEndDate = null;
 
     private Integer billCycleDayLocal = null;
+
+    private Integer quantity = null;
 
     private List<EventSubscription> events = null;
 
@@ -99,7 +102,7 @@ public class Subscription extends KillBillObject {
                      final String bundleExternalKey,
                      final UUID subscriptionId,
                      final String externalKey,
-                     final LocalDate startDate,
+                     final DateTime startDate,
                      final String productName,
                      final ProductCategory productCategory,
                      final BillingPeriod billingPeriod,
@@ -108,11 +111,12 @@ public class Subscription extends KillBillObject {
                      final String planName,
                      final EntitlementState state,
                      final EntitlementSourceType sourceType,
-                     final LocalDate cancelledDate,
+                     final DateTime cancelledDate,
                      final LocalDate chargedThroughDate,
-                     final LocalDate billingStartDate,
-                     final LocalDate billingEndDate,
+                     final DateTime billingStartDate,
+                     final DateTime billingEndDate,
                      final Integer billCycleDayLocal,
+                     final Integer quantity,
                      final List<EventSubscription> events,
                      final List<PhasePrice> priceOverrides,
                      final List<PhasePrice> prices,
@@ -137,6 +141,7 @@ public class Subscription extends KillBillObject {
         this.billingStartDate = billingStartDate;
         this.billingEndDate = billingEndDate;
         this.billCycleDayLocal = billCycleDayLocal;
+        this.quantity = quantity;
         this.events = events;
         this.priceOverrides = priceOverrides;
         this.prices = prices;
@@ -189,12 +194,12 @@ public class Subscription extends KillBillObject {
         return externalKey;
     }
 
-    public Subscription setStartDate(final LocalDate startDate) {
+    public Subscription setStartDate(final DateTime startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    public LocalDate getStartDate() {
+    public DateTime getStartDate() {
         return startDate;
     }
 
@@ -270,12 +275,12 @@ public class Subscription extends KillBillObject {
         return sourceType;
     }
 
-    public Subscription setCancelledDate(final LocalDate cancelledDate) {
+    public Subscription setCancelledDate(final DateTime cancelledDate) {
         this.cancelledDate = cancelledDate;
         return this;
     }
 
-    public LocalDate getCancelledDate() {
+    public DateTime getCancelledDate() {
         return cancelledDate;
     }
 
@@ -288,21 +293,21 @@ public class Subscription extends KillBillObject {
         return chargedThroughDate;
     }
 
-    public Subscription setBillingStartDate(final LocalDate billingStartDate) {
+    public Subscription setBillingStartDate(final DateTime billingStartDate) {
         this.billingStartDate = billingStartDate;
         return this;
     }
 
-    public LocalDate getBillingStartDate() {
+    public DateTime getBillingStartDate() {
         return billingStartDate;
     }
 
-    public Subscription setBillingEndDate(final LocalDate billingEndDate) {
+    public Subscription setBillingEndDate(final DateTime billingEndDate) {
         this.billingEndDate = billingEndDate;
         return this;
     }
 
-    public LocalDate getBillingEndDate() {
+    public DateTime getBillingEndDate() {
         return billingEndDate;
     }
 
@@ -313,6 +318,15 @@ public class Subscription extends KillBillObject {
 
     public Integer getBillCycleDayLocal() {
         return billCycleDayLocal;
+    }
+
+    public Subscription setQuantity(final Integer quantity) {
+        this.quantity = quantity;
+        return this;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
     }
 
     public Subscription setEvents(final List<EventSubscription> events) {
@@ -394,6 +408,7 @@ public class Subscription extends KillBillObject {
             Objects.equals(this.billingStartDate, subscription.billingStartDate) &&
             Objects.equals(this.billingEndDate, subscription.billingEndDate) &&
             Objects.equals(this.billCycleDayLocal, subscription.billCycleDayLocal) &&
+            Objects.equals(this.quantity, subscription.quantity) &&
             Objects.equals(this.events, subscription.events) &&
             Objects.equals(this.priceOverrides, subscription.priceOverrides) &&
             Objects.equals(this.prices, subscription.prices) &&
@@ -421,6 +436,7 @@ public class Subscription extends KillBillObject {
             billingStartDate,
             billingEndDate,
             billCycleDayLocal,
+            quantity,
             events,
             priceOverrides,
             prices,
@@ -451,6 +467,7 @@ public class Subscription extends KillBillObject {
         sb.append("    billingStartDate: ").append(toIndentedString(billingStartDate)).append("\n");
         sb.append("    billingEndDate: ").append(toIndentedString(billingEndDate)).append("\n");
         sb.append("    billCycleDayLocal: ").append(toIndentedString(billCycleDayLocal)).append("\n");
+        sb.append("    quantity: ").append(toIndentedString(quantity)).append("\n");
         sb.append("    events: ").append(toIndentedString(events)).append("\n");
         sb.append("    priceOverrides: ").append(toIndentedString(priceOverrides)).append("\n");
         sb.append("    prices: ").append(toIndentedString(prices)).append("\n");

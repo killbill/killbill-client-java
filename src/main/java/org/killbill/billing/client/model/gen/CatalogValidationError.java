@@ -22,7 +22,6 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
-import java.math.BigDecimal;
 
 /**
  *           DO NOT EDIT !!!
@@ -32,40 +31,27 @@ import java.math.BigDecimal;
  */
 import org.killbill.billing.client.model.KillBillObject;
 
-public class RolledUpUnit {
+public class CatalogValidationError {
 
-    private String unitType = null;
-
-    private BigDecimal amount = null;
+    private String errorDescription = null;
 
 
-    public RolledUpUnit() {
+    public CatalogValidationError() {
     }
 
-    public RolledUpUnit(final String unitType,
-                     final BigDecimal amount) {
-        this.unitType = unitType;
-        this.amount = amount;
+    public CatalogValidationError(final String errorDescription) {
+        this.errorDescription = errorDescription;
 
     }
 
 
-    public RolledUpUnit setUnitType(final String unitType) {
-        this.unitType = unitType;
+    public CatalogValidationError setErrorDescription(final String errorDescription) {
+        this.errorDescription = errorDescription;
         return this;
     }
 
-    public String getUnitType() {
-        return unitType;
-    }
-
-    public RolledUpUnit setAmount(final BigDecimal amount) {
-        this.amount = amount;
-        return this;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
+    public String getErrorDescription() {
+        return errorDescription;
     }
 
     @Override
@@ -76,24 +62,21 @@ public class RolledUpUnit {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        RolledUpUnit rolledUpUnit = (RolledUpUnit) o;
-        return Objects.equals(this.unitType, rolledUpUnit.unitType) &&
-            Objects.equals(this.amount, rolledUpUnit.amount);
+        CatalogValidationError catalogValidationError = (CatalogValidationError) o;
+        return Objects.equals(this.errorDescription, catalogValidationError.errorDescription);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(unitType,
-            amount);
+        return Objects.hash(errorDescription);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class RolledUpUnit {\n");
+        sb.append("class CatalogValidationError {\n");
         
-        sb.append("    unitType: ").append(toIndentedString(unitType)).append("\n");
-        sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
+        sb.append("    errorDescription: ").append(toIndentedString(errorDescription)).append("\n");
         sb.append("}");
         return sb.toString();
     }
