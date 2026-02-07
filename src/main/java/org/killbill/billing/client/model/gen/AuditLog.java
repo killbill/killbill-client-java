@@ -23,7 +23,7 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.util.UUID;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 import org.killbill.billing.ObjectType;
 
 /**
@@ -38,7 +38,7 @@ public class AuditLog<E> {
 
     private String changeType = null;
 
-    private DateTime changeDate = null;
+    private ZonedDateTime changeDate = null;
 
     private ObjectType objectType = null;
 
@@ -59,7 +59,7 @@ public class AuditLog<E> {
     }
 
     public AuditLog(final String changeType,
-                     final DateTime changeDate,
+                     final ZonedDateTime changeDate,
                      final ObjectType objectType,
                      final UUID objectId,
                      final String changedBy,
@@ -89,12 +89,12 @@ public class AuditLog<E> {
         return changeType;
     }
 
-    public AuditLog setChangeDate(final DateTime changeDate) {
+    public AuditLog setChangeDate(final ZonedDateTime changeDate) {
         this.changeDate = changeDate;
         return this;
     }
 
-    public DateTime getChangeDate() {
+    public ZonedDateTime getChangeDate() {
         return changeDate;
     }
 

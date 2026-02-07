@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.entitlement.api.SubscriptionEventType;
@@ -45,9 +45,9 @@ public class EventSubscription extends KillBillObject {
 
     private BillingPeriod billingPeriod = null;
 
-    private DateTime effectiveDate = null;
+    private ZonedDateTime effectiveDate = null;
     
-    private DateTime catalogEffectiveDate = null;
+    private ZonedDateTime catalogEffectiveDate = null;
 
     private String plan = null;
 
@@ -74,8 +74,8 @@ public class EventSubscription extends KillBillObject {
 
     public EventSubscription(final UUID eventId,
                      final BillingPeriod billingPeriod,
-                     final DateTime effectiveDate,
-                     final DateTime catalogEffectiveDate,
+                     final ZonedDateTime effectiveDate,
+                     final ZonedDateTime catalogEffectiveDate,
                      final String plan,
                      final String product,
                      final String priceList,
@@ -122,20 +122,20 @@ public class EventSubscription extends KillBillObject {
         return billingPeriod;
     }
 
-    public EventSubscription setEffectiveDate(final DateTime effectiveDate) {
+    public EventSubscription setEffectiveDate(final ZonedDateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    public DateTime getEffectiveDate() {
+    public ZonedDateTime getEffectiveDate() {
         return effectiveDate;
     }
 
-    public DateTime getCatalogEffectiveDate() {
+    public ZonedDateTime getCatalogEffectiveDate() {
 		return catalogEffectiveDate;
 	}
 
-	public void setCatalogEffectiveDate(DateTime catalogEffectiveDate) {
+	public void setCatalogEffectiveDate(ZonedDateTime catalogEffectiveDate) {
 		this.catalogEffectiveDate = catalogEffectiveDate;
 	}
 

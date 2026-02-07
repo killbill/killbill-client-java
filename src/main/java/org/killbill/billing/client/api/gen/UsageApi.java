@@ -22,7 +22,7 @@ package org.killbill.billing.client.api.gen;
 
 import java.util.Objects;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import org.killbill.billing.client.model.gen.RolledUpUsage;
 import org.killbill.billing.client.model.gen.SubscriptionUsageRecord;
 import java.util.UUID;

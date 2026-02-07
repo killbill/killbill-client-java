@@ -24,8 +24,8 @@ import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.Catalog;
 import org.killbill.billing.client.model.gen.CatalogValidation;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import org.killbill.billing.client.model.gen.Phase;
 import org.killbill.billing.client.model.gen.Plan;
 import org.killbill.billing.client.model.gen.PlanDetail;
@@ -134,7 +134,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, PlanDetails.class, requestOptions);
     }
 
-    public Catalogs getCatalogJson(final DateTime requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+    public Catalogs getCatalogJson(final ZonedDateTime requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog";
 
@@ -171,7 +171,7 @@ public class CatalogApi {
         return httpClient.doGet(uri, DateTimes.class, requestOptions);
     }
 
-    public String getCatalogXml(final DateTime requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+    public String getCatalogXml(final ZonedDateTime requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/xml";
 

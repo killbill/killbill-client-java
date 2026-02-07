@@ -27,7 +27,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
 
@@ -61,7 +61,7 @@ public class Account extends KillBillObject {
 
     private UUID paymentMethodId = null;
 
-    private DateTime referenceTime = null;
+    private ZonedDateTime referenceTime = null;
 
     private String timeZone = null;
 
@@ -106,7 +106,7 @@ public class Account extends KillBillObject {
                      final UUID parentAccountId,
                      final Boolean isPaymentDelegatedToParent,
                      final UUID paymentMethodId,
-                     final DateTime referenceTime,
+                     final ZonedDateTime referenceTime,
                      final String timeZone,
                      final String address1,
                      final String address2,
@@ -243,12 +243,12 @@ public class Account extends KillBillObject {
         return paymentMethodId;
     }
 
-    public Account setReferenceTime(final DateTime referenceTime) {
+    public Account setReferenceTime(final ZonedDateTime referenceTime) {
         this.referenceTime = referenceTime;
         return this;
     }
 
-    public DateTime getReferenceTime() {
+    public ZonedDateTime getReferenceTime() {
         return referenceTime;
     }
 

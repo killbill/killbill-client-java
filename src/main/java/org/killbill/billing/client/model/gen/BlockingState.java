@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.entitlement.api.BlockingStateType;
 
@@ -52,7 +52,7 @@ public class BlockingState extends KillBillObject {
 
     private Boolean isBlockBilling = null;
 
-    private DateTime effectiveDate = null;
+    private ZonedDateTime effectiveDate = null;
 
     private BlockingStateType type = null;
 
@@ -67,7 +67,7 @@ public class BlockingState extends KillBillObject {
                      final Boolean isBlockChange,
                      final Boolean isBlockEntitlement,
                      final Boolean isBlockBilling,
-                     final DateTime effectiveDate,
+                     final ZonedDateTime effectiveDate,
                      final BlockingStateType type,
                      final List<AuditLog> auditLogs) {
         super(auditLogs);
@@ -140,12 +140,12 @@ public class BlockingState extends KillBillObject {
         return isBlockBilling;
     }
 
-    public BlockingState setEffectiveDate(final DateTime effectiveDate) {
+    public BlockingState setEffectiveDate(final ZonedDateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    public DateTime getEffectiveDate() {
+    public ZonedDateTime getEffectiveDate() {
         return effectiveDate;
     }
 

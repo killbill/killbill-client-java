@@ -23,7 +23,7 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.math.BigDecimal;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 /**
  *           DO NOT EDIT !!!
@@ -35,7 +35,7 @@ import org.killbill.billing.client.model.KillBillObject;
 
 public class UsageRecord {
 
-    private DateTime recordDate = null;
+    private ZonedDateTime recordDate = null;
 
     private BigDecimal amount = null;
 
@@ -43,7 +43,7 @@ public class UsageRecord {
     public UsageRecord() {
     }
 
-    public UsageRecord(final DateTime recordDate,
+    public UsageRecord(final ZonedDateTime recordDate,
                      final BigDecimal amount) {
         this.recordDate = recordDate;
         this.amount = amount;
@@ -51,12 +51,12 @@ public class UsageRecord {
     }
 
 
-    public UsageRecord setRecordDate(final DateTime recordDate) {
+    public UsageRecord setRecordDate(final ZonedDateTime recordDate) {
         this.recordDate = recordDate;
         return this;
     }
 
-    public DateTime getRecordDate() {
+    public ZonedDateTime getRecordDate() {
         return recordDate;
     }
 

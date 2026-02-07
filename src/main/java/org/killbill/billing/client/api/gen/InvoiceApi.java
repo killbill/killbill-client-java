@@ -28,7 +28,7 @@ import org.killbill.billing.client.model.gen.Invoice;
 import org.killbill.billing.client.model.gen.InvoiceDryRun;
 import org.killbill.billing.client.model.gen.InvoiceItem;
 import org.killbill.billing.client.model.gen.InvoicePayment;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import java.util.Map;

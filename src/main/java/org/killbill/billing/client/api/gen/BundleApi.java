@@ -26,13 +26,13 @@ import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.BlockingState;
 import org.killbill.billing.client.model.gen.Bundle;
 import org.killbill.billing.client.model.gen.CustomField;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import org.killbill.billing.client.model.BlockingStates;
 import java.util.List;
 import java.util.Map;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 import org.killbill.billing.client.model.CustomFields;
 import org.killbill.billing.client.model.Tags;
 import org.killbill.billing.util.api.AuditLevel;
@@ -94,7 +94,7 @@ public class BundleApi {
         return httpClient.doPost(uri, body, BlockingStates.class, requestOptions);
     }
 
-    public BlockingStates addBundleBlockingState(final UUID bundleId, final BlockingState body, final DateTime requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public BlockingStates addBundleBlockingState(final UUID bundleId, final BlockingState body, final ZonedDateTime requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(bundleId, "Missing the required parameter 'bundleId' when calling addBundleBlockingState");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addBundleBlockingState");
 

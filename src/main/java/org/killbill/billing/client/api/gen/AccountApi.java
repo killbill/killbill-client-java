@@ -32,7 +32,7 @@ import org.killbill.billing.client.model.gen.Bundle;
 import org.killbill.billing.client.model.gen.CustomField;
 import org.killbill.billing.client.model.gen.Invoice;
 import org.killbill.billing.client.model.gen.InvoicePayment;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import org.killbill.billing.client.model.gen.OverdueState;
 import org.killbill.billing.client.model.gen.Payment;
 import org.killbill.billing.client.model.gen.PaymentMethod;

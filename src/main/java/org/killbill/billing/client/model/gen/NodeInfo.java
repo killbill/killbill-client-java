@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 import org.killbill.billing.client.model.gen.PluginInfo;
 
 /**
@@ -39,9 +39,9 @@ public class NodeInfo {
 
     private String nodeName = null;
 
-    private DateTime bootTime = null;
+    private ZonedDateTime bootTime = null;
 
-    private DateTime lastUpdatedDate = null;
+    private ZonedDateTime lastUpdatedDate = null;
 
     private String kbVersion = null;
 
@@ -60,8 +60,8 @@ public class NodeInfo {
     }
 
     public NodeInfo(final String nodeName,
-                     final DateTime bootTime,
-                     final DateTime lastUpdatedDate,
+                     final ZonedDateTime bootTime,
+                     final ZonedDateTime lastUpdatedDate,
                      final String kbVersion,
                      final String apiVersion,
                      final String pluginApiVersion,
@@ -90,21 +90,21 @@ public class NodeInfo {
         return nodeName;
     }
 
-    public NodeInfo setBootTime(final DateTime bootTime) {
+    public NodeInfo setBootTime(final ZonedDateTime bootTime) {
         this.bootTime = bootTime;
         return this;
     }
 
-    public DateTime getBootTime() {
+    public ZonedDateTime getBootTime() {
         return bootTime;
     }
 
-    public NodeInfo setLastUpdatedDate(final DateTime lastUpdatedDate) {
+    public NodeInfo setLastUpdatedDate(final ZonedDateTime lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
         return this;
     }
 
-    public DateTime getLastUpdatedDate() {
+    public ZonedDateTime getLastUpdatedDate() {
         return lastUpdatedDate;
     }
 

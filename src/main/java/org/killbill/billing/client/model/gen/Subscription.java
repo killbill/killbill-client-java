@@ -25,8 +25,8 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.catalog.api.PhaseType;
 import org.killbill.billing.catalog.api.ProductCategory;
@@ -56,7 +56,7 @@ public class Subscription extends KillBillObject {
 
     private String externalKey = null;
 
-    private DateTime startDate = null;
+    private ZonedDateTime startDate = null;
 
     private String productName = null;
 
@@ -74,13 +74,13 @@ public class Subscription extends KillBillObject {
 
     private EntitlementSourceType sourceType = null;
 
-    private DateTime cancelledDate = null;
+    private ZonedDateTime cancelledDate = null;
 
     private LocalDate chargedThroughDate = null;
 
-    private DateTime billingStartDate = null;
+    private ZonedDateTime billingStartDate = null;
 
-    private DateTime billingEndDate = null;
+    private ZonedDateTime billingEndDate = null;
 
     private Integer billCycleDayLocal = null;
 
@@ -102,7 +102,7 @@ public class Subscription extends KillBillObject {
                      final String bundleExternalKey,
                      final UUID subscriptionId,
                      final String externalKey,
-                     final DateTime startDate,
+                     final ZonedDateTime startDate,
                      final String productName,
                      final ProductCategory productCategory,
                      final BillingPeriod billingPeriod,
@@ -111,10 +111,10 @@ public class Subscription extends KillBillObject {
                      final String planName,
                      final EntitlementState state,
                      final EntitlementSourceType sourceType,
-                     final DateTime cancelledDate,
+                     final ZonedDateTime cancelledDate,
                      final LocalDate chargedThroughDate,
-                     final DateTime billingStartDate,
-                     final DateTime billingEndDate,
+                     final ZonedDateTime billingStartDate,
+                     final ZonedDateTime billingEndDate,
                      final Integer billCycleDayLocal,
                      final Integer quantity,
                      final List<EventSubscription> events,
@@ -194,12 +194,12 @@ public class Subscription extends KillBillObject {
         return externalKey;
     }
 
-    public Subscription setStartDate(final DateTime startDate) {
+    public Subscription setStartDate(final ZonedDateTime startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    public DateTime getStartDate() {
+    public ZonedDateTime getStartDate() {
         return startDate;
     }
 
@@ -275,12 +275,12 @@ public class Subscription extends KillBillObject {
         return sourceType;
     }
 
-    public Subscription setCancelledDate(final DateTime cancelledDate) {
+    public Subscription setCancelledDate(final ZonedDateTime cancelledDate) {
         this.cancelledDate = cancelledDate;
         return this;
     }
 
-    public DateTime getCancelledDate() {
+    public ZonedDateTime getCancelledDate() {
         return cancelledDate;
     }
 
@@ -293,21 +293,21 @@ public class Subscription extends KillBillObject {
         return chargedThroughDate;
     }
 
-    public Subscription setBillingStartDate(final DateTime billingStartDate) {
+    public Subscription setBillingStartDate(final ZonedDateTime billingStartDate) {
         this.billingStartDate = billingStartDate;
         return this;
     }
 
-    public DateTime getBillingStartDate() {
+    public ZonedDateTime getBillingStartDate() {
         return billingStartDate;
     }
 
-    public Subscription setBillingEndDate(final DateTime billingEndDate) {
+    public Subscription setBillingEndDate(final ZonedDateTime billingEndDate) {
         this.billingEndDate = billingEndDate;
         return this;
     }
 
-    public DateTime getBillingEndDate() {
+    public ZonedDateTime getBillingEndDate() {
         return billingEndDate;
     }
 
