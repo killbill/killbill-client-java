@@ -24,10 +24,10 @@ import java.util.Objects;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.time.ZonedDateTime;
 import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
 

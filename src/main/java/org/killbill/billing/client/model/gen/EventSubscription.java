@@ -23,10 +23,10 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.time.ZonedDateTime;
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.entitlement.api.SubscriptionEventType;
@@ -46,7 +46,7 @@ public class EventSubscription extends KillBillObject {
     private BillingPeriod billingPeriod = null;
 
     private ZonedDateTime effectiveDate = null;
-    
+
     private ZonedDateTime catalogEffectiveDate = null;
 
     private String plan = null;
@@ -131,15 +131,16 @@ public class EventSubscription extends KillBillObject {
         return effectiveDate;
     }
 
+    public EventSubscription setCatalogEffectiveDate(final ZonedDateTime catalogEffectiveDate) {
+        this.catalogEffectiveDate = catalogEffectiveDate;
+        return this;
+    }
+
     public ZonedDateTime getCatalogEffectiveDate() {
-		return catalogEffectiveDate;
-	}
+        return catalogEffectiveDate;
+    }
 
-	public void setCatalogEffectiveDate(ZonedDateTime catalogEffectiveDate) {
-		this.catalogEffectiveDate = catalogEffectiveDate;
-	}
-
-	public EventSubscription setPlan(final String plan) {
+    public EventSubscription setPlan(final String plan) {
         this.plan = plan;
         return this;
     }

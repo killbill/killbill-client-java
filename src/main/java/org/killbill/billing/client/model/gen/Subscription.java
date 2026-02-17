@@ -22,11 +22,11 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.time.ZonedDateTime;
-import java.time.LocalDate;
 import org.killbill.billing.catalog.api.BillingPeriod;
 import org.killbill.billing.catalog.api.PhaseType;
 import org.killbill.billing.catalog.api.ProductCategory;

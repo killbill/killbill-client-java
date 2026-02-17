@@ -24,7 +24,6 @@ import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.Catalog;
 import org.killbill.billing.client.model.gen.CatalogValidation;
-import java.time.ZonedDateTime;
 import java.time.LocalDate;
 import org.killbill.billing.client.model.gen.Phase;
 import org.killbill.billing.client.model.gen.Plan;
@@ -33,10 +32,13 @@ import org.killbill.billing.client.model.gen.PriceList;
 import org.killbill.billing.client.model.gen.Product;
 import org.killbill.billing.client.model.gen.SimplePlan;
 import java.util.UUID;
+import java.time.ZonedDateTime;
 import org.killbill.billing.client.model.PlanDetails;
 import java.util.List;
 import org.killbill.billing.client.model.Catalogs;
 import org.killbill.billing.client.model.DateTimes;
+
+import java.time.format.DateTimeFormatter;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -140,7 +142,7 @@ public class CatalogApi {
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            queryParams.put("requestedDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(requestedDate));
         }
         if (accountId != null) {
             queryParams.put("accountId", String.valueOf(accountId));
@@ -177,7 +179,7 @@ public class CatalogApi {
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            queryParams.put("requestedDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(requestedDate));
         }
         if (accountId != null) {
             queryParams.put("accountId", String.valueOf(accountId));
