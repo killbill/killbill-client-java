@@ -46,7 +46,7 @@ public class EventSubscription extends KillBillObject {
     private BillingPeriod billingPeriod = null;
 
     private DateTime effectiveDate = null;
-    
+
     private DateTime catalogEffectiveDate = null;
 
     private String plan = null;
@@ -131,15 +131,16 @@ public class EventSubscription extends KillBillObject {
         return effectiveDate;
     }
 
+    public EventSubscription setCatalogEffectiveDate(final DateTime catalogEffectiveDate) {
+        this.catalogEffectiveDate = catalogEffectiveDate;
+        return this;
+    }
+
     public DateTime getCatalogEffectiveDate() {
-		return catalogEffectiveDate;
-	}
+        return catalogEffectiveDate;
+    }
 
-	public void setCatalogEffectiveDate(DateTime catalogEffectiveDate) {
-		this.catalogEffectiveDate = catalogEffectiveDate;
-	}
-
-	public EventSubscription setPlan(final String plan) {
+    public EventSubscription setPlan(final String plan) {
         this.plan = plan;
         return this;
     }
