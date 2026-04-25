@@ -17,6 +17,21 @@
 
 <FindBugsFilter>
     <Match>
+        <Class name="org.killbill.billing.client.KillBillHttpClient"/>
+        <Method name="&lt;init&gt;" params="java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.Integer" returns="void"/>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
+    <Match>
+        <Class name="org.killbill.billing.client.KillBillHttpClient"/>
+        <Method name="&lt;init&gt;" params="java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Boolean,java.lang.String" returns="void"/>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
+    <Match>
+        <Class name="org.killbill.billing.client.SslUtils"/>
+        <Method name="&lt;init&gt;" params="" returns="void"/>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
+    <Match>
         <Or>
             <Class name="~org\.killbill\.billing\.client\.api\.gen.*"/>
             <Class name="~org\.killbill\.billing\.client\.model\.gen.*"/>
