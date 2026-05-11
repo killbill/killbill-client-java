@@ -100,4 +100,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_WORKFLOW_PAT }}
         run: |
           PROJECT_VERSION=$(git describe --abbrev=0 | cut -d '-' -f 4)
-          gh workflow -R killbill/killbill-oss-parent run release.yml -f java_client_version=${PROJECT_VERSION}
+          gh workflow -R killbill/killbill-oss-parent run release.yml --ref maint-for-0-24-x -f java_client_version=${PROJECT_VERSION}
