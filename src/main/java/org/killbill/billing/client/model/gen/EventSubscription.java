@@ -300,4 +300,3 @@ public class EventSubscription extends KillBillObject {
         return o.toString().replace("\n", "\n    ");
     }
 }
-
