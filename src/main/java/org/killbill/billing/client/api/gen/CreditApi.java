@@ -23,6 +23,7 @@ package org.killbill.billing.client.api.gen;
 import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.InvoiceItem;
+import java.time.LocalDate;
 import java.util.UUID;
 import org.killbill.billing.client.model.InvoiceItems;
 import java.util.List;
@@ -58,16 +59,19 @@ public class CreditApi {
         this.httpClient = httpClient;
     }
 
-    public InvoiceItems createCredits(final InvoiceItems body, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
-        return createCredits(body, Boolean.valueOf(false), pluginProperty, inputOptions);
+    public InvoiceItems createCredits(final InvoiceItems body, final LocalDate requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+        return createCredits(body, requestedDate, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
-    public InvoiceItems createCredits(final InvoiceItems body, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public InvoiceItems createCredits(final InvoiceItems body, final LocalDate requestedDate, final Boolean autoCommit, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createCredits");
 
         final String uri = "/1.0/kb/credits";
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
+        if (requestedDate != null) {
+            queryParams.put("requestedDate", String.valueOf(requestedDate));
+        }
         if (autoCommit != null) {
             queryParams.put("autoCommit", String.valueOf(autoCommit));
         }

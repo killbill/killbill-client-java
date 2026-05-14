@@ -109,7 +109,7 @@ public class SubscriptionApi {
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            queryParams.put("requestedDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(requestedDate));
         }
         if (pluginProperty != null) {
             queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
@@ -180,7 +180,7 @@ public class SubscriptionApi {
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            queryParams.put("requestedDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(requestedDate));
         }
         if (callCompletion != null) {
             queryParams.put("callCompletion", String.valueOf(callCompletion));
@@ -259,7 +259,7 @@ public class SubscriptionApi {
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            queryParams.put("requestedDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(requestedDate));
         }
         if (callCompletion != null) {
             queryParams.put("callCompletion", String.valueOf(callCompletion));
@@ -340,10 +340,10 @@ public class SubscriptionApi {
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (entitlementDate != null) {
-            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+            queryParams.put("entitlementDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(entitlementDate));
         }
         if (billingDate != null) {
-            queryParams.put("billingDate", String.valueOf(billingDate));
+            queryParams.put("billingDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(billingDate));
         }
         if (renameKeyIfExistsAndUnused != null) {
             queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
@@ -468,10 +468,10 @@ public class SubscriptionApi {
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (entitlementDate != null) {
-            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+            queryParams.put("entitlementDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(entitlementDate));
         }
         if (billingDate != null) {
-            queryParams.put("billingDate", String.valueOf(billingDate));
+            queryParams.put("billingDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(billingDate));
         }
         if (migrated != null) {
             queryParams.put("migrated", String.valueOf(migrated));

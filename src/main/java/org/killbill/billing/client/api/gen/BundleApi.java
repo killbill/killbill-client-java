@@ -105,7 +105,7 @@ public class BundleApi {
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            queryParams.put("requestedDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(requestedDate));
         }
         if (pluginProperty != null) {
             queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
