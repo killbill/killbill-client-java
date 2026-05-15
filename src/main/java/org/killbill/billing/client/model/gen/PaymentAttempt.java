@@ -23,10 +23,10 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.joda.time.DateTime;
 import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.PluginProperty;
@@ -54,7 +54,7 @@ public class PaymentAttempt extends KillBillObject {
 
     private TransactionType transactionType = null;
 
-    private DateTime effectiveDate = null;
+    private ZonedDateTime effectiveDate = null;
 
     private String stateName = null;
 
@@ -77,7 +77,7 @@ public class PaymentAttempt extends KillBillObject {
                      final UUID transactionId,
                      final String transactionExternalKey,
                      final TransactionType transactionType,
-                     final DateTime effectiveDate,
+                     final ZonedDateTime effectiveDate,
                      final String stateName,
                      final BigDecimal amount,
                      final Currency currency,
@@ -155,12 +155,12 @@ public class PaymentAttempt extends KillBillObject {
         return transactionType;
     }
 
-    public PaymentAttempt setEffectiveDate(final DateTime effectiveDate) {
+    public PaymentAttempt setEffectiveDate(final ZonedDateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    public DateTime getEffectiveDate() {
+    public ZonedDateTime getEffectiveDate() {
         return effectiveDate;
     }
 
