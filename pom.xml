@@ -25,7 +25,7 @@
         <version>0.147.0-4494b1e-SNAPSHOT</version>
     </parent>
     <artifactId>killbill-client-java</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.4.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Kill Bill Client Java</name>
     <description>Kill Bill Java client library</description>
@@ -59,7 +59,8 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-joda</artifactId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.spotbugs</groupId>
@@ -68,10 +69,6 @@
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

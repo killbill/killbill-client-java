@@ -21,7 +21,7 @@ package org.killbill.billing.client.model;
 
 import java.util.ArrayList;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
-public class DateTimes extends ArrayList<DateTime> {
+public class DateTimes extends ArrayList<ZonedDateTime> {
 }

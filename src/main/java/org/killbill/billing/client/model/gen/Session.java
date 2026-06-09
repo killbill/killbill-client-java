@@ -22,7 +22,7 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 /**
  *           DO NOT EDIT !!!
@@ -36,9 +36,9 @@ public class Session {
 
     private String id = null;
 
-    private DateTime startDate = null;
+    private ZonedDateTime startDate = null;
 
-    private DateTime lastAccessDate = null;
+    private ZonedDateTime lastAccessDate = null;
 
     private Long timeout = null;
 
@@ -49,8 +49,8 @@ public class Session {
     }
 
     public Session(final String id,
-                     final DateTime startDate,
-                     final DateTime lastAccessDate,
+                     final ZonedDateTime startDate,
+                     final ZonedDateTime lastAccessDate,
                      final Long timeout,
                      final String host) {
         this.id = id;
@@ -71,21 +71,21 @@ public class Session {
         return id;
     }
 
-    public Session setStartDate(final DateTime startDate) {
+    public Session setStartDate(final ZonedDateTime startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    public DateTime getStartDate() {
+    public ZonedDateTime getStartDate() {
         return startDate;
     }
 
-    public Session setLastAccessDate(final DateTime lastAccessDate) {
+    public Session setLastAccessDate(final ZonedDateTime lastAccessDate) {
         this.lastAccessDate = lastAccessDate;
         return this;
     }
 
-    public DateTime getLastAccessDate() {
+    public ZonedDateTime getLastAccessDate() {
         return lastAccessDate;
     }
 

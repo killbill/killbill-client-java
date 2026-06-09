@@ -24,8 +24,7 @@ import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.Catalog;
 import org.killbill.billing.client.model.gen.CatalogValidation;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import org.killbill.billing.client.model.gen.Phase;
 import org.killbill.billing.client.model.gen.Plan;
 import org.killbill.billing.client.model.gen.PlanDetail;
@@ -33,10 +32,13 @@ import org.killbill.billing.client.model.gen.PriceList;
 import org.killbill.billing.client.model.gen.Product;
 import org.killbill.billing.client.model.gen.SimplePlan;
 import java.util.UUID;
+import java.time.ZonedDateTime;
 import org.killbill.billing.client.model.PlanDetails;
 import java.util.List;
 import org.killbill.billing.client.model.Catalogs;
 import org.killbill.billing.client.model.DateTimes;
+
+import java.time.format.DateTimeFormatter;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -134,13 +136,13 @@ public class CatalogApi {
         return httpClient.doGet(uri, PlanDetails.class, requestOptions);
     }
 
-    public Catalogs getCatalogJson(final DateTime requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+    public Catalogs getCatalogJson(final ZonedDateTime requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog";
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            queryParams.put("requestedDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(requestedDate));
         }
         if (accountId != null) {
             queryParams.put("accountId", String.valueOf(accountId));
@@ -171,13 +173,13 @@ public class CatalogApi {
         return httpClient.doGet(uri, DateTimes.class, requestOptions);
     }
 
-    public String getCatalogXml(final DateTime requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
+    public String getCatalogXml(final ZonedDateTime requestedDate, final UUID accountId, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/catalog/xml";
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            queryParams.put("requestedDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(requestedDate));
         }
         if (accountId != null) {
             queryParams.put("accountId", String.valueOf(accountId));

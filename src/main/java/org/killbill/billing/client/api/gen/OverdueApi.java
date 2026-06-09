@@ -24,6 +24,8 @@ import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.Overdue;
 
+import java.time.format.DateTimeFormatter;
+
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
 import org.killbill.billing.client.KillBillHttpClient;

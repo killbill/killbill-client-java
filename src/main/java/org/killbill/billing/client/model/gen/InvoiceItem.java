@@ -23,11 +23,11 @@ package org.killbill.billing.client.model.gen;
 import java.util.Objects;
 import java.util.Arrays;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.InvoiceItem;
@@ -91,7 +91,7 @@ public class InvoiceItem extends KillBillObject {
 
     private String itemDetails = null;
 
-    private DateTime catalogEffectiveDate = null;
+    private ZonedDateTime catalogEffectiveDate = null;
 
     private List<InvoiceItem> childItems = null;
 
@@ -124,7 +124,7 @@ public class InvoiceItem extends KillBillObject {
                      final Currency currency,
                      final BigDecimal quantity,
                      final String itemDetails,
-                     final DateTime catalogEffectiveDate,
+                     final ZonedDateTime catalogEffectiveDate,
                      final List<InvoiceItem> childItems,
                      final List<AuditLog> auditLogs) {
         super(auditLogs);
@@ -374,12 +374,12 @@ public class InvoiceItem extends KillBillObject {
         return itemDetails;
     }
 
-    public InvoiceItem setCatalogEffectiveDate(final DateTime catalogEffectiveDate) {
+    public InvoiceItem setCatalogEffectiveDate(final ZonedDateTime catalogEffectiveDate) {
         this.catalogEffectiveDate = catalogEffectiveDate;
         return this;
     }
 
-    public DateTime getCatalogEffectiveDate() {
+    public ZonedDateTime getCatalogEffectiveDate() {
         return catalogEffectiveDate;
     }
 
