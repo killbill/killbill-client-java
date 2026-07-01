@@ -24,10 +24,10 @@ import java.util.Objects;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.joda.time.DateTime;
 import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.AuditLog;
 import org.killbill.billing.client.model.gen.InvoiceItem;
@@ -59,7 +59,7 @@ public class InvoicePaymentTransaction extends KillBillObject {
 
     private Currency currency = null;
 
-    private DateTime effectiveDate = null;
+    private ZonedDateTime effectiveDate = null;
 
     private BigDecimal processedAmount = null;
 
@@ -93,7 +93,7 @@ public class InvoicePaymentTransaction extends KillBillObject {
                      final TransactionType transactionType,
                      final BigDecimal amount,
                      final Currency currency,
-                     final DateTime effectiveDate,
+                     final ZonedDateTime effectiveDate,
                      final BigDecimal processedAmount,
                      final Currency processedCurrency,
                      final TransactionStatus status,
@@ -191,12 +191,12 @@ public class InvoicePaymentTransaction extends KillBillObject {
         return currency;
     }
 
-    public InvoicePaymentTransaction setEffectiveDate(final DateTime effectiveDate) {
+    public InvoicePaymentTransaction setEffectiveDate(final ZonedDateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    public DateTime getEffectiveDate() {
+    public ZonedDateTime getEffectiveDate() {
         return effectiveDate;
     }
 

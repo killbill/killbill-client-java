@@ -22,9 +22,9 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.joda.time.DateTime;
 import org.killbill.billing.catalog.api.Currency;
 import org.killbill.billing.client.model.gen.PriceList;
 import org.killbill.billing.client.model.gen.Product;
@@ -42,7 +42,7 @@ public class Catalog {
 
     private String name = null;
 
-    private DateTime effectiveDate = null;
+    private ZonedDateTime effectiveDate = null;
 
     private List<Currency> currencies = null;
 
@@ -57,7 +57,7 @@ public class Catalog {
     }
 
     public Catalog(final String name,
-                     final DateTime effectiveDate,
+                     final ZonedDateTime effectiveDate,
                      final List<Currency> currencies,
                      final List<Unit> units,
                      final List<Product> products,
@@ -81,12 +81,12 @@ public class Catalog {
         return name;
     }
 
-    public Catalog setEffectiveDate(final DateTime effectiveDate) {
+    public Catalog setEffectiveDate(final ZonedDateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
         return this;
     }
 
-    public DateTime getEffectiveDate() {
+    public ZonedDateTime getEffectiveDate() {
         return effectiveDate;
     }
 

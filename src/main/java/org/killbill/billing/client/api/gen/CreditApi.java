@@ -23,11 +23,13 @@ package org.killbill.billing.client.api.gen;
 import java.util.Objects;
 
 import org.killbill.billing.client.model.gen.InvoiceItem;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import java.util.UUID;
 import org.killbill.billing.client.model.InvoiceItems;
 import java.util.List;
 import java.util.Map;
+
+import java.time.format.DateTimeFormatter;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
