@@ -27,14 +27,14 @@ import org.killbill.billing.client.model.gen.BlockingState;
 import org.killbill.billing.client.model.gen.BulkSubscriptionsBundle;
 import org.killbill.billing.client.model.gen.Bundle;
 import org.killbill.billing.client.model.gen.CustomField;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import org.killbill.billing.client.model.gen.Subscription;
 import org.killbill.billing.client.model.gen.Tag;
 import java.util.UUID;
 import org.killbill.billing.client.model.BlockingStates;
 import java.util.List;
 import java.util.Map;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 import org.killbill.billing.entitlement.api.Entitlement.EntitlementActionPolicy;
 import org.killbill.billing.catalog.api.BillingActionPolicy;
 import org.killbill.billing.client.model.CustomFields;
@@ -44,6 +44,8 @@ import org.killbill.billing.client.model.BulkSubscriptionsBundles;
 import org.killbill.billing.util.api.AuditLevel;
 import org.killbill.billing.client.model.AuditLogs;
 import org.killbill.billing.client.model.Tags;
+
+import java.time.format.DateTimeFormatter;
 
 import org.killbill.billing.client.Converter;
 import org.killbill.billing.client.KillBillClientException;
@@ -98,7 +100,7 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, BlockingStates.class, requestOptions);
     }
 
-    public BlockingStates addSubscriptionBlockingState(final UUID subscriptionId, final BlockingState body, final DateTime requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public BlockingStates addSubscriptionBlockingState(final UUID subscriptionId, final BlockingState body, final ZonedDateTime requestedDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling addSubscriptionBlockingState");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling addSubscriptionBlockingState");
 
@@ -107,7 +109,7 @@ public class SubscriptionApi {
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            queryParams.put("requestedDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(requestedDate));
         }
         if (pluginProperty != null) {
             queryParams.putAll("pluginProperty", Converter.convertPluginPropertyMap(pluginProperty));
@@ -165,12 +167,12 @@ public class SubscriptionApi {
         httpClient.doDelete(uri, requestOptions);
     }
 
-    public void cancelSubscriptionPlan(final UUID subscriptionId, final DateTime requestedDate, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public void cancelSubscriptionPlan(final UUID subscriptionId, final ZonedDateTime requestedDate, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         cancelSubscriptionPlan(subscriptionId, requestedDate, Boolean.valueOf(false), Long.valueOf(5), entitlementPolicy, billingPolicy, Boolean.valueOf(false), pluginProperty, inputOptions);
     }
 
 
-    public void cancelSubscriptionPlan(final UUID subscriptionId, final DateTime requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Boolean useRequestedDateForBilling, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public void cancelSubscriptionPlan(final UUID subscriptionId, final ZonedDateTime requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final EntitlementActionPolicy entitlementPolicy, final BillingActionPolicy billingPolicy, final Boolean useRequestedDateForBilling, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling cancelSubscriptionPlan");
 
         final String uri = "/1.0/kb/subscriptions/{subscriptionId}"
@@ -178,7 +180,7 @@ public class SubscriptionApi {
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            queryParams.put("requestedDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(requestedDate));
         }
         if (callCompletion != null) {
             queryParams.put("callCompletion", String.valueOf(callCompletion));
@@ -244,11 +246,11 @@ public class SubscriptionApi {
         httpClient.doPut(uri, body, requestOptions);
     }
 
-    public void changeSubscriptionPlan(final UUID subscriptionId, final Subscription body, final DateTime requestedDate, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public void changeSubscriptionPlan(final UUID subscriptionId, final Subscription body, final ZonedDateTime requestedDate, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         changeSubscriptionPlan(subscriptionId, body, requestedDate, Boolean.valueOf(false), Long.valueOf(3), billingPolicy, pluginProperty, inputOptions);
     }
 
-    public void changeSubscriptionPlan(final UUID subscriptionId, final Subscription body, final DateTime requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public void changeSubscriptionPlan(final UUID subscriptionId, final Subscription body, final ZonedDateTime requestedDate, final Boolean callCompletion, final Long callTimeoutSec, final BillingActionPolicy billingPolicy, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(subscriptionId, "Missing the required parameter 'subscriptionId' when calling changeSubscriptionPlan");
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling changeSubscriptionPlan");
 
@@ -257,7 +259,7 @@ public class SubscriptionApi {
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (requestedDate != null) {
-            queryParams.put("requestedDate", String.valueOf(requestedDate));
+            queryParams.put("requestedDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(requestedDate));
         }
         if (callCompletion != null) {
             queryParams.put("callCompletion", String.valueOf(callCompletion));
@@ -327,21 +329,21 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Subscription.class, requestOptions);
     }
 
-    public Subscription createSubscription(final Subscription body, final DateTime entitlementDate, final DateTime billingDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public Subscription createSubscription(final Subscription body, final ZonedDateTime entitlementDate, final ZonedDateTime billingDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return createSubscription(body, entitlementDate, billingDate, Boolean.valueOf(true), Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(false), Long.valueOf(3), pluginProperty, inputOptions);
     }
 
-    public Subscription createSubscription(final Subscription body, final DateTime entitlementDate, final DateTime billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean skipResponse, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public Subscription createSubscription(final Subscription body, final ZonedDateTime entitlementDate, final ZonedDateTime billingDate, final Boolean renameKeyIfExistsAndUnused, final Boolean migrated, final Boolean skipResponse, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscription");
 
         final String uri = "/1.0/kb/subscriptions";
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (entitlementDate != null) {
-            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+            queryParams.put("entitlementDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(entitlementDate));
         }
         if (billingDate != null) {
-            queryParams.put("billingDate", String.valueOf(billingDate));
+            queryParams.put("billingDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(billingDate));
         }
         if (renameKeyIfExistsAndUnused != null) {
             queryParams.put("renameKeyIfExistsAndUnused", String.valueOf(renameKeyIfExistsAndUnused));
@@ -455,21 +457,21 @@ public class SubscriptionApi {
         return httpClient.doPost(uri, body, Bundle.class, requestOptions);
     }
 
-    public Bundle createSubscriptionWithAddOns(final Subscriptions body, final DateTime entitlementDate, final DateTime billingDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle createSubscriptionWithAddOns(final Subscriptions body, final ZonedDateTime entitlementDate, final ZonedDateTime billingDate, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         return createSubscriptionWithAddOns(body, entitlementDate, billingDate, Boolean.valueOf(false), Boolean.valueOf(false), Boolean.valueOf(true), Boolean.valueOf(false), Long.valueOf(3), pluginProperty, inputOptions);
     }
 
-    public Bundle createSubscriptionWithAddOns(final Subscriptions body, final DateTime entitlementDate, final DateTime billingDate, final Boolean migrated, final Boolean skipResponse, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
+    public Bundle createSubscriptionWithAddOns(final Subscriptions body, final ZonedDateTime entitlementDate, final ZonedDateTime billingDate, final Boolean migrated, final Boolean skipResponse, final Boolean renameKeyIfExistsAndUnused, final Boolean callCompletion, final Long callTimeoutSec, final Map<String, String> pluginProperty, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling createSubscriptionWithAddOns");
 
         final String uri = "/1.0/kb/subscriptions/createSubscriptionWithAddOns";
 
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (entitlementDate != null) {
-            queryParams.put("entitlementDate", String.valueOf(entitlementDate));
+            queryParams.put("entitlementDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(entitlementDate));
         }
         if (billingDate != null) {
-            queryParams.put("billingDate", String.valueOf(billingDate));
+            queryParams.put("billingDate", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(billingDate));
         }
         if (migrated != null) {
             queryParams.put("migrated", String.valueOf(migrated));

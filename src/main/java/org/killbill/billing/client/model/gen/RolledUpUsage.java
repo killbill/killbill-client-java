@@ -22,10 +22,10 @@ package org.killbill.billing.client.model.gen;
 
 import java.util.Objects;
 import java.util.Arrays;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.joda.time.DateTime;
 import org.killbill.billing.client.model.gen.RolledUpUnit;
 
 /**
@@ -40,9 +40,9 @@ public class RolledUpUsage {
 
     private UUID subscriptionId = null;
 
-    private DateTime startDate = null;
+    private ZonedDateTime startDate = null;
 
-    private DateTime endDate = null;
+    private ZonedDateTime endDate = null;
 
     private List<RolledUpUnit> rolledUpUnits = null;
 
@@ -51,8 +51,8 @@ public class RolledUpUsage {
     }
 
     public RolledUpUsage(final UUID subscriptionId,
-                     final DateTime startDate,
-                     final DateTime endDate,
+                     final ZonedDateTime startDate,
+                     final ZonedDateTime endDate,
                      final List<RolledUpUnit> rolledUpUnits) {
         this.subscriptionId = subscriptionId;
         this.startDate = startDate;
@@ -71,21 +71,21 @@ public class RolledUpUsage {
         return subscriptionId;
     }
 
-    public RolledUpUsage setStartDate(final DateTime startDate) {
+    public RolledUpUsage setStartDate(final ZonedDateTime startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    public DateTime getStartDate() {
+    public ZonedDateTime getStartDate() {
         return startDate;
     }
 
-    public RolledUpUsage setEndDate(final DateTime endDate) {
+    public RolledUpUsage setEndDate(final ZonedDateTime endDate) {
         this.endDate = endDate;
         return this;
     }
 
-    public DateTime getEndDate() {
+    public ZonedDateTime getEndDate() {
         return endDate;
     }
 
