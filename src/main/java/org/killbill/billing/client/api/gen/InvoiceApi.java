@@ -602,11 +602,20 @@ public class InvoiceApi {
     }
 
     public String getInvoiceTemplate(final RequestOptions inputOptions) throws KillBillClientException {
+        return getInvoiceTemplate(Boolean.valueOf(false), inputOptions);
+    }
+
+    public String getInvoiceTemplate(final Boolean templateWithBrandInfo, final RequestOptions inputOptions) throws KillBillClientException {
 
         final String uri = "/1.0/kb/invoices/template";
 
+        final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
+        if (templateWithBrandInfo != null) {
+            queryParams.put("templateWithBrandInfo", String.valueOf(templateWithBrandInfo));
+        }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
+        inputOptionsBuilder.withQueryParams(queryParams.asMap());
         inputOptionsBuilder.withHeader(KillBillHttpClient.HTTP_HEADER_ACCEPT, "text/html");
         final RequestOptions requestOptions = inputOptionsBuilder.build();
 
@@ -811,10 +820,10 @@ public class InvoiceApi {
     }
 
     public String uploadInvoiceTemplate(final String body, final RequestOptions inputOptions) throws KillBillClientException {
-        return uploadInvoiceTemplate(body, Boolean.valueOf(false), inputOptions);
+        return uploadInvoiceTemplate(body, Boolean.valueOf(false), Boolean.valueOf(false), inputOptions);
     }
 
-    public String uploadInvoiceTemplate(final String body, final Boolean deleteIfExists, final RequestOptions inputOptions) throws KillBillClientException {
+    public String uploadInvoiceTemplate(final String body, final Boolean deleteIfExists, final Boolean templateWithBrandInfo, final RequestOptions inputOptions) throws KillBillClientException {
         Preconditions.checkNotNull(body, "Missing the required parameter 'body' when calling uploadInvoiceTemplate");
 
         final String uri = "/1.0/kb/invoices/template";
@@ -822,6 +831,9 @@ public class InvoiceApi {
         final Multimap<String, String> queryParams = new TreeMapSetMultimap<>(inputOptions.getQueryParams());
         if (deleteIfExists != null) {
             queryParams.put("deleteIfExists", String.valueOf(deleteIfExists));
+        }
+        if (templateWithBrandInfo != null) {
+            queryParams.put("templateWithBrandInfo", String.valueOf(templateWithBrandInfo));
         }
 
         final RequestOptionsBuilder inputOptionsBuilder = inputOptions.extend();
