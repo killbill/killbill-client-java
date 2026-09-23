@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.kill-bill.billing</groupId>
         <artifactId>killbill-oss-parent</artifactId>
-        <version>0.147.27</version>
+        <version>0.147.28</version>
     </parent>
     <artifactId>killbill-client-java</artifactId>
     <version>1.5.5-SNAPSHOT</version>
